@@ -1,4 +1,4 @@
-package author.modid;
+package crystalspider.soulfired;
 
 import org.slf4j.Logger;
 
@@ -10,10 +10,10 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 /**
- * ModId mod loader.
+ * Soul fire'd mod loader.
  */
-@Mod(ModIdLoader.MODID)
-public class ModIdLoader {
+@Mod(SoulFiredLoader.MODID)
+public class SoulFiredLoader {
   /**
    * Logger.
    */
@@ -22,18 +22,18 @@ public class ModIdLoader {
   /**
    * Network channel protocol version.
    */
-  public static final String PROTOCOL_VERSION = "1";
+  public static final String PROTOCOL_VERSION = "1.18-1.0";
   /**
    * {@link SimpleChannel} instance for compatibility client-server.
    */
-  public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(ModIdLoader.MODID, "main"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
+  public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(SoulFiredLoader.MODID, "main"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
 
   /**
    * ID of this mod.
    */
-  public static final String MODID = "modid";
+  public static final String MODID = "soulfired";
 
-  public ModIdLoader() {
+  public SoulFiredLoader() {
     // Register handlers and configs.
   }
 }

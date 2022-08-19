@@ -1,15 +1,15 @@
-package author.modid;
+package crystalspider.soulfired;
 
 import net.fabricmc.api.ModInitializer;
 
 /**
- * Mod Title mod loader.
+ * Soul fire'd mod loader.
  */
-public class ModIdLoader implements ModInitializer {
+public class SoulFiredLoader implements ModInitializer {
   /**
    * ID of this mod.
    */
-  public static final String MODID = "modid";
+  public static final String MODID = "soulfired";
 
   @Override
   public void onInitialize() {
