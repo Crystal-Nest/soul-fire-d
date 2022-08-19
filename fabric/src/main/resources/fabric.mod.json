@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "${modid}",
+  "version": "${mod_version}",
+  "name": "${mod_title}",
+  "description": "Mod brief description.",
+  "authors": [
+    "${author}"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/${modid_kebab}",
+    "issues": "https://github.com/${github_user}/${modid_kebab}/issues",
+    "sources": "https://github.com/${github_user}/${modid_kebab}/tree/${minecraft_version}"
+  },
+  "license": "GPL-3.0-or-later",
+  "icon": "assets/${modid}/${modid_kebab}.jpg",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "${group}.${modid}.ModIdLoader"
+    ]
+  },
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}",
+    "java": ">=17"
+  }
+}
