@@ -1,0 +1,188 @@
+buildscript {
+  repositories {
+    // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
+    maven { url = 'https://maven.minecraftforge.net' }
+    mavenCentral()
+  }
+  dependencies {
+    classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+  }
+}
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+plugins {
+  id 'com.matthewprenger.cursegradle' version "${cursegradle_version}"
+  id "com.github.breadmoirai.github-release" version "${github_release_version}"
+}
+apply plugin: 'net.minecraftforge.gradle'
+
+archivesBaseName = project.modid
+version = "${minecraft_version}-${mod_version}-${loader.toLowerCase()}"
+group = project.group
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+  mappings channel: 'official', version: "${minecraft_version}"
+  // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
+  runs {
+    client {
+      workingDirectory project.file('run')
+      property 'forge.logging.markers', 'REGISTRIES'
+      // https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+      property 'forge.logging.console.level', 'debug'
+      property 'forge.enabledGameTestNamespaces', "${modid}"
+      mods {
+        "${modid}" {
+          source sourceSets.main
+        }
+      }
+    }
+    server {
+      workingDirectory project.file('run')
+      property 'forge.logging.markers', 'REGISTRIES'
+      // https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+      property 'forge.logging.console.level', 'debug'
+      property 'forge.enabledGameTestNamespaces', "${modid}"
+      mods {
+        "${modid}" {
+          source sourceSets.main
+        }
+      }
+    }
+    gameTestServer {
+      workingDirectory project.file('run')
+      property 'forge.logging.markers', 'REGISTRIES'
+      // https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+      property 'forge.logging.console.level', 'debug'
+      property 'forge.enabledGameTestNamespaces', "${modid}"
+      mods {
+        "${modid}" {
+          source sourceSets.main
+        }
+      }
+    }
+    data {
+      workingDirectory project.file('run')
+      property 'forge.logging.markers', 'REGISTRIES'
+      // https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+      property 'forge.logging.console.level', 'debug'
+      args '--mod', "${modid}", '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+      mods {
+        "${modid}" {
+          source sourceSets.main
+        }
+      }
+    }
+  }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {}
+
+dependencies {
+  minecraft "net.minecraftforge:forge:${minecraft_version}-${loader_version}${forge_subversion}"
+}
+
+def resourceTarget = 'META-INF/mods.toml'
+def intoTargets = ["$rootDir/bin/main/"]
+def replaceProperties = [
+  modid: modid,
+  modid_kebab: modid_kebab,
+  mod_title: mod_title,
+  minecraft_version: minecraft_version,
+  mod_version: mod_version,
+  loader_version: loader_version,
+  forge_subversion: forge_subversion,
+  author: author,
+  github_user: github_user
+]
+
+processResources {
+  inputs.properties replaceProperties
+  replaceProperties.put 'project', project
+
+  filesMatching(resourceTarget) {
+    expand replaceProperties
+  }
+
+  intoTargets.each { target ->
+    if (file(target).exists()) {
+      copy {
+        from(sourceSets.main.resources) {
+          include resourceTarget
+          expand replaceProperties
+        }
+        into target
+      }
+    }
+  }
+}
+
+jar {
+  manifest {
+    attributes([
+      "Specification-Title"     : project.mod_title,
+      "Specification-Version"   : project.mod_version,
+      "Specification-Vendor"    : project.author,
+      "Implementation-Title"    : project.mod_title,
+      "Implementation-Version"  : project.mod_version,
+      "Implementation-Vendor"   : project.author,
+      "Implementation-Vendor-Id": project.group,
+      "Implementation-URL"      : "https://github.com/${github_user}/${modid_kebab}/tree/${minecraft_version}",
+      "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+    ])
+  }
+}
+
+tasks.withType(JavaCompile).configureEach {
+  it.options.encoding = 'UTF-8'
+  it.options.release = 17
+}
+
+def changelog = "See [Changelog](https://github.com/${github_user}/${modid_kebab}/blob/master/CHANGELOG.md#${minecraft_version.replaceAll('\\.', '')}-${mod_version.replaceAll('\\.', '')}---${new Date().format("yyyyMMdd")})."
+
+file("../api-keys.properties").withReader { 
+  Properties props = new Properties()
+  props.load(it)
+  project.api_keys = props
+}
+
+curseforge {
+  apiKey = "${api_keys.curseforge}"
+  project {
+    id = "${curseforge_id}"
+    changelogType = 'markdown'
+    changelog = changelog
+    releaseType = 'release'
+    addGameVersion "${loader}"
+    addGameVersion "${minecraft_version}"
+    mainArtifact(jar) {
+      displayName = "[${loader} - ${minecraft_version}] ${mod_title} v${mod_version}"
+      // relations {}
+    }
+  }
+  options {
+    forgeGradleIntegration = false
+  }
+}
+
+githubRelease {
+  token "${api_keys.github}"
+  owner "${github_user}"
+  repo "${modid_kebab}"
+  tagName "v${minecraft_version}-${mod_version}"
+  targetCommitish "${minecraft_version}"
+  releaseName "v${minecraft_version}-${mod_version}"
+  generateReleaseNotes false
+  body changelog
+  draft true
+  prerelease false
+  releaseAssets jar
+  // Setting this to true will allow this plugin to upload artifacts to a release if it found an existing one. If overwrite is set to true, this option is ignored.
+  allowUploadToExisting true
+  // By default false; if set to true, will delete an existing release with the same tag and name
+  // overwrite true
+  // by default false; you can use this to see what actions would be taken without making a release
+  // dryRun false
+}

@@ -1,0 +1,36 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# vscode
+bin/
+.classpath
+.project
+.vscode
+
+# gradle
+build
+out
+classes
+.gradle
+
+# other
+eclipse
+run
+
+# macos
+*.DS_Store
+
+# api keys
+api-keys.properties
