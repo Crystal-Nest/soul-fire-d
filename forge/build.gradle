@@ -6,6 +6,7 @@ buildscript {
   }
   dependencies {
     classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+    classpath 'org.spongepowered:mixingradle:0.7.+'
   }
 }
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
@@ -14,6 +15,7 @@ plugins {
   id "com.github.breadmoirai.github-release" version "${github_release_version}"
 }
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
 
 archivesBaseName = project.modid
 version = "${minecraft_version}-${mod_version}-${loader.toLowerCase()}"
@@ -82,6 +84,12 @@ repositories {}
 
 dependencies {
   minecraft "net.minecraftforge:forge:${minecraft_version}-${loader_version}${forge_subversion}"
+  annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+mixin {
+  add sourceSets.main, 'soulfired.refmap.json'
+  config 'soulfired.mixins.json'
 }
 
 def resourceTarget = 'META-INF/mods.toml'
