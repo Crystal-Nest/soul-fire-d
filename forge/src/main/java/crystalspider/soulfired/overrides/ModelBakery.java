@@ -12,7 +12,7 @@ public class ModelBakery extends net.minecraft.client.resources.model.ModelBaker
   @SuppressWarnings("deprecation")
   public static final Material SOUL_FIRE_0 = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation("block/soul_fire_0"));
   @SuppressWarnings("deprecation")
-  public static final Material SOUL_FIRE_1 = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation("block/Soul_fire_1"));
+  public static final Material SOUL_FIRE_1 = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation("block/soul_fire_1"));
 
   public ModelBakery(ResourceManager resourceManager, BlockColors blockColors, ProfilerFiller profileFiller, int mipLevel) {
     super(resourceManager, blockColors, profileFiller, mipLevel);

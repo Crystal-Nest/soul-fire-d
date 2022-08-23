@@ -25,7 +25,7 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
   private boolean hasVisualSoulFire;
   private int remainingSoulFireTicks = -getSoulFireImmuneTicks();
 
-  private EntityMixin() {
+  EntityMixin() {
     super(Entity.class);
   }
 
@@ -37,6 +37,9 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
 
   @Shadow
   public abstract boolean isSpectator();
+
+  @Shadow
+  public abstract boolean isOnFire();
 
   @Shadow
   public abstract EntityType<?> getType();
@@ -94,8 +97,18 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
   }
 
   @Override
+  public boolean isOnAnyFire() {
+    return isOnFire() || isOnSoulFire();
+  }
+
+  @Override
   public boolean displaySoulFireAnimation() {
     return isOnSoulFire() && !isSpectator();
+  }
+
+  @Override
+  public boolean displayAnyFireAnimation() {
+    return !isSpectator() && (isOnSoulFire() || isOnFire());
   }
 
   protected int getSoulFireImmuneTicks() {

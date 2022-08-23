@@ -8,7 +8,11 @@
     "BaseFireBlockMixin",
     "CampfireBlockMixin",
     "EntityMixin",
-    "EntityRenderDispatcherMixin",
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "PlayerMixin"
+  ],
+  "client": [
+    "client.EntityRenderDispatcherMixin",
+    "client.ScreenEffectRendererMixin"
   ]
 }

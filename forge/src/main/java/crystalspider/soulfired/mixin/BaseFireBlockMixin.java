@@ -23,6 +23,15 @@ public abstract class BaseFireBlockMixin extends Block {
     super(properties);
   }
 
+  /**
+   * @author Crystal Spider
+   * @reason original method needs to be called only when this Block is not a Soul Fire Block.
+   * 
+   * @param state
+   * @param world
+   * @param pos
+   * @param entity
+   */
   @Override
   @Overwrite
   @SuppressWarnings("deprecation")
@@ -34,9 +43,12 @@ public abstract class BaseFireBlockMixin extends Block {
         if (soulFiredEntity.getRemainingSoulFireTicks() == 0) {
           soulFiredEntity.setSecondsOnSoulFire(8);
         }
-        entity.hurt(DamageSource.IN_SOUL_FIRE, this.fireDamage); // TODO: add dmg mult
+        // TODO: add dmg mult (here or in SoulFireBlock constructor: https://mixin-wiki.readthedocs.io/mixin-basics/#injecting-into-constructors)
+        entity.hurt(DamageSource.IN_SOUL_FIRE, this.fireDamage);
       }
+      super.entityInside(state, world, pos, entity);
     } else {
+      // TODO: invoke original method
       if (!entity.fireImmune()) {
         entity.setRemainingFireTicks(entity.getRemainingFireTicks() + 1);
         if (entity.getRemainingFireTicks() == 0) {
@@ -44,7 +56,7 @@ public abstract class BaseFireBlockMixin extends Block {
         }
         entity.hurt(DamageSource.IN_FIRE, this.fireDamage);
       }
+      super.entityInside(state, world, pos, entity);
     }
-    super.entityInside(state, world, pos, entity);
   }
 }

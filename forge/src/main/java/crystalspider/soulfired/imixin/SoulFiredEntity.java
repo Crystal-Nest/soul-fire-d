@@ -19,5 +19,9 @@ public interface SoulFiredEntity {
 
   public boolean isOnSoulFire();
 
+  public boolean isOnAnyFire();
+
   public boolean displaySoulFireAnimation();
+
+  public boolean displayAnyFireAnimation();
 }

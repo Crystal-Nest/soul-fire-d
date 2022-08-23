@@ -30,13 +30,22 @@ public abstract class CampfireBlockMixin extends BaseEntityBlock implements Simp
     super(properties);
   }
 
+  /**
+   * @author Crystal Spider
+   * @reason TODO
+   * 
+   * @param state
+   * @param world
+   * @param pos
+   * @param entity
+   */
   @Override
   @Overwrite
   @SuppressWarnings("deprecation")
   public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
     if (!entity.fireImmune() && state.getValue(CampfireBlock.LIT) && entity instanceof LivingEntity) {
       // Normal campfires have spawnParticles to true while soul campfires have spawnParticles to false.
-      if (!spawnParticles) {
+      if (!spawnParticles) { // TODO: add configurable frost walker enchantment check
         entity.hurt(DamageSource.IN_SOUL_FIRE, (float) this.fireDamage); // TODO: add dmg mult
       } else if (!EnchantmentHelper.hasFrostWalker((LivingEntity)entity)) {
         entity.hurt(DamageSource.IN_FIRE, (float) this.fireDamage);
