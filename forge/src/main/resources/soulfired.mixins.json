@@ -9,7 +9,8 @@
     "CampfireBlockMixin",
     "EntityMixin",
     "LivingEntityMixin",
-    "PlayerMixin"
+    "PlayerMixin",
+    "SoulFireBlockMixin"
   ],
   "client": [
     "client.EntityRenderDispatcherMixin",

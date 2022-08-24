@@ -1,10 +1,10 @@
 package crystalspider.soulfired;
 
-import org.slf4j.Logger;
 
-import com.mojang.logging.LogUtils;
 
+import crystalspider.soulfired.api.FireManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -14,11 +14,6 @@ import net.minecraftforge.network.simple.SimpleChannel;
  */
 @Mod(SoulFiredLoader.MODID)
 public class SoulFiredLoader {
-  /**
-   * Logger.
-   */
-  public static final Logger LOGGER = LogUtils.getLogger();
-
   /**
    * Network channel protocol version.
    */
@@ -34,6 +29,14 @@ public class SoulFiredLoader {
   public static final String MODID = "soulfired";
 
   public SoulFiredLoader() {
-    // Register handlers and configs.
+    FireManager.registerFire(
+      FireManager.getFireBuilder()
+        .setId("soul")
+        .setDamage(2)
+        .setInFire("inSoulFire")
+        .setOnFire("onSoulFire")
+        .setSourceBlock(Blocks.SOUL_FIRE)
+      .build()
+    );
   }
 }
