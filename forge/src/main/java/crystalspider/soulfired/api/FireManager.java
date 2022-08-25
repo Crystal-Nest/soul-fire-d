@@ -1,6 +1,7 @@
 package crystalspider.soulfired.api;
 
 import java.util.HashMap;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 
@@ -94,10 +95,18 @@ public class FireManager {
     return null;
   }
 
-  public static final boolean hurtEntity(Entity entity, String fireId, DamageSource damageSource, float damage) {
+  public static final boolean hurtEntityInFire(Entity entity, String fireId, DamageSource damageSource, float damage) {
+    return hurtEntity(entity, fireId, damageSource, damage, FireManager::getInFireDamageSource);
+  }
+
+  public static final boolean hurtEntityOnFire(Entity entity, String fireId, DamageSource damageSource, float damage) {
+    return hurtEntity(entity, fireId, damageSource, damage, FireManager::getOnFireDamageSource);
+  }
+
+  private static final boolean hurtEntity(Entity entity, String fireId, DamageSource damageSource, float damage, Function<String, DamageSource> damageSourceGetter) {
     if (isFireId(fireId)) {
       ((FireTyped) entity).setFireId(fireId);
-      return entity.hurt(getInFireDamageSource(fireId), getDamage(fireId));
+      return entity.hurt(damageSourceGetter.apply(fireId), getDamage(fireId));
     }
     ((FireTyped) entity).setFireId(null);
     return entity.hurt(damageSource, damage);

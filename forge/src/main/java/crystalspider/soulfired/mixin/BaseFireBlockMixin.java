@@ -33,6 +33,6 @@ public abstract class BaseFireBlockMixin extends Block implements FireTyped {
 
   @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
-    return FireManager.hurtEntity(caller, getFireId(), damageSource, damage);
+    return FireManager.hurtEntityInFire(caller, getFireId(), damageSource, damage);
   }
 }

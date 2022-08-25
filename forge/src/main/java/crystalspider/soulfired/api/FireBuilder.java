@@ -23,39 +23,59 @@ public class FireBuilder {
 
   /**
    * {@link Fire} instance {@link Fire#id id}.
+   * <p>
+   * Required.
    */
   private String id;
 
   /**
    * {@link Fire} instance {@link Fire#damage damage}.
+   * <p>
+   * Optional, defaults to {@code 1.0F}.
    */
   private float damage;
 
   /**
    * {@link Fire} instance {@link Fire#material0 material0}.
+   * <p>
+   * Optional, defaults to calling {@link #setMaterial0(String)} with {@code "block/" + id + "_fire_0"}.
    */
   private Material material0;
   /**
    * {@link Fire} instance {@link Fire#material1 material1}.
+   * <p>
+   * Optional, defaults to calling {@link #setMaterial0(String)} with {@code "block/" + id + "_fire_1"}.
    */
   private Material material1;
 
   /**
    * {@link Fire} instance {@link Fire#inFire inFire}.
+   * <p>
+   * Optional, defaults to {@link DamageSource#IN_FIRE}.
    */
   private DamageSource inFire;
   /**
    * {@link Fire} instance {@link Fire#onFire onFire}.
+   * <p>
+   * Optional, defaults to {@link DamageSource#ON_FIRE}.
    */
   private DamageSource onFire;
 
   /**
    * {@link Fire} instance {@link Fire#hurtSound hurtSound}.
+   * <p>
+   * Optional, defaults to {@link SoundEvents#PLAYER_HURT_ON_FIRE}.
+   * <p>
+   * Default value is recommended.
    */
   private SoundEvent hurtSound;
 
   /**
    * {@link Fire} instance {@link Fire#blockState blockState}.
+   * <p>
+   * Optional, defaults to {@code Blocks.FIRE.defaultBlockState()}.
+   * <p>
+   * Default value is <b>not</b> recommended.
    */
   private BlockState blockState;
 

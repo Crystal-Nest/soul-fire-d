@@ -38,6 +38,6 @@ public abstract class CampfireBlockMixin extends BaseEntityBlock implements Simp
     if (this == Blocks.SOUL_CAMPFIRE && !FireManager.isFireId(getFireId())) {
       setFireId("soul");
     }
-    return FireManager.hurtEntity(caller, getFireId(), damageSource, damage);
+    return FireManager.hurtEntityInFire(caller, getFireId(), damageSource, damage);
   }
 }

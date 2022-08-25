@@ -55,7 +55,7 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
 
   @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
-    return FireManager.hurtEntity(caller, ((FireTyped) caller).getFireId(), damageSource, damage);
+    return FireManager.hurtEntityOnFire(caller, ((FireTyped) caller).getFireId(), damageSource, damage);
   }
 
   @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;defineSynchedData()V"))
