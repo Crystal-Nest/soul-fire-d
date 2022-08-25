@@ -85,12 +85,16 @@ public class FireBuilder {
 
   /**
    * Sets the {@link #id}.
+   * <p>
+   * {@link #id} will be set only if the given {@code id} is valid. In addition, a valid {@code id} will be trimmed.
    * 
    * @param id
    * @return this Builder to either set other properties or {@link #build}.
    */
   public FireBuilder setId(String id) {
-    this.id = id;
+    if (FireManager.isValidFireId(id)) {
+      this.id = id;
+    }
     return this;
   }
 
@@ -219,6 +223,19 @@ public class FireBuilder {
   }
 
   /**
+   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code messageId} equal to {@code "in_" + id + "_fire"}.
+   * 
+   * @return this Builder to either set other properties or {@link #build}.
+   * @throws IllegalStateException if the {@link #id} is invalid (not set or blank).
+   */
+  public FireBuilder setInFire() throws IllegalStateException {
+    if (FireManager.isValidFireId(id)) {
+      return setInFire("in_" + id + "_fire");
+    }
+    throw new IllegalStateException("Attempted to create inFire DamageSource before setting a valid id");
+  }
+
+  /**
    * Sets the {@link DamageSource} {@link #onFire}.
    * <p>
    * Prefer {@link #setOnFire(String)}.
@@ -241,6 +258,19 @@ public class FireBuilder {
    */
   public FireBuilder setOnFire(String messageId) {
     return setOnFire((new DamageSource(messageId)).bypassArmor().setIsFire());
+  }
+
+  /**
+   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code messageId} equal to {@code "on_" + id + "_fire"}.
+   * 
+   * @return this Builder to either set other properties or {@link #build}.
+   * @throws IllegalStateException if the {@link #id} is invalid (not set or blank).
+   */
+  public FireBuilder setOnFire() throws IllegalStateException {
+    if (FireManager.isValidFireId(id)) {
+      return setOnFire("on_" + id + "_fire");
+    }
+    throw new IllegalStateException("Attempted to create onFire DamageSource before setting a valid id");
   }
 
   /**
@@ -314,7 +344,7 @@ public class FireBuilder {
       if (material1 == null) {
         setMaterial1("block/" + id + "_fire_1");
       }
-      return new Fire(id, damage, material0, material1, inFire, onFire, hurtSound, blockState);
+      return new Fire(FireManager.sanitizeFireId(id), damage, material0, material1, inFire, onFire, hurtSound, blockState);
     }
     throw new IllegalStateException("Attempted to build a Fire with a non-valid id");
   }

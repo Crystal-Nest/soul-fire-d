@@ -67,7 +67,7 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
   @Inject(method = "setRemainingFireTicks", at = @At(value = "HEAD"))
   private void onSetRemainingFireTicks(int ticks, CallbackInfo ci) {
     if (!level.isClientSide && (ticks <= 0 || ticks >= getRemainingFireTicks())) {
-      setFireId(null);
+      setFireId(FireManager.DEFAULT_FIRE_ID);
     }
   }
 
@@ -80,11 +80,6 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
 
   @Inject(method = "load", at = @At(value = "TAIL"))
   private void onLoad(CompoundTag tag, CallbackInfo ci) {
-    String id = tag.getString("FireId");
-    if (FireManager.isFireId(id)) {
-      setFireId(id);
-    } else {
-      setFireId(null);
-    }
+    setFireId(FireManager.ensureFireId(tag.getString("FireId")));
   }
 }

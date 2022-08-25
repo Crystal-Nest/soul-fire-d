@@ -36,7 +36,7 @@ public abstract class CampfireBlockMixin extends BaseEntityBlock implements Simp
   @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
     if (this == Blocks.SOUL_CAMPFIRE && !FireManager.isFireId(getFireId())) {
-      setFireId("soul");
+      setFireId(FireManager.SOUL_FIRE_ID);
     }
     return FireManager.hurtEntityInFire(caller, getFireId(), damageSource, damage);
   }

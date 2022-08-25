@@ -1,6 +1,8 @@
 package crystalspider.soulfired.api;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -13,8 +15,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class FireManager {
   /**
@@ -22,10 +24,23 @@ public class FireManager {
    */
   public static final Logger LOGGER = LogUtils.getLogger();
 
+  public static final String DEFAULT_FIRE_ID = "";
+
+  public static final String SOUL_FIRE_ID = "soul";
+
   /**
    * {@link HashMap} of all registered {@link Fire Fires}.
    */
   private static volatile ConcurrentHashMap<String, Fire> fires = new ConcurrentHashMap<>();
+
+  public static final synchronized void registerFire(Fire fire) {
+    String fireId = fire.getId();
+    if (!fires.containsKey(fireId)) {
+      fires.put(fireId, fire);
+    } else {
+      LOGGER.error("Fire [" + fireId + "] was already registered with the following value: " + fires.get(fireId));
+    }
+  }
 
   public static final CampfireBlock createCampfireBlock(String fireId, boolean spawnParticles, Properties properties) {
     if (isValidFireId(fireId)) {
@@ -40,21 +55,34 @@ public class FireManager {
     return new FireBuilder();
   }
 
-  public static final synchronized void registerFire(Fire fire) {
-    String fireId = fire.getId();
-    if (!fires.containsKey(fireId)) {
-      fires.put(fireId, fire);
-    } else {
-      LOGGER.error("Fire [" + fireId + "] was already registered with the following value: " + fires.get(fireId));
-    }
-  }
-
   public static final boolean isValidFireId(String id) {
     return !(id == null || id.isBlank());
   }
 
   public static final boolean isFireId(String id) {
-    return isValidFireId(id) && fires.containsKey(id);
+    return fires.containsKey(id);
+  }
+
+  public static final String sanitizeFireId(String id) {
+    if (isValidFireId(id)) {
+      return id.trim();
+    }
+    return DEFAULT_FIRE_ID;
+  }
+
+  public static final String ensureFireId(String id) {
+    if (fires.containsKey(id)) {
+      return id;
+    }
+    return DEFAULT_FIRE_ID;
+  }
+
+  public static final List<String> getFireIds() {
+    return List.copyOf(Collections.list(fires.keys()));
+  }
+
+  public static final List<Fire> getFires() {
+    return List.copyOf(fires.values());
   }
 
   public static final float getDamage(String id) {
@@ -123,7 +151,7 @@ public class FireManager {
       ((FireTyped) entity).setFireId(fireId);
       return entity.hurt(damageSourceGetter.apply(fireId), getDamage(fireId));
     }
-    ((FireTyped) entity).setFireId(null);
+    ((FireTyped) entity).setFireId(DEFAULT_FIRE_ID);
     return entity.hurt(damageSource, damage);
   }
 }
