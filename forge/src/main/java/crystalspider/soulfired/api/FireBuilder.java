@@ -3,6 +3,8 @@ package crystalspider.soulfired.api;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
@@ -46,6 +48,11 @@ public class FireBuilder {
    * {@link Fire} instance {@link Fire#onFire onFire}.
    */
   private DamageSource onFire;
+
+  /**
+   * {@link Fire} instance {@link Fire#hurtSound hurtSound}.
+   */
+  private SoundEvent hurtSound;
 
   /**
    * {@link Fire} instance {@link Fire#blockState blockState}.
@@ -217,6 +224,17 @@ public class FireBuilder {
   }
 
   /**
+   * Sets the {@link #hurtSound}.
+   * 
+   * @param hurtSound
+   * @return this Builder to either set other properties or {@link #build}.
+   */
+  public FireBuilder setHurtSound(SoundEvent hurtSound) {
+    this.hurtSound = hurtSound;
+    return this;
+  }
+
+  /**
    * Sets the {@link #blockState}.
    * <p>
    * Use this only if you need fine grained control on the BlockState associated to the Fire, otherwise prefer {@link #setSourceBlock(BaseFireBlock)}
@@ -253,6 +271,7 @@ public class FireBuilder {
     material1 = null;
     inFire = DamageSource.IN_FIRE;
     onFire = DamageSource.ON_FIRE;
+    hurtSound = SoundEvents.PLAYER_HURT_ON_FIRE;
     blockState = Blocks.FIRE.defaultBlockState();
     return this;
   }
@@ -275,7 +294,7 @@ public class FireBuilder {
       if (material1 == null) {
         setMaterial1("block/" + id + "_fire_1");
       }
-      return new Fire(id, damage, material0, material1, inFire, onFire, blockState);
+      return new Fire(id, damage, material0, material1, inFire, onFire, hurtSound, blockState);
     }
     throw new IllegalStateException("Attempted to build a Fire with a non-valid id");
   }

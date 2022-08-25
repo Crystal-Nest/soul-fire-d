@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.client.resources.model.Material;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -74,6 +75,13 @@ public class FireManager {
   public static final Material getMaterial1(String fireId) {
     if (isFireId(fireId)) {
       return fires.get(fireId).getMaterial1();
+    }
+    return null;
+  }
+
+  public static final SoundEvent getHurtSound(String fireId) {
+    if (isFireId(fireId)) {
+      return fires.get(fireId).getHurtSound();
     }
     return null;
   }
