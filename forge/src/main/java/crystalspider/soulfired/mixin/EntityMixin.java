@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.imixin.SoulFiredEntity;
+import crystalspider.soulfired.api.FireTyped;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -24,7 +24,7 @@ import net.minecraftforge.common.capabilities.CapabilityProvider;
 import net.minecraftforge.common.extensions.IForgeEntity;
 
 @Mixin(Entity.class)
-public abstract class EntityMixin extends CapabilityProvider<Entity> implements Nameable, EntityAccess, CommandSource, IForgeEntity, SoulFiredEntity {
+public abstract class EntityMixin extends CapabilityProvider<Entity> implements Nameable, EntityAccess, CommandSource, IForgeEntity, FireTyped {
   @Shadow
   public Level level;
   @Shadow
@@ -55,12 +55,7 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
 
   @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
-    String fireId = ((SoulFiredEntity) caller).getFireId();
-    if (FireManager.isFireId(fireId)) {
-      return caller.hurt(FireManager.getInFireDamageSource(fireId), FireManager.getDamage(fireId));
-    }
-    ((SoulFiredEntity) caller).setFireId(null);
-    return caller.hurt(damageSource, damage);
+    return FireManager.hurtEntity(caller, ((FireTyped) caller).getFireId(), damageSource, damage);
   }
 
   @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;defineSynchedData()V"))

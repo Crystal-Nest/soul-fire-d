@@ -5,15 +5,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.imixin.SoulFiredEntity;
+import crystalspider.soulfired.api.FireTyped;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 
 @Mixin(CampfireBlock.class)
-public abstract class CampfireBlockMixin extends BaseEntityBlock implements SimpleWaterloggedBlock, SoulFiredEntity {
+public abstract class CampfireBlockMixin extends BaseEntityBlock implements SimpleWaterloggedBlock, FireTyped {
   private String fireId;
 
   private CampfireBlockMixin(Properties properties) {
@@ -34,12 +35,9 @@ public abstract class CampfireBlockMixin extends BaseEntityBlock implements Simp
 
   @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
-    // TODO: implement fireId
-    if (FireManager.isFireId(fireId)) {
-      ((SoulFiredEntity) caller).setFireId(fireId);
-      return caller.hurt(FireManager.getInFireDamageSource(fireId), FireManager.getDamage(fireId));
+    if (this == Blocks.SOUL_CAMPFIRE && !FireManager.isFireId(getFireId())) {
+      setFireId("soul");
     }
-    ((SoulFiredEntity) caller).setFireId(null);
-    return caller.hurt(damageSource, damage);
+    return FireManager.hurtEntity(caller, getFireId(), damageSource, damage);
   }
 }

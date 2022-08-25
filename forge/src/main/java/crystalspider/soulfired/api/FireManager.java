@@ -9,6 +9,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class FireManager {
@@ -91,5 +92,14 @@ public class FireManager {
       return fires.get(fireId).getBlockState();
     }
     return null;
+  }
+
+  public static final boolean hurtEntity(Entity entity, String fireId, DamageSource damageSource, float damage) {
+    if (isFireId(fireId)) {
+      ((FireTyped) entity).setFireId(fireId);
+      return entity.hurt(getInFireDamageSource(fireId), getDamage(fireId));
+    }
+    ((FireTyped) entity).setFireId(null);
+    return entity.hurt(damageSource, damage);
   }
 }

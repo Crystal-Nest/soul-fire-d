@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.imixin.SoulFiredEntity;
+import crystalspider.soulfired.api.FireTyped;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -21,7 +21,7 @@ public class ScreenEffectRendererMixin {
   // TODO: fix target
   @Redirect(method = "renderScreenEffect", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/event/ForgeEventFactory;renderFireOverlay(Lnet/minecraft/world/entity/player/Player;Lcom/mojang/blaze3d/vertex/PoseStack;)Z"))
   private static boolean redirectRenderFireOverlay(Player player, PoseStack poseStack) {
-    String fireId = ((SoulFiredEntity) player).getFireId();
+    String fireId = ((FireTyped) player).getFireId();
     if (FireManager.isFireId(fireId)) {
       return ForgeEventFactory.renderBlockOverlay(player, poseStack, OverlayType.FIRE, FireManager.getSourceBlock(fireId), player.blockPosition());
     }
@@ -30,7 +30,7 @@ public class ScreenEffectRendererMixin {
 
   @ModifyVariable(method = "renderFire", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/resources/model/Material;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;"))
   private static TextureAtlasSprite onRenderFire$sprite(TextureAtlasSprite value, Minecraft minecraft, PoseStack poseStack) {
-    String fireId = ((SoulFiredEntity) minecraft.player).getFireId();
+    String fireId = ((FireTyped) minecraft.player).getFireId();
     if (FireManager.isFireId(fireId)) {
       return FireManager.getMaterial1(fireId).sprite();
     }
