@@ -5,7 +5,9 @@
   "refmap": "soulfired.refmap.json",
   "package": "crystalspider.soulfired.mixin",
   "mixins": [
+    "AbstractArrowMixin",
     "BaseFireBlockMixin",
+    "BowItemMixin",
     "CampfireBlockMixin",
     "EntityMixin",
     "PlayerMixin",

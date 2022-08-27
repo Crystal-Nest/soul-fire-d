@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import crystalspider.soulfired.api.FireManager;
+import crystalspider.soulfired.api.FireTypeChanger;
 import crystalspider.soulfired.api.FireTyped;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.nbt.CompoundTag;
@@ -24,7 +25,7 @@ import net.minecraftforge.common.capabilities.CapabilityProvider;
 import net.minecraftforge.common.extensions.IForgeEntity;
 
 @Mixin(Entity.class)
-public abstract class EntityMixin extends CapabilityProvider<Entity> implements Nameable, EntityAccess, CommandSource, IForgeEntity, FireTyped {
+public abstract class EntityMixin extends CapabilityProvider<Entity> implements Nameable, EntityAccess, CommandSource, IForgeEntity, FireTypeChanger {
   @Shadow
   public Level level;
   @Shadow

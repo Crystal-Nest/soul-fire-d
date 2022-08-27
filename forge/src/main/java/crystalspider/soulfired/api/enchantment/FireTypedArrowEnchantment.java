@@ -1,12 +1,12 @@
 package crystalspider.soulfired.api.enchantment;
 
 import crystalspider.soulfired.api.FireManager;
+import crystalspider.soulfired.api.FireTyped;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.ArrowFireEnchantment;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
 
-public class FireTypedArrowEnchantment extends ArrowFireEnchantment {
+public class FireTypedArrowEnchantment extends ArrowFireEnchantment implements FireTyped {
   private final String fireId;
 
   private final boolean isTreasure;
@@ -29,7 +29,7 @@ public class FireTypedArrowEnchantment extends ArrowFireEnchantment {
 
   @Override
   public final boolean checkCompatibility(Enchantment enchantment) {
-    return super.checkCompatibility(enchantment) && enchantment != Enchantments.FLAMING_ARROWS;
+    return super.checkCompatibility(enchantment) && !(enchantment instanceof ArrowFireEnchantment);
   }
   
   @Override
@@ -50,5 +50,10 @@ public class FireTypedArrowEnchantment extends ArrowFireEnchantment {
   @Override
   public final boolean isDiscoverable() {
     return isDiscoverable;
+  }
+
+  @Override
+  public final String getFireId() {
+    return fireId;
   }
 }

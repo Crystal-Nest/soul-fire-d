@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.api.FireTyped;
+import crystalspider.soulfired.api.FireTypeChanger;
 import net.minecraft.world.level.block.SoulFireBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
@@ -14,6 +14,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 public abstract class SoulFireBlockMixin {
   @Inject(method = "<init>", at = @At("TAIL"))
   private void onInit(Properties properties, CallbackInfo ci) {
-    ((FireTyped) this).setFireId(FireManager.SOUL_FIRE_ID);
+    ((FireTypeChanger) this).setFireId(FireManager.SOUL_FIRE_ID);
   }
 }

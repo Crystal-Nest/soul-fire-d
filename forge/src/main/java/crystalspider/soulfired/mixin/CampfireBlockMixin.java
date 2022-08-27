@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.api.FireTyped;
+import crystalspider.soulfired.api.FireTypeChanger;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 
 @Mixin(CampfireBlock.class)
-public abstract class CampfireBlockMixin extends BaseEntityBlock implements SimpleWaterloggedBlock, FireTyped {
+public abstract class CampfireBlockMixin extends BaseEntityBlock implements SimpleWaterloggedBlock, FireTypeChanger {
   private String fireId;
 
   private CampfireBlockMixin(Properties properties) {

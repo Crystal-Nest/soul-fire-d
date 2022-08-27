@@ -1,11 +1,13 @@
 package crystalspider.soulfired.api;
 
+import crystalspider.soulfired.api.Fire.FireEnchantData;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -78,6 +80,13 @@ public class FireBuilder {
    * Default value is <b>not</b> recommended.
    */
   private BlockState blockState;
+
+  private Rarity rarity;
+
+  private boolean isTreasure;
+  private boolean isCurse;
+  private boolean isTradeable;
+  private boolean isDiscoverable;
 
   FireBuilder() {
     reset();
@@ -307,6 +316,31 @@ public class FireBuilder {
     return setSourceBlock(sourceBlock.defaultBlockState());
   }
 
+  public FireBuilder setRarity(Rarity rarity) {
+    this.rarity = rarity;
+    return this;
+  }
+
+  public FireBuilder setTreasure(boolean isTreasure) {
+    this.isTreasure = isTreasure;
+    return this;
+  }
+
+  public FireBuilder setCurse(boolean isCurse) {
+    this.isCurse = isCurse;
+    return this;
+  }
+
+  public FireBuilder setTradeable(boolean isTradeable) {
+    this.isTradeable = isTradeable;
+    return this;
+  }
+
+  public FireBuilder setDiscoverable(boolean isDiscoverable) {
+    this.isDiscoverable = isDiscoverable;
+    return this;
+  }
+
   /**
    * Resets the state of the Builder.
    * <p>
@@ -323,6 +357,11 @@ public class FireBuilder {
     onFire = DamageSource.ON_FIRE;
     hurtSound = SoundEvents.PLAYER_HURT_ON_FIRE;
     blockState = Blocks.FIRE.defaultBlockState();
+    rarity = Rarity.VERY_RARE;
+    isTreasure = true;
+    isCurse = false;
+    isTradeable = true;
+    isDiscoverable = true;
     return this;
   }
 
@@ -344,7 +383,7 @@ public class FireBuilder {
       if (material1 == null) {
         setMaterial1("block/" + id + "_fire_1");
       }
-      return new Fire(FireManager.sanitizeFireId(id), damage, material0, material1, inFire, onFire, hurtSound, blockState);
+      return new Fire(FireManager.sanitizeFireId(id), damage, material0, material1, inFire, onFire, hurtSound, blockState, new FireEnchantData(rarity, isTreasure, isCurse, isTradeable, isDiscoverable));
     }
     throw new IllegalStateException("Attempted to build a Fire with a non-valid id");
   }

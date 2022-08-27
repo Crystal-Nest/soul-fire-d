@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
+import crystalspider.soulfired.api.enchantment.FireTypedArrowEnchantment;
+import crystalspider.soulfired.api.enchantment.FireTypedAspectEnchantment;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -18,7 +20,7 @@ import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class FireManager {
+public abstract class FireManager {
   /**
    * Logger.
    */
@@ -33,6 +35,9 @@ public class FireManager {
    */
   private static volatile ConcurrentHashMap<String, Fire> fires = new ConcurrentHashMap<>();
 
+  private static volatile ConcurrentHashMap<String, FireTypedAspectEnchantment> fireAspectEnchants = new ConcurrentHashMap<>();
+  private static volatile ConcurrentHashMap<String, FireTypedArrowEnchantment> flameEnchants = new ConcurrentHashMap<>();
+
   public static final synchronized void registerFire(Fire fire) {
     String fireId = fire.getId();
     if (!fires.containsKey(fireId)) {
@@ -42,17 +47,41 @@ public class FireManager {
     }
   }
 
+  public static final synchronized void registerFireAspect(FireTypedAspectEnchantment fireAspectEnchant) {
+    if (FireManager.isFireId(fireAspectEnchant.getFireId())) {
+      fireAspectEnchants.put(fireAspectEnchant.getFireId(), fireAspectEnchant);
+    }
+  }
+
+  public static final synchronized void registerFlame(FireTypedArrowEnchantment flameEnchant) {
+    if (FireManager.isFireId(flameEnchant.getFireId())) {
+      flameEnchants.put(flameEnchant.getFireId(), flameEnchant);
+    }
+  }
+
   public static final CampfireBlock createCampfireBlock(String fireId, boolean spawnParticles, Properties properties) {
     if (isValidFireId(fireId)) {
       CampfireBlock campfire = new CampfireBlock(spawnParticles, 0, properties);
-      ((FireTyped) campfire).setFireId(fireId);
+      ((FireTypeChanger) campfire).setFireId(fireId);
       return campfire;
     }
     return new CampfireBlock(spawnParticles, 1, properties);
   }
 
-  public static final FireBuilder getFireBuilder() {
+  public static final FireBuilder fireBuilder() {
     return new FireBuilder();
+  }
+
+  public static final FireEnchantmentBuilder fireEnchantBuilder(String modId) {
+    return new FireEnchantmentBuilder(modId);
+  }
+
+  public static final FireEnchantmentBuilder fireEnchantBuilder(String modId, String fireId) {
+    return new FireEnchantmentBuilder(modId, fireId);
+  }
+
+  public static final FireEnchantmentBuilder fireEnchantBuilder(String modId, Fire fire) {
+    return new FireEnchantmentBuilder(modId, fire);
   }
 
   public static final boolean isValidFireId(String id) {
@@ -60,7 +89,7 @@ public class FireManager {
   }
 
   public static final boolean isFireId(String id) {
-    return fires.containsKey(id);
+    return isValidFireId(id) && fires.containsKey(id);
   }
 
   public static final String sanitizeFireId(String id) {
@@ -71,7 +100,7 @@ public class FireManager {
   }
 
   public static final String ensureFireId(String id) {
-    if (fires.containsKey(id)) {
+    if (fires.containsKey(sanitizeFireId(id))) {
       return id;
     }
     return DEFAULT_FIRE_ID;
@@ -138,6 +167,28 @@ public class FireManager {
     return null;
   }
 
+  public static final List<FireTypedAspectEnchantment> getFireAspectEnchants() {
+    return List.copyOf(fireAspectEnchants.values());
+  }
+
+  public static final List<FireTypedArrowEnchantment> getFlameEnchants() {
+    return List.copyOf(flameEnchants.values());
+  }
+
+  public static final FireTypedAspectEnchantment getFireAspectEnchant(String fireId) {
+    if (isFireId(fireId)) {
+      return fireAspectEnchants.get(fireId);
+    }
+    return null;
+  }
+
+  public static final FireTypedArrowEnchantment getFlameEnchant(String fireId) {
+    if (isFireId(fireId)) {
+      return flameEnchants.get(fireId);
+    }
+    return null;
+  }
+
   public static final boolean hurtEntityInFire(Entity entity, String fireId, DamageSource damageSource, float damage) {
     return hurtEntity(entity, fireId, damageSource, damage, FireManager::getInFireDamageSource);
   }
@@ -148,10 +199,10 @@ public class FireManager {
 
   private static final boolean hurtEntity(Entity entity, String fireId, DamageSource damageSource, float damage, Function<String, DamageSource> damageSourceGetter) {
     if (isFireId(fireId)) {
-      ((FireTyped) entity).setFireId(fireId);
+      ((FireTypeChanger) entity).setFireId(fireId);
       return entity.hurt(damageSourceGetter.apply(fireId), getDamage(fireId));
     }
-    ((FireTyped) entity).setFireId(DEFAULT_FIRE_ID);
+    ((FireTypeChanger) entity).setFireId(DEFAULT_FIRE_ID);
     return entity.hurt(damageSource, damage);
   }
 }

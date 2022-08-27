@@ -5,14 +5,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.api.FireTyped;
+import crystalspider.soulfired.api.FireTypeChanger;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
 
 @Mixin(BaseFireBlock.class)
-public abstract class BaseFireBlockMixin extends Block implements FireTyped {
+public abstract class BaseFireBlockMixin extends Block implements FireTypeChanger {
   private String fireId;
 
   private BaseFireBlockMixin(Properties properties) {
