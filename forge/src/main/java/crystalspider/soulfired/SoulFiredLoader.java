@@ -29,7 +29,6 @@ public class SoulFiredLoader {
   public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, "main"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
 
   public SoulFiredLoader() {
-    // ENCHANTMENTS.register(FMLJavaModLoadingContext.get().getModEventBus());
     FMLJavaModLoadingContext.get().getModEventBus().register(new RegistryEventHandler());
     FireManager.registerFire(
       FireManager.fireBuilder()
