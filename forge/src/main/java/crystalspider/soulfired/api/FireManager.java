@@ -12,6 +12,7 @@ import com.mojang.logging.LogUtils;
 
 import crystalspider.soulfired.api.enchantment.FireTypedArrowEnchantment;
 import crystalspider.soulfired.api.enchantment.FireTypedAspectEnchantment;
+import crystalspider.soulfired.api.type.FireTypeChanger;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -38,25 +39,42 @@ public abstract class FireManager {
   private static volatile ConcurrentHashMap<String, FireTypedAspectEnchantment> fireAspectEnchants = new ConcurrentHashMap<>();
   private static volatile ConcurrentHashMap<String, FireTypedArrowEnchantment> flameEnchants = new ConcurrentHashMap<>();
 
-  public static final synchronized void registerFire(Fire fire) {
+  public static final synchronized Fire registerFire(Fire fire) {
     String fireId = fire.getId();
     if (!fires.containsKey(fireId)) {
       fires.put(fireId, fire);
-    } else {
-      LOGGER.error("Fire [" + fireId + "] was already registered with the following value: " + fires.get(fireId));
+      return fire;
     }
+    LOGGER.error("Fire [" + fireId + "] was already registered with the following value: " + fires.get(fireId));
+    return fires.get(fireId);
   }
 
-  public static final synchronized void registerFireAspect(FireTypedAspectEnchantment fireAspectEnchant) {
-    if (FireManager.isFireId(fireAspectEnchant.getFireId())) {
-      fireAspectEnchants.put(fireAspectEnchant.getFireId(), fireAspectEnchant);
+  public static final synchronized FireTypedAspectEnchantment registerFireAspect(FireTypedAspectEnchantment fireAspectEnchant) {
+    String fireId = fireAspectEnchant.getFireId();
+    if (isFireId(fireId)) {
+      if (!fireAspectEnchants.containsKey(fireId)) {
+        fireAspectEnchants.put(fireId, fireAspectEnchant);
+        return fireAspectEnchant;
+      }
+      LOGGER.error("Fire Aspect Enchantment with fireId [" + fireId + "] was already registered");
+      return fireAspectEnchants.get(fireId);
     }
+    LOGGER.error("Tried to register a Fire Aspect Enchantment with an non-valid or not mapped fireId [" + fireId + "]");
+    return null;
   }
 
-  public static final synchronized void registerFlame(FireTypedArrowEnchantment flameEnchant) {
-    if (FireManager.isFireId(flameEnchant.getFireId())) {
-      flameEnchants.put(flameEnchant.getFireId(), flameEnchant);
+  public static final synchronized FireTypedArrowEnchantment registerFlame(FireTypedArrowEnchantment flameEnchant) {
+    String fireId = flameEnchant.getFireId();
+    if (isFireId(fireId)) {
+      if (!flameEnchants.containsKey(fireId)) {
+        flameEnchants.put(fireId, flameEnchant);
+        return flameEnchant;
+      }
+      LOGGER.error("Flame Enchantment with fireId [" + fireId + "] was already registered");
+      return flameEnchants.get(fireId);
     }
+    LOGGER.error("Tried to register a Flame Enchantment with an non-valid or not mapped fireId [" + fireId + "]");
+    return null;
   }
 
   public static final CampfireBlock createCampfireBlock(String fireId, boolean spawnParticles, Properties properties) {

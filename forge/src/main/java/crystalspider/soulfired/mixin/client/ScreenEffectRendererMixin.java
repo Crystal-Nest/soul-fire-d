@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.api.FireTyped;
+import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

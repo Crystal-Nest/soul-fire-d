@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.api.FireTypeChanger;
 import crystalspider.soulfired.api.enchantment.FireTypedArrowEnchantment;
+import crystalspider.soulfired.api.type.FireTypeChanger;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;

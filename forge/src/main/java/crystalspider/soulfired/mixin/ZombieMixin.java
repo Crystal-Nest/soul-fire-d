@@ -6,8 +6,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.api.FireTypeChanger;
-import crystalspider.soulfired.api.FireTyped;
+import crystalspider.soulfired.api.type.FireTypeChanger;
+import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Zombie;
 

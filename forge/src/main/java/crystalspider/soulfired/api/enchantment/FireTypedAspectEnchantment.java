@@ -1,8 +1,8 @@
 package crystalspider.soulfired.api.enchantment;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.api.FireTypeChanger;
-import crystalspider.soulfired.api.FireTyped;
+import crystalspider.soulfired.api.type.FireTypeChanger;
+import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;

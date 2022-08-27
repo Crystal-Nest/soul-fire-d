@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.api.FireTypeChanger;
-import crystalspider.soulfired.api.FireTyped;
+import crystalspider.soulfired.api.type.FireTypeChanger;
+import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;

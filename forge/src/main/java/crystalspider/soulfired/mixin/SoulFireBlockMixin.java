@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.api.FireTypeChanger;
+import crystalspider.soulfired.api.type.FireTypeChanger;
 import net.minecraft.world.level.block.SoulFireBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
