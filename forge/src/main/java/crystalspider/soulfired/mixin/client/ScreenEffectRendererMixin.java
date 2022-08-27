@@ -18,7 +18,6 @@ import net.minecraftforge.event.ForgeEventFactory;
 
 @Mixin(ScreenEffectRenderer.class)
 public class ScreenEffectRendererMixin {
-  // TODO: fix target
   @Redirect(method = "renderScreenEffect", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/event/ForgeEventFactory;renderFireOverlay(Lnet/minecraft/world/entity/player/Player;Lcom/mojang/blaze3d/vertex/PoseStack;)Z"))
   private static boolean redirectRenderFireOverlay(Player player, PoseStack poseStack) {
     String fireId = ((FireTyped) player).getFireId();
@@ -29,7 +28,7 @@ public class ScreenEffectRendererMixin {
   }
 
   @ModifyVariable(method = "renderFire", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/resources/model/Material;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;"))
-  private static TextureAtlasSprite onRenderFire$sprite(TextureAtlasSprite value, Minecraft minecraft, PoseStack poseStack) {
+  private static TextureAtlasSprite onRenderFire(TextureAtlasSprite value, Minecraft minecraft, PoseStack poseStack) {
     String fireId = ((FireTyped) minecraft.player).getFireId();
     if (FireManager.isFireId(fireId)) {
       return FireManager.getMaterial1(fireId).sprite();
