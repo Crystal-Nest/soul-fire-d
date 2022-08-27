@@ -1,31 +1,53 @@
-# Soul fire'd
-### Let Soul Fire burn!
+![Soul Fire'd banner](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/soul-fire-d/soul-fire-d.gif)
 
-## Features
-- 2 new DamageSource: IN_SOUL_FIRE and ON_SOUL_FIRE
-- New death message (same as normal fire but with "flesh and soul" or "soul")
-- Increased firetick damage in accordance to soul fire block tick damage
-- Soul Campfires soul fire damage bypasses Frost Walker enchantment.
-- Soul fire damage is increased to piglings.
+---
+<div style="display: flex; justify-content: space-evenly;">
+  <div style="display: flex;">
+    <div style="margin-right: 8px;">Supported Minecraft versions</div>
+    <div style="display: flex; justify-content: space-evenly;">
+      <div style="margin-right: 8px;">1.19.2</div>
+      <div style="margin-right: 8px;">1.19.1</div>
+      <div style="margin-right: 8px;">1.19</div>
+      <div>1.18.2</div>
+    </div>
+  </div>
+  <div style="display: flex;">
+    <div style="margin-right: 8px;">Side</div><div>Client & Server</div>
+  </div>
+  <div style="display: flex;">
+    <div style="margin-right: 8px;">Forge</div><div>Downloads</div>
+  </div>
+  <div style="display: flex;">
+    <div style="margin-right: 8px;">Fabric</div><div>Downloads</div>
+  </div>
+  <div style="display: flex;">
+    <div style="margin-right: 8px;">GitHub</div><div>Issues</div>
+  </div>
+</div>
 
-## Downloads
-This is BOTH the FORGE and FABRIC version, so make sure you're downloading the correct version that suits your needs.  
-Downloads are available [here](https://www.curseforge.com/minecraft/mc-mods/soul-fired/files).
+---
+## **Description**
+In Minecraft there's Soul Fire, yet if you or a mob catch fire because of it nothing will change from normal fire.  
+This mod makes Soul Fire actually work as one would expect, all whilst providing an *easy-to-use* API for modders that want to add their own custom fire and have it behave consistently.
 
-## Localization
-If you want to provide a new translation for the death message, or improve an existing one,
-open an issue using the Localization template and title it "Death message localization for [lang-tag]" replacing "lang-tag" with the [Minecraft language tag](https://minecraft.fandom.com/wiki/Language#Languages).
+## **Features**
+- Soul Fire overlay
+- Entities catching fire from Soul Fire will burn with actual Soul Fire.  
+Burning from Soul Fire will deal 2 damage per second.
+- Actually consistent Soul Fire behavior.  
+For instance, but not limited to, zombies burning from Soul Fire and arrows passing through Soul Fire can set their targets on Soul Fire.
+- Two new enchantments: Soul Fire Aspect and Soul Flame.  
+As their name suggests, they work exactly the same as Fire Aspect and Flame with the only difference being the kind of fire the target will burn from, with the consequent damage increase.
+- API for custom fire types:  
+For modders who want to add their own custom fire(s), this mod provides an *easy-to-use* API to register your fire(s) and have it(them) behave consistently **automatically**. Furthermore for each new modded fire that uses this API there will be new custom Fire Aspect and Flame enchantments available in game **automatically**.  
+See the bottom section *For developers* to know more.
 
-## Issues
-To open a new issue or search an existing one visit the [issues tab](https://github.com/Nyphet/soul-fire-d/issues).
+## **License and right of use**
+Feel free to use this mod for any modpack or video, just be sure to give credit and possibly link [here](https://github.com/Nyphet/just-vertical-slabs#readme).  
+This project is published under the [GNU General Public License v3.0](https://github.com/Nyphet/just-vertical-slabs/blob/master/LICENSE).
 
-## Technical details
-This mod is required on both server and client.  
-For mod/datapack developers:  
-This mod provides 2 new Damage Sources, IN_SOUL_FIRE and ON_SOUL_FIRE, to use instead of IN_FIRE and ON_FIRE when you want to damage an entity with soul fire.  
-Soul fire damage is increased for Piglings only if soul fire is a Piglin repellent.
-If soul fire is not a Piglin repellent it will not deal increased damage to them, furthermore if soul fire is set as a Hoglin repellent then it will deal increased damage to Hoglings.
+## **For developers**
+To learn how to use the provided API follow the [Wiki](https://github.com/Nyphet/soul-fire-d/wiki) on [GitHub](https://github.com/Nyphet/soul-fire-d).
 
-## License and right of use
-Feel free to use this mod for any modpack or video, just be sure to give credit and possibly link [here](https://github.com/Nyphet/soul-fire-d#readme).  
-This project is published under the [GNU General Public License v3.0](https://github.com/Nyphet/soul-fire-d/blob/master/LICENSE).
+## **Support me**
+[![My other projects](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/curseforge/curseforge64.png "My other projects")](https://www.curseforge.com/members/crystal_spider_/projects)
