@@ -28,6 +28,11 @@ public class SoulFiredLoader {
    */
   public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, "main"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
 
+  /**
+   * Registers the {@link RegistryEventHandler} to the mod bus.
+   * <p>
+   * Registers Soul Fire as modded fire.
+   */
   public SoulFiredLoader() {
     FMLJavaModLoadingContext.get().getModEventBus().register(new RegistryEventHandler());
     FireManager.registerFire(

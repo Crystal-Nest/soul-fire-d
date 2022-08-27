@@ -13,10 +13,21 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 
+/**
+ * Injects into {@link CampfireBlock} to alter Fire behavior for consistency.
+ */
 @Mixin(CampfireBlock.class)
 public abstract class CampfireBlockMixin extends BaseEntityBlock implements SimpleWaterloggedBlock, FireTypeChanger {
+  /**
+   * Fire Id.
+   */
   private String fireId;
 
+  /**
+   * Useless constructor required by the super class to make the compiler happy.
+   * 
+   * @param properties
+   */
   private CampfireBlockMixin(Properties properties) {
     super(properties);
   }
@@ -33,6 +44,16 @@ public abstract class CampfireBlockMixin extends BaseEntityBlock implements Simp
     return fireId;
   }
 
+  /**
+   * Redirects the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link CampfireBlock#entityInside(BlockState, Level, BlockPos, Entity)}.
+   * <p>
+   * Hurts the entity with the correct fire damage and {@link DamageSource}.
+   * 
+   * @param caller {@link Entity} invoking (owning) the redirected method.
+   * @param damageSource original {@link DamageSource} (normale fire).
+   * @param damage original damage (normal fire).
+   * @return the result of calling the redirected method.
+   */
   @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
     if (this == Blocks.SOUL_CAMPFIRE && !FireManager.isFireId(getFireId())) {

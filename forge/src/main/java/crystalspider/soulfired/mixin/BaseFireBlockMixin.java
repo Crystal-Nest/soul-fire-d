@@ -11,10 +11,21 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
 
+/**
+ * Injects into {@link BaseFireBlock} to alter Fire behavior for consistency.
+ */
 @Mixin(BaseFireBlock.class)
 public abstract class BaseFireBlockMixin extends Block implements FireTypeChanger {
+  /**
+   * Fire Id.
+   */
   private String fireId;
 
+  /**
+   * Useless constructor required by the super class to make the compiler happy.
+   * 
+   * @param properties
+   */
   private BaseFireBlockMixin(Properties properties) {
     super(properties);
   }
@@ -31,6 +42,16 @@ public abstract class BaseFireBlockMixin extends Block implements FireTypeChange
     return fireId;
   }
 
+  /**
+   * Redirects the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link BaseFireBlock#entityInside(BlockState, Level, BlockPos, Entity)}.
+   * <p>
+   * Hurts the entity with the correct fire damage and {@link DamageSource}.
+   * 
+   * @param caller {@link Entity} invoking (owning) the redirected method.
+   * @param damageSource original {@link DamageSource} (normale fire).
+   * @param damage original damage (normal fire).
+   * @return the result of calling the redirected method.
+   */
   @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
     return FireManager.hurtEntityInFire(caller, getFireId(), damageSource, damage);

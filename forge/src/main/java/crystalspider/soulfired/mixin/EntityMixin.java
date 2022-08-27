@@ -11,36 +11,52 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import crystalspider.soulfired.api.type.FireTyped;
-import net.minecraft.commands.CommandSource;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.Nameable;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.entity.EntityAccess;
-import net.minecraftforge.common.capabilities.CapabilityProvider;
-import net.minecraftforge.common.extensions.IForgeEntity;
 
+/**
+ * Injects into {@link Entity} to alter Fire behavior for consistency.
+ */
 @Mixin(Entity.class)
-public abstract class EntityMixin extends CapabilityProvider<Entity> implements Nameable, EntityAccess, CommandSource, IForgeEntity, FireTypeChanger {
+public abstract class EntityMixin implements FireTypeChanger {
+  /**
+   * 
+   */
   @Shadow
   public Level level;
+  /**
+   * 
+   */
   @Shadow
   protected SynchedEntityData entityData;
 
+  /**
+   * 
+   */
   private static final EntityDataAccessor<String> DATA_FIRE_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.STRING);
 
-  EntityMixin() {
-    super(Entity.class);
-  }
-
+  /**
+   * 
+   */
   @Shadow
   protected abstract void defineSynchedData();
+  /**
+   * 
+   * 
+   * @return
+   */
   @Shadow
   public abstract int getRemainingFireTicks();
+  /**
+   * 
+   * 
+   * @return
+   */
   @Shadow
   public abstract boolean isInLava();
 
@@ -54,17 +70,36 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
     return entityData.get(DATA_FIRE_ID);
   }
 
+  /**
+   * 
+   * 
+   * @param caller
+   * @param damageSource
+   * @param damage
+   * @return
+   */
   @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
     return FireManager.hurtEntityOnFire(caller, ((FireTyped) caller).getFireId(), damageSource, damage);
   }
 
+  /**
+   * 
+   * 
+   * @param caller
+   */
   @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;defineSynchedData()V"))
   private void redirectDefineSynchedData(Entity caller) {
     entityData.define(DATA_FIRE_ID, "");
     defineSynchedData();
   }
 
+  /**
+   * 
+   * 
+   * @param ticks
+   * @param ci
+   */
   @Inject(method = "setRemainingFireTicks", at = @At(value = "HEAD"))
   private void onSetRemainingFireTicks(int ticks, CallbackInfo ci) {
     if (!level.isClientSide && (ticks <= 0 || ticks >= getRemainingFireTicks())) {
@@ -72,6 +107,12 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
     }
   }
 
+  /**
+   * 
+   * 
+   * @param tag
+   * @param cir
+   */
   @Inject(method = "saveWithoutId", at = @At(value = "TAIL"))
   private void onSaveWithoutId(CompoundTag tag, CallbackInfoReturnable<CompoundTag> cir) {
     if (FireManager.isFireId(getFireId())) {
@@ -79,6 +120,12 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
     }
   }
 
+  /**
+   * 
+   * 
+   * @param tag
+   * @param ci
+   */
   @Inject(method = "load", at = @At(value = "TAIL"))
   private void onLoad(CompoundTag tag, CallbackInfo ci) {
     setFireId(FireManager.ensureFireId(tag.getString("FireId")));

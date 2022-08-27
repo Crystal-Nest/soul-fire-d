@@ -15,9 +15,24 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
-
+/**
+ * Injects into {@link BowItem} to alter Fire behavior for consistency.
+ */
 @Mixin(BowItem.class)
 public class BowItemMixin {
+  /**
+   * Redirects the call to {@link Level#addFreshEntity(Entity)} inside the method {@link BowItem#releaseUsing(ItemStack, Level, LivingEntity, int)}.
+   * <p>
+   * Handles setting the arrow on the correct kind of fire if the bow has a custom fire enchantment.
+   * 
+   * @param caller {@link Level} invoking (owning) the redirected method.
+   * @param abstractArrow parameter of the redirected method: the arrow being add to the world.
+   * @param bow bow being released.
+   * @param level world inside which the arrow should be generated (is the same instance as {@code caller}).
+   * @param holder {@link LivingEntity} holding the {@code bow}.
+   * @param drawTime time the {@code bow} has being drawn for.
+   * @return the result of calling the redirected method.
+   */
   @Redirect(method = "releaseUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
   private boolean redirectAddFreshEntity(Level caller, Entity abstractArrow, ItemStack bow, Level level, LivingEntity holder, int drawTime) {
     if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, bow) <= 0) {
