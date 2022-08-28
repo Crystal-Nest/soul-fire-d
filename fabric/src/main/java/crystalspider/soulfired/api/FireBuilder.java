@@ -428,9 +428,9 @@ public class FireBuilder {
   /**
    * Build a {@link Fire} instance.
    * <p>
-   * If {@link #spriteIdentifier0} is not set, it will default to a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlasLocation atlasLocation} and {@code "block/" + id + "_fire_0"} as its {@link SpriteIdentifier#texture texture}.
+   * If {@link #spriteIdentifier0} is not set, it will default to a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlas atlas} and {@code "block/" + id + "_fire_0"} as its {@link SpriteIdentifier#texture texture}.
    * <p>
-   * If {@link #spriteIdentifier1} is not set, it will default to a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlasLocation atlasLocation} and {@code "block/" + id + "_fire_1"} as its {@link SpriteIdentifier#texture texture}.
+   * If {@link #spriteIdentifier1} is not set, it will default to a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlas atlas} and {@code "block/" + id + "_fire_1"} as its {@link SpriteIdentifier#texture texture}.
    * 
    * @return {@link Fire} instance.
    * @throws IllegalStateException if the {@link #id} is invalid (not set or blank).
