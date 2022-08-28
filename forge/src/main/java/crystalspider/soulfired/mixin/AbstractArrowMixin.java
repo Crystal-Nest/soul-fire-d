@@ -33,10 +33,12 @@ public abstract class AbstractArrowMixin extends Projectile implements FireTypeC
   }
 
   /**
+   * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link AbstractArrow#onHitEntity(EntityHitResult)}.
+   * <p>
+   * Sets the correct FireId for the Entity.
    * 
-   * 
-   * @param caller
-   * @param seconds
+   * @param caller {@link Entity} invoking (owning) the redirected method.
+   * @param seconds seconds the entity should be set on fire for.
    */
   @Redirect(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setSecondsOnFire(I)V"))
   private void redirectSetSecondsOnFire(Entity caller, int seconds) {
@@ -45,10 +47,12 @@ public abstract class AbstractArrowMixin extends Projectile implements FireTypeC
   }
 
   /**
+   * Injects at the end of the method {@link AbstractArrow#setEnchantmentEffectsFromEntity(LivingEntity, float)}.
+   * <p>
+   * Sets this arrow on fire for 100 seconds with the correct FireId if it was shot by a mob with an item enchanted with a custom fire enchantment.
    * 
-   * 
-   * @param entity
-   * @param damage
+   * @param entity {@link LivingEntity}, a mob, shooting the arrow.
+   * @param damage arrow base damage.
    * @param ci {@link CallbackInfo}.
    */
   @Inject(method = "setEnchantmentEffectsFromEntity", at = @At(value = "TAIL"))

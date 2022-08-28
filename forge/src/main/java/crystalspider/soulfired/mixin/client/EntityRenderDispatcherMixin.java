@@ -14,18 +14,20 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.entity.Entity;
 
 /**
- * 
+ * Injects into {@link EntityRenderDispatcher} to alter Fire behavior for consistency.
  */
 @Mixin(EntityRenderDispatcher.class)
 public abstract class EntityRenderDispatcherMixin {
   /**
+   * Modifies the assignment value returned by the first call to {@link Material#sprite()} in the method {@link EntityRenderDispatcher#renderFlame(PoseStack, MultiBufferSource, Entity)}.
+   * <p>
+   * Assigns the correct sprite for the fire type the entity is burning from.
    * 
-   * 
-   * @param value
+   * @param value original sprite returned by the modified method.
    * @param poseStack
    * @param multiBufferSource
-   * @param entity
-   * @return
+   * @param entity {@link Entity} that's burning.
+   * @return {@link TextureAtlasSprite} to assign.
    */
   @ModifyVariable(method = "renderFlame", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/resources/model/Material;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", ordinal = 0), ordinal = 0)
   private TextureAtlasSprite onRenderFlameAtSprite0(TextureAtlasSprite value, PoseStack poseStack, MultiBufferSource multiBufferSource, Entity entity) {
@@ -37,13 +39,15 @@ public abstract class EntityRenderDispatcherMixin {
   }
 
   /**
+   * Modifies the assignment value returned by the second call to {@link Material#sprite()} in the method {@link EntityRenderDispatcher#renderFlame(PoseStack, MultiBufferSource, Entity)}.
+   * <p>
+   * Assigns the correct sprite for the fire type the entity is burning from.
    * 
-   * 
-   * @param value
+   * @param value original sprite returned by the modified method.
    * @param poseStack
    * @param multiBufferSource
-   * @param entity
-   * @return
+   * @param entity {@link Entity} that's burning.
+   * @return {@link TextureAtlasSprite} to assign.
    */
   @ModifyVariable(method = "renderFlame", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/resources/model/Material;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", ordinal = 1), ordinal = 1)
   private TextureAtlasSprite onRenderFlameAtSprite1(TextureAtlasSprite value, PoseStack poseStack, MultiBufferSource multiBufferSource, Entity entity) {
