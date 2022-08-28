@@ -95,7 +95,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
-    return FireManager.hurtEntityOnFire(caller, ((FireTyped) caller).getFireId(), damageSource, damage);
+    return FireManager.damageOnFire(caller, ((FireTyped) caller).getFireId(), damageSource, damage);
   }
 
   /**
@@ -109,7 +109,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   @Inject(method = "setRemainingFireTicks", at = @At(value = "HEAD"))
   private void onSetRemainingFireTicks(int ticks, CallbackInfo ci) {
     if (!level.isClientSide && (ticks <= 0 || ticks >= getRemainingFireTicks())) {
-      setFireId(FireManager.DEFAULT_FIRE_ID);
+      setFireId(FireManager.BASE_FIRE_ID);
     }
   }
 

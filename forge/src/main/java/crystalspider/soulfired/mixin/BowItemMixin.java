@@ -5,12 +5,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.api.enchantment.FireTypedArrowEnchantment;
 import crystalspider.soulfired.api.type.FireTypeChanger;
+import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -36,10 +37,10 @@ public class BowItemMixin {
   @Redirect(method = "releaseUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
   private boolean redirectAddFreshEntity(Level caller, Entity abstractArrow, ItemStack bow, Level level, LivingEntity holder, int drawTime) {
     if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, bow) <= 0) {
-      for (FireTypedArrowEnchantment enchantment : FireManager.getFlameEnchants()) {
+      for (Enchantment enchantment : FireManager.getFlames()) {
         if (EnchantmentHelper.getItemEnchantmentLevel(enchantment, bow) > 0) {
           abstractArrow.setSecondsOnFire(100);
-          ((FireTypeChanger) abstractArrow).setFireId(enchantment.getFireId());
+          ((FireTypeChanger) abstractArrow).setFireId(((FireTyped) enchantment).getFireId());
           break;
         }
       }

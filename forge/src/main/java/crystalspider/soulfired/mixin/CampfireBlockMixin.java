@@ -6,12 +6,14 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Injects into {@link CampfireBlock} to alter Fire behavior for consistency.
@@ -59,6 +61,6 @@ public abstract class CampfireBlockMixin extends BaseEntityBlock implements Simp
     if (this == Blocks.SOUL_CAMPFIRE && !FireManager.isFireId(getFireId())) {
       setFireId(FireManager.SOUL_FIRE_ID);
     }
-    return FireManager.hurtEntityInFire(caller, getFireId(), damageSource, damage);
+    return FireManager.damageInFire(caller, getFireId(), damageSource, damage);
   }
 }

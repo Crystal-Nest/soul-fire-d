@@ -1,8 +1,6 @@
 package crystalspider.soulfired.handlers;
 
-import crystalspider.soulfired.SoulFiredLoader;
 import crystalspider.soulfired.api.Fire;
-import crystalspider.soulfired.api.FireEnchantmentBuilder;
 import crystalspider.soulfired.api.FireManager;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.event.RegistryEvent.Register;
@@ -22,9 +20,8 @@ public class RegistryEventHandler {
   @SubscribeEvent
   public void handle(Register<Enchantment> event) {
     for (Fire fire : FireManager.getFires()) {
-      FireEnchantmentBuilder fireEnchantmentBuilder = FireManager.fireEnchantBuilder(SoulFiredLoader.MODID, fire);
-      event.getRegistry().register(FireManager.registerFireAspect(fireEnchantmentBuilder.buildFireAspect()));
-      event.getRegistry().register(FireManager.registerFlame(fireEnchantmentBuilder.buildFlame()));
+      event.getRegistry().register(fire.getFireAspect());
+      event.getRegistry().register(fire.getFlame());
     }
   }
 }

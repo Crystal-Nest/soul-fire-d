@@ -1,5 +1,6 @@
 package crystalspider.soulfired.api.enchantment;
 
+import crystalspider.soulfired.SoulFiredLoader;
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import crystalspider.soulfired.api.type.FireTyped;
@@ -9,7 +10,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.FireAspectEnchantment;
 
+/**
+ * Fire Aspect Enchantment sensitive to the fire type.
+ */
 public class FireTypedAspectEnchantment extends FireAspectEnchantment implements FireTyped {
+  /**
+   * Fire Id.
+   */
   private final String fireId;
 
   private final boolean isTreasure;
@@ -17,6 +24,14 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
   private final boolean isTradeable;
   private final boolean isDiscoverable;
 
+  /**
+   * @param fireId
+   * @param rarity
+   * @param isTreasure
+   * @param isCurse
+   * @param isTradeable
+   * @param isDiscoverable
+   */
   public FireTypedAspectEnchantment(String fireId, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
     super(rarity, EquipmentSlot.MAINHAND);
     this.fireId = FireManager.sanitizeFireId(fireId);
@@ -24,8 +39,13 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
     this.isCurse = isCurse;
     this.isTradeable = isTradeable;
     this.isDiscoverable = isDiscoverable;
+    setRegistryName(SoulFiredLoader.MODID, this.fireId + "_fire_aspect");
   }
 
+  /**
+   * @param fireId
+   * @param rarity
+   */
   public FireTypedAspectEnchantment(String fireId, Rarity rarity) {
     this(fireId, rarity, true, false, true, true);
   }
@@ -40,7 +60,7 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
 
   @Override
   public final boolean checkCompatibility(Enchantment enchantment) {
-    return super.checkCompatibility(enchantment) && !(enchantment instanceof FireAspectEnchantment);
+    return super.checkCompatibility(enchantment) && !(enchantment instanceof FireAspectEnchantment) && !FireManager.getFireAspects().contains(enchantment);
   }
 
   @Override

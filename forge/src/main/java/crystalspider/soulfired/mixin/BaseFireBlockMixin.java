@@ -6,10 +6,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Injects into {@link BaseFireBlock} to alter Fire behavior for consistency.
@@ -54,6 +56,6 @@ public abstract class BaseFireBlockMixin extends Block implements FireTypeChange
    */
   @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
-    return FireManager.hurtEntityInFire(caller, getFireId(), damageSource, damage);
+    return FireManager.damageInFire(caller, getFireId(), damageSource, damage);
   }
 }

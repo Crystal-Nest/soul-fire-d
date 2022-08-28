@@ -3,7 +3,7 @@ package crystalspider.soulfired.api;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.item.enchantment.Enchantment.Rarity;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -19,6 +19,11 @@ public class Fire {
    * Fire damage per second.
    */
   private final float damage;
+
+  /**
+   * Whether to invert harm and heal for mobs that have potion effects inverted (e.g. undeads).
+   */
+  private final boolean invertHealAndHarm;
 
   /**
    * Fire {@link Material} for the sprite0.
@@ -50,31 +55,42 @@ public class Fire {
   /**
    * {@link BlockState} of the Fire Block considered as the source for this Fire.
    */
-  private final BlockState blockState;
+  private final BlockState sourceBlock;
 
-  private final FireEnchantData fireEnchantData;
+  /**
+   * Fire Aspect {@link Enchantment}.
+   */
+  private final Enchantment fireAspect;
+  /**
+   * Flame {@link Enchantment}.
+   */
+  private final Enchantment flame;
 
   /**
    * @param id {@link #id}.
    * @param damage {@link #damage}.
+   * @param invertHealAndHarm {@link #invertHealAndHarm}.
    * @param material0 {@link #material0}.
    * @param material1 {@link #material1}.
    * @param inFire {@link #inFire}.
    * @param onFire {@link #onFire}.
    * @param hurtSound {@link #hurtSound}.
-   * @param blockState {@link #blockState}.
-   * @param fireEnchantData {@link #fireEnchantData}.
+   * @param sourceBlock {@link #sourceBlock}.
+   * @param fireAspect {@link #fireAspect}.
+   * @param flame {@link #flame}.
    */
-  Fire(String id, float damage, Material material0, Material material1, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, BlockState blockState, FireEnchantData fireEnchantData) {
+  Fire(String id, float damage, boolean invertHealAndHarm, Material material0, Material material1, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, BlockState sourceBlock, Enchantment fireAspect, Enchantment flame) {
     this.id = id;
     this.damage = damage;
+    this.invertHealAndHarm = invertHealAndHarm;
     this.material0 = material0;
     this.material1 = material1;
     this.inFire = inFire;
     this.onFire = onFire;
     this.hurtSound = hurtSound;
-    this.blockState = blockState;
-    this.fireEnchantData = fireEnchantData;
+    this.sourceBlock = sourceBlock;
+    this.fireAspect = fireAspect;
+    this.flame = flame;
   }
 
   /**
@@ -93,6 +109,15 @@ public class Fire {
    */
   public float getDamage() {
     return damage;
+  }
+
+  /**
+   * Returns this {@link #invertHealAndHarm}.
+   * 
+   * @return this {@link #invertHealAndHarm}.
+   */
+  public boolean getInvertHealAndHarm() {
+    return invertHealAndHarm;
   }
 
   /**
@@ -141,71 +166,34 @@ public class Fire {
   }
 
   /**
-   * Returns this {@link #blockState}.
+   * Returns this {@link #sourceBlock}.
    * 
-   * @return this {@link #blockState}.
+   * @return this {@link #sourceBlock}.
    */
-  public BlockState getBlockState() {
-    return blockState;
+  public BlockState getSourceBlock() {
+    return sourceBlock;
   }
 
   /**
-   * Returns this {@link #fireEnchantData}.
+   * Returns this {@link #fireAspect}.
    * 
-   * @return this {@link #fireEnchantData}.
+   * @return this {@link #fireAspect}.
    */
-  public FireEnchantData getEnchantData() {
-    return fireEnchantData;
+  public Enchantment getFireAspect() {
+    return fireAspect;
+  }
+
+  /**
+   * Returns this {@link #flame}.
+   * 
+   * @return this {@link #flame}.
+   */
+  public Enchantment getFlame() {
+    return flame;
   }
 
   @Override
   public String toString() {
-    return "Fire [id=" + id + ", damage=" + damage + ", material0=" + material0 + ", material1=" + material1 + ", inFire=" + inFire + ", onFire=" + onFire + ", hurtSound=" + hurtSound + ", blockState=" + blockState + ", enchantData=" + fireEnchantData + "]";
-  }
-
-  static class FireEnchantData {
-    final Rarity rarity;
-  
-    final boolean isTreasure;
-    final boolean isCurse;
-    final boolean isTradeable;
-    final boolean isDiscoverable;
-  
-    public FireEnchantData(Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
-      this.rarity = rarity;
-      this.isTreasure = isTreasure;    
-      this.isCurse = isCurse;
-      this.isTradeable = isTradeable;
-      this.isDiscoverable = isDiscoverable;
-    }
-  
-    public FireEnchantData(Rarity rarity) {
-      this(rarity, true, false, true, true);
-    }
-
-    public Rarity getRarity() {
-      return rarity;
-    }
-
-    public boolean isTreasure() {
-      return isTreasure;
-    }
-
-    public boolean isCurse() {
-      return isCurse;
-    }
-
-    public boolean isTradeable() {
-      return isTradeable;
-    }
-
-    public boolean isDiscoverable() {
-      return isDiscoverable;
-    }
-
-    @Override
-    public String toString() {
-      return "FireEnchantData [rarity=" + rarity + ", isCurse=" + isCurse + ", isDiscoverable=" + isDiscoverable + ", isTradeable=" + isTradeable + ", isTreasure=" + isTreasure + "]";
-    }    
+    return "Fire [id=" + id + ", damage=" + damage + ", invertedHealAndHarm=" + invertHealAndHarm + ", material0=" + material0 + ", material1=" + material1 + ", inFire=" + inFire + ", onFire=" + onFire + ", hurtSound=" + hurtSound + ", blockState=" + sourceBlock + "]";
   }
 }
