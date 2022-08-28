@@ -8,16 +8,19 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
+import crystalspider.soulfired.SoulFiredLoader;
 import crystalspider.soulfired.api.type.FireTypeChanger;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.CampfireBlock;
+import net.minecraft.block.AbstractBlock.Settings;
+import net.minecraft.client.texture.Sprite;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 /**
  * Static manager for the registered Fires.
@@ -47,16 +50,16 @@ public abstract class FireManager {
    * Utility to create a FireTyped {@link CampfireBlock}.
    * 
    * @param fireId Fire Id of the fire the campfire burns from.
-   * @param properties {@link Properties Block Properties}.
+   * @param settings {@link Settings Block Settings}.
    * @return the new {@link CampfireBlock}.
    */
-  public static final CampfireBlock createCampfireBlock(String fireId, Properties properties) {
+  public static final CampfireBlock createCampfireBlock(String fireId, Settings settings) {
     if (isValidFireId(fireId)) {
-      CampfireBlock campfire = new CampfireBlock(false, 0, properties);
+      CampfireBlock campfire = new CampfireBlock(false, 0, settings);
       ((FireTypeChanger) campfire).setFireId(fireId);
       return campfire;
     }
-    return new CampfireBlock(false, (int) FireBuilder.DEFAULT_DAMAGE, properties);
+    return new CampfireBlock(false, (int) FireBuilder.DEFAULT_DAMAGE, settings);
   }
 
   /**
@@ -80,6 +83,8 @@ public abstract class FireManager {
     String fireId = fire.getId();
     if (!fires.containsKey(fireId)) {
       fires.put(fireId, fire);
+      Registry.register(Registry.ENCHANTMENT, new Identifier( SoulFiredLoader.MODID, fireId + "_fire_aspect"), fire.getFireAspect());
+      Registry.register(Registry.ENCHANTMENT, new Identifier( SoulFiredLoader.MODID, fireId + "_flame"), fire.getFlame());
       return true;
     }
     LOGGER.error("Fire [" + fireId + "] was already registered with the following value: " + fires.get(fireId));
@@ -203,7 +208,7 @@ public abstract class FireManager {
    * @param id
    * @return the sprite 0 of the {@link Fire} registered with the given {@code id}.
    */
-  public static final TextureAtlasSprite getSprite0(String id) {
+  public static final Sprite getSprite0(String id) {
     if (isFireId(id)) {
       return fires.get(id).getSprite0();
     }
@@ -218,7 +223,7 @@ public abstract class FireManager {
    * @param id
    * @return the sprite 1 of the {@link Fire} registered with the given {@code id}.
    */
-  public static final TextureAtlasSprite getSprite1(String id) {
+  public static final Sprite getSprite1(String id) {
     if (isFireId(id)) {
       return fires.get(id).getSprite1();
     }
@@ -357,7 +362,7 @@ public abstract class FireManager {
   public static final boolean damageInFire(Entity entity, String fireId, DamageSource damageSource, float damage) {
     if (isFireId(fireId)) {
       ((FireTypeChanger) entity).setFireId(fireId);
-      if (entity.tickCount % 20 == 0) {
+      if (entity.age % 20 == 0) {
         return harmOrHeal(entity, getInFireDamageSource(fireId), getDamage(fireId), getInvertHealAndHarm(fireId));
       }
       return false;
@@ -401,18 +406,18 @@ public abstract class FireManager {
     if (damage > 0) {
       if (entity instanceof LivingEntity) {
         LivingEntity livingEntity = (LivingEntity) entity;
-        if (livingEntity.isInvertedHealAndHarm() && invertHealAndHarm) {
+        if (livingEntity.isUndead() && invertHealAndHarm) {
           livingEntity.heal(damage);
           return false;
         }
-        return livingEntity.hurt(damageSource, damage);
+        return livingEntity.damage(damageSource, damage);
       }
-      return entity.hurt(damageSource, damage);
+      return entity.damage(damageSource, damage);
     }
     if (entity instanceof LivingEntity) {
       LivingEntity livingEntity = (LivingEntity) entity;
-      if (livingEntity.isInvertedHealAndHarm() && invertHealAndHarm) {
-        return livingEntity.hurt(damageSource, -damage);
+      if (livingEntity.isUndead() && invertHealAndHarm) {
+        return livingEntity.damage(damageSource, -damage);
       }
       livingEntity.heal(-damage);
       return false;

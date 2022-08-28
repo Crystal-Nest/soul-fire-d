@@ -3,18 +3,17 @@ package crystalspider.soulfired.api;
 import crystalspider.soulfired.api.enchantment.FireTypedArrowEnchantment;
 import crystalspider.soulfired.api.enchantment.FireTypedAspectEnchantment;
 import crystalspider.soulfired.api.type.FireTyped;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantment.Rarity;
-import net.minecraft.world.level.block.BaseFireBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantment.Rarity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 
 /**
  * Builder for {@link Fire} instances.
@@ -39,17 +38,17 @@ public class FireBuilder {
   /**
    * Default value for {@link #hurtSound}.
    */
-  public static final SoundEvent DEFAULT_HURT_SOUND = SoundEvents.PLAYER_HURT_ON_FIRE;
+  public static final SoundEvent DEFAULT_HURT_SOUND = SoundEvents.ENTITY_PLAYER_HURT_ON_FIRE;
   /**
    * Default value for {@link #blockState}.
    */
-  public static final BlockState DEFAULT_BLOCKSTATE = Blocks.FIRE.defaultBlockState();
+  public static final BlockState DEFAULT_BLOCKSTATE = Blocks.FIRE.getDefaultState();
 
   /**
    * Default atlas location.
    */
   @SuppressWarnings("deprecation")
-  private static final ResourceLocation BASE_ATLAS_LOCATION = TextureAtlas.LOCATION_BLOCKS;
+  private static final Identifier BASE_ATLAS_LOCATION = SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE;
 
   /**
    * {@link Fire} instance {@link Fire#id id}.
@@ -73,17 +72,17 @@ public class FireBuilder {
   private boolean invertHealAndHarm;
 
   /**
-   * {@link Fire} instance {@link Fire#material0 material0}.
+   * {@link Fire} instance {@link Fire#spriteIdentifier0 spriteIdentifier0}.
    * <p>
-   * Optional, defaults to calling {@link #setMaterial0(String)} with {@code "block/" + id + "_fire_0"}.
+   * Optional, defaults to calling {@link #setSpriteIdentifier0(String)} with {@code "block/" + id + "_fire_0"}.
    */
-  private Material material0;
+  private SpriteIdentifier spriteIdentifier0;
   /**
-   * {@link Fire} instance {@link Fire#material1 material1}.
+   * {@link Fire} instance {@link Fire#spriteIdentifier1 spriteIdentifier1}.
    * <p>
-   * Optional, defaults to calling {@link #setMaterial0(String)} with {@code "block/" + id + "_fire_1"}.
+   * Optional, defaults to calling {@link #setSpriteIdentifier0(String)} with {@code "block/" + id + "_fire_1"}.
    */
-  private Material material1;
+  private SpriteIdentifier spriteIdentifier1;
 
   /**
    * {@link Fire} instance {@link Fire#inFire inFire}.
@@ -181,87 +180,87 @@ public class FireBuilder {
   }
 
   /**
-   * Sets the {@link #material0}.
+   * Sets the {@link #spriteIdentifier0}.
    * 
-   * @param material0
+   * @param spriteIdentifier0
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder setMaterial0(Material material0) {
-    this.material0 = material0;
+  public FireBuilder setSpriteIdentifier0(SpriteIdentifier spriteIdentifier0) {
+    this.spriteIdentifier0 = spriteIdentifier0;
     return this;
   }
 
   /**
-   * Sets the {@link #material0} by creating a new {@link Material} with the given {@link Material#atlasLocation atlasLocation} and {@link Material#texture texture}.
+   * Sets the {@link #spriteIdentifier0} by creating a new {@link SpriteIdentifier} with the given {@link SpriteIdentifier#atlasLocation atlasLocation} and {@link SpriteIdentifier#texture texture}.
    * 
    * @param atlasLocation
    * @param texture
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder setMaterial0(ResourceLocation atlasLocation, ResourceLocation texture) {
-    return setMaterial0(new Material(atlasLocation, texture));
+  public FireBuilder setSpriteIdentifier0(Identifier atlasLocation, Identifier texture) {
+    return setSpriteIdentifier0(new SpriteIdentifier(atlasLocation, texture));
   }
 
   /**
-   * Sets the {@link #material0} by creating a new {@link Material} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link Material#atlasLocation atlasLocation} and the given {@code texture} as its {@link Material#texture texture}.
+   * Sets the {@link #spriteIdentifier0} by creating a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlasLocation atlasLocation} and the given {@code texture} as its {@link SpriteIdentifier#texture texture}.
    * 
    * @param texture
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder setMaterial0(ResourceLocation texture) {
-    return setMaterial0(BASE_ATLAS_LOCATION, texture);
+  public FireBuilder setSpriteIdentifier0(Identifier texture) {
+    return setSpriteIdentifier0(BASE_ATLAS_LOCATION, texture);
   }
 
   /**
-   * Sets the {@link #material0} by creating a new {@link Material} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link Material#atlasLocation atlasLocation} and a new {@link ResourceLocation} with the given {@code id} as its {@link Material#texture texture}.
+   * Sets the {@link #spriteIdentifier0} by creating a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlasLocation atlasLocation} and a new {@link Identifier} with the given {@code id} as its {@link SpriteIdentifier#texture texture}.
    * 
    * @param id
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder setMaterial0(String id) {
-    return setMaterial0(new ResourceLocation(id));
+  public FireBuilder setSpriteIdentifier0(String id) {
+    return setSpriteIdentifier0(new Identifier(id));
   }
 
   /**
-   * Sets the {@link #material1}.
+   * Sets the {@link #spriteIdentifier1}.
    * 
-   * @param material1
+   * @param spriteIdentifier1
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder setMaterial1(Material material1) {
-    this.material1 = material1;
+  public FireBuilder setSpriteIdentifier1(SpriteIdentifier spriteIdentifier1) {
+    this.spriteIdentifier1 = spriteIdentifier1;
     return this;
   }
 
   /**
-   * Sets the {@link #material1} by creating a new {@link Material} with the given {@link Material#atlasLocation atlasLocation} and {@link Material#texture texture}.
+   * Sets the {@link #spriteIdentifier1} by creating a new {@link SpriteIdentifier} with the given {@link SpriteIdentifier#atlasLocation atlasLocation} and {@link SpriteIdentifier#texture texture}.
    * 
    * @param atlasLocation
    * @param texture
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder setMaterial1(ResourceLocation atlasLocation, ResourceLocation texture) {
-    return setMaterial1(new Material(atlasLocation, texture));
+  public FireBuilder setSpriteIdentifier1(Identifier atlasLocation, Identifier texture) {
+    return setSpriteIdentifier1(new SpriteIdentifier(atlasLocation, texture));
   }
 
   /**
-   * Sets the {@link #material1} by creating a new {@link Material} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link Material#atlasLocation atlasLocation} and the given {@code texture} as its {@link Material#texture texture}.
+   * Sets the {@link #spriteIdentifier1} by creating a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlasLocation atlasLocation} and the given {@code texture} as its {@link SpriteIdentifier#texture texture}.
    * 
    * @param texture
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder setMaterial1(ResourceLocation texture) {
-    return setMaterial1(BASE_ATLAS_LOCATION, texture);
+  public FireBuilder setSpriteIdentifier1(Identifier texture) {
+    return setSpriteIdentifier1(BASE_ATLAS_LOCATION, texture);
   }
 
   /**
-   * Sets the {@link #material1} by creating a new {@link Material} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link Material#atlasLocation atlasLocation} and a new {@link ResourceLocation} with the given {@code id} as its {@link Material#texture texture}.
+   * Sets the {@link #spriteIdentifier1} by creating a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlasLocation atlasLocation} and a new {@link Identifier} with the given {@code id} as its {@link SpriteIdentifier#texture texture}.
    * 
    * @param id
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder setMaterial1(String id) {
-    return setMaterial1(new ResourceLocation(id));
+  public FireBuilder setSpriteIdentifier1(String id) {
+    return setSpriteIdentifier1(new Identifier(id));
   }
 
   /**
@@ -278,19 +277,19 @@ public class FireBuilder {
   }
 
   /**
-   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the given {@code messageId}.
+   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the given {@code name}.
    * <p>
-   * The {@link DamageSource} will have both {@link DamageSource#bypassArmor bypassArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}, and {@link DamageSource#exhaustion exhaustion} set to {@code 0.0F}.
+   * The {@link DamageSource} will have both {@link DamageSource#setBypassesArmor setBypassesArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}, and {@link DamageSource#exhaustion exhaustion} set to {@code 0.0F}.
    * 
-   * @param messageId
+   * @param name
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder setInFire(String messageId) {
-    return setInFire((new DamageSource(messageId)).bypassArmor().setIsFire());
+  public FireBuilder setInFire(String name) {
+    return setInFire((new FireDamageSource(name)).setBypassesArmor().setFire());
   }
 
   /**
-   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code messageId} equal to {@code "in_" + id + "_fire"}.
+   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code name} equal to {@code "in_" + id + "_fire"}.
    * 
    * @return this Builder to either set other properties or {@link #build}.
    * @throws IllegalStateException if the {@link #id} is invalid (not set or blank).
@@ -316,19 +315,19 @@ public class FireBuilder {
   }
 
   /**
-   * Sets the {@link DamageSource} {@link #onFire} by creating a new {@link DamageSource} with the given {@code messageId}.
+   * Sets the {@link DamageSource} {@link #onFire} by creating a new {@link DamageSource} with the given {@code name}.
    * <p>
-   * The {@link DamageSource} will have both {@link DamageSource#bypassArmor bypassArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}, and {@link DamageSource#exhaustion exhaustion} set to {@code 0.0F}.   * 
+   * The {@link DamageSource} will have both {@link DamageSource#setBypassesArmor setBypassesArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}, and {@link DamageSource#exhaustion exhaustion} set to {@code 0.0F}.   * 
    * 
-   * @param messageId
+   * @param name
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder setOnFire(String messageId) {
-    return setOnFire((new DamageSource(messageId)).bypassArmor().setIsFire());
+  public FireBuilder setOnFire(String name) {
+    return setOnFire((new FireDamageSource(name)).setBypassesArmor().setFire());
   }
 
   /**
-   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code messageId} equal to {@code "on_" + id + "_fire"}.
+   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code name} equal to {@code "on_" + id + "_fire"}.
    * 
    * @return this Builder to either set other properties or {@link #build}.
    * @throws IllegalStateException if the {@link #id} is invalid (not set or blank).
@@ -371,7 +370,7 @@ public class FireBuilder {
    * @return this Builder to either set other properties or {@link #build}.
    */
   public FireBuilder setSourceBlock(Block sourceBlock) {
-    return setSourceBlock(sourceBlock.defaultBlockState());
+    return setSourceBlock(sourceBlock.getDefaultState());
   }
 
   /**
@@ -415,8 +414,8 @@ public class FireBuilder {
     id = null;
     damage = DEFAULT_DAMAGE;
     invertHealAndHarm = DEFAULT_INVERT_HEAL_AND_HARM;
-    material0 = null;
-    material1 = null;
+    spriteIdentifier0 = null;
+    spriteIdentifier1 = null;
     inFire = DEFAULT_IN_FIRE;
     onFire = DEFAULT_ON_FIRE;
     hurtSound = DEFAULT_HURT_SOUND;
@@ -429,20 +428,20 @@ public class FireBuilder {
   /**
    * Build a {@link Fire} instance.
    * <p>
-   * If {@link #material0} is not set, it will default to a new {@link Material} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link Material#atlasLocation atlasLocation} and {@code "block/" + id + "_fire_0"} as its {@link Material#texture texture}.
+   * If {@link #spriteIdentifier0} is not set, it will default to a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlasLocation atlasLocation} and {@code "block/" + id + "_fire_0"} as its {@link SpriteIdentifier#texture texture}.
    * <p>
-   * If {@link #material1} is not set, it will default to a new {@link Material} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link Material#atlasLocation atlasLocation} and {@code "block/" + id + "_fire_1"} as its {@link Material#texture texture}.
+   * If {@link #spriteIdentifier1} is not set, it will default to a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlasLocation atlasLocation} and {@code "block/" + id + "_fire_1"} as its {@link SpriteIdentifier#texture texture}.
    * 
    * @return {@link Fire} instance.
    * @throws IllegalStateException if the {@link #id} is invalid (not set or blank).
    */
   public Fire build() throws IllegalStateException {
     if (FireManager.isValidFireId(id)) {
-      if (material0 == null) {
-        setMaterial0("block/" + id + "_fire_0");
+      if (spriteIdentifier0 == null) {
+        setSpriteIdentifier0("block/" + id + "_fire_0");
       }
-      if (material1 == null) {
-        setMaterial1("block/" + id + "_fire_1");
+      if (spriteIdentifier1 == null) {
+        setSpriteIdentifier1("block/" + id + "_fire_1");
       }
       if (fireAspect == null) {
         fireAspect = new FireTypedAspectEnchantment(id, Rarity.VERY_RARE);
@@ -450,7 +449,7 @@ public class FireBuilder {
       if (flame == null) {
         flame = new FireTypedArrowEnchantment(id, Rarity.VERY_RARE);
       }
-      return new Fire(FireManager.sanitizeFireId(id), damage, invertHealAndHarm, material0, material1, inFire, onFire, hurtSound, blockState, fireAspect, flame);
+      return new Fire(FireManager.sanitizeFireId(id), damage, invertHealAndHarm, spriteIdentifier0, spriteIdentifier1, inFire, onFire, hurtSound, blockState, fireAspect, flame);
     }
     throw new IllegalStateException("Attempted to build a Fire with a non-valid id");
   }

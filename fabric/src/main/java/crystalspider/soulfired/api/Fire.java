@@ -1,11 +1,11 @@
 package crystalspider.soulfired.api;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.sound.SoundEvent;
 
 /**
  * Fire
@@ -27,17 +27,17 @@ public class Fire {
   private final boolean invertHealAndHarm;
 
   /**
-   * Fire {@link Material} for the sprite0.
+   * Fire {@link SpriteIdentifier} for the sprite0.
    * <p>
    * Used only in rendering the Fire of an entity.
    */
-  private final Material material0;
+  private final SpriteIdentifier spriteIdentifier0;
   /**
-   * Fire {@link Material} for the sprite1.
+   * Fire {@link SpriteIdentifier} for the sprite1.
    * <p>
    * Used both for rendering the Fire of an entity and the player overlay.
    */
-  private final Material material1;
+  private final SpriteIdentifier spriteIdentifier1;
 
   /**
    * Fire {@link DamageSource} for when the entity is in or on a block providing fire.
@@ -80,12 +80,12 @@ public class Fire {
    * @param fireAspect {@link #fireAspect}.
    * @param flame {@link #flame}.
    */
-  Fire(String id, float damage, boolean invertHealAndHarm, Material material0, Material material1, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, BlockState sourceBlock, Enchantment fireAspect, Enchantment flame) {
+  Fire(String id, float damage, boolean invertHealAndHarm, SpriteIdentifier spriteIdentifier0, SpriteIdentifier spriteIdentifier1, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, BlockState sourceBlock, Enchantment fireAspect, Enchantment flame) {
     this.id = id;
     this.damage = damage;
     this.invertHealAndHarm = invertHealAndHarm;
-    this.material0 = material0;
-    this.material1 = material1;
+    this.spriteIdentifier0 = spriteIdentifier0;
+    this.spriteIdentifier1 = spriteIdentifier1;
     this.inFire = inFire;
     this.onFire = onFire;
     this.hurtSound = hurtSound;
@@ -126,8 +126,8 @@ public class Fire {
    * 
    * @return this sprite 0.
    */
-  public TextureAtlasSprite getSprite0() {
-    return material0.sprite();
+  public Sprite getSprite0() {
+    return spriteIdentifier0.getSprite();
   }
 
   /**
@@ -135,8 +135,8 @@ public class Fire {
    * 
    * @return this sprite 1.
    */
-  public TextureAtlasSprite getSprite1() {
-    return material1.sprite();
+  public Sprite getSprite1() {
+    return spriteIdentifier1.getSprite();
   }
 
   /**
@@ -195,6 +195,6 @@ public class Fire {
 
   @Override
   public String toString() {
-    return "Fire [id=" + id + ", damage=" + damage + ", invertedHealAndHarm=" + invertHealAndHarm + ", material0=" + material0 + ", material1=" + material1 + ", inFire=" + inFire + ", onFire=" + onFire + ", hurtSound=" + hurtSound + ", blockState=" + sourceBlock + "]";
+    return "Fire [id=" + id + ", damage=" + damage + ", invertedHealAndHarm=" + invertHealAndHarm + ", spriteIdentifier0=" + spriteIdentifier0 + ", spriteIdentifier1=" + spriteIdentifier1 + ", inFire=" + inFire + ", onFire=" + onFire + ", hurtSound=" + hurtSound + ", blockState=" + sourceBlock + "]";
   }
 }

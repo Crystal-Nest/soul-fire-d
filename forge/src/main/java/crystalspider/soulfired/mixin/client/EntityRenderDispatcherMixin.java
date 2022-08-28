@@ -33,7 +33,7 @@ public abstract class EntityRenderDispatcherMixin {
   private TextureAtlasSprite onRenderFlameAtSprite0(TextureAtlasSprite value, PoseStack poseStack, MultiBufferSource multiBufferSource, Entity entity) {
     String fireId = ((FireTyped) entity).getFireId();
     if (FireManager.isFireId(fireId)) {
-      return FireManager.getMaterial0(fireId).sprite();
+      return FireManager.getSprite0(fireId);
     }
     return value;
   }
@@ -53,7 +53,7 @@ public abstract class EntityRenderDispatcherMixin {
   private TextureAtlasSprite onRenderFlameAtSprite1(TextureAtlasSprite value, PoseStack poseStack, MultiBufferSource multiBufferSource, Entity entity) {
     String fireId = ((FireTyped) entity).getFireId();
     if (FireManager.isFireId(fireId)) {
-      return FireManager.getMaterial1(fireId).sprite();
+      return FireManager.getSprite1(fireId);
     }
     return value;
   }

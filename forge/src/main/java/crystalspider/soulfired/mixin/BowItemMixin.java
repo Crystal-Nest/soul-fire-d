@@ -30,12 +30,12 @@ public class BowItemMixin {
    * @param abstractArrow parameter of the redirected method: the arrow being add to the world.
    * @param bow bow being released.
    * @param level world inside which the arrow should be generated (is the same instance as {@code caller}).
-   * @param holder {@link LivingEntity} holding the {@code bow}.
-   * @param drawTime time the {@code bow} has being drawn for.
+   * @param user {@link LivingEntity} holding the {@code bow}.
+   * @param remainingUseTicks time left before pulling the {@code bow} to the max.
    * @return the result of calling the redirected method.
    */
   @Redirect(method = "releaseUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
-  private boolean redirectAddFreshEntity(Level caller, Entity abstractArrow, ItemStack bow, Level level, LivingEntity holder, int drawTime) {
+  private boolean redirectAddFreshEntity(Level caller, Entity abstractArrow, ItemStack bow, Level level, LivingEntity user, int remainingUseTicks) {
     if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, bow) <= 0) {
       for (Enchantment enchantment : FireManager.getFlames()) {
         if (EnchantmentHelper.getItemEnchantmentLevel(enchantment, bow) > 0) {

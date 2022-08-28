@@ -53,7 +53,7 @@ public class ScreenEffectRendererMixin {
   private static TextureAtlasSprite onRenderFire(TextureAtlasSprite value, Minecraft minecraft, PoseStack poseStack) {
     String fireId = ((FireTyped) minecraft.player).getFireId();
     if (FireManager.isFireId(fireId)) {
-      return FireManager.getMaterial1(fireId).sprite();
+      return FireManager.getSprite1(fireId);
     }
     return value;
   }

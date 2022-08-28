@@ -13,7 +13,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -23,14 +22,14 @@ import net.minecraft.world.phys.EntityHitResult;
  * Injects into {@link AbstractArrow} to alter Fire behavior for consistency.
  */
 @Mixin(AbstractArrow.class)
-public abstract class AbstractArrowMixin extends Projectile implements FireTypeChanger {
+public abstract class AbstractArrowMixin extends Entity implements FireTypeChanger {
   /**
    * Useless constructor required by the super class to make the compiler happy.
    * 
    * @param entityType
    * @param world
    */
-  private AbstractArrowMixin(EntityType<? extends Projectile> entityType, Level world) {
+  public AbstractArrowMixin(EntityType<?> entityType, Level world) {
     super(entityType, world);
   }
 
@@ -54,11 +53,11 @@ public abstract class AbstractArrowMixin extends Projectile implements FireTypeC
    * Sets this arrow on fire for 100 seconds with the correct FireId if it was shot by a mob with an item enchanted with a custom fire enchantment.
    * 
    * @param entity {@link LivingEntity}, a mob, shooting the arrow.
-   * @param damage arrow base damage.
+   * @param damage arrow damage modifier.
    * @param ci {@link CallbackInfo}.
    */
   @Inject(method = "setEnchantmentEffectsFromEntity", at = @At(value = "TAIL"))
-  private void onSetEnchantmentEffectsFromEntity(LivingEntity entity, float damage, CallbackInfo ci) {
+  private void onSetEnchantmentEffectsFromEntity(LivingEntity entity, float damageModifier, CallbackInfo ci) {
     for (Enchantment enchantment : FireManager.getFlames()) {
       if (EnchantmentHelper.getEnchantmentLevel(enchantment, entity) > 0) {
         setSecondsOnFire(100);

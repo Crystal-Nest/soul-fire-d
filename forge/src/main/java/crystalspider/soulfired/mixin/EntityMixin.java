@@ -75,7 +75,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    * <p>
    * Defines the {@link #DATA_FIRE_ID Fire Id data} to synchronize across client and server.
    * 
-   * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as this entity.
+   * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as {@code this} entity.
    */
   @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;defineSynchedData()V"))
   private void redirectDefineSynchedData(Entity caller) {
@@ -114,14 +114,14 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Injects at the end of the method {@link Entity#onSaveWithoutId(CompoundTag)}.
+   * Injects in the method {@link Entity#saveWithoutId(CompoundTag)} before the invocation of {@link Entity#addAdditionalSaveData(CompoundTag)}.
    * <p>
    * If valid, saves the current FireId in the given {@link CompoundTag}.
    * 
    * @param tag
    * @param cir {@link CallbackInfoReturnable}.
    */
-  @Inject(method = "saveWithoutId", at = @At(value = "TAIL"))
+  @Inject(method = "saveWithoutId", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V"))
   private void onSaveWithoutId(CompoundTag tag, CallbackInfoReturnable<CompoundTag> cir) {
     if (FireManager.isFireId(getFireId())) {
       tag.putString("FireId", getFireId());
@@ -129,14 +129,14 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Injects at the end of the method {@link Entity#onLoad(CompoundTag)}.
+   * Injects in the method {@link Entity#load(CompoundTag)} before the invocation of {@link Entity#readAdditionalSaveData(CompoundTag)}.
    * <p>
    * Loads the FireId from the given {@link CompoundTag}.
    * 
    * @param tag
    * @param ci {@link CallbackInfo}.
    */
-  @Inject(method = "load", at = @At(value = "TAIL"))
+  @Inject(method = "load", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V"))
   private void onLoad(CompoundTag tag, CallbackInfo ci) {
     setFireId(FireManager.ensureFireId(tag.getString("FireId")));
   }

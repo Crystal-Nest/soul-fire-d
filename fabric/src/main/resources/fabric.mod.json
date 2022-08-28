@@ -20,7 +20,9 @@
       "${group}.${modid}.SoulFiredLoader"
     ]
   },
-  "mixins": [],
+  "mixins": [
+    "soulfired.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
