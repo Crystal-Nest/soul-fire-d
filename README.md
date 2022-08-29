@@ -1,29 +1,13 @@
-![Soul Fire'd banner](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/soul-fire-d/soul-fire-d.gif)
+![Soul Fire'd banner](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/soul-fire-d/banner.gif)
 
 ---
-<div style="display: flex; justify-content: space-evenly;">
-  <div style="display: flex;">
-    <div style="margin-right: 8px;">Supported Minecraft versions</div>
-    <div style="display: flex; justify-content: space-evenly;">
-      <div style="margin-right: 8px;">1.19.2</div>
-      <div style="margin-right: 8px;">1.19.1</div>
-      <div style="margin-right: 8px;">1.19</div>
-      <div>1.18.2</div>
-    </div>
-  </div>
-  <div style="display: flex;">
-    <div style="margin-right: 8px;">Side</div><div>Client & Server</div>
-  </div>
-  <div style="display: flex;">
-    <div style="margin-right: 8px;">Forge</div><div>Downloads</div>
-  </div>
-  <div style="display: flex;">
-    <div style="margin-right: 8px;">Fabric</div><div>Downloads</div>
-  </div>
-  <div style="display: flex;">
-    <div style="margin-right: 8px;">GitHub</div><div>Issues</div>
-  </div>
-</div>
+MINECRAFT: 1.19.2 | 1.19.1 | 1.19 | 1.18.2
+
+ISSUES: GitHubLogo GITHUB
+
+![Loader](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/loader/loader.svg)![Forge](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/loader/forge.svg)![Fabric](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/loader/fabric.svg)
+
+![Overlay](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/side/client-server.svg)
 
 ---
 ## **Description**
@@ -31,14 +15,17 @@ In Minecraft there's Soul Fire, yet if you or a mob catch fire because of it not
 This mod makes Soul Fire actually work as one would expect, all whilst providing an *easy-to-use* API for modders that want to add their own custom fire and have it behave consistently.
 
 ## **Features**
-- Soul Fire overlay
-- Entities catching fire from Soul Fire will burn with actual Soul Fire.  
-Burning from Soul Fire will deal 2 damage per second.
-- Actually consistent Soul Fire behavior.  
-For instance, but not limited to, zombies burning from Soul Fire and arrows passing through Soul Fire can set their targets on Soul Fire.
-- Two new enchantments: Soul Fire Aspect and Soul Flame.  
+- **Soul Fire overlay**  
+![Overlay](https://github.com/Nyphet/mod-fancy-assets/blob/main/soul-fire-d/overlay.gif?raw=true)
+- **Entities catching fire from Soul Fire will burn with actual Soul Fire.**  
+Burning from Soul Fire will deal 2 damage per second.  
+![Sheep](https://github.com/Nyphet/mod-fancy-assets/blob/main/soul-fire-d/sheep.gif?raw=true)
+- **Actually consistent Soul Fire behavior.**  
+For instance, but not limited to, zombies burning from Soul Fire and arrows passing through Soul Fire can set their targets on Soul Fire.  
+![Arrows](https://github.com/Nyphet/mod-fancy-assets/blob/main/soul-fire-d/arrow.gif?raw=true)
+- **Two new enchantments: Soul Fire Aspect and Soul Flame.**  
 As their name suggests, they work exactly the same as Fire Aspect and Flame with the only difference being the kind of fire the target will burn from, with the consequent damage increase.
-- API for custom fire types:  
+- **API for custom fire types:**  
 For modders who want to add their own custom fire(s), this mod provides an *easy-to-use* API to register your fire(s) and have it(them) behave consistently **automatically**. Furthermore for each new modded fire that uses this API there will be new custom Fire Aspect and Flame enchantments available in game **automatically**.  
 See the bottom section *For developers* to know more.
 
@@ -50,4 +37,7 @@ This project is published under the [GNU General Public License v3.0](https://gi
 To learn how to use the provided API follow the [Wiki](https://github.com/Nyphet/soul-fire-d/wiki) on [GitHub](https://github.com/Nyphet/soul-fire-d).
 
 ## **Support me**
+[![Patreon](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/patreon/patreon64.png "Patreon")](https://www.patreon.com/crystalspider)
+[![Kofi](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/kofi/kofi64.png "Kofi")](https://ko-fi.com/crystalspider)
+[![Twitch](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/twitch/twitch64.png "Twitch")](https://www.twitch.tv/crystal_spider_)
 [![My other projects](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/curseforge/curseforge64.png "My other projects")](https://www.curseforge.com/members/crystal_spider_/projects)
