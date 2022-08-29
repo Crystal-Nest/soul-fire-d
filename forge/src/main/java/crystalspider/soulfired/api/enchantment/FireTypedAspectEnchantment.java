@@ -1,6 +1,5 @@
 package crystalspider.soulfired.api.enchantment;
 
-import crystalspider.soulfired.SoulFiredLoader;
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import crystalspider.soulfired.api.type.FireTyped;
@@ -15,6 +14,10 @@ import net.minecraft.world.item.enchantment.FireAspectEnchantment;
  */
 public class FireTypedAspectEnchantment extends FireAspectEnchantment implements FireTyped {
   /**
+   * Mod Id.
+   */
+  private final String modId;
+  /**
    * Fire Id.
    */
   private final String fireId;
@@ -25,6 +28,7 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
   private final boolean isDiscoverable;
 
   /**
+   * @param modId
    * @param fireId
    * @param rarity
    * @param isTreasure
@@ -32,22 +36,24 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
    * @param isTradeable
    * @param isDiscoverable
    */
-  public FireTypedAspectEnchantment(String fireId, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
+  public FireTypedAspectEnchantment(String modId, String fireId, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
     super(rarity, EquipmentSlot.MAINHAND);
+    this.modId = modId;
     this.fireId = FireManager.sanitizeFireId(fireId);
-    this.isTreasure = isTreasure;    
+    this.isTreasure = isTreasure;
     this.isCurse = isCurse;
     this.isTradeable = isTradeable;
     this.isDiscoverable = isDiscoverable;
-    setRegistryName(SoulFiredLoader.MODID, this.fireId + "_fire_aspect");
+    setRegistryName(this.modId, this.fireId + "_fire_aspect");
   }
 
   /**
+   * @param modId
    * @param fireId
    * @param rarity
    */
-  public FireTypedAspectEnchantment(String fireId, Rarity rarity) {
-    this(fireId, rarity, true, false, true, true);
+  public FireTypedAspectEnchantment(String modId, String fireId, Rarity rarity) {
+    this(modId, fireId, rarity, true, false, true, true);
   }
 
   @Override
@@ -86,5 +92,14 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
   @Override
   public final String getFireId() {
     return fireId;
+  }
+  
+  /**
+   * Returns this {@link #modId}.
+   * 
+   * @return this {@link #modId}.
+   */
+  public final String getModId() {
+    return modId;
   }
 }

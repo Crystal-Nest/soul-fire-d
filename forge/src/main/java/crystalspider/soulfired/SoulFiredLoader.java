@@ -37,6 +37,7 @@ public class SoulFiredLoader {
     FMLJavaModLoadingContext.get().getModEventBus().register(new RegistryEventHandler());
     FireManager.registerFire(
       FireManager.fireBuilder()
+        .setModId(MODID)
         .setId(FireManager.SOUL_FIRE_ID)
         .setDamage(2)
         .setSourceBlock(Blocks.SOUL_FIRE)

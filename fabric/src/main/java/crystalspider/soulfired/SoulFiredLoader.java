@@ -17,6 +17,7 @@ public class SoulFiredLoader implements ModInitializer {
   public void onInitialize() {
     FireManager.registerFire(
       FireManager.fireBuilder()
+        .setModId(MODID)
         .setId(FireManager.SOUL_FIRE_ID)
         .setDamage(2)
         .setSourceBlock(Blocks.SOUL_FIRE)

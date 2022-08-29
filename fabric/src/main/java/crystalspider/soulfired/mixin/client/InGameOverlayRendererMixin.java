@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import crystalspider.soulfired.api.FireManager;
+import crystalspider.soulfired.api.client.FireClientManager;
 import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameOverlayRenderer;
@@ -32,7 +33,7 @@ public class InGameOverlayRendererMixin {
   private static Sprite onRenderFireOverlay(Sprite value, MinecraftClient client, MatrixStack matrices) {
     String fireId = ((FireTyped) client.player).getFireId();
     if (FireManager.isFireId(fireId)) {
-      return FireManager.getSprite1(fireId);
+      return FireClientManager.getSprite1(fireId);
     }
     return value;
   }

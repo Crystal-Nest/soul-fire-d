@@ -1,8 +1,6 @@
 package crystalspider.soulfired.api;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.sound.SoundEvent;
@@ -11,6 +9,10 @@ import net.minecraft.sound.SoundEvent;
  * Fire
  */
 public class Fire {
+  /**
+   * Mod ID.
+   */
+  private final String modId;
   /**
    * Fire unique ID.
    */
@@ -25,19 +27,6 @@ public class Fire {
    * Whether to invert harm and heal for mobs that have potion effects inverted (e.g. undeads).
    */
   private final boolean invertHealAndHarm;
-
-  /**
-   * Fire {@link SpriteIdentifier} for the sprite0.
-   * <p>
-   * Used only in rendering the Fire of an entity.
-   */
-  private final SpriteIdentifier spriteIdentifier0;
-  /**
-   * Fire {@link SpriteIdentifier} for the sprite1.
-   * <p>
-   * Used both for rendering the Fire of an entity and the player overlay.
-   */
-  private final SpriteIdentifier spriteIdentifier1;
 
   /**
    * Fire {@link DamageSource} for when the entity is in or on a block providing fire.
@@ -68,6 +57,7 @@ public class Fire {
   private final Enchantment flame;
 
   /**
+   * @param modId {@link #modId}.
    * @param id {@link #id}.
    * @param damage {@link #damage}.
    * @param invertHealAndHarm {@link #invertHealAndHarm}.
@@ -80,18 +70,26 @@ public class Fire {
    * @param fireAspect {@link #fireAspect}.
    * @param flame {@link #flame}.
    */
-  Fire(String id, float damage, boolean invertHealAndHarm, SpriteIdentifier spriteIdentifier0, SpriteIdentifier spriteIdentifier1, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, BlockState sourceBlock, Enchantment fireAspect, Enchantment flame) {
+  Fire(String modId, String id, float damage, boolean invertHealAndHarm, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, BlockState sourceBlock, Enchantment fireAspect, Enchantment flame) {
+    this.modId = modId;
     this.id = id;
     this.damage = damage;
     this.invertHealAndHarm = invertHealAndHarm;
-    this.spriteIdentifier0 = spriteIdentifier0;
-    this.spriteIdentifier1 = spriteIdentifier1;
     this.inFire = inFire;
     this.onFire = onFire;
     this.hurtSound = hurtSound;
     this.sourceBlock = sourceBlock;
     this.fireAspect = fireAspect;
     this.flame = flame;
+  }
+
+  /**
+   * Returns this {@link #modId}.
+   * 
+   * @return this {@link #modId}.
+   */
+  public String getModId() {
+    return modId;
   }
 
   /**
@@ -119,24 +117,6 @@ public class Fire {
    */
   public boolean getInvertHealAndHarm() {
     return invertHealAndHarm;
-  }
-
-  /**
-   * Returns this sprite 0.
-   * 
-   * @return this sprite 0.
-   */
-  public Sprite getSprite0() {
-    return spriteIdentifier0.getSprite();
-  }
-
-  /**
-   * Returns this sprite 1.
-   * 
-   * @return this sprite 1.
-   */
-  public Sprite getSprite1() {
-    return spriteIdentifier1.getSprite();
   }
 
   /**
@@ -195,6 +175,6 @@ public class Fire {
 
   @Override
   public String toString() {
-    return "Fire [id=" + id + ", damage=" + damage + ", invertedHealAndHarm=" + invertHealAndHarm + ", spriteIdentifier0=" + spriteIdentifier0 + ", spriteIdentifier1=" + spriteIdentifier1 + ", inFire=" + inFire + ", onFire=" + onFire + ", hurtSound=" + hurtSound + ", blockState=" + sourceBlock + "]";
+    return "Fire [id=" + id + ", damage=" + damage + ", invertedHealAndHarm=" + invertHealAndHarm + ", inFire=" + inFire + ", onFire=" + onFire + ", hurtSound=" + hurtSound + ", blockState=" + sourceBlock + "]";
   }
 }

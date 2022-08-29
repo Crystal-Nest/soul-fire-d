@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import crystalspider.soulfired.api.FireManager;
+import crystalspider.soulfired.api.client.FireClientManager;
 import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
@@ -53,7 +54,7 @@ public class ScreenEffectRendererMixin {
   private static TextureAtlasSprite onRenderFire(TextureAtlasSprite value, Minecraft minecraft, PoseStack poseStack) {
     String fireId = ((FireTyped) minecraft.player).getFireId();
     if (FireManager.isFireId(fireId)) {
-      return FireManager.getSprite1(fireId);
+      return FireClientManager.getSprite1(fireId);
     }
     return value;
   }

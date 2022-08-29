@@ -18,6 +18,9 @@
   "entrypoints": {
     "main": [
       "${group}.${modid}.SoulFiredLoader"
+    ],
+    "client": [
+      "${group}.${modid}.SoulFiredClientLoader"
     ]
   },
   "mixins": [

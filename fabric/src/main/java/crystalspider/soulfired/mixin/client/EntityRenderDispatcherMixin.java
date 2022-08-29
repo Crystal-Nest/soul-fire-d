@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import crystalspider.soulfired.api.FireManager;
+import crystalspider.soulfired.api.client.FireClientManager;
 import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -33,7 +34,7 @@ public abstract class EntityRenderDispatcherMixin {
   private Sprite onRenderFireAtSprite0(Sprite value, MatrixStack matrices, VertexConsumerProvider vertexConsumer, Entity entity) {
     String fireId = ((FireTyped) entity).getFireId();
     if (FireManager.isFireId(fireId)) {
-      return FireManager.getSprite0(fireId);
+      return FireClientManager.getSprite0(fireId);
     }
     return value;
   }
@@ -53,7 +54,7 @@ public abstract class EntityRenderDispatcherMixin {
   private Sprite onRenderFireAtSprite1(Sprite value, MatrixStack matrices, VertexConsumerProvider vertexConsumer, Entity entity) {
     String fireId = ((FireTyped) entity).getFireId();
     if (FireManager.isFireId(fireId)) {
-      return FireManager.getSprite1(fireId);
+      return FireClientManager.getSprite1(fireId);
     }
     return value;
   }

@@ -8,12 +8,10 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
-import crystalspider.soulfired.SoulFiredLoader;
 import crystalspider.soulfired.api.type.FireTypeChanger;
+import net.minecraft.block.AbstractBlock.Settings;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
-import net.minecraft.block.AbstractBlock.Settings;
-import net.minecraft.client.texture.Sprite;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -29,7 +27,7 @@ public abstract class FireManager {
   /**
    * Logger.
    */
-  public static final Logger LOGGER = LogUtils.getLogger();
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   /**
    * Fire Id of Vanilla Fire.
@@ -83,11 +81,11 @@ public abstract class FireManager {
     String fireId = fire.getId();
     if (!fires.containsKey(fireId)) {
       fires.put(fireId, fire);
-      Registry.register(Registry.ENCHANTMENT, new Identifier( SoulFiredLoader.MODID, fireId + "_fire_aspect"), fire.getFireAspect());
-      Registry.register(Registry.ENCHANTMENT, new Identifier( SoulFiredLoader.MODID, fireId + "_flame"), fire.getFlame());
+      Registry.register(Registry.ENCHANTMENT, new Identifier(fire.getModId(), fireId + "_fire_aspect"), fire.getFireAspect());
+      Registry.register(Registry.ENCHANTMENT, new Identifier(fire.getModId(), fireId + "_flame"), fire.getFlame());
       return true;
     }
-    LOGGER.error("Fire [" + fireId + "] was already registered with the following value: " + fires.get(fireId));
+    LOGGER.error("Fire [" + fireId + "] was already registered by mod " + fires.get(fireId).getModId() + " with the following value: " + fires.get(fireId));
     return false;
   }
 
@@ -198,36 +196,6 @@ public abstract class FireManager {
       return fires.get(id).getInvertHealAndHarm();
     }
     return FireBuilder.DEFAULT_INVERT_HEAL_AND_HARM;
-  }
-
-  /**
-   * Returns the sprite 0 of the {@link Fire} registered with the given {@code id}.
-   * <p>
-   * Returns {@code null} if no {@link Fire} was registered with the given {@code id}.
-   * 
-   * @param id
-   * @return the sprite 0 of the {@link Fire} registered with the given {@code id}.
-   */
-  public static final Sprite getSprite0(String id) {
-    if (isFireId(id)) {
-      return fires.get(id).getSprite0();
-    }
-    return null;
-  }
-
-  /**
-   * Returns the sprite 1 of the {@link Fire} registered with the given {@code id}.
-   * <p>
-   * Returns {@code null} if no {@link Fire} was registered with the given {@code id}.
-   * 
-   * @param id
-   * @return the sprite 1 of the {@link Fire} registered with the given {@code id}.
-   */
-  public static final Sprite getSprite1(String id) {
-    if (isFireId(id)) {
-      return fires.get(id).getSprite1();
-    }
-    return null;
   }
 
   /**

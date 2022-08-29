@@ -3,9 +3,6 @@ package crystalspider.soulfired.api;
 import crystalspider.soulfired.api.enchantment.FireTypedArrowEnchantment;
 import crystalspider.soulfired.api.enchantment.FireTypedAspectEnchantment;
 import crystalspider.soulfired.api.type.FireTyped;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -46,11 +43,11 @@ public class FireBuilder {
   public static final BlockState DEFAULT_BLOCKSTATE = Blocks.FIRE.defaultBlockState();
 
   /**
-   * Default atlas location.
+   * {@link Fire} instance {@link Fire#modId modId}.
+   * <p>
+   * Required.
    */
-  @SuppressWarnings("deprecation")
-  private static final ResourceLocation BASE_ATLAS_LOCATION = TextureAtlas.LOCATION_BLOCKS;
-
+  private String modId;
   /**
    * {@link Fire} instance {@link Fire#id id}.
    * <p>
@@ -71,19 +68,6 @@ public class FireBuilder {
    * Optional, defaults to {@code false}.
    */
   private boolean invertHealAndHarm;
-
-  /**
-   * {@link Fire} instance {@link Fire#material0 material0}.
-   * <p>
-   * Optional, defaults to calling {@link #setMaterial0(String)} with {@code "block/" + id + "_fire_0"}.
-   */
-  private Material material0;
-  /**
-   * {@link Fire} instance {@link Fire#material1 material1}.
-   * <p>
-   * Optional, defaults to calling {@link #setMaterial0(String)} with {@code "block/" + id + "_fire_1"}.
-   */
-  private Material material1;
 
   /**
    * {@link Fire} instance {@link Fire#inFire inFire}.
@@ -138,6 +122,17 @@ public class FireBuilder {
   }
 
   /**
+   * Sets the {@link #modId}.
+   * 
+   * @param modId
+   * @return this Builder to either set other properties or {@link #build}.
+   */
+  public FireBuilder setModId(String modId) {
+    this.modId = modId;
+    return this;
+  }
+
+  /**
    * Sets the {@link #id}.
    * <p>
    * {@link #id} will be set only if the given {@code id} is valid. In addition, a valid {@code id} will be trimmed.
@@ -178,90 +173,6 @@ public class FireBuilder {
   public FireBuilder setInvertHealAndHarm(boolean invertHealAndHarm) {
     this.invertHealAndHarm = invertHealAndHarm;
     return this;
-  }
-
-  /**
-   * Sets the {@link #material0}.
-   * 
-   * @param material0
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setMaterial0(Material material0) {
-    this.material0 = material0;
-    return this;
-  }
-
-  /**
-   * Sets the {@link #material0} by creating a new {@link Material} with the given {@link Material#atlasLocation atlasLocation} and {@link Material#texture texture}.
-   * 
-   * @param atlasLocation
-   * @param texture
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setMaterial0(ResourceLocation atlasLocation, ResourceLocation texture) {
-    return setMaterial0(new Material(atlasLocation, texture));
-  }
-
-  /**
-   * Sets the {@link #material0} by creating a new {@link Material} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link Material#atlasLocation atlasLocation} and the given {@code texture} as its {@link Material#texture texture}.
-   * 
-   * @param texture
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setMaterial0(ResourceLocation texture) {
-    return setMaterial0(BASE_ATLAS_LOCATION, texture);
-  }
-
-  /**
-   * Sets the {@link #material0} by creating a new {@link Material} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link Material#atlasLocation atlasLocation} and a new {@link ResourceLocation} with the given {@code id} as its {@link Material#texture texture}.
-   * 
-   * @param id
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setMaterial0(String id) {
-    return setMaterial0(new ResourceLocation(id));
-  }
-
-  /**
-   * Sets the {@link #material1}.
-   * 
-   * @param material1
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setMaterial1(Material material1) {
-    this.material1 = material1;
-    return this;
-  }
-
-  /**
-   * Sets the {@link #material1} by creating a new {@link Material} with the given {@link Material#atlasLocation atlasLocation} and {@link Material#texture texture}.
-   * 
-   * @param atlasLocation
-   * @param texture
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setMaterial1(ResourceLocation atlasLocation, ResourceLocation texture) {
-    return setMaterial1(new Material(atlasLocation, texture));
-  }
-
-  /**
-   * Sets the {@link #material1} by creating a new {@link Material} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link Material#atlasLocation atlasLocation} and the given {@code texture} as its {@link Material#texture texture}.
-   * 
-   * @param texture
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setMaterial1(ResourceLocation texture) {
-    return setMaterial1(BASE_ATLAS_LOCATION, texture);
-  }
-
-  /**
-   * Sets the {@link #material1} by creating a new {@link Material} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link Material#atlasLocation atlasLocation} and a new {@link ResourceLocation} with the given {@code id} as its {@link Material#texture texture}.
-   * 
-   * @param id
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setMaterial1(String id) {
-    return setMaterial1(new ResourceLocation(id));
   }
 
   /**
@@ -415,8 +326,6 @@ public class FireBuilder {
     id = null;
     damage = DEFAULT_DAMAGE;
     invertHealAndHarm = DEFAULT_INVERT_HEAL_AND_HARM;
-    material0 = null;
-    material1 = null;
     inFire = DEFAULT_IN_FIRE;
     onFire = DEFAULT_ON_FIRE;
     hurtSound = DEFAULT_HURT_SOUND;
@@ -429,29 +338,23 @@ public class FireBuilder {
   /**
    * Build a {@link Fire} instance.
    * <p>
-   * If {@link #material0} is not set, it will default to a new {@link Material} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link Material#atlasLocation atlasLocation} and {@code "block/" + id + "_fire_0"} as its {@link Material#texture texture}.
+   * If {@link #fireAspect} is not set, it will default to a new {@link FireTypedAspectEnchantment} with {@link Rarity#VERY_RARE}.
    * <p>
-   * If {@link #material1} is not set, it will default to a new {@link Material} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link Material#atlasLocation atlasLocation} and {@code "block/" + id + "_fire_1"} as its {@link Material#texture texture}.
+   * If {@link #flame} is not set, it will default to a new {@link FireTypedArrowEnchantment} with {@link Rarity#VERY_RARE}.
    * 
    * @return {@link Fire} instance.
    * @throws IllegalStateException if the {@link #id} is invalid (not set or blank).
    */
   public Fire build() throws IllegalStateException {
-    if (FireManager.isValidFireId(id)) {
-      if (material0 == null) {
-        setMaterial0("block/" + id + "_fire_0");
-      }
-      if (material1 == null) {
-        setMaterial1("block/" + id + "_fire_1");
-      }
+    if (FireManager.isValidFireId(id) && !(modId == null || modId.isBlank())) {
       if (fireAspect == null) {
-        fireAspect = new FireTypedAspectEnchantment(id, Rarity.VERY_RARE);
+        fireAspect = new FireTypedAspectEnchantment(modId, id, Rarity.VERY_RARE);
       }
       if (flame == null) {
-        flame = new FireTypedArrowEnchantment(id, Rarity.VERY_RARE);
+        flame = new FireTypedArrowEnchantment(modId, id, Rarity.VERY_RARE);
       }
-      return new Fire(FireManager.sanitizeFireId(id), damage, invertHealAndHarm, material0, material1, inFire, onFire, hurtSound, blockState, fireAspect, flame);
+      return new Fire(modId, FireManager.sanitizeFireId(id), damage, invertHealAndHarm, inFire, onFire, hurtSound, blockState, fireAspect, flame);
     }
-    throw new IllegalStateException("Attempted to build a Fire with a non-valid id");
+    throw new IllegalStateException("Attempted to build a Fire with a non-valid id or modId");
   }
 }

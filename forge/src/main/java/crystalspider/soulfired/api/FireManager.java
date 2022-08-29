@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 
 import crystalspider.soulfired.api.type.FireTypeChanger;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -26,7 +25,7 @@ public abstract class FireManager {
   /**
    * Logger.
    */
-  public static final Logger LOGGER = LogUtils.getLogger();
+  private static final Logger LOGGER = LogUtils.getLogger();
 
   /**
    * Fire Id of Vanilla Fire.
@@ -82,7 +81,7 @@ public abstract class FireManager {
       fires.put(fireId, fire);
       return true;
     }
-    LOGGER.error("Fire [" + fireId + "] was already registered with the following value: " + fires.get(fireId));
+    LOGGER.error("Fire [" + fireId + "] was already registered by mod " + fires.get(fireId).getModId() + " with the following value: " + fires.get(fireId));
     return false;
   }
 
@@ -193,36 +192,6 @@ public abstract class FireManager {
       return fires.get(id).getInvertHealAndHarm();
     }
     return FireBuilder.DEFAULT_INVERT_HEAL_AND_HARM;
-  }
-
-  /**
-   * Returns the sprite 0 of the {@link Fire} registered with the given {@code id}.
-   * <p>
-   * Returns {@code null} if no {@link Fire} was registered with the given {@code id}.
-   * 
-   * @param id
-   * @return the sprite 0 of the {@link Fire} registered with the given {@code id}.
-   */
-  public static final TextureAtlasSprite getSprite0(String id) {
-    if (isFireId(id)) {
-      return fires.get(id).getSprite0();
-    }
-    return null;
-  }
-
-  /**
-   * Returns the sprite 1 of the {@link Fire} registered with the given {@code id}.
-   * <p>
-   * Returns {@code null} if no {@link Fire} was registered with the given {@code id}.
-   * 
-   * @param id
-   * @return the sprite 1 of the {@link Fire} registered with the given {@code id}.
-   */
-  public static final TextureAtlasSprite getSprite1(String id) {
-    if (isFireId(id)) {
-      return fires.get(id).getSprite1();
-    }
-    return null;
   }
 
   /**

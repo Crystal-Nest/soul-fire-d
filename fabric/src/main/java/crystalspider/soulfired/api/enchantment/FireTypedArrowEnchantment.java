@@ -12,6 +12,10 @@ import net.minecraft.entity.EquipmentSlot;
  */
 public class FireTypedArrowEnchantment extends FlameEnchantment implements FireTyped {
   /**
+   * Mod Id.
+   */
+  private final String modId;
+  /**
    * Fire Id.
    */
   private final String fireId;
@@ -22,6 +26,7 @@ public class FireTypedArrowEnchantment extends FlameEnchantment implements FireT
   private final boolean isDiscoverable;
 
   /**
+   * @param modId
    * @param fireId
    * @param rarity
    * @param isTreasure
@@ -29,21 +34,23 @@ public class FireTypedArrowEnchantment extends FlameEnchantment implements FireT
    * @param isTradeable
    * @param isDiscoverable
    */
-  public FireTypedArrowEnchantment(String fireId, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
+  public FireTypedArrowEnchantment(String modId, String fireId, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
     super(rarity, EquipmentSlot.MAINHAND);
+    this.modId = modId;
     this.fireId = FireManager.sanitizeFireId(fireId);
-    this.isTreasure = isTreasure;    
+    this.isTreasure = isTreasure;
     this.isCurse = isCurse;
     this.isTradeable = isTradeable;
     this.isDiscoverable = isDiscoverable;
   }
 
   /**
+   * @param modId
    * @param fireId
    * @param rarity
    */
-  public FireTypedArrowEnchantment(String fireId, Rarity rarity) {
-    this(fireId, rarity, true, false, true, true);
+  public FireTypedArrowEnchantment(String modId, String fireId, Rarity rarity) {
+    this(modId, fireId, rarity, true, false, true, true);
   }
 
   @Override
@@ -74,5 +81,14 @@ public class FireTypedArrowEnchantment extends FlameEnchantment implements FireT
   @Override
   public final String getFireId() {
     return fireId;
+  }
+
+  /**
+   * Returns this {@link #modId}.
+   * 
+   * @return this {@link #modId}.
+   */
+  public final String getModId() {
+    return modId;
   }
 }

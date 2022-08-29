@@ -6,14 +6,11 @@ import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.texture.SpriteAtlasTexture;
-import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantment.Rarity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
 
 /**
  * Builder for {@link Fire} instances.
@@ -45,11 +42,11 @@ public class FireBuilder {
   public static final BlockState DEFAULT_BLOCKSTATE = Blocks.FIRE.getDefaultState();
 
   /**
-   * Default atlas location.
+   * {@link Fire} instance {@link Fire#modId modId}.
+   * <p>
+   * Required.
    */
-  @SuppressWarnings("deprecation")
-  private static final Identifier BASE_ATLAS_LOCATION = SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE;
-
+  private String modId;
   /**
    * {@link Fire} instance {@link Fire#id id}.
    * <p>
@@ -70,19 +67,6 @@ public class FireBuilder {
    * Optional, defaults to {@code false}.
    */
   private boolean invertHealAndHarm;
-
-  /**
-   * {@link Fire} instance {@link Fire#spriteIdentifier0 spriteIdentifier0}.
-   * <p>
-   * Optional, defaults to calling {@link #setSpriteIdentifier0(String)} with {@code "block/" + id + "_fire_0"}.
-   */
-  private SpriteIdentifier spriteIdentifier0;
-  /**
-   * {@link Fire} instance {@link Fire#spriteIdentifier1 spriteIdentifier1}.
-   * <p>
-   * Optional, defaults to calling {@link #setSpriteIdentifier0(String)} with {@code "block/" + id + "_fire_1"}.
-   */
-  private SpriteIdentifier spriteIdentifier1;
 
   /**
    * {@link Fire} instance {@link Fire#inFire inFire}.
@@ -137,6 +121,17 @@ public class FireBuilder {
   }
 
   /**
+   * Sets the {@link #modId}.
+   * 
+   * @param modId
+   * @return this Builder to either set other properties or {@link #build}.
+   */
+  public FireBuilder setModId(String modId) {
+    this.modId = modId;
+    return this;
+  }
+
+  /**
    * Sets the {@link #id}.
    * <p>
    * {@link #id} will be set only if the given {@code id} is valid. In addition, a valid {@code id} will be trimmed.
@@ -180,90 +175,6 @@ public class FireBuilder {
   }
 
   /**
-   * Sets the {@link #spriteIdentifier0}.
-   * 
-   * @param spriteIdentifier0
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setSpriteIdentifier0(SpriteIdentifier spriteIdentifier0) {
-    this.spriteIdentifier0 = spriteIdentifier0;
-    return this;
-  }
-
-  /**
-   * Sets the {@link #spriteIdentifier0} by creating a new {@link SpriteIdentifier} with the given {@link SpriteIdentifier#atlasLocation atlasLocation} and {@link SpriteIdentifier#texture texture}.
-   * 
-   * @param atlasLocation
-   * @param texture
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setSpriteIdentifier0(Identifier atlasLocation, Identifier texture) {
-    return setSpriteIdentifier0(new SpriteIdentifier(atlasLocation, texture));
-  }
-
-  /**
-   * Sets the {@link #spriteIdentifier0} by creating a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlasLocation atlasLocation} and the given {@code texture} as its {@link SpriteIdentifier#texture texture}.
-   * 
-   * @param texture
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setSpriteIdentifier0(Identifier texture) {
-    return setSpriteIdentifier0(BASE_ATLAS_LOCATION, texture);
-  }
-
-  /**
-   * Sets the {@link #spriteIdentifier0} by creating a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlasLocation atlasLocation} and a new {@link Identifier} with the given {@code id} as its {@link SpriteIdentifier#texture texture}.
-   * 
-   * @param id
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setSpriteIdentifier0(String id) {
-    return setSpriteIdentifier0(new Identifier(id));
-  }
-
-  /**
-   * Sets the {@link #spriteIdentifier1}.
-   * 
-   * @param spriteIdentifier1
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setSpriteIdentifier1(SpriteIdentifier spriteIdentifier1) {
-    this.spriteIdentifier1 = spriteIdentifier1;
-    return this;
-  }
-
-  /**
-   * Sets the {@link #spriteIdentifier1} by creating a new {@link SpriteIdentifier} with the given {@link SpriteIdentifier#atlasLocation atlasLocation} and {@link SpriteIdentifier#texture texture}.
-   * 
-   * @param atlasLocation
-   * @param texture
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setSpriteIdentifier1(Identifier atlasLocation, Identifier texture) {
-    return setSpriteIdentifier1(new SpriteIdentifier(atlasLocation, texture));
-  }
-
-  /**
-   * Sets the {@link #spriteIdentifier1} by creating a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlasLocation atlasLocation} and the given {@code texture} as its {@link SpriteIdentifier#texture texture}.
-   * 
-   * @param texture
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setSpriteIdentifier1(Identifier texture) {
-    return setSpriteIdentifier1(BASE_ATLAS_LOCATION, texture);
-  }
-
-  /**
-   * Sets the {@link #spriteIdentifier1} by creating a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlasLocation atlasLocation} and a new {@link Identifier} with the given {@code id} as its {@link SpriteIdentifier#texture texture}.
-   * 
-   * @param id
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setSpriteIdentifier1(String id) {
-    return setSpriteIdentifier1(new Identifier(id));
-  }
-
-  /**
    * Sets the {@link DamageSource} {@link #inFire}.
    * <p>
    * Prefer {@link #setInFire(String)}.
@@ -277,11 +188,11 @@ public class FireBuilder {
   }
 
   /**
-   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the given {@code name}.
+   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the given {@code messageId}.
    * <p>
-   * The {@link DamageSource} will have both {@link DamageSource#setBypassesArmor setBypassesArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}, and {@link DamageSource#exhaustion exhaustion} set to {@code 0.0F}.
+   * The {@link DamageSource} will have both {@link DamageSource#bypassArmor bypassArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}, and {@link DamageSource#exhaustion exhaustion} set to {@code 0.0F}.
    * 
-   * @param name
+   * @param messageId
    * @return this Builder to either set other properties or {@link #build}.
    */
   public FireBuilder setInFire(String name) {
@@ -289,7 +200,7 @@ public class FireBuilder {
   }
 
   /**
-   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code name} equal to {@code "in_" + id + "_fire"}.
+   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code messageId} equal to {@code "in_" + id + "_fire"}.
    * 
    * @return this Builder to either set other properties or {@link #build}.
    * @throws IllegalStateException if the {@link #id} is invalid (not set or blank).
@@ -315,11 +226,11 @@ public class FireBuilder {
   }
 
   /**
-   * Sets the {@link DamageSource} {@link #onFire} by creating a new {@link DamageSource} with the given {@code name}.
+   * Sets the {@link DamageSource} {@link #onFire} by creating a new {@link DamageSource} with the given {@code messageId}.
    * <p>
-   * The {@link DamageSource} will have both {@link DamageSource#setBypassesArmor setBypassesArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}, and {@link DamageSource#exhaustion exhaustion} set to {@code 0.0F}.   * 
+   * The {@link DamageSource} will have both {@link DamageSource#bypassArmor bypassArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}, and {@link DamageSource#exhaustion exhaustion} set to {@code 0.0F}.   * 
    * 
-   * @param name
+   * @param messageId
    * @return this Builder to either set other properties or {@link #build}.
    */
   public FireBuilder setOnFire(String name) {
@@ -327,7 +238,7 @@ public class FireBuilder {
   }
 
   /**
-   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code name} equal to {@code "on_" + id + "_fire"}.
+   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code messageId} equal to {@code "on_" + id + "_fire"}.
    * 
    * @return this Builder to either set other properties or {@link #build}.
    * @throws IllegalStateException if the {@link #id} is invalid (not set or blank).
@@ -364,7 +275,7 @@ public class FireBuilder {
   }
 
   /**
-   * Sets the {@link #blockState} to the {@link Block#defaultBlockState() default BlockState} of the given {@code sourceBlock}.
+   * Sets the {@link #blockState} to the {@link Block#getDefaultState() default BlockState} of the given {@code sourceBlock}.
    * 
    * @param sourceBlock
    * @return this Builder to either set other properties or {@link #build}.
@@ -414,8 +325,6 @@ public class FireBuilder {
     id = null;
     damage = DEFAULT_DAMAGE;
     invertHealAndHarm = DEFAULT_INVERT_HEAL_AND_HARM;
-    spriteIdentifier0 = null;
-    spriteIdentifier1 = null;
     inFire = DEFAULT_IN_FIRE;
     onFire = DEFAULT_ON_FIRE;
     hurtSound = DEFAULT_HURT_SOUND;
@@ -428,29 +337,23 @@ public class FireBuilder {
   /**
    * Build a {@link Fire} instance.
    * <p>
-   * If {@link #spriteIdentifier0} is not set, it will default to a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlas atlas} and {@code "block/" + id + "_fire_0"} as its {@link SpriteIdentifier#texture texture}.
+   * If {@link #fireAspect} is not set, it will default to a new {@link FireTypedAspectEnchantment} with {@link Rarity#VERY_RARE}.
    * <p>
-   * If {@link #spriteIdentifier1} is not set, it will default to a new {@link SpriteIdentifier} with {@link #BASE_ATLAS_LOCATION BlockLocation} as its {@link SpriteIdentifier#atlas atlas} and {@code "block/" + id + "_fire_1"} as its {@link SpriteIdentifier#texture texture}.
+   * If {@link #flame} is not set, it will default to a new {@link FireTypedArrowEnchantment} with {@link Rarity#VERY_RARE}.
    * 
    * @return {@link Fire} instance.
    * @throws IllegalStateException if the {@link #id} is invalid (not set or blank).
    */
   public Fire build() throws IllegalStateException {
-    if (FireManager.isValidFireId(id)) {
-      if (spriteIdentifier0 == null) {
-        setSpriteIdentifier0("block/" + id + "_fire_0");
-      }
-      if (spriteIdentifier1 == null) {
-        setSpriteIdentifier1("block/" + id + "_fire_1");
-      }
+    if (FireManager.isValidFireId(id) && !(modId == null || modId.isBlank())) {
       if (fireAspect == null) {
-        fireAspect = new FireTypedAspectEnchantment(id, Rarity.VERY_RARE);
+        fireAspect = new FireTypedAspectEnchantment(modId, id, Rarity.VERY_RARE);
       }
       if (flame == null) {
-        flame = new FireTypedArrowEnchantment(id, Rarity.VERY_RARE);
+        flame = new FireTypedArrowEnchantment(modId, id, Rarity.VERY_RARE);
       }
-      return new Fire(FireManager.sanitizeFireId(id), damage, invertHealAndHarm, spriteIdentifier0, spriteIdentifier1, inFire, onFire, hurtSound, blockState, fireAspect, flame);
+      return new Fire(modId, FireManager.sanitizeFireId(id), damage, invertHealAndHarm, inFire, onFire, hurtSound, blockState, fireAspect, flame);
     }
-    throw new IllegalStateException("Attempted to build a Fire with a non-valid id");
+    throw new IllegalStateException("Attempted to build a Fire with a non-valid id or modId");
   }
 }
