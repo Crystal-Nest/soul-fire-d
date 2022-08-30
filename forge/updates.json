@@ -3,8 +3,28 @@
   "1.19.2": {
     "1.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/xxxxxxx"
   },
+  "1.19.1": {
+    "1.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3958565"
+  },
+  "1.19": {
+    "1.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3958549"
+  },
+  "1.18.2": {
+    "1.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3958508"
+  },
+  "1.16.5": {
+    "1.0.0.0-final": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3959082"
+  },
   "promos": {
     "1.19.2-latest": "1.0.0.0",
-    "1.19.2-recommended": "1.0.0.0"
+    "1.19.2-recommended": "1.0.0.0",
+    "1.19.1-latest": "1.0.0.0",
+    "1.19.1-recommended": "1.0.0.0",
+    "1.19-latest": "1.0.0.0",
+    "1.19-recommended": "1.0.0.0",
+    "1.18.2-latest": "1.0.0.0",
+    "1.18.2-recommended": "1.0.0.0",
+    "1.16.5-latest": "1.0.0.0-final",
+    "1.16.5-recommended": "1.0.0.0-final"
   }
 }
