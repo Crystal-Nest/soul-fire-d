@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_17",
+  "package": "crystalspider.soulfired.mixin",
+  "mixins": [
+    "AbstractFireBlockMixin",
+    "BowItemMixin",
+    "CampfireBlockMixin",
+    "EntityMixin",
+    "PersistentProjectileEntityMixin",
+    "PlayerEntityMixin",
+    "SoulFireBlockMixin",
+    "ZombieEntityMixin"
+  ],
+  "client": [
+    "client.EntityRenderDispatcherMixin",
+    "client.InGameOverlayRendererMixin"
+  ]
+}
