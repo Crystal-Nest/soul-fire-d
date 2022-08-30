@@ -7,14 +7,14 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import crystalspider.soulfired.api.type.FireTyped;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.Level;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.BowItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 /**
  * Injects into {@link BowItem} to alter Fire behavior for consistency.
@@ -22,20 +22,20 @@ import net.minecraft.world.level.Level;
 @Mixin(BowItem.class)
 public class BowItemMixin {
   /**
-   * Redirects the call to {@link Level#addFreshEntity(Entity)} inside the method {@link BowItem#releaseUsing(ItemStack, Level, LivingEntity, int)}.
+   * Redirects the call to {@link World#addFreshEntity(Entity)} inside the method {@link BowItem#releaseUsing(ItemStack, World, LivingEntity, int)}.
    * <p>
    * Handles setting the arrow on the correct kind of fire if the bow has a custom fire enchantment.
    * 
    * @param caller {@link Level} invoking (owning) the redirected method.
    * @param abstractArrow parameter of the redirected method: the arrow being add to the world.
    * @param bow bow being released.
-   * @param level world inside which the arrow should be generated (is the same instance as {@code caller}).
+   * @param world world inside which the arrow should be generated (is the same instance as {@code caller}).
    * @param user {@link LivingEntity} holding the {@code bow}.
    * @param remainingUseTicks time left before pulling the {@code bow} to the max.
    * @return the result of calling the redirected method.
    */
-  @Redirect(method = "releaseUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
-  private boolean redirectAddFreshEntity(Level caller, Entity abstractArrow, ItemStack bow, Level level, LivingEntity user, int remainingUseTicks) {
+  @Redirect(method = "releaseUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;addFreshEntity(Lnet/minecraft/entity/Entity;)Z"))
+  private boolean redirectAddFreshEntity(World caller, Entity abstractArrow, ItemStack bow, World world, LivingEntity user, int remainingUseTicks) {
     if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, bow) <= 0) {
       for (Enchantment enchantment : FireManager.getFlames()) {
         if (EnchantmentHelper.getItemEnchantmentLevel(enchantment, bow) > 0) {

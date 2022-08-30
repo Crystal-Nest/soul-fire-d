@@ -2,14 +2,14 @@ package crystalspider.soulfired.api.enchantment;
 
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTyped;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.enchantment.ArrowFireEnchantment;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.FlameEnchantment;
+import net.minecraft.inventory.EquipmentSlotType;
 
 /**
  * Flame Enchantment sensitive to the fire type.
  */
-public class FireTypedArrowEnchantment extends ArrowFireEnchantment implements FireTyped {
+public class FireTypedArrowEnchantment extends FlameEnchantment implements FireTyped {
   /**
    * Mod Id.
    */
@@ -34,7 +34,7 @@ public class FireTypedArrowEnchantment extends ArrowFireEnchantment implements F
    * @param isDiscoverable
    */
   public FireTypedArrowEnchantment(String modId, String fireId, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
-    super(rarity, EquipmentSlot.MAINHAND);
+    super(rarity, EquipmentSlotType.MAINHAND);
     this.modId = modId;
     this.fireId = FireManager.sanitizeFireId(fireId);
     this.isTreasure = isTreasure;
@@ -55,7 +55,7 @@ public class FireTypedArrowEnchantment extends ArrowFireEnchantment implements F
 
   @Override
   public final boolean checkCompatibility(Enchantment enchantment) {
-    return super.checkCompatibility(enchantment) && !(enchantment instanceof ArrowFireEnchantment) && !FireManager.getFlames().contains(enchantment);
+    return super.checkCompatibility(enchantment) && !(enchantment instanceof FlameEnchantment) && !FireManager.getFlames().contains(enchantment);
   }
   
   @Override

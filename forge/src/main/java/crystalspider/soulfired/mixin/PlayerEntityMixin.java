@@ -7,17 +7,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTyped;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 
 /**
- * Injects into {@link Player} to alter Fire behavior for consistency.
+ * Injects into {@link PlayerEntity} to alter Fire behavior for consistency.
  */
-@Mixin(Player.class)
-public abstract class PlayerMixin implements FireTyped {
+@Mixin(PlayerEntity.class)
+public abstract class PlayerEntityMixin implements FireTyped {
   /**
-   * Injects at the start of the method {@link Player#getHurtSound(DamageSource)}.
+   * Injects at the start of the method {@link PlayerEntity#getHurtSound(DamageSource)}.
    * <p>
    * If {@code damageSource} is a custom Fire DamageSource, forces the target method to return the correct hurt sound.
    * 

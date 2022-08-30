@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
-import net.minecraft.world.level.block.SoulFireBlock;
+import net.minecraft.block.SoulFireBlock;
 
 /**
  * Injects into {@link SoulFireBlock} to alter Fire behavior for consistency.

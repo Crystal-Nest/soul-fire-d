@@ -1,9 +1,9 @@
 package crystalspider.soulfired.api;
 
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 
 /**
  * Fire

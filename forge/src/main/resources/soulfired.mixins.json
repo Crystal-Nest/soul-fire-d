@@ -1,21 +1,21 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_8",
   "refmap": "soulfired.refmap.json",
   "package": "crystalspider.soulfired.mixin",
   "mixins": [
-    "AbstractArrowMixin",
-    "BaseFireBlockMixin",
+    "AbstractArrowEntityMixin",
+    "AbstractFireBlockMixin",
     "BowItemMixin",
     "CampfireBlockMixin",
     "EntityMixin",
-    "PlayerMixin",
+    "PlayerEntityMixin",
     "SoulFireBlockMixin",
-    "ZombieMixin"
+    "ZombieEntityMixin"
   ],
   "client": [
-    "client.EntityRenderDispatcherMixin",
-    "client.ScreenEffectRendererMixin"
+    "client.EntityRendererManagerMixin",
+    "client.OverlayRendererMixin"
   ]
 }

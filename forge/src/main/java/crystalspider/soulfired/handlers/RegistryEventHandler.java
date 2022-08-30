@@ -2,7 +2,7 @@ package crystalspider.soulfired.handlers;
 
 import crystalspider.soulfired.api.Fire;
 import crystalspider.soulfired.api.FireManager;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 

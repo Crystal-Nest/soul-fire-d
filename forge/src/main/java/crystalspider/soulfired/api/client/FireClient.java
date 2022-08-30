@@ -1,10 +1,10 @@
 package crystalspider.soulfired.api.client;
 
 import crystalspider.soulfired.api.FireManager;
+import net.minecraft.client.renderer.model.RenderMaterial;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Fire client side only.
@@ -23,23 +23,23 @@ public class FireClient {
    * <p>
    * Used only in rendering the Fire of an entity.
    */
-  private final Material material0;
+  private final RenderMaterial material0;
   /**
    * Fire {@link Material} for the sprite1.
    * <p>
    * Used both for rendering the Fire of an entity and the player overlay.
    */
-  private final Material material1;
+  private final RenderMaterial material1;
 
   FireClient(String modId, String id) {
     this.modId = modId;
     this.id = id;
     if (modId.equals(FireManager.SOUL_FIRE_ID)) {
-      this.material0 = new Material(InventoryMenu.BLOCK_ATLAS, new ResourceLocation(modId, "block/" + id + "_fire_0"));
-      this.material1 = new Material(InventoryMenu.BLOCK_ATLAS, new ResourceLocation(modId, "block/" + id + "_fire_1"));
+      this.material0 = new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(modId, "block/" + id + "_fire_0"));
+      this.material1 = new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(modId, "block/" + id + "_fire_1"));
     } else {
-      this.material0 = new Material(InventoryMenu.BLOCK_ATLAS, new ResourceLocation("block/" + id + "_fire_0"));
-      this.material1 = new Material(InventoryMenu.BLOCK_ATLAS, new ResourceLocation("block/" + id + "_fire_1"));
+      this.material0 = new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new ResourceLocation("block/" + id + "_fire_0"));
+      this.material1 = new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new ResourceLocation("block/" + id + "_fire_1"));
     }
   }
 

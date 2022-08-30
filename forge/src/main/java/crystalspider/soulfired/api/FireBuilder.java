@@ -1,17 +1,18 @@
 package crystalspider.soulfired.api;
 
+import org.apache.commons.lang3.StringUtils;
+
 import crystalspider.soulfired.api.enchantment.FireTypedArrowEnchantment;
 import crystalspider.soulfired.api.enchantment.FireTypedAspectEnchantment;
 import crystalspider.soulfired.api.type.FireTyped;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantment.Rarity;
-import net.minecraft.world.level.block.BaseFireBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantment.Rarity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 
 /**
  * Builder for {@link Fire} instances.
@@ -346,7 +347,7 @@ public class FireBuilder {
    * @throws IllegalStateException if the {@link #id} is invalid (not set or blank).
    */
   public Fire build() throws IllegalStateException {
-    if (FireManager.isValidFireId(id) && !(modId == null || modId.isBlank())) {
+    if (FireManager.isValidFireId(id) && StringUtils.isNotBlank(modId)) {
       if (fireAspect == null) {
         fireAspect = new FireTypedAspectEnchantment(modId, id, Rarity.VERY_RARE);
       }

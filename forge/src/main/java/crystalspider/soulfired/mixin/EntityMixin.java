@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import crystalspider.soulfired.api.type.FireTyped;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 
 /**
  * Injects into {@link Entity} to alter Fire behavior for consistency.
@@ -28,17 +28,17 @@ public abstract class EntityMixin implements FireTypeChanger {
    * Shadowed {@link Entity#level}.
    */
   @Shadow
-  public Level level;
+  public World level;
   /**
    * Shadowed {@link Entity#entityData}.
    */
   @Shadow
-  protected SynchedEntityData entityData;
+  protected EntityDataManager entityData;
 
   /**
-   * {@link EntityDataAccessor} to synchronize the Fire Id across client and server.
+   * {@link DataParameter} to synchronize the Fire Id across client and server.
    */
-  private static final EntityDataAccessor<String> DATA_FIRE_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.STRING);
+  private static final DataParameter<String> DATA_FIRE_ID = EntityDataManager.defineId(Entity.class, DataSerializers.STRING);
 
   /**
    * Shadowed {@link Entity#defineSynchedData()}.
@@ -77,7 +77,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    * 
    * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as {@code this} entity.
    */
-  @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;defineSynchedData()V"))
+  @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;defineSynchedData()V"))
   private void redirectDefineSynchedData(Entity caller) {
     entityData.define(DATA_FIRE_ID, "");
     defineSynchedData();
@@ -93,7 +93,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    * @param damage original damage (normal fire).
    * @return the result of calling the redirected method.
    */
-  @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
+  @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;hurt(Lnet/minecraft/util/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
     return FireManager.damageOnFire(caller, ((FireTyped) caller).getFireId(), damageSource, damage);
   }
@@ -114,30 +114,30 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Injects in the method {@link Entity#saveWithoutId(CompoundTag)} before the invocation of {@link Entity#addAdditionalSaveData(CompoundTag)}.
+   * Injects in the method {@link Entity#saveWithoutId(CompoundNBT)} before the invocation of {@link Entity#addAdditionalSaveData(CompoundNBT)}.
    * <p>
-   * If valid, saves the current FireId in the given {@link CompoundTag}.
+   * If valid, saves the current FireId in the given {@link CompoundNBT}.
    * 
    * @param tag
    * @param cir {@link CallbackInfoReturnable}.
    */
-  @Inject(method = "saveWithoutId", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V"))
-  private void onSaveWithoutId(CompoundTag tag, CallbackInfoReturnable<CompoundTag> cir) {
+  @Inject(method = "saveWithoutId", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundNBT;)V"))
+  private void onSaveWithoutId(CompoundNBT tag, CallbackInfoReturnable<CompoundNBT> cir) {
     if (FireManager.isFireId(getFireId())) {
       tag.putString("FireId", getFireId());
     }
   }
 
   /**
-   * Injects in the method {@link Entity#load(CompoundTag)} before the invocation of {@link Entity#readAdditionalSaveData(CompoundTag)}.
+   * Injects in the method {@link Entity#load(CompoundNBT)} before the invocation of {@link Entity#readAdditionalSaveData(CompoundNBT)}.
    * <p>
-   * Loads the FireId from the given {@link CompoundTag}.
+   * Loads the FireId from the given {@link CompoundNBT}.
    * 
    * @param tag
    * @param ci {@link CallbackInfo}.
    */
-  @Inject(method = "load", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V"))
-  private void onLoad(CompoundTag tag, CallbackInfo ci) {
+  @Inject(method = "load", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;readAdditionalSaveData(Lnet/minecraft/nbt/CompoundNBT;)V"))
+  private void onLoad(CompoundNBT tag, CallbackInfo ci) {
     setFireId(FireManager.ensureFireId(tag.getString("FireId")));
   }
 }

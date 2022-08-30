@@ -1,6 +1,5 @@
 buildscript {
   repositories {
-    // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
     maven { url = 'https://maven.minecraftforge.net' }
     mavenCentral()
   }
@@ -9,7 +8,7 @@ buildscript {
     classpath 'org.spongepowered:mixingradle:0.7.+'
   }
 }
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+
 plugins {
   id 'com.matthewprenger.cursegradle' version "${cursegradle_version}"
   id "com.github.breadmoirai.github-release" version "${github_release_version}"
@@ -21,7 +20,7 @@ archivesBaseName = project.modid
 version = "${minecraft_version}-${mod_version}-${loader.toLowerCase()}"
 group = project.group
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 minecraft {
   mappings channel: 'official', version: "${minecraft_version}"
@@ -32,7 +31,6 @@ minecraft {
       property 'forge.logging.markers', 'REGISTRIES'
       // https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
       property 'forge.logging.console.level', 'debug'
-      property 'forge.enabledGameTestNamespaces', "${modid}"
       mods {
         "${modid}" {
           source sourceSets.main
@@ -44,19 +42,6 @@ minecraft {
       property 'forge.logging.markers', 'REGISTRIES'
       // https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
       property 'forge.logging.console.level', 'debug'
-      property 'forge.enabledGameTestNamespaces', "${modid}"
-      mods {
-        "${modid}" {
-          source sourceSets.main
-        }
-      }
-    }
-    gameTestServer {
-      workingDirectory project.file('run')
-      property 'forge.logging.markers', 'REGISTRIES'
-      // https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-      property 'forge.logging.console.level', 'debug'
-      property 'forge.enabledGameTestNamespaces', "${modid}"
       mods {
         "${modid}" {
           source sourceSets.main
@@ -145,7 +130,6 @@ jar {
 
 tasks.withType(JavaCompile).configureEach {
   it.options.encoding = 'UTF-8'
-  it.options.release = 17
 }
 
 def changelog = "See [Changelog](https://github.com/${github_user}/${modid_kebab}/blob/master/CHANGELOG.md#${minecraft_version.replaceAll('\\.', '')}-${mod_version.replaceAll('\\.', '')}---${new Date().format("yyyyMMdd")})."

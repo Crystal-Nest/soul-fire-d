@@ -3,11 +3,11 @@ package crystalspider.soulfired.api.enchantment;
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import crystalspider.soulfired.api.type.FireTyped;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.FireAspectEnchantment;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.FireAspectEnchantment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 
 /**
  * Fire Aspect Enchantment sensitive to the fire type.
@@ -37,7 +37,7 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
    * @param isDiscoverable
    */
   public FireTypedAspectEnchantment(String modId, String fireId, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
-    super(rarity, EquipmentSlot.MAINHAND);
+    super(rarity, EquipmentSlotType.MAINHAND);
     this.modId = modId;
     this.fireId = FireManager.sanitizeFireId(fireId);
     this.isTreasure = isTreasure;

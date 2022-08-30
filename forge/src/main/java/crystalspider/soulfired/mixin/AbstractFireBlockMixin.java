@@ -6,18 +6,19 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.block.BaseFireBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.AbstractFireBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 /**
- * Injects into {@link BaseFireBlock} to alter Fire behavior for consistency.
+ * Injects into {@link AbstractFireBlock} to alter Fire behavior for consistency.
  */
-@Mixin(BaseFireBlock.class)
-public abstract class BaseFireBlockMixin extends Block implements FireTypeChanger {
+@Mixin(AbstractFireBlock.class)
+public abstract class AbstractFireBlockMixin extends Block implements FireTypeChanger {
   /**
    * Fire Id.
    */
@@ -28,7 +29,7 @@ public abstract class BaseFireBlockMixin extends Block implements FireTypeChange
    * 
    * @param properties
    */
-  private BaseFireBlockMixin(Properties properties) {
+  private AbstractFireBlockMixin(Properties properties) {
     super(properties);
   }
 
@@ -45,7 +46,7 @@ public abstract class BaseFireBlockMixin extends Block implements FireTypeChange
   }
 
   /**
-   * Redirects the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link BaseFireBlock#entityInside(BlockState, Level, BlockPos, Entity)}.
+   * Redirects the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link AbstractFireBlock#entityInside(BlockState, World, BlockPos, Entity)}.
    * <p>
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
    * 
@@ -54,7 +55,7 @@ public abstract class BaseFireBlockMixin extends Block implements FireTypeChange
    * @param damage original damage (normal fire).
    * @return the result of calling the redirected method.
    */
-  @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
+  @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;hurt(Lnet/minecraft/util/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
     return FireManager.damageInFire(caller, getFireId(), damageSource, damage);
   }
