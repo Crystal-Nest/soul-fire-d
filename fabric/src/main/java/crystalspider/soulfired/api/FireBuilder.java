@@ -1,5 +1,7 @@
 package crystalspider.soulfired.api;
 
+import org.apache.commons.lang3.StringUtils;
+
 import crystalspider.soulfired.api.enchantment.FireTypedArrowEnchantment;
 import crystalspider.soulfired.api.enchantment.FireTypedAspectEnchantment;
 import crystalspider.soulfired.api.type.FireTyped;
@@ -345,7 +347,7 @@ public class FireBuilder {
    * @throws IllegalStateException if the {@link #id} is invalid (not set or blank).
    */
   public Fire build() throws IllegalStateException {
-    if (FireManager.isValidFireId(id) && !(modId == null || modId.isBlank())) {
+    if (FireManager.isValidFireId(id) && StringUtils.isNotBlank(modId)) {
       if (fireAspect == null) {
         fireAspect = new FireTypedAspectEnchantment(modId, id, Rarity.VERY_RARE);
       }

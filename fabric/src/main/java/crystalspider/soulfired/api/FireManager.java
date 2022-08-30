@@ -1,12 +1,14 @@
 package crystalspider.soulfired.api;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-
-import com.mojang.logging.LogUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import net.minecraft.block.AbstractBlock.Settings;
@@ -27,7 +29,7 @@ public abstract class FireManager {
   /**
    * Logger.
    */
-  private static final Logger LOGGER = LogUtils.getLogger();
+  private static final Logger LOGGER = LogManager.getLogger();
 
   /**
    * Fire Id of Vanilla Fire.
@@ -95,7 +97,7 @@ public abstract class FireManager {
    * @return a copy of the list of all registered {@link Fire Fires}.
    */
   public static final List<Fire> getFires() {
-    return List.copyOf(fires.values());
+    return new ArrayList<>(fires.values());
   }
 
   /**
@@ -120,7 +122,7 @@ public abstract class FireManager {
    * @return whether the given {@code id} is a valid fire id.
    */
   public static final boolean isValidFireId(String id) {
-    return !(id == null || id.isBlank());
+    return StringUtils.isNotBlank(id);
   }
 
   /**
@@ -165,7 +167,7 @@ public abstract class FireManager {
    * @return a copy of the list of all registered fire ids.
    */
   public static final List<String> getFireIds() {
-    return List.copyOf(Collections.list(fires.keys()));
+    return new ArrayList<>(Collections.list(fires.keys()));
   }
 
   /**
@@ -274,7 +276,7 @@ public abstract class FireManager {
    * @return the list of all Fire Aspect enchantments registered.
    */
   public static final List<Enchantment> getFireAspects() {
-    return fires.values().stream().map(fire -> fire.getFireAspect()).toList();
+    return fires.values().stream().map(fire -> fire.getFireAspect()).collect(Collectors.toList());
   }
 
   /**
@@ -283,7 +285,7 @@ public abstract class FireManager {
    * @return the list of all Flame enchantments registered.
    */
   public static final List<Enchantment> getFlames() {
-    return fires.values().stream().map(fire -> fire.getFlame()).toList();
+    return fires.values().stream().map(fire -> fire.getFlame()).collect(Collectors.toList());
   }
 
   /**

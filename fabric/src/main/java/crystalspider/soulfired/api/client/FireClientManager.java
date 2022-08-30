@@ -2,9 +2,8 @@ package crystalspider.soulfired.api.client;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.slf4j.Logger;
-
-import com.mojang.logging.LogUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import crystalspider.soulfired.api.Fire;
 import crystalspider.soulfired.api.FireManager;
@@ -14,7 +13,7 @@ public abstract class FireClientManager {
   /**
    * Logger.
    */
-  private static final Logger LOGGER = LogUtils.getLogger();
+  private static final Logger LOGGER = LogManager.getLogger();
 
   /**
    * {@link ConcurrentHashMap} of all registered {@link FireClient Fires}.
