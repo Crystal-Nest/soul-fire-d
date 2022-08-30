@@ -1,6 +1,6 @@
 # Change Log
 
-All notable changes to the "mod-id" Minecraft mod will be documented in this file.
+All notable changes to the "soul-fire-d" Minecraft mod will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Forge Semantic Versioning](https://docs.minecraftforge.net/en/latest/gettingstarted/versioning/#versioning).
@@ -8,8 +8,55 @@ and this project adheres to [Forge Semantic Versioning](https://docs.minecraftfo
 ## [Unreleased]
 - Nothing new.
 
-## [1.19.2-1.0.0.0] - yyyy/mm/dd
-- List of changes.
+## [1.19.2-1.0.0.0] - 2022/08/30
+- New fire overlay for Soul Fire.
+- New flame rendering for entities burning from Soul Fire, along with increased damage.
+- Improved fire consistency.
+- Zombies on fire will transmit the kind of fire they're burning from.
+- Being set on fire will make entities burn from the correct fire type, furthermore new fire sources will change the fire type.
+- New enchantments: Soul Fire Aspect and Soul Flame.
+- API for modders to make modded fires behave consistently with little to no effort.
 
-[Unreleased]: https://github.com/author/mod-id
-[1.19.2-1.0.0.0]: https://github.com/author/mod-id/releases/tag/v1.19.2-1.0.0.0
+## [1.19.1-1.0.0.0] - 2022/08/30
+- New fire overlay for Soul Fire.
+- New flame rendering for entities burning from Soul Fire, along with increased damage.
+- Improved fire consistency.
+- Zombies on fire will transmit the kind of fire they're burning from.
+- Being set on fire will make entities burn from the correct fire type, furthermore new fire sources will change the fire type.
+- New enchantments: Soul Fire Aspect and Soul Flame.
+- API for modders to make modded fires behave consistently with little to no effort.
+
+## [1.19-1.0.0.0] - 2022/08/30
+- New fire overlay for Soul Fire.
+- New flame rendering for entities burning from Soul Fire, along with increased damage.
+- Improved fire consistency.
+- Zombies on fire will transmit the kind of fire they're burning from.
+- Being set on fire will make entities burn from the correct fire type, furthermore new fire sources will change the fire type.
+- New enchantments: Soul Fire Aspect and Soul Flame.
+- API for modders to make modded fires behave consistently with little to no effort.
+
+## [1.18.2-1.0.0.0] - 2022/08/30
+- New fire overlay for Soul Fire.
+- New flame rendering for entities burning from Soul Fire, along with increased damage.
+- Improved fire consistency.
+- Zombies on fire will transmit the kind of fire they're burning from.
+- Being set on fire will make entities burn from the correct fire type, furthermore new fire sources will change the fire type.
+- New enchantments: Soul Fire Aspect and Soul Flame.
+- API for modders to make modded fires behave consistently with little to no effort.
+
+## [1.16.5-1.0.0.0-final] - 2022/08/30
+- New fire overlay for Soul Fire.
+- New flame rendering for entities burning from Soul Fire, along with increased damage.
+- Improved fire consistency.
+- Zombies on fire will transmit the kind of fire they're burning from.
+- Being set on fire will make entities burn from the correct fire type, furthermore new fire sources will change the fire type.
+- New enchantments: Soul Fire Aspect and Soul Flame.
+- API for modders to make modded fires behave consistently with little to no effort.
+- This is the FINAL version. 1.16.5 will not receive further updates.
+
+[Unreleased]: https://github.com/Nyphet/soul-fire-d
+[1.19.2-1.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.2-1.0.0.0
+[1.19.1-1.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.1-1.0.0.0
+[1.19-1.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19-1.0.0.0
+[1.18.2-1.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-1.0.0.0
+[1.16.5-1.0.0.0-final]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.16.5-1.0.0.0-final
