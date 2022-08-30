@@ -1,13 +1,13 @@
 ![Soul Fire'd banner](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/soul-fire-d/banner.gif)
 
 ---
-MINECRAFT: 1.19.2 | 1.19.1 | 1.19 | 1.18.2
+![Minecraft](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/minecraft.svg)[![1.19.2](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/1-19-2.svg)](https://www.curseforge.com/minecraft/mc-mods/soul-fire-d/files/all?filter-status=1&filter-game-version=2020709689%3A9366)![Separator](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/separator.svg)[![1.19.1](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/1-19-1.svg)](https://www.curseforge.com/minecraft/mc-mods/soul-fire-d/files/all?filter-status=1&filter-game-version=2020709689%3A9259)![Separator](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/separator.svg)[![1.19](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/1-19.svg)](https://www.curseforge.com/minecraft/mc-mods/soul-fire-d/files/all?filter-status=1&filter-game-version=2020709689%3A9186)![Separator](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/separator.svg)[![1.18.2](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/1-18-2.svg)](https://www.curseforge.com/minecraft/mc-mods/soul-fire-d/files/all?filter-status=1&filter-game-version=2020709689%3A9008)
 
-ISSUES: GitHubLogo GITHUB
-
-![Loader](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/loader/loader.svg)![Forge](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/loader/forge.svg)![Fabric](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/loader/fabric.svg)
+![Loader](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/loader/loader.svg)[![Forge](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/loader/forge.svg)](https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/all?filter-status=1&filter-game-version=2020709689%3A7498)![Separator](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/separator.svg)[![Fabric](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/loader/fabric.svg)](https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/all?filter-status=1&filter-game-version=2020709689%3A7499)
 
 ![Overlay](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/side/client-server.svg)
+
+![Issues](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/github/issues.svg)[![GitHub](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/github/github.svg)](https://github.com/Nyphet/soul-fire-d/issues)
 
 ---
 ## **Description**
@@ -37,7 +37,5 @@ This project is published under the [GNU General Public License v3.0](https://gi
 To learn how to use the provided API follow the [Wiki](https://github.com/Nyphet/soul-fire-d/wiki) on [GitHub](https://github.com/Nyphet/soul-fire-d).
 
 ## **Support me**
-[![Patreon](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/patreon/patreon64.png "Patreon")](https://www.patreon.com/crystalspider)
-[![Kofi](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/kofi/kofi64.png "Kofi")](https://ko-fi.com/crystalspider)
-[![Twitch](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/twitch/twitch64.png "Twitch")](https://www.twitch.tv/crystal_spider_)
+[![GitHub](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/github/github64.png "My other projects")](https://github.com/Nyphet)
 [![My other projects](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/curseforge/curseforge64.png "My other projects")](https://www.curseforge.com/members/crystal_spider_/projects)
