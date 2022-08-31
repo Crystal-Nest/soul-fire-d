@@ -12,6 +12,7 @@ import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.world.entity.Entity;
 
 /**

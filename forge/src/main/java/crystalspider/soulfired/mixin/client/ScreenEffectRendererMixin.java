@@ -13,6 +13,7 @@ import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.RenderBlockScreenEffectEvent.OverlayType;
