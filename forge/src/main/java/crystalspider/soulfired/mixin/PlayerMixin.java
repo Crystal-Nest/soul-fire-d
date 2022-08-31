@@ -10,6 +10,7 @@ import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -48,7 +49,7 @@ public abstract class PlayerMixin extends LivingEntity implements FireTyped {
   }
 
   /**
-   * Modifies the assignment value returned by {@link EnchantmentHelper#getFireAspect(LivingEntity)} in the method {@link Player#attack()}.
+   * Modifies the assignment value returned by {@link EnchantmentHelper#getFireAspect(LivingEntity)} in the method {@link Player#attack(Entity)}.
    * <p>
    * Returns the proper Fire Aspect level taking into account all possible Fire Aspect enchantments.
    * 
