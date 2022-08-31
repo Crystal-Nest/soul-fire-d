@@ -108,7 +108,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Inject(method = "setFireTicks", at = @At(value = "HEAD"))
   private void onSetFireTicks(int ticks, CallbackInfo ci) {
-    if (!world.isClient && (ticks <= 0 || ticks >= getFireTicks())) {
+    if (!world.isClient && ticks >= getFireTicks()) {
       setFireId(FireManager.BASE_FIRE_ID);
     }
   }
