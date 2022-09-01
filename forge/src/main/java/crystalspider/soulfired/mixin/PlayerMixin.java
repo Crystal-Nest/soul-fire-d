@@ -44,7 +44,7 @@ public abstract class PlayerMixin implements FireTyped {
    * @param player
    */
   @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getFireAspect(Lnet/minecraft/world/entity/LivingEntity;)I"))
-  private int onAttack(Player player) {
+  private int onAttack(LivingEntity player) {
     int fireAspectLevel = EnchantmentHelper.getFireAspect(player);
     if (fireAspectLevel <= 0) {
       for (Enchantment fireAspect : FireManager.getFireAspects()) {
