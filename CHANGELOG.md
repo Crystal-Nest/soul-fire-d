@@ -8,6 +8,23 @@ and this project adheres to [Forge Semantic Versioning](https://docs.minecraftfo
 ## [Unreleased]
 - Nothing new.
 
+## [1.19.2-1.0.0.2] - 2022/09/01
+- Fixed crash
+
+## [1.19.1-1.0.0.2] - 2022/09/01
+- Fixed crash
+
+## [1.19-1.0.0.2] - 2022/09/01
+- Fixed crash
+
+## [1.18.2-1.0.0.2] - 2022/09/01
+- Fixed crash
+
+## [1.16.5-1.0.0.2-final] - 2022/09/01
+- Fixed crash
+- I swear, *this* should be the FINAL version. 1.16.5 will not receive further updates.  
+(Unless I introduced new bugs with this update)
+
 ## [1.19.2-1.0.0.1] - 2022/08/31
 - Fixed modded Fire Aspect not cooking drops when oneshotting entities.
 - Fixed normal fire "flashing" when the flame goes out due to water.
@@ -77,17 +94,22 @@ So now *this* is the FINAL version. 1.16.5 will not receive further updates.
 - This is the FINAL version. 1.16.5 will not receive further updates.
 
 [Unreleased]: https://github.com/Nyphet/soul-fire-d
+[1.19.2-1.0.0.2]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.2-1.0.0.2
 [1.19.2-1.0.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.2-1.0.0.1
 [1.19.2-1.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.2-1.0.0.0
 
+[1.19.1-1.0.0.2]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.1-1.0.0.2
 [1.19.1-1.0.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.1-1.0.0.1
 [1.19.1-1.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.1-1.0.0.0
 
+[1.19-1.0.0.2]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19-1.0.0.2
 [1.19-1.0.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19-1.0.0.1
 [1.19-1.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19-1.0.0.0
 
+[1.18.2-1.0.0.2]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-1.0.0.2
 [1.18.2-1.0.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-1.0.0.1
 [1.18.2-1.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-1.0.0.0
 
+[1.16.5-1.0.0.2-final]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.16.5-1.0.0.2-final
 [1.16.5-1.0.0.1-final]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.16.5-1.0.0.1-final
 [1.16.5-1.0.0.0-final]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.16.5-1.0.0.0-final
