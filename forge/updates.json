@@ -1,29 +1,29 @@
 {
-  "homepage": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files",
+  "homepage": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files",
   "1.19.2": {
-    "1.0.0.2": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3962722",
-    "1.0.0.1": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3960983",
-    "1.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3959176"
+    "1.0.0.2": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3962722",
+    "1.0.0.1": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3960983",
+    "1.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3959176"
   },
   "1.19.1": {
-    "1.0.0.2": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3962700",
-    "1.0.0.1": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3960968",
-    "1.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3958565"
+    "1.0.0.2": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3962700",
+    "1.0.0.1": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3960968",
+    "1.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3958565"
   },
   "1.19": {
-    "1.0.0.2": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3962692",
-    "1.0.0.1": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3960963",
-    "1.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3958549"
+    "1.0.0.2": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3962692",
+    "1.0.0.1": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3960963",
+    "1.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3958549"
   },
   "1.18.2": {
-    "1.0.0.2": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3962686",
-    "1.0.0.1": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3960956",
-    "1.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3958508"
+    "1.0.0.2": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3962686",
+    "1.0.0.1": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3960956",
+    "1.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3958508"
   },
   "1.16.5": {
-    "1.0.0.2-final": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3962580",
-    "1.0.0.1-final": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3960944",
-    "1.0.0.0-final": "https://www.curseforge.com/minecraft/mc-mods/mod-id/files/3959082"
+    "1.0.0.2-final": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3962580",
+    "1.0.0.1-final": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3960944",
+    "1.0.0.0-final": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3959082"
   },
   "promos": {
     "1.19.2-latest": "1.0.0.2",
