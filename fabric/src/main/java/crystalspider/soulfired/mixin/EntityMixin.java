@@ -88,7 +88,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    * <p>
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
    * 
-   * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as this entity.
+   * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as {@code this} entity.
    * @param damageSource original {@link DamageSource} (normale fire).
    * @param damage original damage (normal fire).
    * @return the result of calling the redirected method.
@@ -96,6 +96,19 @@ public abstract class EntityMixin implements FireTypeChanger {
   @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
   private boolean redirectDamage(Entity caller, DamageSource damageSource, float damage) {
     return FireManager.damageOnFire(caller, ((FireTyped) caller).getFireId(), damageSource, damage);
+  }
+
+  /**
+   * Redirects the call to {@link Entity#setOnFireFor(int)} inside the method {@link Entity#setOnFireFromLava()}.
+   * <p>
+   * Sets the base fire id.
+   * 
+   * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as {@code this} entity.
+   * @param seconds seconds to set the entity on fire for.
+   */
+  @Redirect(method = "setOnFireFromLava", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setOnFireFor(I)V"))
+  private void redirectSetOnFireFor(Entity caller, int seconds) {
+    FireManager.setOnFire(caller, seconds, FireManager.BASE_FIRE_ID);
   }
 
   /**
