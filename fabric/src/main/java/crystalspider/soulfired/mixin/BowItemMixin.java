@@ -5,13 +5,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.api.type.FireTypeChanger;
-import crystalspider.soulfired.api.type.FireTyped;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
+import crystalspider.soulfired.api.enchantment.FireEnchantmentHelper;
+import crystalspider.soulfired.api.enchantment.FireEnchantmentHelper.FireEnchantment;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -22,29 +19,22 @@ import net.minecraft.world.World;
 @Mixin(BowItem.class)
 public class BowItemMixin {
   /**
-   * Redirects the call to {@link World#spawnEntity(Entity)} inside the method {@link BowItem#onStoppedUsing(ItemStack, World, LivingEntity, int)}.
+   * Redirects the call to {@link PersistentProjectileEntity#setOnFireFor(int)} inside the method {@link BowItem#onStoppedUsing(ItemStack, World, LivingEntity, int)}.
    * <p>
    * Handles setting the arrow on the correct kind of fire if the bow has a custom fire enchantment.
    * 
-   * @param caller {@link World} invoking (owning) the redirected method.
-   * @param persistentProjectileEntity parameter of the redirected method: the arrow being add to the world.
+   * @param caller {@link PersistentProjectileEntity} invoking (owning) the redirected method.
+   * @param seconds parameter of the redirected method: number of seconds to set the arrow on fire for.
    * @param bow bow being released.
-   * @param world world inside which the arrow should be generated (is the same instance as {@code caller}).
+   * @param world world inside which the arrow should be generated.
    * @param user {@link LivingEntity} holding the {@code bow}.
    * @param remainingUseTicks time left before pulling the {@code bow} to the max.
-   * @return the result of calling the redirected method.
    */
-  @Redirect(method = "onStoppedUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;spawnEntity(Lnet/minecraft/entity/Entity;)Z"))
-  private boolean redirectSpawnEntity(World caller, Entity persistentProjectileEntity, ItemStack bow, World world, LivingEntity user, int remainingUseTicks) {
-    if (EnchantmentHelper.getLevel(Enchantments.FLAME, bow) <= 0) {
-      for (Enchantment enchantment : FireManager.getFlames()) {
-        if (EnchantmentHelper.getLevel(enchantment, bow) > 0) {
-          persistentProjectileEntity.setOnFireFor(100);
-          ((FireTypeChanger) persistentProjectileEntity).setFireId(((FireTyped) enchantment).getFireId());
-          break;
-        }
-      }
+  @Redirect(method = "onStoppedUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;setOnFireFor(I)V"))
+  private void redirectSpawnEntity(PersistentProjectileEntity caller, int seconds, ItemStack bow, World world, LivingEntity user, int remainingUseTicks) {
+    FireEnchantment fireEnchantment = FireEnchantmentHelper.getWhichFlame(bow);
+    if (fireEnchantment.isApplied()) {
+      FireManager.setOnFire(caller, seconds, fireEnchantment.getFireId());
     }
-    return caller.spawnEntity(persistentProjectileEntity);
   }
 }
