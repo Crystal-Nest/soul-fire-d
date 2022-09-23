@@ -42,7 +42,7 @@ public abstract class PersistentProjectileEntityMixin implements FireTypeChanger
    * @param ci {@link CallbackInfo}.
    */
   @Redirect(method = "applyEnchantmentEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;setOnFireFor(I)V"))
-  private void onApplyEnchantmentEffects(PersistentProjectileEntity caller, int seconds, LivingEntity entity) {
+  private void redirectSetOnFireFor(PersistentProjectileEntity caller, int seconds, LivingEntity entity) {
     FireEnchantment fireEnchantment = FireEnchantmentHelper.getWhichFlame(entity);
     if (fireEnchantment.isApplied()) {
       FireManager.setOnFire(caller, seconds, fireEnchantment.getFireId());

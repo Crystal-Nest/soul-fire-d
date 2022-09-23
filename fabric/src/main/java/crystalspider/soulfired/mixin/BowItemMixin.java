@@ -31,7 +31,7 @@ public class BowItemMixin {
    * @param remainingUseTicks time left before pulling the {@code bow} to the max.
    */
   @Redirect(method = "onStoppedUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;setOnFireFor(I)V"))
-  private void redirectSpawnEntity(PersistentProjectileEntity caller, int seconds, ItemStack bow, World world, LivingEntity user, int remainingUseTicks) {
+  private void redirectSetOnFireFor(PersistentProjectileEntity caller, int seconds, ItemStack bow, World world, LivingEntity user, int remainingUseTicks) {
     FireEnchantment fireEnchantment = FireEnchantmentHelper.getWhichFlame(bow);
     if (fireEnchantment.isApplied()) {
       FireManager.setOnFire(caller, seconds, fireEnchantment.getFireId());
