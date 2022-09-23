@@ -97,6 +97,19 @@ public abstract class EntityMixin implements FireTypeChanger {
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
     return FireManager.damageOnFire(caller, ((FireTyped) caller).getFireId(), damageSource, damage);
   }
+  
+  /**
+   * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link Entity#lavaHurt()}.
+   * <p>
+   * Sets the base fire id.
+   * 
+   * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as {@code this} entity.
+   * @param seconds seconds to set the entity on fire for.
+   */
+  @Redirect(method = "lavaHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setSecondsOnFire(I)V"))
+  private void redirectSetSecondsOnFire(Entity caller, int seconds) {
+    FireManager.setOnFire(caller, seconds, FireManager.BASE_FIRE_ID);
+  }
 
   /**
    * Injects at the start of the method {@link Entity#setRemainingFireTicks(int)}.

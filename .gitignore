@@ -5,6 +5,7 @@ bin
 .metadata
 .classpath
 .project
+eclipse
 
 # idea
 out
@@ -26,8 +27,9 @@ classes
 .gradle
 
 # other
-eclipse
 run
+.fabric
+.forge
 
 # macos
 *.DS_Store
