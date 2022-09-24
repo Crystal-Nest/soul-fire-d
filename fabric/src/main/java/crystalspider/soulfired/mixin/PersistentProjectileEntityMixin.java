@@ -3,7 +3,6 @@ package crystalspider.soulfired.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.enchantment.FireEnchantmentHelper;
@@ -37,9 +36,9 @@ public abstract class PersistentProjectileEntityMixin implements FireTypeChanger
    * <p>
    * Handles setting this arrow on the correct kind of fire, if any.
    * 
+   * @param caller {@link AbstractArrow} invoking (owning) the redirected method. It's the same as {@code this}.
+   * @param seconds seconds the arrow should be set on fire for.
    * @param entity {@link LivingEntity}, a mob, shooting the arrow.
-   * @param damage arrow damage modifier.
-   * @param ci {@link CallbackInfo}.
    */
   @Redirect(method = "applyEnchantmentEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;setOnFireFor(I)V"))
   private void redirectSetOnFireFor(PersistentProjectileEntity caller, int seconds, LivingEntity entity) {
