@@ -15,7 +15,7 @@ import net.minecraft.world.entity.monster.Zombie;
 @Mixin(Zombie.class)
 public abstract class ZombieMixin implements FireTyped {
   /**
-   * Injects into the method {@link Entity#setSecondsOnFire(int)} inside the method {@link ZombieEntity#doHurtTarget(Entity)}.
+   * Injects into the method {@link Entity#setSecondsOnFire(int)} inside the method {@link Zombie#doHurtTarget(Entity)}.
    * <p>
    * Sets the correct FireId to the {@link Entity} being set on fire.
    * 
