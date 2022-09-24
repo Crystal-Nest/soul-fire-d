@@ -8,6 +8,32 @@ and this project adheres to [Forge Semantic Versioning](https://docs.minecraftfo
 ## [Unreleased]
 - Nothing new.
 
+## [1.19.2-1.1.0.0] - 2022/09/24
+- Fixed compatibility with Malum (and probably some other mods).
+- Fixed a bug that would prevent soul flamed arrows to catch normal fire in lava.
+- Improved logic and expanded API.
+
+## [1.19.1-1.1.0.0] - 2022/09/24
+- Fixed compatibility with Malum (and probably some other mods).
+- Fixed a bug that would prevent soul flamed arrows to catch normal fire in lava.
+- Improved logic and expanded API.
+
+## [1.19-1.1.0.0] - 2022/09/24
+- Fixed compatibility with Malum (and probably some other mods).
+- Fixed a bug that would prevent soul flamed arrows to catch normal fire in lava.
+- Improved logic and expanded API.
+
+## [1.18.2-1.1.0.0] - 2022/09/24
+- Fixed compatibility with Malum (and probably some other mods).
+- Fixed a bug that would prevent soul flamed arrows to catch normal fire in lava.
+- Improved logic and expanded API.
+
+## [1.16.5-1.1.0.0] - 2022/09/24
+- Fixed compatibility with Malum (and probably some other mods).
+- Fixed a bug that would prevent soul flamed arrows to catch normal fire in lava.
+- Improved logic and expanded API.
+- Dropped the `-final` because I can't bring myself to abandon a version if there's still someone using it. 
+
 ## [1.19.2-1.0.0.2] - 2022/09/01
 - Fixed crash
 

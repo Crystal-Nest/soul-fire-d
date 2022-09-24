@@ -313,6 +313,18 @@ public abstract class FireManager {
   }
 
   /**
+   * Set on fire the given entity for the given seconds with the given fireId.
+   * 
+   * @param entity {@link Entity} to set on fire.
+   * @param seconds amount of seconds the fire should last for.
+   * @param fireId fire id of the fire.
+   */
+  public static final void setOnFire(Entity entity, int seconds, String fireId) {
+    entity.setSecondsOnFire(seconds);
+    ((FireTypeChanger) entity).setFireId(ensureFireId(fireId));
+  }
+
+  /**
    * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with {@code fireId}.
    * <p>
    * If no {@link Fire} was registered with {@code fireId}, uses the provided {@code damageSource} and {@code damage} to harm (or heal) the {@code entity}.
