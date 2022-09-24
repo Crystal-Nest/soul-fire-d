@@ -28,8 +28,7 @@ public abstract class AbstractArrowEntityMixin implements FireTypeChanger {
    */
   @Redirect(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setSecondsOnFire(I)V"))
   private void redirectSetSecondsOnFire(Entity caller, int seconds) {
-    caller.setSecondsOnFire(seconds);
-    ((FireTypeChanger) caller).setFireId(getFireId());
+    FireManager.setOnFire(caller, seconds, getFireId());
   }
 
   /**

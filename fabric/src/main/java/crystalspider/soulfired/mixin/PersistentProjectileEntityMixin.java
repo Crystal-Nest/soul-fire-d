@@ -28,8 +28,7 @@ public abstract class PersistentProjectileEntityMixin implements FireTypeChanger
    */
   @Redirect(method = "onEntityHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setOnFireFor(I)V"))
   private void redirectSetOnFireFor(Entity caller, int seconds) {
-    caller.setOnFireFor(seconds);
-    ((FireTypeChanger) caller).setFireId(getFireId());
+    FireManager.setOnFire(caller, seconds, getFireId());
   }
 
   /**
