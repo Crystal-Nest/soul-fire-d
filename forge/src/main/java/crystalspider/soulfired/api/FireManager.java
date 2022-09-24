@@ -323,7 +323,7 @@ public abstract class FireManager {
    */
   public static final void setOnFire(Entity entity, int seconds, String fireId) {
     entity.setSecondsOnFire(seconds);
-    ((FireTypeChanger) entity).setFireId(fireId);
+    ((FireTypeChanger) entity).setFireId(ensureFireId(fireId));
   }
 
 

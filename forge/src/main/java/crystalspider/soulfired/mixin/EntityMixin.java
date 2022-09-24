@@ -62,7 +62,7 @@ public abstract class EntityMixin implements FireTypeChanger {
 
   @Override
   public void setFireId(String fireId) {
-    entityData.set(DATA_FIRE_ID, fireId != null ? fireId.trim() : "");
+    entityData.set(DATA_FIRE_ID, FireManager.ensureFireId(fireId));
   }
 
   @Override
@@ -79,7 +79,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;defineSynchedData()V"))
   private void redirectDefineSynchedData(Entity caller) {
-    entityData.define(DATA_FIRE_ID, "");
+    entityData.define(DATA_FIRE_ID, FireManager.BASE_FIRE_ID);
     defineSynchedData();
   }
 
@@ -88,7 +88,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    * <p>
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
    * 
-   * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as this entity.
+   * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as {@code this} entity.
    * @param damageSource original {@link DamageSource} (normale fire).
    * @param damage original damage (normal fire).
    * @return the result of calling the redirected method.
