@@ -62,7 +62,7 @@ public abstract class EntityMixin implements FireTypeChanger {
 
   @Override
   public void setFireId(String fireId) {
-    dataTracker.set(DATA_FIRE_ID, fireId != null ? fireId.trim() : "");
+    dataTracker.set(DATA_FIRE_ID, FireManager.ensureFireId(fireId));
   }
 
   @Override
@@ -79,7 +79,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;initDataTracker()V"))
   private void redirectInitDataTracker(Entity caller) {
-    dataTracker.startTracking(DATA_FIRE_ID, "");
+    dataTracker.startTracking(DATA_FIRE_ID, FireManager.BASE_FIRE_ID);
     initDataTracker();
   }
 
@@ -96,6 +96,19 @@ public abstract class EntityMixin implements FireTypeChanger {
   @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
   private boolean redirectDamage(Entity caller, DamageSource damageSource, float damage) {
     return FireManager.damageOnFire(caller, ((FireTyped) caller).getFireId(), damageSource, damage);
+  }
+
+  /**
+   * Redirects the call to {@link Entity#setOnFireFor(int)} inside the method {@link Entity#setOnFireFromLava()}.
+   * <p>
+   * Sets the base fire id.
+   * 
+   * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as {@code this} entity.
+   * @param seconds seconds to set the entity on fire for.
+   */
+  @Redirect(method = "setOnFireFromLava", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setOnFireFor(I)V"))
+  private void redirectSetOnFireFor(Entity caller, int seconds) {
+    FireManager.setOnFire(caller, seconds, FireManager.BASE_FIRE_ID);
   }
 
   /**

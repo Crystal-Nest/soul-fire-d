@@ -62,7 +62,7 @@ public abstract class EntityMixin implements FireTypeChanger {
 
   @Override
   public void setFireId(String fireId) {
-    entityData.set(DATA_FIRE_ID, fireId != null ? fireId.trim() : "");
+    entityData.set(DATA_FIRE_ID, FireManager.ensureFireId(fireId));
   }
 
   @Override
@@ -79,7 +79,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;defineSynchedData()V"))
   private void redirectDefineSynchedData(Entity caller) {
-    entityData.define(DATA_FIRE_ID, "");
+    entityData.define(DATA_FIRE_ID, FireManager.BASE_FIRE_ID);
     defineSynchedData();
   }
 
@@ -96,6 +96,19 @@ public abstract class EntityMixin implements FireTypeChanger {
   @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
     return FireManager.damageOnFire(caller, ((FireTyped) caller).getFireId(), damageSource, damage);
+  }
+
+  /**
+   * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link Entity#lavaHurt()}.
+   * <p>
+   * Sets the base fire id.
+   * 
+   * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as {@code this} entity.
+   * @param seconds seconds to set the entity on fire for.
+   */
+  @Redirect(method = "lavaHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setSecondsOnFire(I)V"))
+  private void redirectSetSecondsOnFire(Entity caller, int seconds) {
+    FireManager.setOnFire(caller, seconds, FireManager.BASE_FIRE_ID);
   }
 
   /**

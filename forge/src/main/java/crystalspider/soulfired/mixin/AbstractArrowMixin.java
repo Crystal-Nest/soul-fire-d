@@ -2,37 +2,22 @@ package crystalspider.soulfired.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import crystalspider.soulfired.api.FireManager;
+import crystalspider.soulfired.api.enchantment.FireEnchantmentHelper;
+import crystalspider.soulfired.api.enchantment.FireEnchantmentHelper.FireEnchantment;
 import crystalspider.soulfired.api.type.FireTypeChanger;
-import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 
 /**
  * Injects into {@link AbstractArrow} to alter Fire behavior for consistency.
  */
 @Mixin(AbstractArrow.class)
-public abstract class AbstractArrowMixin extends Entity implements FireTypeChanger {
-  /**
-   * Useless constructor required by the super class to make the compiler happy.
-   * 
-   * @param entityType
-   * @param world
-   */
-  public AbstractArrowMixin(EntityType<?> entityType, Level world) {
-    super(entityType, world);
-  }
-
+public abstract class AbstractArrowMixin implements FireTypeChanger {
   /**
    * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link AbstractArrow#onHitEntity(EntityHitResult)}.
    * <p>
@@ -43,27 +28,23 @@ public abstract class AbstractArrowMixin extends Entity implements FireTypeChang
    */
   @Redirect(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setSecondsOnFire(I)V"))
   private void redirectSetSecondsOnFire(Entity caller, int seconds) {
-    caller.setSecondsOnFire(seconds);
-    ((FireTypeChanger) caller).setFireId(getFireId());
+    FireManager.setOnFire(caller, seconds, getFireId());
   }
 
   /**
-   * Injects at the end of the method {@link AbstractArrow#setEnchantmentEffectsFromEntity(LivingEntity, float)}.
+   * Redirects the call to {@link AbstractArrow#setSecondsOnFire(int)} inside the method {@link AbstractArrow#setEnchantmentEffectsFromEntity(LivingEntity, float)}.
    * <p>
-   * Sets this arrow on fire for 100 seconds with the correct FireId if it was shot by a mob with an item enchanted with a custom fire enchantment.
+   * Handles setting this arrow on the correct kind of fire, if any.
    * 
+   * @param caller {@link AbstractArrow} invoking (owning) the redirected method. It's the same as {@code this}.
+   * @param seconds seconds the arrow should be set on fire for.
    * @param entity {@link LivingEntity}, a mob, shooting the arrow.
-   * @param damage arrow damage modifier.
-   * @param ci {@link CallbackInfo}.
    */
-  @Inject(method = "setEnchantmentEffectsFromEntity", at = @At(value = "TAIL"))
-  private void onSetEnchantmentEffectsFromEntity(LivingEntity entity, float damageModifier, CallbackInfo ci) {
-    for (Enchantment enchantment : FireManager.getFlames()) {
-      if (EnchantmentHelper.getEnchantmentLevel(enchantment, entity) > 0) {
-        setSecondsOnFire(100);
-        setFireId(((FireTyped) enchantment).getFireId());
-        break;
-      }
+  @Redirect(method = "setEnchantmentEffectsFromEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/AbstractArrow;setSecondsOnFire(I)V"))
+  private void redirectSetSecondsOnFire(AbstractArrow caller, int seconds, LivingEntity entity) {
+    FireEnchantment fireEnchantment = FireEnchantmentHelper.getWhichFlame(entity);
+    if (fireEnchantment.isApplied()) {
+      FireManager.setOnFire(caller, seconds, fireEnchantment.getFireId());
     }
   }
 }
