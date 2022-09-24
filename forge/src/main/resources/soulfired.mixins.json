@@ -9,6 +9,7 @@
     "BaseFireBlockMixin",
     "BowItemMixin",
     "CampfireBlockMixin",
+    "EnchantmentHelperMixin",
     "EntityMixin",
     "PlayerMixin",
     "SoulFireBlockMixin",

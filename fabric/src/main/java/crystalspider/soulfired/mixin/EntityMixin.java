@@ -62,7 +62,7 @@ public abstract class EntityMixin implements FireTypeChanger {
 
   @Override
   public void setFireId(String fireId) {
-    dataTracker.set(DATA_FIRE_ID, fireId != null ? fireId.trim() : "");
+    dataTracker.set(DATA_FIRE_ID, FireManager.ensureFireId(fireId));
   }
 
   @Override
@@ -79,7 +79,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;initDataTracker()V"))
   private void redirectInitDataTracker(Entity caller) {
-    dataTracker.startTracking(DATA_FIRE_ID, "");
+    dataTracker.startTracking(DATA_FIRE_ID, FireManager.BASE_FIRE_ID);
     initDataTracker();
   }
 
