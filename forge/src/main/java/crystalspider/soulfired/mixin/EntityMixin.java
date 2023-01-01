@@ -59,9 +59,17 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Shadow
   public abstract boolean isInLava();
+  /**
+   * Shadowed {@link Entity#fireImmune()}.
+   * 
+   * @return whether this entity is immune to fire damage.
+   */
+  @Shadow
+  public abstract boolean fireImmune();
 
   @Override
   public void setFireId(String fireId) {
+    if (!this.fireImmune())
     entityData.set(DATA_FIRE_ID, FireManager.ensureFireId(fireId));
   }
 
