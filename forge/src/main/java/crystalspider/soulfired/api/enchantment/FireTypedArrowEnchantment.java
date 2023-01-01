@@ -19,9 +19,23 @@ public class FireTypedArrowEnchantment extends FlameEnchantment implements FireT
    */
   private final String fireId;
 
+  /**
+   * Whether the enchantment is treasure only.
+   */
   private final boolean isTreasure;
+  /**
+   * Whether the enchantment is a curse.
+   */
   private final boolean isCurse;
+  /**
+   * Whether the enchantment can appear in the enchanted book trade offers of librarian villagers.
+   */
   private final boolean isTradeable;
+  /**
+   * Whether the enchantment will appear in the enchanting table or loots with random enchant function.
+   * <p>
+   * Note that {@link #isTreasure} takes precedence.
+   */
   private final boolean isDiscoverable;
 
   /**
