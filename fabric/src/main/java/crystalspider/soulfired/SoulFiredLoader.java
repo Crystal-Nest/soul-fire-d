@@ -1,7 +1,9 @@
 package crystalspider.soulfired;
 
 import crystalspider.soulfired.api.FireManager;
+import crystalspider.soulfired.handlers.LootTableEventsHandler;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
 import net.minecraft.block.Blocks;
 
 /**
@@ -23,5 +25,6 @@ public class SoulFiredLoader implements ModInitializer {
         .setSourceBlock(Blocks.SOUL_FIRE)
       .build()
     );
+    LootTableLoadingCallback.EVENT.register(LootTableEventsHandler::handle);
   }
 }

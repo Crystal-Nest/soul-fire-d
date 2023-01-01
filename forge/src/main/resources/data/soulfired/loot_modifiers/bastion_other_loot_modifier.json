@@ -1,0 +1,16 @@
+{
+  "type": "soulfired:chest_loot_modifier",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/bastion_other"
+    }
+  ],
+  "additions": [
+    {
+      "enchantment": "soulfired:soul_flame",
+      "level": 1,
+      "chance": 0.05
+    }
+  ]
+}
