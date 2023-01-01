@@ -16,9 +16,10 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 /**
  * Static manager for the registered Fires.
@@ -81,8 +82,8 @@ public abstract class FireManager {
     String fireId = fire.getId();
     if (!fires.containsKey(fireId)) {
       fires.put(fireId, fire);
-      Registry.register(Registry.ENCHANTMENT, new Identifier(fire.getModId(), fireId + "_fire_aspect"), fire.getFireAspect());
-      Registry.register(Registry.ENCHANTMENT, new Identifier(fire.getModId(), fireId + "_flame"), fire.getFlame());
+      Registry.register(Registries.ENCHANTMENT, new Identifier(fire.getModId(), fireId + "_fire_aspect"), fire.getFireAspect());
+      Registry.register(Registries.ENCHANTMENT, new Identifier(fire.getModId(), fireId + "_flame"), fire.getFlame());
       return true;
     }
     LOGGER.error("Fire [" + fireId + "] was already registered by mod " + fires.get(fireId).getModId() + " with the following value: " + fires.get(fireId));
