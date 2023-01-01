@@ -64,7 +64,7 @@ public class FireTypedArrowEnchantment extends FlameEnchantment implements FireT
    * @param rarity
    */
   public FireTypedArrowEnchantment(String modId, String fireId, Rarity rarity) {
-    this(modId, fireId, rarity, true, false, true, true);
+    this(modId, fireId, rarity, false, false, true, true);
   }
 
   @Override
