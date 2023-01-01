@@ -69,7 +69,7 @@ public abstract class EntityMixin implements FireTypeChanger {
 
   @Override
   public void setFireId(String fireId) {
-    if (this.isFireImmune()) {
+    if (!this.isFireImmune()) {
       dataTracker.set(DATA_FIRE_ID, FireManager.ensureFireId(fireId));
     }
   }
