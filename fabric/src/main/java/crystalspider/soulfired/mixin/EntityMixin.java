@@ -41,11 +41,6 @@ public abstract class EntityMixin implements FireTypeChanger {
   private static final TrackedData<String> DATA_FIRE_ID = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.STRING);
 
   /**
-   * Shadowed {@link Entity#initDataTracker()}.
-   */
-  @Shadow
-  protected abstract void initDataTracker();
-  /**
    * Shadowed {@link Entity#getFireTicks()}.
    * 
    * @return the remaining ticks the entity is set to burn for.
@@ -80,19 +75,6 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Redirects the call to {@link Entity#initDataTracker()} inside the constructor.
-   * <p>
-   * Defines the {@link #DATA_FIRE_ID Fire Id data} to synchronize across client and server.
-   * 
-   * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as {@code this} entity.
-   */
-  @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;initDataTracker()V"))
-  private void redirectInitDataTracker(Entity caller) {
-    dataTracker.startTracking(DATA_FIRE_ID, FireManager.BASE_FIRE_ID);
-    initDataTracker();
-  }
-
-  /**
    * Redirects the call to {@link Entity#damage(DamageSource, float)} inside the method {@link Entity#baseTick()}.
    * <p>
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
@@ -118,6 +100,18 @@ public abstract class EntityMixin implements FireTypeChanger {
   @Redirect(method = "setOnFireFromLava", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setOnFireFor(I)V"))
   private void redirectSetOnFireFor(Entity caller, int seconds) {
     FireManager.setOnFire(caller, seconds, FireManager.BASE_FIRE_ID);
+  }
+
+  /**
+   * Redirects the call to {@link Entity#initDataTracker()} inside the constructor.
+   * <p>
+   * Defines the {@link #DATA_FIRE_ID Fire Id data} to synchronize across client and server.
+   * 
+   * @param ci {@link CallbackInfo}.
+   */
+  @Inject(method = "<init>", at = @At("TAIL"))
+  private void redirectInitDataTracker(CallbackInfo ci) {
+    dataTracker.startTracking(DATA_FIRE_ID, FireManager.BASE_FIRE_ID);
   }
 
   /**

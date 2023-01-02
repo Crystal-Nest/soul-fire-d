@@ -41,11 +41,6 @@ public abstract class EntityMixin implements FireTypeChanger {
   private static final DataParameter<String> DATA_FIRE_ID = EntityDataManager.defineId(Entity.class, DataSerializers.STRING);
 
   /**
-   * Shadowed {@link Entity#defineSynchedData()}.
-   */
-  @Shadow
-  protected abstract void defineSynchedData();
-  /**
    * Shadowed {@link Entity#getRemainingFireTicks()}.
    * 
    * @return the remaining ticks the entity is set to burn for.
@@ -79,19 +74,6 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Redirects the call to {@link Entity#defineSynchedData()} inside the constructor.
-   * <p>
-   * Defines the {@link #DATA_FIRE_ID Fire Id data} to synchronize across client and server.
-   * 
-   * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as {@code this} entity.
-   */
-  @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;defineSynchedData()V"))
-  private void redirectDefineSynchedData(Entity caller) {
-    entityData.define(DATA_FIRE_ID, FireManager.BASE_FIRE_ID);
-    defineSynchedData();
-  }
-
-  /**
    * Redirects the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link Entity#baseTick()}.
    * <p>
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
@@ -117,6 +99,18 @@ public abstract class EntityMixin implements FireTypeChanger {
   @Redirect(method = "lavaHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setSecondsOnFire(I)V"))
   private void redirectSetSecondsOnFire(Entity caller, int seconds) {
     FireManager.setOnFire(caller, seconds, FireManager.BASE_FIRE_ID);
+  }
+
+  /**
+   * Injects at the end of the constructor.
+   * <p>
+   * Defines the {@link #DATA_FIRE_ID Fire Id data} to synchronize across client and server.
+   * 
+   * @param ci {@link CallbackInfo}.
+   */
+  @Inject(method = "<init>", at = @At("TAIL"))
+  private void redirectDefineSynchedData(CallbackInfo ci) {
+    entityData.define(DATA_FIRE_ID, FireManager.BASE_FIRE_ID);
   }
 
   /**
