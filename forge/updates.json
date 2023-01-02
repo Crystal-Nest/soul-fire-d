@@ -1,9 +1,11 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files",
   "1.19.3": {
+    "2.0.0.1": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/",
     "2.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/4285527"
   },
   "1.19.2": {
+    "2.0.0.1": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/4287456",
     "2.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/4285449",
     "1.1.0.0": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/4002958",
     "1.0.0.2": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3962722",
@@ -23,6 +25,7 @@
     "1.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3958549"
   },
   "1.18.2": {
+    "2.0.0.1": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/4287454",
     "2.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/4285410",
     "1.1.0.0": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/4002948",
     "1.0.0.2": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3962686",
@@ -30,6 +33,7 @@
     "1.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3958508"
   },
   "1.16.5": {
+    "2.0.0.1": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/4287452",
     "2.0.0.0": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/4285401",
     "1.1.0.0": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/4002945",
     "1.0.0.2-final": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3962580",
@@ -37,17 +41,17 @@
     "1.0.0.0-final": "https://www.curseforge.com/minecraft/mc-mods/soul-fired/files/3959082"
   },
   "promos": {
-    "1.19.3-latest": "2.0.0.0",
-    "1.19.3-recommended": "2.0.0.0",
-    "1.19.2-latest": "2.0.0.0",
-    "1.19.2-recommended": "2.0.0.0",
+    "1.19.3-latest": "2.0.0.1",
+    "1.19.3-recommended": "2.0.0.1",
+    "1.19.2-latest": "2.0.0.1",
+    "1.19.2-recommended": "2.0.0.1",
     "1.19.1-latest": "1.1.0.0",
     "1.19.1-recommended": "1.1.0.0",
     "1.19-latest": "1.1.0.0",
     "1.19-recommended": "2.0.0.0",
-    "1.18.2-latest": "2.0.0.0",
-    "1.18.2-recommended": "2.0.0.0",
-    "1.16.5-latest": "2.0.0.0",
-    "1.16.5-recommended": "2.0.0.0"
+    "1.18.2-latest": "2.0.0.1",
+    "1.18.2-recommended": "2.0.0.1",
+    "1.16.5-latest": "2.0.0.1",
+    "1.16.5-recommended": "2.0.0.1"
   }
 }

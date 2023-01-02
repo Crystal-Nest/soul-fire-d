@@ -8,6 +8,18 @@ and this project adheres to [Forge Semantic Versioning](https://docs.minecraftfo
 ## [Unreleased]
 - Nothing new.
 
+## [1.19.3-2.0.0.1] - 2023/01/02
+- Improved compatibility, especially with Nyf's Spiders.
+
+## [1.19.2-2.0.0.1] - 2023/01/02
+- Improved compatibility, especially with Nyf's Spiders.
+
+## [1.18.2-2.0.0.1] - 2023/01/02
+- Improved compatibility, especially with Nyf's Spiders.
+
+## [1.16.5-2.0.0.1] - 2023/01/02
+- Improved compatibility, especially with Spiders 2.0.
+
 ## [1.19.3-2.0.0.0] - 2023/01/01
 - Ported to 1.19.3.
 
@@ -141,8 +153,10 @@ So now *this* is the FINAL version. 1.16.5 will not receive further updates.
 - This is the FINAL version. 1.16.5 will not receive further updates.
 
 [Unreleased]: https://github.com/Nyphet/soul-fire-d
+[1.19.3-2.0.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.3-2.0.0.1
 [1.19.3-2.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.3-2.0.0.0
 
+[1.19.2-2.0.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.2-2.0.0.1
 [1.19.2-2.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.2-2.0.0.0
 [1.19.2-1.1.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.2-1.1.0.0
 [1.19.2-1.0.0.2]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.2-1.0.0.2
@@ -159,12 +173,14 @@ So now *this* is the FINAL version. 1.16.5 will not receive further updates.
 [1.19-1.0.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19-1.0.0.1
 [1.19-1.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19-1.0.0.0
 
+[1.18.2-2.0.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-2.0.0.1
 [1.18.2-2.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-2.0.0.0
 [1.18.2-1.1.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-1.1.0.0
 [1.18.2-1.0.0.2]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-1.0.0.2
 [1.18.2-1.0.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-1.0.0.1
 [1.18.2-1.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-1.0.0.0
 
+[1.16.5-2.0.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.16.5-2.0.0.1
 [1.16.5-2.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.16.5-2.0.0.0
 [1.16.5-1.1.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.16.5-1.1.0.0
 [1.16.5-1.0.0.2-final]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.16.5-1.0.0.2-final
