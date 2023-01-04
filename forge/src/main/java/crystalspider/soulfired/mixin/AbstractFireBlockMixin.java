@@ -11,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -20,9 +21,9 @@ import net.minecraft.world.World;
 @Mixin(AbstractFireBlock.class)
 public abstract class AbstractFireBlockMixin extends Block implements FireTypeChanger {
   /**
-   * Fire Id.
+   * Fire Type.
    */
-  private String fireId;
+  private ResourceLocation fireType;
 
   /**
    * Useless constructor required by the super class to make the compiler happy.
@@ -34,15 +35,13 @@ public abstract class AbstractFireBlockMixin extends Block implements FireTypeCh
   }
 
   @Override
-  public void setFireId(String id) {
-    if (FireManager.isValidFireId(id)) {
-      fireId = id;
-    }
+  public void setFireType(ResourceLocation fireType) {
+    this.fireType = fireType;
   }
 
   @Override
-  public String getFireId() {
-    return fireId;
+  public ResourceLocation getFireType() {
+    return fireType;
   }
 
   /**
@@ -57,6 +56,7 @@ public abstract class AbstractFireBlockMixin extends Block implements FireTypeCh
    */
   @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;hurt(Lnet/minecraft/util/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
-    return FireManager.damageInFire(caller, getFireId(), damageSource, damage);
+    // TODO
+    return FireManager.damageInFire(caller, getFireType());
   }
 }

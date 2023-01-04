@@ -1,16 +1,14 @@
 package crystalspider.soulfired.api;
 
-import org.apache.commons.lang3.StringUtils;
-
 import crystalspider.soulfired.api.enchantment.FireTypedArrowEnchantment;
 import crystalspider.soulfired.api.enchantment.FireTypedAspectEnchantment;
 import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantment.Rarity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 
@@ -39,9 +37,9 @@ public class FireBuilder {
    */
   public static final SoundEvent DEFAULT_HURT_SOUND = SoundEvents.PLAYER_HURT_ON_FIRE;
   /**
-   * Default value for {@link #blockState}.
+   * Default value for {@link #sourceBlock}.
    */
-  public static final BlockState DEFAULT_BLOCKSTATE = Blocks.FIRE.defaultBlockState();
+  public static final Block DEFAULT_SOURCE_BLOCK = Blocks.FIRE;
 
   /**
    * {@link Fire} instance {@link Fire#modId modId}.
@@ -50,30 +48,30 @@ public class FireBuilder {
    */
   private String modId;
   /**
-   * {@link Fire} instance {@link Fire#id id}.
+   * {@link Fire} instance {@link Fire#fireId id}.
    * <p>
    * Required.
    */
-  private String id;
+  private String fireId;
 
   /**
    * {@link Fire} instance {@link Fire#damage damage}.
    * <p>
-   * Optional, defaults to {@code 1.0F}.
+   * Optional, defaults to {@link #DEFAULT_DAMAGE}.
    */
   private float damage;
 
   /**
    * {@link Fire} instance {@link Fire#invertHealAndHarm invertedHealAndHarm}.
    * <p>
-   * Optional, defaults to {@code false}.
+   * Optional, defaults to {@link #DEFAULT_INVERT_HEAL_AND_HARM}.
    */
   private boolean invertHealAndHarm;
 
   /**
    * {@link Fire} instance {@link Fire#inFire inFire}.
    * <p>
-   * Optional, defaults to {@link DamageSource#IN_FIRE}.
+   * Optional, defaults to {@link #DEFAULT_IN_FIRE}.
    * <p>
    * If changed from the default, remember to add translations for the new death messages!
    */
@@ -81,7 +79,7 @@ public class FireBuilder {
   /**
    * {@link Fire} instance {@link Fire#onFire onFire}.
    * <p>
-   * Optional, defaults to {@link DamageSource#ON_FIRE}.
+   * Optional, defaults to {@link #DEFAULT_ON_FIRE}.
    * <p>
    * If changed from the default, remember to add translations for the new death messages!
    */
@@ -90,20 +88,20 @@ public class FireBuilder {
   /**
    * {@link Fire} instance {@link Fire#hurtSound hurtSound}.
    * <p>
-   * Optional, defaults to {@link SoundEvents#PLAYER_HURT_ON_FIRE}.
+   * Optional, defaults to {@link #DEFAULT_HURT_SOUND}.
    * <p>
    * Default value is recommended.
    */
   private SoundEvent hurtSound;
 
   /**
-   * {@link Fire} instance {@link Fire#blockState blockState}.
+   * {@link Fire} instance {@link Fire#sourceBlock sourceBlock}.
    * <p>
-   * Optional, defaults to {@code Blocks.FIRE.defaultBlockState()}.
+   * Optional, defaults to {@link #DEFAULT_SOURCE_BLOCK}.
    * <p>
    * Default value is <b>not</b> recommended.
    */
-  private BlockState blockState;
+  private Block sourceBlock;
 
   /**
    * {@link Fire} instance {@link Fire#fireAspect fireAspect}.
@@ -124,26 +122,30 @@ public class FireBuilder {
 
   /**
    * Sets the {@link #modId}.
+   * <p>
+   * {@link #modId} will be set only if the given {@code id} is valid.
    * 
    * @param modId
    * @return this Builder to either set other properties or {@link #build}.
    */
   public FireBuilder setModId(String modId) {
-    this.modId = modId;
+    if (FireManager.isValidModId(modId)) {
+      this.modId = modId;
+    }
     return this;
   }
 
   /**
-   * Sets the {@link #id}.
+   * Sets the {@link #fireId}.
    * <p>
-   * {@link #id} will be set only if the given {@code id} is valid. In addition, a valid {@code id} will be trimmed.
+   * {@link #fireId} will be set only if the given {@code id} is valid.
    * 
-   * @param id
+   * @param fireId
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder setId(String id) {
-    if (FireManager.isValidFireId(id)) {
-      this.id = id;
+  public FireBuilder setFireId(String fireId) {
+    if (FireManager.isValidFireId(fireId)) {
+      this.fireId = fireId;
     }
     return this;
   }
@@ -192,24 +194,29 @@ public class FireBuilder {
   /**
    * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the given {@code messageId}.
    * <p>
-   * The {@link DamageSource} will have both {@link DamageSource#bypassArmor bypassArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}, and {@link DamageSource#exhaustion exhaustion} set to {@code 0.0F}.
+   * The {@link DamageSource} will have both {@link DamageSource#bypassArmor bypassArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}.
+   * <p>
+   * Prefer the use of {@link #setInFire()} after setting both {@link #modId} and {@link #fireId}.
    * 
    * @param messageId
    * @return this Builder to either set other properties or {@link #build}.
    */
+  @Deprecated
   public FireBuilder setInFire(String messageId) {
     return setInFire((new DamageSource(messageId)).bypassArmor().setIsFire());
   }
 
   /**
    * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code messageId} equal to {@code "in_" + id + "_fire"}.
+   * <p>
+   * The {@link DamageSource} will have both {@link DamageSource#bypassArmor bypassArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}.
    * 
    * @return this Builder to either set other properties or {@link #build}.
-   * @throws IllegalStateException if the {@link #id} is invalid (not set or blank).
+   * @throws IllegalStateException if the either {@link #modId} or {@link #fireId} is not valid.
    */
   public FireBuilder setInFire() throws IllegalStateException {
-    if (FireManager.isValidFireId(id)) {
-      return setInFire("in_" + id + "_fire");
+    if (FireManager.isValidFireId(fireId)) {
+      return setInFire("in_" + fireId + "_fire");
     }
     throw new IllegalStateException("Attempted to create inFire DamageSource before setting a valid id");
   }
@@ -230,24 +237,29 @@ public class FireBuilder {
   /**
    * Sets the {@link DamageSource} {@link #onFire} by creating a new {@link DamageSource} with the given {@code messageId}.
    * <p>
-   * The {@link DamageSource} will have both {@link DamageSource#bypassArmor bypassArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}, and {@link DamageSource#exhaustion exhaustion} set to {@code 0.0F}.   * 
+   * The {@link DamageSource} will have both {@link DamageSource#bypassArmor bypassArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}.
+   * <p>
+   * Prefer the use of {@link #setOnFire()} after setting both {@link #modId} and {@link #fireId}.
    * 
    * @param messageId
    * @return this Builder to either set other properties or {@link #build}.
    */
+  @Deprecated
   public FireBuilder setOnFire(String messageId) {
     return setOnFire((new DamageSource(messageId)).bypassArmor().setIsFire());
   }
 
   /**
    * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code messageId} equal to {@code "on_" + id + "_fire"}.
+   * <p>
+   * The {@link DamageSource} will have both {@link DamageSource#bypassArmor bypassArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}.
    * 
    * @return this Builder to either set other properties or {@link #build}.
-   * @throws IllegalStateException if the {@link #id} is invalid (not set or blank).
+   * @throws IllegalStateException if the either {@link #modId} or {@link #fireId} is not valid.
    */
   public FireBuilder setOnFire() throws IllegalStateException {
-    if (FireManager.isValidFireId(id)) {
-      return setOnFire("on_" + id + "_fire");
+    if (FireManager.isValidFireId(fireId)) {
+      return setOnFire("on_" + fireId + "_fire");
     }
     throw new IllegalStateException("Attempted to create onFire DamageSource before setting a valid id");
   }
@@ -264,26 +276,14 @@ public class FireBuilder {
   }
 
   /**
-   * Sets the {@link #blockState}.
-   * <p>
-   * Use this only if you need fine grained control on the BlockState associated to the Fire, otherwise prefer {@link #setSourceBlock(BaseFireBlock)}
-   * 
-   * @param blockState
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setSourceBlock(BlockState blockState) {
-    this.blockState = blockState;
-    return this;
-  }
-
-  /**
-   * Sets the {@link #blockState} to the {@link Block#defaultBlockState() default BlockState} of the given {@code sourceBlock}.
+   * Sets the {@link #sourceBlock}.
    * 
    * @param sourceBlock
    * @return this Builder to either set other properties or {@link #build}.
    */
   public FireBuilder setSourceBlock(Block sourceBlock) {
-    return setSourceBlock(sourceBlock.defaultBlockState());
+    this.sourceBlock = sourceBlock;
+    return this;
   }
 
   /**
@@ -320,42 +320,45 @@ public class FireBuilder {
    * Resets the state of the Builder.
    * <p>
    * Used to avoid getting new Builders from the {@link FireManager manager} and instead use the same instance to build different {@link Fire Fires}.
+   * <p>
+   * Note that, for ease of use, the {@link #modId} is not reset.
    * 
    * @return this Builder, reset.
    */
   public FireBuilder reset() {
-    id = null;
+    fireId = null;
     damage = DEFAULT_DAMAGE;
     invertHealAndHarm = DEFAULT_INVERT_HEAL_AND_HARM;
     inFire = DEFAULT_IN_FIRE;
     onFire = DEFAULT_ON_FIRE;
     hurtSound = DEFAULT_HURT_SOUND;
-    blockState = DEFAULT_BLOCKSTATE;
+    sourceBlock = DEFAULT_SOURCE_BLOCK;
     fireAspect = null;
     flame = null;
     return this;
   }
 
   /**
-   * Build a {@link Fire} instance.
+   * Builds a {@link Fire} instance.
    * <p>
    * If {@link #fireAspect} is not set, it will default to a new {@link FireTypedAspectEnchantment} with {@link Rarity#VERY_RARE}.
    * <p>
    * If {@link #flame} is not set, it will default to a new {@link FireTypedArrowEnchantment} with {@link Rarity#VERY_RARE}.
    * 
    * @return {@link Fire} instance.
-   * @throws IllegalStateException if the {@link #id} is invalid (not set or blank).
+   * @throws IllegalStateException if the either {@link #fireId} or {@link #modId} is not valid.
    */
   public Fire build() throws IllegalStateException {
-    if (FireManager.isValidFireId(id) && StringUtils.isNotBlank(modId)) {
+    if (FireManager.isValidFireId(fireId) && FireManager.isValidModId(modId)) {
+      ResourceLocation fireType = FireManager.sanitize(modId, fireId);
       if (fireAspect == null) {
-        fireAspect = new FireTypedAspectEnchantment(modId, id, Rarity.VERY_RARE);
+        fireAspect = new FireTypedAspectEnchantment(fireType, Rarity.VERY_RARE);
       }
       if (flame == null) {
-        flame = new FireTypedArrowEnchantment(modId, id, Rarity.VERY_RARE);
+        flame = new FireTypedArrowEnchantment(fireType, Rarity.VERY_RARE);
       }
-      return new Fire(modId, FireManager.sanitizeFireId(id), damage, invertHealAndHarm, inFire, onFire, hurtSound, blockState, fireAspect, flame);
+      return new Fire(fireType, damage, invertHealAndHarm, inFire, onFire, hurtSound, sourceBlock, fireAspect, flame);
     }
-    throw new IllegalStateException("Attempted to build a Fire with a non-valid id or modId");
+    throw new IllegalStateException("Attempted to build a Fire with a not valid fireId or modId");
   }
 }

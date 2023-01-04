@@ -1,8 +1,9 @@
 package crystalspider.soulfired.api;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 
 /**
@@ -10,13 +11,9 @@ import net.minecraft.util.SoundEvent;
  */
 public class Fire {
   /**
-   * Mod ID.
+   * {@link ResourceLocation} to uniquely identify this Fire.
    */
-  private final String modId;
-  /**
-   * Fire unique ID.
-   */
-  private final String id;
+  private final ResourceLocation fireType;
 
   /**
    * Fire damage per second.
@@ -43,9 +40,9 @@ public class Fire {
   private final SoundEvent hurtSound;
 
   /**
-   * {@link BlockState} of the Fire Block considered as the source for this Fire.
+   * {@link Block} of the Fire Block considered as the source for this Fire.
    */
-  private final BlockState sourceBlock;
+  private final Block sourceBlock;
 
   /**
    * Fire Aspect {@link Enchantment}.
@@ -70,9 +67,8 @@ public class Fire {
    * @param fireAspect {@link #fireAspect}.
    * @param flame {@link #flame}.
    */
-  Fire(String modId, String id, float damage, boolean invertHealAndHarm, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, BlockState sourceBlock, Enchantment fireAspect, Enchantment flame) {
-    this.modId = modId;
-    this.id = id;
+  Fire(ResourceLocation fireType, float damage, boolean invertHealAndHarm, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, Block sourceBlock, Enchantment fireAspect, Enchantment flame) {
+    this.fireType = fireType;
     this.damage = damage;
     this.invertHealAndHarm = invertHealAndHarm;
     this.inFire = inFire;
@@ -84,21 +80,12 @@ public class Fire {
   }
 
   /**
-   * Returns this {@link #modId}.
+   * Returns this {@link #fireType}.
    * 
-   * @return this {@link #modId}.
+   * @return this {@link #fireType}.
    */
-  public String getModId() {
-    return modId;
-  }
-
-  /**
-   * Returns this {@link #id}.
-   * 
-   * @return this {@link #id}.
-   */
-  public String getId() {
-    return id;
+  public ResourceLocation getFireType() {
+    return fireType;
   }
 
   /**
@@ -151,7 +138,7 @@ public class Fire {
    * 
    * @return this {@link #sourceBlock}.
    */
-  public BlockState getSourceBlock() {
+  public Block getSourceBlock() {
     return sourceBlock;
   }
 
@@ -175,6 +162,6 @@ public class Fire {
 
   @Override
   public String toString() {
-    return "Fire [id=" + id + ", damage=" + damage + ", invertedHealAndHarm=" + invertHealAndHarm + ", inFire=" + inFire + ", onFire=" + onFire + ", hurtSound=" + hurtSound + ", blockState=" + sourceBlock + "]";
+    return "Fire [fireType=" + fireType + ", damage=" + damage + ", invertedHealAndHarm=" + invertHealAndHarm + ", inFire=" + inFire + ", onFire=" + onFire + ", hurtSound=" + hurtSound + ", blockState=" + sourceBlock + "]";
   }
 }

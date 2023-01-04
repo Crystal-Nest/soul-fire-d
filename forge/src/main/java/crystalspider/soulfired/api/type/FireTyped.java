@@ -1,15 +1,17 @@
 package crystalspider.soulfired.api.type;
 
+import net.minecraft.util.ResourceLocation;
+
 /**
  * Type sensitive to the fire type it has (burns or burn).
  */
 public interface FireTyped {
   /**
-   * Returns this {@code fireId}.
+   * Returns this {@code fireType}.
    * <p>
-   * May or may not process the actual fireId before returning.
+   * May or may not process the actual fireType before returning.
    * 
-   * @return this {@code fireId}.
+   * @return this {@code fireType}.
    */
-  public String getFireId();
+  public ResourceLocation getFireType();
 }

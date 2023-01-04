@@ -17,6 +17,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 /**
@@ -36,7 +37,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   protected EntityDataManager entityData;
 
   /**
-   * {@link DataParameter} to synchronize the Fire Id across client and server.
+   * {@link DataParameter} to synchronize the Fire Type across client and server.
    */
   private static final DataParameter<String> DATA_FIRE_ID = EntityDataManager.defineId(Entity.class, DataSerializers.STRING);
 
@@ -63,14 +64,15 @@ public abstract class EntityMixin implements FireTypeChanger {
   public abstract boolean fireImmune();
 
   @Override
-  public void setFireId(String fireId) {
-    if (!this.fireImmune())
-    entityData.set(DATA_FIRE_ID, FireManager.ensureFireId(fireId));
+  public void setFireType(ResourceLocation fireType) {
+    if (!this.fireImmune()) {
+      entityData.set(DATA_FIRE_ID, FireManager.ensure(fireType).toString());
+    }
   }
 
   @Override
-  public String getFireId() {
-    return entityData.get(DATA_FIRE_ID);
+  public ResourceLocation getFireType() {
+    return ResourceLocation.tryParse(entityData.get(DATA_FIRE_ID));
   }
 
   /**
@@ -79,13 +81,14 @@ public abstract class EntityMixin implements FireTypeChanger {
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
    * 
    * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as {@code this} entity.
-   * @param damageSource original {@link DamageSource} (normale fire).
+   * @param damageSource original {@link DamageSource} (normal fire).
    * @param damage original damage (normal fire).
    * @return the result of calling the redirected method.
    */
   @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;hurt(Lnet/minecraft/util/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
-    return FireManager.damageOnFire(caller, ((FireTyped) caller).getFireId(), damageSource, damage);
+    // TODO
+    return FireManager.damageOnFire(caller, ((FireTyped) caller).getFireType());
   }
   
   /**
@@ -98,7 +101,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Redirect(method = "lavaHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setSecondsOnFire(I)V"))
   private void redirectSetSecondsOnFire(Entity caller, int seconds) {
-    FireManager.setOnFire(caller, seconds, FireManager.BASE_FIRE_ID);
+    FireManager.setOnFire(caller, seconds, FireManager.DEFAULT_FIRE_TYPE);
   }
 
   /**
@@ -110,7 +113,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Inject(method = "<init>", at = @At("TAIL"))
   private void redirectDefineSynchedData(CallbackInfo ci) {
-    entityData.define(DATA_FIRE_ID, FireManager.BASE_FIRE_ID);
+    entityData.define(DATA_FIRE_ID, FireManager.DEFAULT_FIRE_TYPE.toString());
   }
 
   /**
@@ -124,7 +127,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   @Inject(method = "setRemainingFireTicks", at = @At(value = "HEAD"))
   private void onSetRemainingFireTicks(int ticks, CallbackInfo ci) {
     if (!level.isClientSide && ticks >= getRemainingFireTicks()) {
-      setFireId(FireManager.BASE_FIRE_ID);
+      setFireType(FireManager.DEFAULT_FIRE_TYPE);
     }
   }
 
@@ -138,8 +141,8 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Inject(method = "saveWithoutId", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundNBT;)V"))
   private void onSaveWithoutId(CompoundNBT tag, CallbackInfoReturnable<CompoundNBT> cir) {
-    if (FireManager.isFireId(getFireId())) {
-      tag.putString("FireId", getFireId());
+    if (FireManager.isRegisteredType(getFireType())) {
+      tag.putString("FireType", getFireType().toString());
     }
   }
 
@@ -153,6 +156,6 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Inject(method = "load", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;readAdditionalSaveData(Lnet/minecraft/nbt/CompoundNBT;)V"))
   private void onLoad(CompoundNBT tag, CallbackInfo ci) {
-    setFireId(FireManager.ensureFireId(tag.getString("FireId")));
+    setFireType(FireManager.ensure(ResourceLocation.tryParse(tag.getString("FireType"))));
   }
 }

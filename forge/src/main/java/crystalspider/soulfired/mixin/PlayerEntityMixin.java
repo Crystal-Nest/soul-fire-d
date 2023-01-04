@@ -27,7 +27,7 @@ public abstract class PlayerEntityMixin implements FireTyped {
   @Inject(method = "getHurtSound", at = @At(value = "HEAD"), cancellable = true)
   private void onGetHurtSound(DamageSource damageSource, CallbackInfoReturnable<SoundEvent> cir) {
     if (FireManager.isFireDamageSource(damageSource)) {
-      cir.setReturnValue(FireManager.getHurtSound(getFireId()));
+      cir.setReturnValue(FireManager.getHurtSound(getFireType()));
     }
   }
 }

@@ -5,19 +5,16 @@ import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.FlameEnchantment;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.util.ResourceLocation;
 
 /**
- * Flame Enchantment sensitive to the fire type.
+ * Flame Enchantment sensitive to the Fire Type.
  */
 public class FireTypedArrowEnchantment extends FlameEnchantment implements FireTyped {
   /**
-   * Mod Id.
+   * {@link ResourceLocation} to uniquely identify the associated Fire.
    */
-  private final String modId;
-  /**
-   * Fire Id.
-   */
-  private final String fireId;
+  private final ResourceLocation fireType;
 
   /**
    * Whether the enchantment is treasure only.
@@ -39,6 +36,24 @@ public class FireTypedArrowEnchantment extends FlameEnchantment implements FireT
   private final boolean isDiscoverable;
 
   /**
+   * @param fireType
+   * @param rarity
+   * @param isTreasure
+   * @param isCurse
+   * @param isTradeable
+   * @param isDiscoverable
+   */
+  public FireTypedArrowEnchantment(ResourceLocation fireType, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
+    super(rarity, EquipmentSlotType.MAINHAND);
+    this.fireType = FireManager.sanitize(fireType);
+    this.isTreasure = isTreasure;
+    this.isCurse = isCurse;
+    this.isTradeable = isTradeable;
+    this.isDiscoverable = isDiscoverable;
+    setRegistryName(fireType.getNamespace(), fireType.getPath() + "_flame");
+  }
+
+  /**
    * @param modId
    * @param fireId
    * @param rarity
@@ -48,14 +63,15 @@ public class FireTypedArrowEnchantment extends FlameEnchantment implements FireT
    * @param isDiscoverable
    */
   public FireTypedArrowEnchantment(String modId, String fireId, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
-    super(rarity, EquipmentSlotType.MAINHAND);
-    this.modId = modId;
-    this.fireId = FireManager.sanitizeFireId(fireId);
-    this.isTreasure = isTreasure;
-    this.isCurse = isCurse;
-    this.isTradeable = isTradeable;
-    this.isDiscoverable = isDiscoverable;
-    setRegistryName(this.modId, this.fireId + "_flame");
+    this(new ResourceLocation(modId, fireId), rarity, isTreasure, isCurse, isTradeable, isDiscoverable);
+  }
+
+  /**
+   * @param fireType
+   * @param rarity
+   */
+  public FireTypedArrowEnchantment(ResourceLocation fireType, Rarity rarity) {
+    this(fireType, rarity, false, false, true, true);
   }
 
   /**
@@ -64,7 +80,7 @@ public class FireTypedArrowEnchantment extends FlameEnchantment implements FireT
    * @param rarity
    */
   public FireTypedArrowEnchantment(String modId, String fireId, Rarity rarity) {
-    this(modId, fireId, rarity, false, false, true, true);
+    this(new ResourceLocation(modId, fireId), rarity, false, false, true, true);
   }
 
   @Override
@@ -93,16 +109,7 @@ public class FireTypedArrowEnchantment extends FlameEnchantment implements FireT
   }
 
   @Override
-  public final String getFireId() {
-    return fireId;
-  }
-
-  /**
-   * Returns this {@link #modId}.
-   * 
-   * @return this {@link #modId}.
-   */
-  public final String getModId() {
-    return modId;
+  public final ResourceLocation getFireType() {
+    return fireType;
   }
 }

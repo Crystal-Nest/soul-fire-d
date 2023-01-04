@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.RenderMaterial;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Injects into {@link EntityRendererManager} to alter Fire behavior for consistency.
@@ -23,7 +24,7 @@ public abstract class EntityRendererManagerMixin {
   /**
    * Modifies the assignment value returned by the first call to {@link RenderMaterial#sprite()} in the method {@link EntityRendererManager#renderFlame(MatrixStack, IRenderTypeBuffer, Entity)}.
    * <p>
-   * Assigns the correct sprite for the fire type the entity is burning from.
+   * Assigns the correct sprite for the Fire Type the entity is burning from.
    * 
    * @param value original sprite returned by the modified method.
    * @param matrixStack
@@ -33,9 +34,9 @@ public abstract class EntityRendererManagerMixin {
    */
   @ModifyVariable(method = "renderFlame", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/renderer/model/RenderMaterial;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", ordinal = 0), ordinal = 0)
   private TextureAtlasSprite onRenderFlameAtSprite0(TextureAtlasSprite value, MatrixStack matrixStack, IRenderTypeBuffer buffer, Entity entity) {
-    String fireId = ((FireTyped) entity).getFireId();
-    if (FireManager.isFireId(fireId)) {
-      return FireClientManager.getSprite0(fireId);
+    ResourceLocation fireType = ((FireTyped) entity).getFireType();
+    if (FireManager.isRegisteredType(fireType)) {
+      return FireClientManager.getSprite0(fireType);
     }
     return value;
   }
@@ -43,7 +44,7 @@ public abstract class EntityRendererManagerMixin {
   /**
    * Modifies the assignment value returned by the second call to {@link RenderMaterial#sprite()} in the method {@link EntityRendererManager#renderFlame(MatrixStack, IRenderTypeBuffer, Entity)}.
    * <p>
-   * Assigns the correct sprite for the fire type the entity is burning from.
+   * Assigns the correct sprite for the Fire Type the entity is burning from.
    * 
    * @param value original sprite returned by the modified method.
    * @param matrixStack
@@ -53,9 +54,9 @@ public abstract class EntityRendererManagerMixin {
    */
   @ModifyVariable(method = "renderFlame", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/renderer/model/RenderMaterial;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", ordinal = 1), ordinal = 1)
   private TextureAtlasSprite onRenderFlameAtSprite1(TextureAtlasSprite value, MatrixStack matrixStack, IRenderTypeBuffer buffer, Entity entity) {
-    String fireId = ((FireTyped) entity).getFireId();
-    if (FireManager.isFireId(fireId)) {
-      return FireClientManager.getSprite1(fireId);
+    ResourceLocation fireType = ((FireTyped) entity).getFireType();
+    if (FireManager.isRegisteredType(fireType)) {
+      return FireClientManager.getSprite1(fireType);
     }
     return value;
   }

@@ -7,58 +7,60 @@ import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
 
 /**
- * Fire client side only.
+ * Fire, client side only.
  */
 public class FireClient {
   /**
-   * Mod ID.
+   * {@link ResourceLocation} to uniquely identify this Fire.
    */
-  private final String modId;
+  private final ResourceLocation fireType;
+
   /**
-   * Fire unique ID.
-   */
-  private final String id;
-  /**
-   * Fire {@link Material} for the sprite0.
+   * Fire {@link Material} for the sprite 0.
    * <p>
    * Used only in rendering the Fire of an entity.
    */
   private final RenderMaterial material0;
   /**
-   * Fire {@link Material} for the sprite1.
+   * Fire {@link Material} for the sprite 1.
    * <p>
    * Used both for rendering the Fire of an entity and the player overlay.
    */
   private final RenderMaterial material1;
 
-  FireClient(String modId, String id) {
-    this.modId = modId;
-    this.id = id;
-    if (modId.equals(FireManager.SOUL_FIRE_ID)) {
-      this.material0 = new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(modId, "block/" + id + "_fire_0"));
-      this.material1 = new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(modId, "block/" + id + "_fire_1"));
-    } else {
-      this.material0 = new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new ResourceLocation("block/" + id + "_fire_0"));
-      this.material1 = new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new ResourceLocation("block/" + id + "_fire_1"));
-    }
+  FireClient(ResourceLocation fireType) {
+    this.fireType = fireType;
+    String modId = fireType.getNamespace(), fireId = fireType.getPath();
+    String joiner = FireManager.DEFAULT_FIRE_TYPE.equals(fireType) ? "" : "_";
+    this.material0 = new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(modId, "block/" + fireId + joiner + "fire_0"));
+    this.material1 = new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(modId, "block/" + fireId + joiner + "fire_1"));
   }
 
   /**
-   * Returns this {@link #modId}.
+   * Returns this {@link #fireType}.
    * 
-   * @return this {@link #modId}.
+   * @return this {@link #fireType}.
    */
-  public String getModId() {
-    return modId;
+  public ResourceLocation getFireType() {
+    return fireType;
   }
 
   /**
-   * Returns this {@link #id}.
+   * Returns this material 0.
    * 
-   * @return this {@link #id}.
+   * @return this material 0.
    */
-  public String getId() {
-    return id;
+  public RenderMaterial getMaterial0() {
+    return material0;
+  }
+
+  /**
+   * Returns this material 1.
+   * 
+   * @return this material 1.
+   */
+  public RenderMaterial getMaterial1() {
+    return material1;
   }
 
   /**
@@ -81,6 +83,6 @@ public class FireClient {
 
   @Override
   public String toString() {
-    return "FireClient [material0=" + material0 + ", material1=" + material1 + "]";
+    return "FireClient [fireType=" + fireType + ", material0=" + material0 + ", material1=" + material1 + "]";
   }
 }

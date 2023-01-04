@@ -28,7 +28,7 @@ public class SoulFiredLoader {
   /**
    * Network channel protocol version.
    */
-  public static final String PROTOCOL_VERSION = "1.16-2.0";
+  public static final String PROTOCOL_VERSION = "1.16-3.0";
   /**
    * {@link SimpleChannel} instance for compatibility client-server.
    */
@@ -54,8 +54,8 @@ public class SoulFiredLoader {
     modEventBus.register(new RegistryEventHandler());
     FireManager.registerFire(
       FireManager.fireBuilder()
-        .setModId(MODID)
-        .setId(FireManager.SOUL_FIRE_ID)
+        .setModId(FireManager.SOUL_FIRE_TYPE.getNamespace())
+        .setFireId(FireManager.SOUL_FIRE_TYPE.getPath())
         .setDamage(2)
         .setSourceBlock(Blocks.SOUL_FIRE)
       .build()

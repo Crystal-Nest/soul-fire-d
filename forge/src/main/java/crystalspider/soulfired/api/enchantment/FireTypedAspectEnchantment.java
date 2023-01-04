@@ -8,19 +8,16 @@ import net.minecraft.enchantment.FireAspectEnchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.util.ResourceLocation;
 
 /**
- * Fire Aspect Enchantment sensitive to the fire type.
+ * Fire Aspect Enchantment sensitive to the Fire Type.
  */
 public class FireTypedAspectEnchantment extends FireAspectEnchantment implements FireTyped {
   /**
-   * Mod Id.
+   * {@link ResourceLocation} to uniquely identify the associated Fire.
    */
-  private final String modId;
-  /**
-   * Fire Id.
-   */
-  private final String fireId;
+  private final ResourceLocation fireType;
 
   /**
    * Whether the enchantment is treasure only.
@@ -42,6 +39,24 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
   private final boolean isDiscoverable;
 
   /**
+   * @param fireType
+   * @param rarity
+   * @param isTreasure
+   * @param isCurse
+   * @param isTradeable
+   * @param isDiscoverable
+   */
+  public FireTypedAspectEnchantment(ResourceLocation fireType, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
+    super(rarity, EquipmentSlotType.MAINHAND);
+    this.fireType = FireManager.sanitize(fireType);
+    this.isTreasure = isTreasure;
+    this.isCurse = isCurse;
+    this.isTradeable = isTradeable;
+    this.isDiscoverable = isDiscoverable;
+    setRegistryName(fireType.getNamespace(), fireType.getPath() + "_fire_aspect");
+  }
+
+  /**
    * @param modId
    * @param fireId
    * @param rarity
@@ -51,14 +66,15 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
    * @param isDiscoverable
    */
   public FireTypedAspectEnchantment(String modId, String fireId, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
-    super(rarity, EquipmentSlotType.MAINHAND);
-    this.modId = modId;
-    this.fireId = FireManager.sanitizeFireId(fireId);
-    this.isTreasure = isTreasure;
-    this.isCurse = isCurse;
-    this.isTradeable = isTradeable;
-    this.isDiscoverable = isDiscoverable;
-    setRegistryName(this.modId, this.fireId + "_fire_aspect");
+    this(new ResourceLocation(modId, fireId), rarity, isTreasure, isCurse, isTradeable, isDiscoverable);
+  }
+
+  /**
+   * @param fireType
+   * @param rarity
+   */
+  public FireTypedAspectEnchantment(ResourceLocation fireType, Rarity rarity) {
+    this(fireType, rarity, false, false, true, true);
   }
 
   /**
@@ -67,7 +83,7 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
    * @param rarity
    */
   public FireTypedAspectEnchantment(String modId, String fireId, Rarity rarity) {
-    this(modId, fireId, rarity, false, false, true, true);
+    this(new ResourceLocation(modId, fireId), rarity, false, false, true, true);
   }
 
   @Override
@@ -75,7 +91,7 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
     if (!attacker.level.isClientSide) {
       target.setSecondsOnFire(level * 4);
     }
-    ((FireTypeChanger) target).setFireId(FireManager.ensureFireId(fireId));
+    ((FireTypeChanger) target).setFireType(FireManager.ensure(fireType));
   }
 
   @Override
@@ -104,16 +120,7 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
   }
 
   @Override
-  public final String getFireId() {
-    return fireId;
-  }
-  
-  /**
-   * Returns this {@link #modId}.
-   * 
-   * @return this {@link #modId}.
-   */
-  public final String getModId() {
-    return modId;
+  public final ResourceLocation getFireType() {
+    return fireType;
   }
 }

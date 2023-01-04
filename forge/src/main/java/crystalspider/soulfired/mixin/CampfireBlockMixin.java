@@ -13,6 +13,7 @@ import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.IWaterLoggable;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -22,9 +23,9 @@ import net.minecraft.world.World;
 @Mixin(CampfireBlock.class)
 public abstract class CampfireBlockMixin extends ContainerBlock implements IWaterLoggable, FireTypeChanger {
   /**
-   * Fire Id.
+   * Fire Type.
    */
-  private String fireId;
+  private ResourceLocation fireType;
 
   /**
    * Useless constructor required by the super class to make the compiler happy.
@@ -36,15 +37,13 @@ public abstract class CampfireBlockMixin extends ContainerBlock implements IWate
   }
 
   @Override
-  public void setFireId(String id) {
-    if (FireManager.isValidFireId(id)) {
-      fireId = id;
-    }
+  public void setFireType(ResourceLocation fireType) {
+    this.fireType = fireType;
   }
 
   @Override
-  public String getFireId() {
-    return fireId;
+  public ResourceLocation getFireType() {
+    return fireType;
   }
 
   /**
@@ -59,9 +58,10 @@ public abstract class CampfireBlockMixin extends ContainerBlock implements IWate
    */
   @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;hurt(Lnet/minecraft/util/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
-    if (this == Blocks.SOUL_CAMPFIRE && !FireManager.isFireId(getFireId())) {
-      setFireId(FireManager.SOUL_FIRE_ID);
+    // TODO
+    if (this == Blocks.SOUL_CAMPFIRE && !FireManager.isRegisteredType(getFireType())) {
+      setFireType(FireManager.SOUL_FIRE_TYPE);
     }
-    return FireManager.damageInFire(caller, getFireId(), damageSource, damage);
+    return FireManager.damageInFire(caller, getFireType());
   }
 }

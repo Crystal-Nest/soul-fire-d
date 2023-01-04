@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.OverlayRenderer;
 import net.minecraft.client.renderer.model.RenderMaterial;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
 import net.minecraftforge.event.ForgeEventFactory;
 
@@ -34,9 +35,9 @@ public class OverlayRendererMixin {
    */
   @Redirect(method = "renderScreenEffect", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/event/ForgeEventFactory;renderFireOverlay(Lnet/minecraft/entity/player/PlayerEntity;Lcom/mojang/blaze3d/matrix/MatrixStack;)Z"))
   private static boolean redirectRenderFireOverlay(PlayerEntity player, MatrixStack matrixStack) {
-    String fireId = ((FireTyped) player).getFireId();
-    if (FireManager.isFireId(fireId)) {
-      return ForgeEventFactory.renderBlockOverlay(player, matrixStack, OverlayType.FIRE, FireManager.getSourceBlock(fireId), player.blockPosition());
+    ResourceLocation fireType = ((FireTyped) player).getFireType();
+    if (FireManager.isRegisteredType(fireType)) {
+      return ForgeEventFactory.renderBlockOverlay(player, matrixStack, OverlayType.FIRE, FireManager.getSourceBlock(fireType).defaultBlockState(), player.blockPosition());
     }
     return ForgeEventFactory.renderFireOverlay(player, matrixStack);
   }
@@ -44,18 +45,19 @@ public class OverlayRendererMixin {
   /**
    * Modifies the assignment value returned by {@link RenderMaterial#sprite()} in the method {@link OverlayRenderer#renderFire(Minecraft, MatrixStack)}.
    * <p>
-   * Assigns the correct sprite for the fire type the player is burning from.
+   * Assigns the correct sprite for the Fire Type the player is burning from.
    * 
    * @param value original sprite returned by the modified method.
    * @param minecraft Minecraft client.
    * @param matrixStack
    * @return {@link TextureAtlasSprite} to assign.
    */
+  @SuppressWarnings("null")
   @ModifyVariable(method = "renderFire", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/renderer/model/RenderMaterial;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;"))
   private static TextureAtlasSprite onRenderFire(TextureAtlasSprite value, Minecraft minecraft, MatrixStack matrixStack) {
-    String fireId = ((FireTyped) minecraft.player).getFireId();
-    if (FireManager.isFireId(fireId)) {
-      return FireClientManager.getSprite1(fireId);
+    ResourceLocation fireType = ((FireTyped) minecraft.player).getFireType();
+    if (FireManager.isRegisteredType(fireType)) {
+      return FireClientManager.getSprite1(fireType);
     }
     return value;
   }
