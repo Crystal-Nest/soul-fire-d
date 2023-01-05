@@ -20,8 +20,12 @@ public class RegistryEventHandler {
   @SubscribeEvent
   public void handle(Register<Enchantment> event) {
     for (Fire fire : FireManager.getFires()) {
-      event.getRegistry().register(fire.getFireAspect());
-      event.getRegistry().register(fire.getFlame());
+      if (fire.getFireAspect().isPresent()) {
+        event.getRegistry().register(fire.getFireAspect().get());
+      }
+      if (fire.getFlame().isPresent()) {
+        event.getRegistry().register(fire.getFlame().get());
+      }
     }
   }
 }

@@ -7,10 +7,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.CampfireBlock;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.IWaterLoggable;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -21,20 +18,11 @@ import net.minecraft.world.World;
  * Injects into {@link CampfireBlock} to alter Fire behavior for consistency.
  */
 @Mixin(CampfireBlock.class)
-public abstract class CampfireBlockMixin extends ContainerBlock implements IWaterLoggable, FireTypeChanger {
+public abstract class CampfireBlockMixin implements FireTypeChanger {
   /**
    * Fire Type.
    */
   private ResourceLocation fireType;
-
-  /**
-   * Useless constructor required by the super class to make the compiler happy.
-   * 
-   * @param properties
-   */
-  private CampfireBlockMixin(Properties properties) {
-    super(properties);
-  }
 
   @Override
   public void setFireType(ResourceLocation fireType) {
@@ -59,9 +47,6 @@ public abstract class CampfireBlockMixin extends ContainerBlock implements IWate
   @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;hurt(Lnet/minecraft/util/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
     // TODO
-    if (this == Blocks.SOUL_CAMPFIRE && !FireManager.isRegisteredType(getFireType())) {
-      setFireType(FireManager.SOUL_FIRE_TYPE);
-    }
     return FireManager.damageInFire(caller, getFireType());
   }
 }

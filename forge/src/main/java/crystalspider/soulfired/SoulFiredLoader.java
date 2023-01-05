@@ -3,7 +3,6 @@ package crystalspider.soulfired;
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.handlers.RegistryEventHandler;
 import crystalspider.soulfired.loot.ChestLootModifier;
-import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -57,7 +56,6 @@ public class SoulFiredLoader {
         .setModId(FireManager.SOUL_FIRE_TYPE.getNamespace())
         .setFireId(FireManager.SOUL_FIRE_TYPE.getPath())
         .setDamage(2)
-        .setSourceBlock(Blocks.SOUL_FIRE)
       .build()
     );
     LOOT_MODIFIERS.register(modEventBus);

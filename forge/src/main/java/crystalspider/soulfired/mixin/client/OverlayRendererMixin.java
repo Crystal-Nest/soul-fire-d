@@ -52,9 +52,9 @@ public class OverlayRendererMixin {
    * @param matrixStack
    * @return {@link TextureAtlasSprite} to assign.
    */
-  @SuppressWarnings("null")
   @ModifyVariable(method = "renderFire", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/renderer/model/RenderMaterial;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;"))
   private static TextureAtlasSprite onRenderFire(TextureAtlasSprite value, Minecraft minecraft, MatrixStack matrixStack) {
+    @SuppressWarnings("null")
     ResourceLocation fireType = ((FireTyped) minecraft.player).getFireType();
     if (FireManager.isRegisteredType(fireType)) {
       return FireClientManager.getSprite1(fireType);

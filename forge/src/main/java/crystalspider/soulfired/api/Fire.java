@@ -1,6 +1,9 @@
 package crystalspider.soulfired.api;
 
+import java.util.Optional;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.CampfireBlock;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -40,18 +43,22 @@ public class Fire {
   private final SoundEvent hurtSound;
 
   /**
-   * {@link Block} of the Fire Block considered as the source for this Fire.
+   * {@link Optional} {@link ResourceLocation} of the {@link Block} of the Fire Block considered as the source for this Fire.
    */
-  private final Block sourceBlock;
+  private final Optional<ResourceLocation> source;
+  /**
+   * {@link Optional} {@link ResourceLocation} of the {@link CampfireBlock} associated with this Fire.
+   */
+  private final Optional<ResourceLocation> campfire;
 
   /**
-   * Fire Aspect {@link Enchantment}.
+   * {@link Optional} Fire Aspect {@link Enchantment}.
    */
-  private final Enchantment fireAspect;
+  private final Optional<Enchantment> fireAspect;
   /**
-   * Flame {@link Enchantment}.
+   * {@link Optional} Flame {@link Enchantment}.
    */
-  private final Enchantment flame;
+  private final Optional<Enchantment> flame;
 
   /**
    * @param modId {@link #modId}.
@@ -63,20 +70,22 @@ public class Fire {
    * @param inFire {@link #inFire}.
    * @param onFire {@link #onFire}.
    * @param hurtSound {@link #hurtSound}.
-   * @param sourceBlock {@link #sourceBlock}.
+   * @param source {@link #source}.
+   * @param campfire {@link #campfire}.
    * @param fireAspect {@link #fireAspect}.
    * @param flame {@link #flame}.
    */
-  Fire(ResourceLocation fireType, float damage, boolean invertHealAndHarm, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, Block sourceBlock, Enchantment fireAspect, Enchantment flame) {
+  Fire(ResourceLocation fireType, float damage, boolean invertHealAndHarm, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, ResourceLocation source, ResourceLocation campfire, Enchantment fireAspect, Enchantment flame) {
     this.fireType = fireType;
     this.damage = damage;
     this.invertHealAndHarm = invertHealAndHarm;
     this.inFire = inFire;
     this.onFire = onFire;
     this.hurtSound = hurtSound;
-    this.sourceBlock = sourceBlock;
-    this.fireAspect = fireAspect;
-    this.flame = flame;
+    this.source = Optional.ofNullable(source);
+    this.campfire = Optional.ofNullable(campfire);
+    this.fireAspect = Optional.ofNullable(fireAspect);
+    this.flame = Optional.ofNullable(flame);
   }
 
   /**
@@ -134,12 +143,21 @@ public class Fire {
   }
 
   /**
-   * Returns this {@link #sourceBlock}.
+   * Returns this {@link #source}.
    * 
-   * @return this {@link #sourceBlock}.
+   * @return this {@link #source}.
    */
-  public Block getSourceBlock() {
-    return sourceBlock;
+  public Optional<ResourceLocation> getSource() {
+    return source;
+  }
+
+  /**
+   * Returns this {@link #campfire}.
+   * 
+   * @return this {@link #campfire}.
+   */
+  public Optional<ResourceLocation> getCampfire() {
+    return campfire;
   }
 
   /**
@@ -147,7 +165,7 @@ public class Fire {
    * 
    * @return this {@link #fireAspect}.
    */
-  public Enchantment getFireAspect() {
+  public Optional<Enchantment> getFireAspect() {
     return fireAspect;
   }
 
@@ -156,12 +174,12 @@ public class Fire {
    * 
    * @return this {@link #flame}.
    */
-  public Enchantment getFlame() {
+  public Optional<Enchantment> getFlame() {
     return flame;
   }
 
   @Override
   public String toString() {
-    return "Fire [fireType=" + fireType + ", damage=" + damage + ", invertedHealAndHarm=" + invertHealAndHarm + ", inFire=" + inFire + ", onFire=" + onFire + ", hurtSound=" + hurtSound + ", blockState=" + sourceBlock + "]";
+    return "Fire [fireType=" + fireType + ", damage=" + damage + ", invertedHealAndHarm=" + invertHealAndHarm + ", inFire=" + inFire + ", onFire=" + onFire + ", hurtSound=" + hurtSound + ", source=" + source + ", campfire=" + campfire + "]";
   }
 }

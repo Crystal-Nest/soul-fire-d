@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import net.minecraft.block.AbstractFireBlock;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
@@ -19,20 +18,11 @@ import net.minecraft.world.World;
  * Injects into {@link AbstractFireBlock} to alter Fire behavior for consistency.
  */
 @Mixin(AbstractFireBlock.class)
-public abstract class AbstractFireBlockMixin extends Block implements FireTypeChanger {
+public abstract class AbstractFireBlockMixin implements FireTypeChanger {
   /**
    * Fire Type.
    */
   private ResourceLocation fireType;
-
-  /**
-   * Useless constructor required by the super class to make the compiler happy.
-   * 
-   * @param properties
-   */
-  private AbstractFireBlockMixin(Properties properties) {
-    super(properties);
-  }
 
   @Override
   public void setFireType(ResourceLocation fireType) {

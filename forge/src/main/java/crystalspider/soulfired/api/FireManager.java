@@ -1,18 +1,19 @@
 package crystalspider.soulfired.api;
 
-import java.util.AbstractMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import crystalspider.soulfired.api.type.FireTypeChanger;
-import net.minecraft.block.AbstractBlock.Properties;
 import net.minecraft.block.Block;
-import net.minecraft.block.CampfireBlock;
+import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -21,6 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.ResourceLocationException;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * Static manager for the registered Fires.
@@ -44,62 +46,12 @@ public abstract class FireManager {
   /**
    * Default {@link Fire} used as fallback to retrieve default properties.
    */
-  public static final Fire DEFAULT_FIRE = new Fire(DEFAULT_FIRE_TYPE, FireBuilder.DEFAULT_DAMAGE, FireBuilder.DEFAULT_INVERT_HEAL_AND_HARM, FireBuilder.DEFAULT_IN_FIRE, FireBuilder.DEFAULT_ON_FIRE, FireBuilder.DEFAULT_HURT_SOUND, FireBuilder.DEFAULT_SOURCE_BLOCK, null, null);
+  public static final Fire DEFAULT_FIRE = new Fire(DEFAULT_FIRE_TYPE, FireBuilder.DEFAULT_DAMAGE, FireBuilder.DEFAULT_INVERT_HEAL_AND_HARM, FireBuilder.DEFAULT_IN_FIRE, FireBuilder.DEFAULT_ON_FIRE, FireBuilder.DEFAULT_HURT_SOUND, new ResourceLocation("fire"), new ResourceLocation("campfire"), null, null);
 
   /**
    * {@link ConcurrentHashMap} of all registered {@link Fire Fires}.
    */
   private static volatile ConcurrentHashMap<ResourceLocation, Fire> fires = new ConcurrentHashMap<>();
-
-  /**
-   * Utility to create a FireTyped {@link CampfireBlock}.
-   * <p>
-   * If you need a more fine grained control over your {@link CampfireBlock}, create your own class and implementation that extends {@link CampfireBlock} to suit your needs.
-   * If you choose your own implementation, remember to set the Fire Type in the constructor of your {@link CampfireBlock} like so:
-   * <pre>
-   * <code>
-   * CustomCampfireBlock() {
-   *  super(emitParticles, 0, properties);
-   *  (({@link FireTypeChanger}) this).setFireType(modId, fireId)
-   * }
-   * </code>
-   * </pre>
-   * 
-   * @param modId
-   * @param fireId
-   * @param properties {@link Properties Block Properties}.
-   * @return the new {@link CampfireBlock}.
-   */
-  public static final CampfireBlock createCampfireBlock(String modId, String fireId, Properties properties) {
-    if (isValidType(modId, fireId)) {
-      return createCampfireBlock(new ResourceLocation(modId, fireId), properties);
-    }
-    return new CampfireBlock(false, (int) DEFAULT_FIRE.getDamage(), properties);
-  }
-
-  /**
-   * Utility to create a FireTyped {@link CampfireBlock}.
-   * <p>
-   * If you need a more fine grained control over your {@link CampfireBlock}, create your own class and implementation that extends {@link CampfireBlock} to suit your needs.
-   * If you choose your own implementation, remember to set the Fire Type in the constructor of your {@link CampfireBlock} like so:
-   * <pre>
-   * <code>
-   * CustomCampfireBlock() {
-   *  super(emitParticles, 0, properties);
-   *  (({@link FireTypeChanger}) this).setFireType(modId, fireId)
-   * }
-   * </code>
-   * </pre>
-   * 
-   * @param fireType
-   * @param properties {@link Properties Block Properties}.
-   * @return the new {@link CampfireBlock}.
-   */
-  public static final CampfireBlock createCampfireBlock(ResourceLocation fireType, Properties properties) {
-    CampfireBlock campfire = new CampfireBlock(false, 0, properties);
-    ((FireTypeChanger) campfire).setFireType(fireType);
-    return campfire;
-  }
 
   /**
    * Returns a new {@link FireBuilder}.
@@ -122,7 +74,20 @@ public abstract class FireManager {
     ResourceLocation fireType = fire.getFireType();
     if (!fires.containsKey(fireType)) {
       fires.put(fireType, fire);
-      ((FireTypeChanger) fire.getSourceBlock()).setFireType(fireType);
+      Optional<ResourceLocation> source = fire.getSource();
+      Optional<ResourceLocation> campfire = fire.getCampfire();
+      if (source.isPresent()) {
+        Block sourceBlock = ForgeRegistries.BLOCKS.getValue(source.get());
+        if (sourceBlock != null) {
+          ((FireTypeChanger) sourceBlock).setFireType(fireType);
+        }
+      }
+      if (campfire.isPresent()) {
+        Block campfireBlock = ForgeRegistries.BLOCKS.getValue(campfire.get());
+        if (campfireBlock != null) {
+          ((FireTypeChanger) campfireBlock).setFireType(fireType);
+        }
+      }
       return true;
     }
     LOGGER.error("Fire [" + fireType + "] was already registered with the following value: " + fires.get(fireType));
@@ -472,40 +437,55 @@ public abstract class FireManager {
   }
 
   /**
-   * Returns the source block of the {@link Fire} registered with the given {@code modId} and {@code fireId}.
+   * Returns the source block associated with {@link Fire} registered with the given {@code modId} and {@code fireId}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given values.
    * 
    * @param modId
    * @param fireId
-   * @return the source block of the {@link Fire}.
+   * @return the source block associated with {@link Fire}.
    */
   public static final Block getSourceBlock(String modId, String fireId) {
     return getSourceBlock(new ResourceLocation(modId, fireId));
   }
 
   /**
-   * Returns the source block of the {@link Fire} registered with the given {@code fireType}.
+   * Returns the fire source block associated with {@link Fire} registered with the given {@code fireType}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
    * 
    * @param fireType
-   * @return the source block of the {@link Fire}.
+   * @return the fire source block associated with {@link Fire}.
    */
   public static final Block getSourceBlock(ResourceLocation fireType) {
-    return fires.getOrDefault(fireType, DEFAULT_FIRE).getSourceBlock();
+    Block sourceBlock = ForgeRegistries.BLOCKS.getValue(fires.getOrDefault(fireType, DEFAULT_FIRE).getSource().orElse(DEFAULT_FIRE.getSource().get()));
+    return sourceBlock != null ? sourceBlock : Blocks.FIRE;
   }
 
   /**
-   * Returns the Fire Type associated with the given {@code sourceBlock}.
+   * Returns the campfire block associated with {@link Fire} registered with the given {@code modId} and {@code fireId}.
    * <p>
-   * Returns the {@link #DEFAULT_FIRE_TYPE default Fire Type} if no {@link Fire} is associated with the given {@code sourceBlock}.
+   * Returns the default value if no {@link Fire} was registered with the given values.
    * 
-   * @param sourceBlock
-   * @return Fire Type associated with the given {@code sourceBlock}.
+   * @param modId
+   * @param fireId
+   * @return the campfire block associated with {@link Fire}.
    */
-  public static final ResourceLocation getFireTypeFromBlock(Block sourceBlock) {
-    return fires.entrySet().stream().filter(entry -> (entry.getValue().getSourceBlock() == sourceBlock)).findFirst().orElse(new AbstractMap.SimpleEntry<ResourceLocation, Fire>(DEFAULT_FIRE_TYPE, DEFAULT_FIRE)).getKey();
+  public static final Block getCampfireBlock(String modId, String fireId) {
+    return getCampfireBlock(new ResourceLocation(modId, fireId));
+  }
+
+  /**
+   * Returns the source block associated with {@link Fire} registered with the given {@code fireType}.
+   * <p>
+   * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
+   * 
+   * @param fireType
+   * @return the source block associated with {@link Fire}.
+   */
+  public static final Block getCampfireBlock(ResourceLocation fireType) {
+    Block campfireBlock = ForgeRegistries.BLOCKS.getValue(fires.getOrDefault(fireType, DEFAULT_FIRE).getCampfire().orElse(DEFAULT_FIRE.getSource().get()));
+    return campfireBlock != null ? campfireBlock : Blocks.CAMPFIRE;
   }
 
   /**
@@ -514,7 +494,7 @@ public abstract class FireManager {
    * @return the list of all Fire Aspect enchantments registered.
    */
   public static final List<Enchantment> getFireAspects() {
-    return fires.values().stream().map(fire -> fire.getFireAspect()).collect(Collectors.toList());
+    return fires.values().stream().map(fire -> fire.getFireAspect()).filter(optional -> optional.isPresent()).map(optional -> optional.get()).collect(Collectors.toList());
   }
 
   /**
@@ -523,18 +503,19 @@ public abstract class FireManager {
    * @return the list of all Flame enchantments registered.
    */
   public static final List<Enchantment> getFlames() {
-    return fires.values().stream().map(fire -> fire.getFlame()).collect(Collectors.toList());
+    return fires.values().stream().map(fire -> fire.getFlame()).filter(optional -> optional.isPresent()).map(optional -> optional.get()).collect(Collectors.toList());
   }
 
   /**
    * Returns the Fire Aspect enchantment of the {@link Fire} registered with the given {@code modId} and {@code fireId}.
    * <p>
-   * Returns the {@code null} if no {@link Fire} was registered with the given values.
+   * Returns {@code null} if no {@link Fire} was registered with the given values.
    * 
    * @param modId
    * @param fireId
    * @return the Fire Aspect enchantment of the {@link Fire}.
    */
+  @Nullable
   public static final Enchantment getFireAspect(String modId, String fireId) {
     return getFireAspect(new ResourceLocation(modId, fireId));
   }
@@ -542,24 +523,26 @@ public abstract class FireManager {
   /**
    * Returns the Fire Aspect enchantment of the {@link Fire} registered with the given {@code fireType}.
    * <p>
-   * Returns the {@code null} if no {@link Fire} was registered with the given {@code fireType}.
+   * Returns {@code null} if no {@link Fire} was registered with the given {@code fireType}.
    * 
    * @param fireType
    * @return the Fire Aspect enchantment of the {@link Fire}.
    */
+  @Nullable
   public static final Enchantment getFireAspect(ResourceLocation fireType) {
-    return fires.getOrDefault(fireType, DEFAULT_FIRE).getFireAspect();
+    return fires.getOrDefault(fireType, DEFAULT_FIRE).getFireAspect().orElse(null);
   }
 
   /**
    * Returns the Flame enchantment of the {@link Fire} registered with the given {@code modId} and {@code fireId}.
    * <p>
-   * Returns the {@code null} if no {@link Fire} was registered with the given values.
+   * Returns {@code null} if no {@link Fire} was registered with the given values.
    * 
    * @param modId
    * @param fireId
    * @return the Flame enchantment of the {@link Fire}.
    */
+  @Nullable
   public static final Enchantment getFlame(String modId, String fireId) {
     return getFlame(new ResourceLocation(modId, fireId));
   }
@@ -567,13 +550,14 @@ public abstract class FireManager {
   /**
    * Returns the Flame enchantment of the {@link Fire} registered with the given {@code fireType}.
    * <p>
-   * Returns the {@code null} if no {@link Fire} was registered with the given {@code fireType}.
+   * Returns {@code null} if no {@link Fire} was registered with the given {@code fireType}.
    * 
    * @param fireType
    * @return the Flame enchantment of the {@link Fire}.
    */
+  @Nullable
   public static final Enchantment getFlame(ResourceLocation fireType) {
-    return fires.getOrDefault(fireType, DEFAULT_FIRE).getFlame();
+    return fires.getOrDefault(fireType, DEFAULT_FIRE).getFlame().orElse(null);
   }
 
   /**
