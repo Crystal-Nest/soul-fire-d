@@ -1,13 +1,13 @@
 package crystalspider.soulfired;
 
-import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.handlers.RegistryEventHandler;
+import crystalspider.soulfired.config.SoulFiredConfig;
 import crystalspider.soulfired.loot.ChestLootModifier;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -44,20 +44,10 @@ public class SoulFiredLoader {
   public static final RegistryObject<ChestLootModifier.Serializer> CHEST_LOOT_MODIFIER = LOOT_MODIFIERS.register("chest_loot_modifier", ChestLootModifier.Serializer::new);
 
   /**
-   * Registers the {@link RegistryEventHandler} to the mod bus.
-   * <p>
-   * Registers Soul Fire as modded fire.
+   * Registers {@link SoulFiredConfig} and {@link #LOOT_MODIFIERS}.
    */
   public SoulFiredLoader() {
-    IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-    modEventBus.register(new RegistryEventHandler());
-    FireManager.registerFire(
-      FireManager.fireBuilder()
-        .setModId(FireManager.SOUL_FIRE_TYPE.getNamespace())
-        .setFireId(FireManager.SOUL_FIRE_TYPE.getPath())
-        .setDamage(2)
-      .build()
-    );
-    LOOT_MODIFIERS.register(modEventBus);
+    ModLoadingContext.get().registerConfig(Type.COMMON, SoulFiredConfig.SPEC);
+    LOOT_MODIFIERS.register(FMLJavaModLoadingContext.get().getModEventBus());
   }
 }

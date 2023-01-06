@@ -5,10 +5,13 @@ import crystalspider.soulfired.api.FireManager;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 /**
  * Handles the registry events.
  */
+@EventBusSubscriber(bus = Bus.MOD)
 public class RegistryEventHandler {
   /**
    * Handles the {@link Register} event for {@link Enchantment Enchantments}.
@@ -18,7 +21,7 @@ public class RegistryEventHandler {
    * @param event
    */
   @SubscribeEvent
-  public void handle(Register<Enchantment> event) {
+  public static void handle(Register<Enchantment> event) {
     for (Fire fire : FireManager.getFires()) {
       if (fire.getFireAspect().isPresent()) {
         event.getRegistry().register(fire.getFireAspect().get());
