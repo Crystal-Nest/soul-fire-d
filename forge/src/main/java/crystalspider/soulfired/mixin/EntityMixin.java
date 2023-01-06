@@ -39,7 +39,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   /**
    * {@link DataParameter} to synchronize the Fire Type across client and server.
    */
-  private static final DataParameter<String> DATA_FIRE_ID = EntityDataManager.defineId(Entity.class, DataSerializers.STRING);
+  private static final DataParameter<String> DATA_FIRE_TYPE = EntityDataManager.defineId(Entity.class, DataSerializers.STRING);
 
   /**
    * Shadowed {@link Entity#getRemainingFireTicks()}.
@@ -66,13 +66,13 @@ public abstract class EntityMixin implements FireTypeChanger {
   @Override
   public void setFireType(ResourceLocation fireType) {
     if (!this.fireImmune()) {
-      entityData.set(DATA_FIRE_ID, FireManager.ensure(fireType).toString());
+      entityData.set(DATA_FIRE_TYPE, FireManager.ensure(fireType).toString());
     }
   }
 
   @Override
   public ResourceLocation getFireType() {
-    return ResourceLocation.tryParse(entityData.get(DATA_FIRE_ID));
+    return ResourceLocation.tryParse(entityData.get(DATA_FIRE_TYPE));
   }
 
   /**
@@ -87,7 +87,6 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;hurt(Lnet/minecraft/util/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
-    // TODO
     return FireManager.damageOnFire(caller, ((FireTyped) caller).getFireType());
   }
   
@@ -107,13 +106,13 @@ public abstract class EntityMixin implements FireTypeChanger {
   /**
    * Injects at the end of the constructor.
    * <p>
-   * Defines the {@link #DATA_FIRE_ID Fire Id data} to synchronize across client and server.
+   * Defines the {@link #DATA_FIRE_TYPE Fire Id data} to synchronize across client and server.
    * 
    * @param ci {@link CallbackInfo}.
    */
   @Inject(method = "<init>", at = @At("TAIL"))
   private void redirectDefineSynchedData(CallbackInfo ci) {
-    entityData.define(DATA_FIRE_ID, FireManager.DEFAULT_FIRE_TYPE.toString());
+    entityData.define(DATA_FIRE_TYPE, FireManager.DEFAULT_FIRE_TYPE.toString());
   }
 
   /**

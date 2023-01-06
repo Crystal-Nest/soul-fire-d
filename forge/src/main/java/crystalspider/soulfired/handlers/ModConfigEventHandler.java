@@ -1,5 +1,6 @@
 package crystalspider.soulfired.handlers;
 
+import crystalspider.soulfired.SoulFiredLoader;
 import crystalspider.soulfired.api.FireBuilder;
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.config.SoulFiredConfig;
@@ -16,19 +17,21 @@ public class ModConfigEventHandler {
   /**
    * Handles the {@link Loading} event.
    * <p>
-   * Registers Soul Fire.
+   * Registers Soul Fire after Soul Fire'd configuration has been loaded.
    * 
    * @param event
    */
   @SubscribeEvent
   public static void handle(Loading event) {
-    FireBuilder fireBuilder = FireManager.fireBuilder().setModId(FireManager.SOUL_FIRE_TYPE.getNamespace()).setFireId(FireManager.SOUL_FIRE_TYPE.getPath()).setDamage(2);
-    if (!SoulFiredConfig.getEnableSoulFireAspect()) {
-      fireBuilder.removeFireAspect();
+    if (event.getConfig().getModId().equals(SoulFiredLoader.MODID)) {
+      FireBuilder fireBuilder = FireManager.fireBuilder().setModId(FireManager.SOUL_FIRE_TYPE.getNamespace()).setFireId(FireManager.SOUL_FIRE_TYPE.getPath()).setDamage(2);
+      if (!SoulFiredConfig.getEnableSoulFireAspect()) {
+        fireBuilder.removeFireAspect();
+      }
+      if (!SoulFiredConfig.getEnableSoulFlame()) {
+        fireBuilder.removeFlame();
+      }
+      FireManager.registerFire(fireBuilder.build());
     }
-    if (!SoulFiredConfig.getEnableSoulFlame()) {
-      fireBuilder.removeFlame();
-    }
-    FireManager.registerFire(fireBuilder.build());
   }
 }
