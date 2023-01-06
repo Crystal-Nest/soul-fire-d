@@ -46,18 +46,18 @@ public class FireClient {
   }
 
   /**
-   * Returns this material 0.
+   * Returns this {@link #material0}.
    * 
-   * @return this material 0.
+   * @return this {@link #material0}.
    */
   public RenderMaterial getMaterial0() {
     return material0;
   }
 
   /**
-   * Returns this material 1.
+   * Returns this {@link #material1}.
    * 
-   * @return this material 1.
+   * @return this {@link #material1}.
    */
   public RenderMaterial getMaterial1() {
     return material1;
