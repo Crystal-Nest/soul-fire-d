@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -70,10 +71,26 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
 
   @Override
   public final void doPostAttack(LivingEntity attacker, Entity target, int level) {
-    if (!attacker.level.isClientSide) {
-      target.setSecondsOnFire(level * 4);
+    if (!wasLastHitByProjectile((LivingEntity) target)) {
+      if (!attacker.level.isClientSide) {
+        target.setSecondsOnFire(level * 4);
+      }
+      ((FireTypeChanger) target).setFireType(FireManager.ensure(fireType));
     }
-    ((FireTypeChanger) target).setFireType(FireManager.ensure(fireType));
+  }
+
+  /**
+   * Returns whether the given {@link Entity} was last hit by a projectile.
+   * 
+   * @param target
+   * @return whether the given {@link Entity} was last hit by a projectile.
+   */
+  private final boolean wasLastHitByProjectile(Entity target) {
+    if (target instanceof LivingEntity) {
+      DamageSource lastDamageSource = ((LivingEntity) target).getLastDamageSource();
+      return lastDamageSource != null && lastDamageSource.isProjectile();
+    }
+    return false;
   }
 
   @Override
