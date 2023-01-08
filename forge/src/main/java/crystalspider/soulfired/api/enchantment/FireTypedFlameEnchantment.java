@@ -1,20 +1,26 @@
 package crystalspider.soulfired.api.enchantment;
 
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.FlameEnchantment;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 /**
  * Flame Enchantment sensitive to the Fire Type.
  */
-public class FireTypedArrowEnchantment extends FlameEnchantment implements FireTyped {
+public final class FireTypedFlameEnchantment extends FlameEnchantment implements FireTyped {
   /**
    * {@link ResourceLocation} to uniquely identify the associated Fire.
    */
   private final ResourceLocation fireType;
+
+  private final Supplier<Boolean> enabled;
 
   /**
    * Whether the enchantment is treasure only.
@@ -35,6 +41,8 @@ public class FireTypedArrowEnchantment extends FlameEnchantment implements FireT
    */
   private final boolean isDiscoverable;
 
+  private final Function<Enchantment, Boolean> compatibility;
+
   /**
    * @param fireType
    * @param rarity
@@ -42,50 +50,39 @@ public class FireTypedArrowEnchantment extends FlameEnchantment implements FireT
    * @param isCurse
    * @param isTradeable
    * @param isDiscoverable
+   * @param enabled
+   * @param compatibility
    */
-  public FireTypedArrowEnchantment(ResourceLocation fireType, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
+  FireTypedFlameEnchantment(ResourceLocation fireType, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable, Supplier<Boolean> enabled, Function<Enchantment, Boolean> compatibility) {
     super(rarity, EquipmentSlotType.MAINHAND);
     this.fireType = FireManager.sanitize(fireType);
     this.isTreasure = isTreasure;
     this.isCurse = isCurse;
     this.isTradeable = isTradeable;
     this.isDiscoverable = isDiscoverable;
+    this.enabled = enabled;
+    this.compatibility = compatibility;
     setRegistryName(fireType.getNamespace(), fireType.getPath() + "_flame");
   }
 
-  /**
-   * @param modId
-   * @param fireId
-   * @param rarity
-   * @param isTreasure
-   * @param isCurse
-   * @param isTradeable
-   * @param isDiscoverable
-   */
-  public FireTypedArrowEnchantment(String modId, String fireId, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
-    this(new ResourceLocation(modId, fireId), rarity, isTreasure, isCurse, isTradeable, isDiscoverable);
+  @Override
+  public final boolean canEnchant(ItemStack itemStack) {
+    return enabled.get() && super.canEnchant(itemStack);
   }
 
-  /**
-   * @param fireType
-   * @param rarity
-   */
-  public FireTypedArrowEnchantment(ResourceLocation fireType, Rarity rarity) {
-    this(fireType, rarity, false, false, true, true);
+  @Override
+  public final boolean canApplyAtEnchantingTable(ItemStack itemStack) {
+    return enabled.get() && super.canApplyAtEnchantingTable(itemStack);
   }
 
-  /**
-   * @param modId
-   * @param fireId
-   * @param rarity
-   */
-  public FireTypedArrowEnchantment(String modId, String fireId, Rarity rarity) {
-    this(new ResourceLocation(modId, fireId), rarity, false, false, true, true);
+  @Override
+  public final boolean isAllowedOnBooks() {
+    return enabled.get() && super.isAllowedOnBooks();
   }
 
   @Override
   public final boolean checkCompatibility(Enchantment enchantment) {
-    return super.checkCompatibility(enchantment) && !(enchantment instanceof FlameEnchantment) && !FireManager.getFlames().contains(enchantment);
+    return enabled.get() && super.checkCompatibility(enchantment) && compatibility.apply(enchantment);
   }
   
   @Override
@@ -100,12 +97,12 @@ public class FireTypedArrowEnchantment extends FlameEnchantment implements FireT
 
   @Override
   public final boolean isTradeable() {
-    return isTradeable;
+    return isTradeable && enabled.get();
   }
 
   @Override
   public final boolean isDiscoverable() {
-    return isDiscoverable;
+    return isDiscoverable && enabled.get();
   }
 
   @Override

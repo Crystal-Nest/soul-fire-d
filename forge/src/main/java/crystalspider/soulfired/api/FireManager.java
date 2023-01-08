@@ -25,7 +25,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * Static manager for the registered Fires.
+ * Static manager for registered Fires.
  */
 public abstract class FireManager {
   /**
@@ -58,8 +58,17 @@ public abstract class FireManager {
    * 
    * @return a new {@link FireBuilder}.
    */
-  public static final FireBuilder fireBuilder() {
-    return new FireBuilder();
+  public static final FireBuilder fireBuilder(String modId, String fireId) {
+    return new FireBuilder(modId, fireId);
+  }
+
+  /**
+   * Returns a new {@link FireBuilder}.
+   * 
+   * @return a new {@link FireBuilder}.
+   */
+  public static final FireBuilder fireBuilder(ResourceLocation fireType) {
+    return new FireBuilder(fireType);
   }
 
   /**

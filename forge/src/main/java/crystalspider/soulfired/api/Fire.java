@@ -2,9 +2,10 @@ package crystalspider.soulfired.api;
 
 import java.util.Optional;
 
+import crystalspider.soulfired.api.enchantment.FireTypedFireAspectEnchantment;
+import crystalspider.soulfired.api.enchantment.FireTypedFlameEnchantment;
 import net.minecraft.block.Block;
 import net.minecraft.block.CampfireBlock;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -12,7 +13,7 @@ import net.minecraft.util.SoundEvent;
 /**
  * Fire
  */
-public class Fire {
+public final class Fire {
   /**
    * {@link ResourceLocation} to uniquely identify this Fire.
    */
@@ -52,13 +53,13 @@ public class Fire {
   private final Optional<ResourceLocation> campfire;
 
   /**
-   * {@link Optional} Fire Aspect {@link Enchantment}.
+   * {@link Optional} Fire Aspect {@link FireTypedFireAspectEnchantment}.
    */
-  private final Optional<Enchantment> fireAspect;
+  private final Optional<FireTypedFireAspectEnchantment> fireAspect;
   /**
-   * {@link Optional} Flame {@link Enchantment}.
+   * {@link Optional} Flame {@link FireTypedFlameEnchantment}.
    */
-  private final Optional<Enchantment> flame;
+  private final Optional<FireTypedFlameEnchantment> flame;
 
   /**
    * @param modId {@link #modId}.
@@ -75,7 +76,7 @@ public class Fire {
    * @param fireAspect {@link #fireAspect}.
    * @param flame {@link #flame}.
    */
-  Fire(ResourceLocation fireType, float damage, boolean invertHealAndHarm, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, ResourceLocation source, ResourceLocation campfire, Enchantment fireAspect, Enchantment flame) {
+  Fire(ResourceLocation fireType, float damage, boolean invertHealAndHarm, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, ResourceLocation source, ResourceLocation campfire, FireTypedFireAspectEnchantment fireAspect, FireTypedFlameEnchantment flame) {
     this.fireType = fireType;
     this.damage = damage;
     this.invertHealAndHarm = invertHealAndHarm;
@@ -165,7 +166,7 @@ public class Fire {
    * 
    * @return this {@link #fireAspect}.
    */
-  public Optional<Enchantment> getFireAspect() {
+  public Optional<FireTypedFireAspectEnchantment> getFireAspect() {
     return fireAspect;
   }
 
@@ -174,7 +175,7 @@ public class Fire {
    * 
    * @return this {@link #flame}.
    */
-  public Optional<Enchantment> getFlame() {
+  public Optional<FireTypedFlameEnchantment> getFlame() {
     return flame;
   }
 

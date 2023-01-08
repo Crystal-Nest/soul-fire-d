@@ -1,5 +1,8 @@
 package crystalspider.soulfired.api.enchantment;
 
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import crystalspider.soulfired.api.type.FireTyped;
@@ -8,16 +11,19 @@ import net.minecraft.enchantment.FireAspectEnchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 /**
  * Fire Aspect Enchantment sensitive to the Fire Type.
  */
-public class FireTypedAspectEnchantment extends FireAspectEnchantment implements FireTyped {
+public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment implements FireTyped {
   /**
    * {@link ResourceLocation} to uniquely identify the associated Fire.
    */
   private final ResourceLocation fireType;
+
+  private final Supplier<Boolean> enabled;
 
   /**
    * Whether the enchantment is treasure only.
@@ -38,6 +44,8 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
    */
   private final boolean isDiscoverable;
 
+  private final Function<Enchantment, Boolean> compatibility;
+
   /**
    * @param fireType
    * @param rarity
@@ -45,45 +53,19 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
    * @param isCurse
    * @param isTradeable
    * @param isDiscoverable
+   * @param enabled
+   * @param compatibility
    */
-  public FireTypedAspectEnchantment(ResourceLocation fireType, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
+  FireTypedFireAspectEnchantment(ResourceLocation fireType, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable, Supplier<Boolean> enabled, Function<Enchantment, Boolean> compatibility) {
     super(rarity, EquipmentSlotType.MAINHAND);
     this.fireType = FireManager.sanitize(fireType);
     this.isTreasure = isTreasure;
     this.isCurse = isCurse;
     this.isTradeable = isTradeable;
     this.isDiscoverable = isDiscoverable;
+    this.enabled = enabled;
+    this.compatibility = compatibility;
     setRegistryName(fireType.getNamespace(), fireType.getPath() + "_fire_aspect");
-  }
-
-  /**
-   * @param modId
-   * @param fireId
-   * @param rarity
-   * @param isTreasure
-   * @param isCurse
-   * @param isTradeable
-   * @param isDiscoverable
-   */
-  public FireTypedAspectEnchantment(String modId, String fireId, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable) {
-    this(new ResourceLocation(modId, fireId), rarity, isTreasure, isCurse, isTradeable, isDiscoverable);
-  }
-
-  /**
-   * @param fireType
-   * @param rarity
-   */
-  public FireTypedAspectEnchantment(ResourceLocation fireType, Rarity rarity) {
-    this(fireType, rarity, false, false, true, true);
-  }
-
-  /**
-   * @param modId
-   * @param fireId
-   * @param rarity
-   */
-  public FireTypedAspectEnchantment(String modId, String fireId, Rarity rarity) {
-    this(new ResourceLocation(modId, fireId), rarity, false, false, true, true);
   }
 
   @Override
@@ -95,8 +77,23 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
   }
 
   @Override
+  public final boolean canEnchant(ItemStack itemStack) {
+    return enabled.get() && super.canEnchant(itemStack);
+  }
+
+  @Override
+  public final boolean canApplyAtEnchantingTable(ItemStack itemStack) {
+    return enabled.get() && super.canApplyAtEnchantingTable(itemStack);
+  }
+
+  @Override
+  public final boolean isAllowedOnBooks() {
+    return enabled.get() && super.isAllowedOnBooks();
+  }
+
+  @Override
   public final boolean checkCompatibility(Enchantment enchantment) {
-    return super.checkCompatibility(enchantment) && !(enchantment instanceof FireAspectEnchantment) && !FireManager.getFireAspects().contains(enchantment);
+    return enabled.get() && super.checkCompatibility(enchantment) && compatibility.apply(enchantment);
   }
 
   @Override
@@ -111,12 +108,12 @@ public class FireTypedAspectEnchantment extends FireAspectEnchantment implements
 
   @Override
   public final boolean isTradeable() {
-    return isTradeable;
+    return isTradeable && enabled.get();
   }
 
   @Override
   public final boolean isDiscoverable() {
-    return isDiscoverable;
+    return isDiscoverable && enabled.get();
   }
 
   @Override

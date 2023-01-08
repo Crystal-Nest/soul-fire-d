@@ -16,7 +16,7 @@ public class RegistryEventHandler {
   /**
    * Handles the {@link Register} event for {@link Enchantment Enchantments}.
    * <p>
-   * Registers default Fire Aspect and Flame enchantments for all registered {@link Fire Fires}.
+   * Registers Fire Aspect and Flame enchantments for all registered {@link Fire Fires} with such enchantments.
    * 
    * @param event
    */

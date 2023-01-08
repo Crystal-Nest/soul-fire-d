@@ -4,9 +4,11 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import crystalspider.soulfired.api.enchantment.FireTypedArrowEnchantment;
-import crystalspider.soulfired.api.enchantment.FireTypedAspectEnchantment;
-import crystalspider.soulfired.api.type.FireTyped;
+import crystalspider.soulfired.api.enchantment.FireAspectBuilder;
+import crystalspider.soulfired.api.enchantment.FireEnchantmentBuilder;
+import crystalspider.soulfired.api.enchantment.FireTypedFireAspectEnchantment;
+import crystalspider.soulfired.api.enchantment.FireTypedFlameEnchantment;
+import crystalspider.soulfired.api.enchantment.FlameBuilder;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantment.Rarity;
 import net.minecraft.util.DamageSource;
@@ -17,7 +19,7 @@ import net.minecraft.util.SoundEvents;
 /**
  * Builder for {@link Fire} instances.
  */
-public class FireBuilder {
+public final class FireBuilder {
   /**
    * Default value for {@link #damage}.
    */
@@ -118,62 +120,36 @@ public class FireBuilder {
   private Optional<ResourceLocation> campfire;
 
   /**
-   * {@link Fire} instance {@link Fire#fireAspect fireAspect}.
+   * {@link FireAspectBuilder}.
    * <p>
-   * Optional, defaults to a new {@link FireTypedAspectEnchantment} with {@link Rarity#VERY_RARE}.
+   * Optional, defaults to a new {@link FireTypedFireAspectEnchantment} with {@link Rarity#VERY_RARE}.
    * <p>
    * Default value is recommended.
    * <p>
-   * If your Fire should have a Fire Aspect enchantment, but with a different value than default, use {@link #setFireAspect(Enchantment)}.
+   * If your Fire should have a Fire Aspect enchantment, but with a different value than default, use {@link #setFireAspectBuilder(FireTypedFireAspectEnchantment)}.
    * <p>
    * If your Fire should not have a Fire Aspect enchantment, set this to null with {@link #removeFireAspect()}.
    */
-  private Optional<Enchantment> fireAspect;
+  private Optional<FireAspectBuilder> fireAspectBuilder;
   /**
-   * {@link Fire} instance {@link Fire#flame flame}.
+   * {@link FlameBuilder}.
    * <p>
-   * Optional, defaults to a new {@link FireTypedArrowEnchantment} with {@link Rarity#VERY_RARE}.
+   * Optional, defaults to a new {@link FireTypedFlameEnchantment} with {@link Rarity#VERY_RARE}.
    * <p>
    * Default value is recommended.
    * <p>
-   * If your Fire should have a Flame enchantment, but with a different value than default, use {@link #setFlame(Enchantment)}.
+   * If your Fire should have a Flame enchantment, but with a different value than default, use {@link #setFlameBuilder(FireTypedFlameEnchantment)}.
    * <p>
    * If your Fire should not have a Flame enchantment, set this to null with {@link #removeFlame()}.
    */
-  private Optional<Enchantment> flame;
+  private Optional<FlameBuilder> flameBuilder;
 
-  FireBuilder() {
-    reset();
+  FireBuilder(String modId, String fireId) {
+    reset(modId, fireId);
   }
 
-  /**
-   * Sets the {@link #modId}.
-   * <p>
-   * {@link #modId} will be set only if the given {@code id} is valid.
-   * 
-   * @param modId
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setModId(String modId) {
-    if (FireManager.isValidModId(modId)) {
-      this.modId = modId;
-    }
-    return this;
-  }
-
-  /**
-   * Sets the {@link #fireId}.
-   * <p>
-   * {@link #fireId} will be set only if the given {@code id} is valid.
-   * 
-   * @param fireId
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setFireId(String fireId) {
-    if (FireManager.isValidFireId(fireId)) {
-      this.fireId = fireId;
-    }
-    return this;
+  FireBuilder(ResourceLocation fireType) {
+    reset(fireType);
   }
 
   /**
@@ -344,17 +320,13 @@ public class FireBuilder {
   }
 
   /**
-   * Sets the {@link #fireAspect} enchantment.
-   * <p>
-   * The {@link Enchantment} passed as parameter <b>MUST</b> implement the {@link FireTyped} interface, otherwise the value will not be set.
+   * Sets the {@link #fireAspectBuilder} enchantment.
    * 
    * @param fireAspect
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder setFireAspect(Enchantment fireAspect) {
-    if (fireAspect instanceof FireTyped) {
-      this.fireAspect = Optional.of(fireAspect);
-    }
+  public FireBuilder setFireAspectBuilder(FireAspectBuilder fireAspect) {
+    this.fireAspectBuilder = Optional.of(fireAspect);
     return this;
   }
 
@@ -363,23 +335,19 @@ public class FireBuilder {
    * 
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder removeFireAspect() {
-    this.fireAspect = null;
+  public FireBuilder removeFireAspectBuilder() {
+    this.fireAspectBuilder = null;
     return this;
   }
 
   /**
-   * Sets the {@link #fireAspect} enchantment.
-   * <p>
-   * The {@link Enchantment} passed as parameter <b>MUST</b> implement the {@link FireTyped} interface, otherwise the value will not be set.
+   * Sets the {@link #fireAspectBuilder} enchantment.
    * 
-   * @param fireAspect
+   * @param fireAspectBuilder
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder setFlame(Enchantment flame) {
-    if (flame instanceof FireTyped) {
-      this.flame = Optional.of(flame);
-    }
+  public FireBuilder setFlameBuilder(FlameBuilder flame) {
+    this.flameBuilder = Optional.of(flame);
     return this;
   }
 
@@ -388,9 +356,13 @@ public class FireBuilder {
    * 
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder removeFlame() {
-    this.flame = null;
+  public FireBuilder removeFlameBuilder() {
+    this.flameBuilder = null;
     return this;
+  }
+
+  public FireBuilder reset(ResourceLocation fireType) {
+    return reset(fireType.getNamespace(), fireType.getPath());
   }
 
   /**
@@ -402,8 +374,9 @@ public class FireBuilder {
    * 
    * @return this Builder, reset.
    */
-  public FireBuilder reset() {
-    fireId = null;
+  public FireBuilder reset(String modId, String fireId) {
+    this.modId = modId;
+    this.fireId = fireId;
     damage = DEFAULT_DAMAGE;
     invertHealAndHarm = DEFAULT_INVERT_HEAL_AND_HARM;
     inFire = DEFAULT_IN_FIRE;
@@ -411,17 +384,27 @@ public class FireBuilder {
     hurtSound = DEFAULT_HURT_SOUND;
     source = Optional.empty();
     campfire = Optional.empty();
-    fireAspect = Optional.empty();
-    flame = Optional.empty();
+    fireAspectBuilder = Optional.empty();
+    flameBuilder = Optional.empty();
+    return this;
+  }
+
+  public FireBuilder reset(String fireId) {
+    this.fireId = fireId;
+    damage = DEFAULT_DAMAGE;
+    invertHealAndHarm = DEFAULT_INVERT_HEAL_AND_HARM;
+    inFire = DEFAULT_IN_FIRE;
+    onFire = DEFAULT_ON_FIRE;
+    hurtSound = DEFAULT_HURT_SOUND;
+    source = Optional.empty();
+    campfire = Optional.empty();
+    fireAspectBuilder = Optional.empty();
+    flameBuilder = Optional.empty();
     return this;
   }
 
   /**
    * Builds a {@link Fire} instance.
-   * <p>
-   * If {@link #fireAspect} is not set, it will default to a new {@link FireTypedAspectEnchantment} with {@link Rarity#VERY_RARE}.
-   * <p>
-   * If {@link #flame} is not set, it will default to a new {@link FireTypedArrowEnchantment} with {@link Rarity#VERY_RARE}.
    * 
    * @return {@link Fire} instance.
    * @throws IllegalStateException if the either {@link #fireId} or {@link #modId} is not valid.
@@ -435,13 +418,13 @@ public class FireBuilder {
       if (campfire != null && !campfire.isPresent()) {
         campfire = Optional.of(new ResourceLocation(modId, fireId + "_campfire"));
       }
-      if (fireAspect != null && !fireAspect.isPresent()) {
-        fireAspect = Optional.of(new FireTypedAspectEnchantment(fireType, Rarity.VERY_RARE));
+      if (fireAspectBuilder != null && !fireAspectBuilder.isPresent()) {
+        fireAspectBuilder = Optional.of((new FireAspectBuilder()).setRarity(Rarity.VERY_RARE));
       }
-      if (flame != null && !flame.isPresent()) {
-        flame = Optional.of(new FireTypedArrowEnchantment(fireType, Rarity.VERY_RARE));
+      if (flameBuilder != null && !flameBuilder.isPresent()) {
+        flameBuilder = Optional.of((new FlameBuilder()).setRarity(Rarity.VERY_RARE));
       }
-      return new Fire(fireType, damage, invertHealAndHarm, inFire, onFire, hurtSound, get(source), get(campfire), get(fireAspect), get(flame));
+      return new Fire(fireType, damage, invertHealAndHarm, inFire, onFire, hurtSound, get(source), get(campfire), build(fireAspectBuilder, fireType), build(flameBuilder, fireType));
     }
     throw new IllegalStateException("Attempted to build a Fire with a not valid fireId or modId");
   }
@@ -457,6 +440,15 @@ public class FireBuilder {
    */
   @Nullable
   private final <T> T get(@Nullable Optional<T> optional) {
-    return optional == null || !optional.isPresent() ? null : optional.get();
+    return optional != null && optional.isPresent() ? optional.get() : null;
+  }
+
+  @Nullable
+  private final <B extends FireEnchantmentBuilder<E>, E extends Enchantment> E build(@Nullable Optional<B> optional, ResourceLocation fireType) {
+    FireEnchantmentBuilder<E> builder = get(optional);
+    if (builder != null) {
+      return builder.build(fireType);
+    }
+    return null;
   }
 }

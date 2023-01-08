@@ -1,5 +1,8 @@
 package crystalspider.soulfired;
 
+import crystalspider.soulfired.api.FireManager;
+import crystalspider.soulfired.api.enchantment.FireAspectBuilder;
+import crystalspider.soulfired.api.enchantment.FlameBuilder;
 import crystalspider.soulfired.config.SoulFiredConfig;
 import crystalspider.soulfired.loot.ChestLootModifier;
 import net.minecraft.util.ResourceLocation;
@@ -44,10 +47,17 @@ public class SoulFiredLoader {
   public static final RegistryObject<ChestLootModifier.Serializer> CHEST_LOOT_MODIFIER = LOOT_MODIFIERS.register("chest_loot_modifier", ChestLootModifier.Serializer::new);
 
   /**
-   * Registers {@link SoulFiredConfig} and {@link #LOOT_MODIFIERS}.
+   * Registers {@link SoulFiredConfig}, {@link #LOOT_MODIFIERS} and Soul Fire.
    */
   public SoulFiredLoader() {
     ModLoadingContext.get().registerConfig(Type.COMMON, SoulFiredConfig.SPEC);
     LOOT_MODIFIERS.register(FMLJavaModLoadingContext.get().getModEventBus());
+    FireManager.registerFire(
+      FireManager.fireBuilder(FireManager.SOUL_FIRE_TYPE)
+        .setDamage(2)
+        .setFireAspectBuilder(new FireAspectBuilder().setEnabled(SoulFiredConfig::getEnableSoulFireAspect))
+        .setFlameBuilder(new FlameBuilder().setEnabled(SoulFiredConfig::getEnableSoulFlame))
+      .build()
+    );
   }
 }

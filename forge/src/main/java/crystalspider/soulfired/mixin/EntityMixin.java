@@ -93,7 +93,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   /**
    * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link Entity#lavaHurt()}.
    * <p>
-   * Sets the base fire id.
+   * Sets the base Fire Type.
    * 
    * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as {@code this} entity.
    * @param seconds seconds to set the entity on fire for.
@@ -106,7 +106,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   /**
    * Injects at the end of the constructor.
    * <p>
-   * Defines the {@link #DATA_FIRE_TYPE Fire Id data} to synchronize across client and server.
+   * Defines the {@link #DATA_FIRE_TYPE Fire Type data} to synchronize across client and server.
    * 
    * @param ci {@link CallbackInfo}.
    */
@@ -118,7 +118,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   /**
    * Injects at the start of the method {@link Entity#setRemainingFireTicks(int)}.
    * <p>
-   * Resets the FireId when this entity stops burning or catches fire from a new fire source.
+   * Resets the Fire Type when this entity stops burning or catches fire from a new fire source.
    * 
    * @param ticks ticks this entity should burn for.
    * @param ci {@link CallbackInfo}.
@@ -133,7 +133,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   /**
    * Injects in the method {@link Entity#saveWithoutId(CompoundNBT)} before the invocation of {@link Entity#addAdditionalSaveData(CompoundNBT)}.
    * <p>
-   * If valid, saves the current FireId in the given {@link CompoundNBT}.
+   * If valid, saves the current Fire Type in the given {@link CompoundNBT}.
    * 
    * @param tag
    * @param cir {@link CallbackInfoReturnable}.
@@ -148,7 +148,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   /**
    * Injects in the method {@link Entity#load(CompoundNBT)} before the invocation of {@link Entity#readAdditionalSaveData(CompoundNBT)}.
    * <p>
-   * Loads the FireId from the given {@link CompoundNBT}.
+   * Loads the Fire Type from the given {@link CompoundNBT}.
    * 
    * @param tag
    * @param ci {@link CallbackInfo}.

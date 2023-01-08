@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 /**
  * Fire, client side only.
  */
-public class FireClient {
+public final class FireClient {
   /**
    * {@link ResourceLocation} to uniquely identify this Fire.
    */

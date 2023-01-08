@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 
 /**
- * Static manager for the registered Fires, client side only.
+ * Static manager for registered Fires, client side only.
  */
 public abstract class FireClientManager {
   /**
@@ -44,7 +44,7 @@ public abstract class FireClientManager {
    * @param fire {@link FireClient} to register.
    * @return whether the registration is successful.
    */
-  public static final synchronized boolean registerFire(FireClient fire) {
+  private static final synchronized boolean registerFire(FireClient fire) {
     ResourceLocation fireType = fire.getFireType();
     if (!fires.containsKey(fireType)) {
       fires.put(fireType, fire);

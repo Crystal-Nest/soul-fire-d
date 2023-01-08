@@ -8,7 +8,7 @@
   ],
   "additions": [
     {
-      "enchantment": "soulfired:soul_flame",
+      "enchantment": "minecraft:soul_flame",
       "level": 1,
       "chance": 0.05
     }

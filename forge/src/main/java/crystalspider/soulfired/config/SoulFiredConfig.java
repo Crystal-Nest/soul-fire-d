@@ -57,8 +57,8 @@ public class SoulFiredConfig {
      * @param builder
      */
     public CommonConfig(ForgeConfigSpec.Builder builder) {
-      enableSoulFireAspect = builder.comment("Whether to enable Soul Fire Aspect enchantment.").worldRestart().define("enable soul fire aspect", true);
-      enableSoulFlame = builder.comment("Whether to enable Soul Flame enchantment.").worldRestart().define("enable soul flame", true);
+      enableSoulFireAspect = builder.comment("Whether to enable Soul Fire Aspect enchantment.").define("enable soul fire aspect", true);
+      enableSoulFlame = builder.comment("Whether to enable Soul Flame enchantment.").define("enable soul flame", true);
     }
   }
 }
