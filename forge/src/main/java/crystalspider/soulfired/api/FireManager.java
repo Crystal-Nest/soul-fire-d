@@ -1,5 +1,6 @@
 package crystalspider.soulfired.api;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -117,6 +118,16 @@ public final class FireManager {
    * @return an {@link HashMap} with the outcome of each registration attempt.
    */
   public static synchronized HashMap<ResourceLocation, Boolean> registerFires(Fire... fires) {
+    return registerFires(Arrays.asList(fires));
+  }
+
+  /**
+   * Attempts to register all the given {@link Fire fires}.
+   * 
+   * @param fires {@link Fire fires} to register.
+   * @return an {@link HashMap} with the outcome of each registration attempt.
+   */
+  public static synchronized HashMap<ResourceLocation, Boolean> registerFires(List<Fire> fires) {
     HashMap<ResourceLocation, Boolean> outcomes = new HashMap<>();
     for (Fire fire : fires) {
       outcomes.put(fire.getFireType(), registerFire(fire));

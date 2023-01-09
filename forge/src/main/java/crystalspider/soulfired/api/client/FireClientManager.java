@@ -1,5 +1,8 @@
 package crystalspider.soulfired.api.client;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.logging.log4j.LogManager;
@@ -29,13 +32,37 @@ public final class FireClientManager {
   private FireClientManager() {}
 
   /**
-   * Registers a new {@link FireClient} from the given {@link Fire}.
+   * Attempts to a new {@link FireClient} from the given {@link Fire}.
    * 
    * @param fire {@link Fire} to derive a new {@link FireClient}.
    * @return whether the registration is successful.
    */
   public static synchronized boolean registerFire(Fire fire) {
     return registerFire(new FireClient(fire.getFireType()));
+  }
+
+  /**
+   * Attempts to register new {@link FireClient} for all the given {@link Fire fires}.
+   * 
+   * @param fires {@link Fire fires} to derive {@link FireClient} to register.
+   * @return an {@link HashMap} with the outcome of each registration attempt.
+   */
+  public static synchronized HashMap<ResourceLocation, Boolean> registerFires(Fire... fires) {
+    return registerFires(Arrays.asList(fires));
+  }
+
+  /**
+   * Attempts to register all the given {@link Fire fires}.
+   * 
+   * @param fires {@link Fire fires} to register.
+   * @return an {@link HashMap} with the outcome of each registration attempt.
+   */
+  public static synchronized HashMap<ResourceLocation, Boolean> registerFires(List<Fire> fires) {
+    HashMap<ResourceLocation, Boolean> outcomes = new HashMap<>();
+    for (Fire fire : fires) {
+      outcomes.put(fire.getFireType(), registerFire(fire));
+    }
+    return outcomes;
   }
 
   /**

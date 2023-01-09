@@ -1,10 +1,10 @@
 package crystalspider.soulfired;
 
 import crystalspider.soulfired.api.FireManager;
+import crystalspider.soulfired.config.SoulFiredConfig;
 import crystalspider.soulfired.handlers.LootTableEventsHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
-import net.minecraft.block.Blocks;
 
 /**
  * Soul fire'd mod loader.
@@ -17,14 +17,13 @@ public class SoulFiredLoader implements ModInitializer {
 
   @Override
   public void onInitialize() {
+    LootTableLoadingCallback.EVENT.register(LootTableEventsHandler::handle);
     FireManager.registerFire(
-      FireManager.fireBuilder()
-        .setModId(MODID)
-        .setId(FireManager.SOUL_FIRE_ID)
+      FireManager.fireBuilder(FireManager.SOUL_FIRE_TYPE)
         .setDamage(2)
-        .setSourceBlock(Blocks.SOUL_FIRE)
+        .setFireAspectConfig(builder -> builder.setEnabled(SoulFiredConfig::getEnableSoulFireAspect))
+        .setFlameConfig(builder -> builder.setEnabled(SoulFiredConfig::getEnableSoulFlame))
       .build()
     );
-    LootTableLoadingCallback.EVENT.register(LootTableEventsHandler::handle);
   }
 }

@@ -7,40 +7,32 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import net.minecraft.block.AbstractFireBlock;
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.CampfireBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
-
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 /**
  * Injects into {@link AbstractFireBlock} to alter Fire behavior for consistency.
  */
 @Mixin(AbstractFireBlock.class)
-public abstract class AbstractFireBlockMixin extends Block implements FireTypeChanger {
+public abstract class AbstractFireBlockMixin implements FireTypeChanger {
   /**
-   * Fire Id.
+   * Fire Type.
    */
-  private String fireId;
+  private Identifier fireType;
 
-  /**
-   * Useless constructor required by the super class to make the compiler happy.
-   * 
-   * @param settings
-   */
-  private AbstractFireBlockMixin(Settings settings) {
-    super(settings);
+  @Override
+  public void setFireType(Identifier fireType) {
+    this.fireType = fireType;
   }
 
   @Override
-  public void setFireId(String id) {
-    if (FireManager.isValidFireId(id)) {
-      fireId = id;
-    }
-  }
-
-  @Override
-  public String getFireId() {
-    return fireId;
+  public Identifier getFireType() {
+    return fireType;
   }
 
   /**
@@ -55,6 +47,6 @@ public abstract class AbstractFireBlockMixin extends Block implements FireTypeCh
    */
   @Redirect(method = "onEntityCollision", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
-    return FireManager.damageInFire(caller, getFireId(), damageSource, damage);
+    return FireManager.damageInFire(caller, getFireType());
   }
 }

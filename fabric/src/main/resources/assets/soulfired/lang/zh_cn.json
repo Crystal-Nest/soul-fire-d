@@ -1,6 +1,6 @@
 {
-  "enchantment.soulfired.soul_fire_aspect": "魂焰附加",
-  "enchantment.soulfired.soul_flame": "灵魂火矢",
-  "enchantment.soulfired.soul_fire_aspect.desc": "击中生物使之附着灵魂火，造成灵魂火焰伤害",
-  "enchantment.soulfired.soul_flame.desc": "箭矢击中生物使之附着灵魂火，造成灵魂火焰伤害"
+  "enchantment.minecraft.soul_fire_aspect": "魂焰附加",
+  "enchantment.minecraft.soul_flame": "灵魂火矢",
+  "enchantment.minecraft.soul_fire_aspect.desc": "击中生物使之附着灵魂火，造成灵魂火焰伤害",
+  "enchantment.minecraft.soul_flame.desc": "箭矢击中生物使之附着灵魂火，造成灵魂火焰伤害"
 }

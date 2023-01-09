@@ -23,8 +23,6 @@ public class FMLClientSetupEventHandler {
    */
   @SubscribeEvent
   public static void handle(FMLClientSetupEvent event) {
-    for (Fire fire : FireManager.getFires()) {
-      FireClientManager.registerFire(fire);
-    }
+    FireClientManager.registerFires(FireManager.getFires());
   }
 }

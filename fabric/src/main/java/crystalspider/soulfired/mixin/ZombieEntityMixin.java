@@ -24,6 +24,6 @@ public abstract class ZombieEntityMixin implements FireTyped {
    */
   @Redirect(method = "tryAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setOnFireFor(I)V"))
   private void redirectSetOnFireFor(Entity caller, int seconds) {
-    FireManager.setOnFire(caller, seconds, getFireId());
+    FireManager.setOnFire(caller, seconds, getFireType());
   }
 }

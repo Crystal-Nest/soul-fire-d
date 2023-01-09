@@ -1,22 +1,23 @@
 package crystalspider.soulfired.api;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.Enchantment;
+import java.util.Optional;
+
+import crystalspider.soulfired.api.enchantment.FireTypedFireAspectEnchantment;
+import crystalspider.soulfired.api.enchantment.FireTypedFlameEnchantment;
+import net.minecraft.block.Block;
+import net.minecraft.block.CampfireBlock;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
 
 /**
  * Fire
  */
-public class Fire {
+public final class Fire {
   /**
-   * Mod ID.
+   * {@link Identifier} to uniquely identify this Fire.
    */
-  private final String modId;
-  /**
-   * Fire unique ID.
-   */
-  private final String id;
+  private final Identifier fireType;
 
   /**
    * Fire damage per second.
@@ -43,62 +44,55 @@ public class Fire {
   private final SoundEvent hurtSound;
 
   /**
-   * {@link BlockState} of the Fire Block considered as the source for this Fire.
+   * {@link Optional} {@link Identifier} of the {@link Block} of the Fire Block considered as the source for this Fire.
    */
-  private final BlockState sourceBlock;
+  private final Optional<Identifier> source;
+  /**
+   * {@link Optional} {@link Identifier} of the {@link CampfireBlock} associated with this Fire.
+   */
+  private final Optional<Identifier> campfire;
 
   /**
-   * Fire Aspect {@link Enchantment}.
+   * {@link Optional} Fire Aspect {@link FireTypedFireAspectEnchantment}.
    */
-  private final Enchantment fireAspect;
+  private final Optional<FireTypedFireAspectEnchantment> fireAspect;
   /**
-   * Flame {@link Enchantment}.
+   * {@link Optional} Flame {@link FireTypedFlameEnchantment}.
    */
-  private final Enchantment flame;
+  private final Optional<FireTypedFlameEnchantment> flame;
 
   /**
-   * @param modId {@link #modId}.
-   * @param id {@link #id}.
+   * @param fireType {@link #fireType}.
    * @param damage {@link #damage}.
    * @param invertHealAndHarm {@link #invertHealAndHarm}.
-   * @param material0 {@link #material0}.
-   * @param material1 {@link #material1}.
    * @param inFire {@link #inFire}.
    * @param onFire {@link #onFire}.
    * @param hurtSound {@link #hurtSound}.
-   * @param sourceBlock {@link #sourceBlock}.
+   * @param source {@link #source}.
+   * @param campfire {@link #campfire}.
    * @param fireAspect {@link #fireAspect}.
    * @param flame {@link #flame}.
    */
-  Fire(String modId, String id, float damage, boolean invertHealAndHarm, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, BlockState sourceBlock, Enchantment fireAspect, Enchantment flame) {
-    this.modId = modId;
-    this.id = id;
+  Fire(Identifier fireType, float damage, boolean invertHealAndHarm, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, Identifier source, Identifier campfire, FireTypedFireAspectEnchantment fireAspect, FireTypedFlameEnchantment flame) {
+    this.fireType = fireType;
     this.damage = damage;
     this.invertHealAndHarm = invertHealAndHarm;
     this.inFire = inFire;
     this.onFire = onFire;
     this.hurtSound = hurtSound;
-    this.sourceBlock = sourceBlock;
-    this.fireAspect = fireAspect;
-    this.flame = flame;
+    this.source = Optional.ofNullable(source);
+    this.campfire = Optional.ofNullable(campfire);
+    this.fireAspect = Optional.ofNullable(fireAspect);
+    this.flame = Optional.ofNullable(flame);
   }
 
   /**
-   * Returns this {@link #modId}.
+   * Returns this {@link #fireType}.
    * 
-   * @return this {@link #modId}.
+   * @return this {@link #fireType}.
    */
-  public String getModId() {
-    return modId;
-  }
-
-  /**
-   * Returns this {@link #id}.
-   * 
-   * @return this {@link #id}.
-   */
-  public String getId() {
-    return id;
+  public Identifier getFireType() {
+    return fireType;
   }
 
   /**
@@ -147,12 +141,21 @@ public class Fire {
   }
 
   /**
-   * Returns this {@link #sourceBlock}.
+   * Returns this {@link #source}.
    * 
-   * @return this {@link #sourceBlock}.
+   * @return this {@link #source}.
    */
-  public BlockState getSourceBlock() {
-    return sourceBlock;
+  public Optional<Identifier> getSource() {
+    return source;
+  }
+
+  /**
+   * Returns this {@link #campfire}.
+   * 
+   * @return this {@link #campfire}.
+   */
+  public Optional<Identifier> getCampfire() {
+    return campfire;
   }
 
   /**
@@ -160,7 +163,7 @@ public class Fire {
    * 
    * @return this {@link #fireAspect}.
    */
-  public Enchantment getFireAspect() {
+  public Optional<FireTypedFireAspectEnchantment> getFireAspect() {
     return fireAspect;
   }
 
@@ -169,12 +172,12 @@ public class Fire {
    * 
    * @return this {@link #flame}.
    */
-  public Enchantment getFlame() {
+  public Optional<FireTypedFlameEnchantment> getFlame() {
     return flame;
   }
 
   @Override
   public String toString() {
-    return "Fire [id=" + id + ", damage=" + damage + ", invertedHealAndHarm=" + invertHealAndHarm + ", inFire=" + inFire + ", onFire=" + onFire + ", hurtSound=" + hurtSound + ", blockState=" + sourceBlock + "]";
+    return "Fire [fireType=" + fireType + ", damage=" + damage + ", invertedHealAndHarm=" + invertHealAndHarm + ", inFire=" + inFire + ", onFire=" + onFire + ", hurtSound=" + hurtSound + ", source=" + source + ", campfire=" + campfire + "]";
   }
 }
