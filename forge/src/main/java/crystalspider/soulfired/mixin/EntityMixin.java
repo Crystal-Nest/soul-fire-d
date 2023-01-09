@@ -140,9 +140,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Inject(method = "saveWithoutId", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundNBT;)V"))
   private void onSaveWithoutId(CompoundNBT tag, CallbackInfoReturnable<CompoundNBT> cir) {
-    if (FireManager.isRegisteredType(getFireType())) {
-      tag.putString("FireType", getFireType().toString());
-    }
+    FireManager.writeNbt(tag, getFireType());
   }
 
   /**
@@ -155,6 +153,6 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Inject(method = "load", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;readAdditionalSaveData(Lnet/minecraft/nbt/CompoundNBT;)V"))
   private void onLoad(CompoundNBT tag, CallbackInfo ci) {
-    setFireType(FireManager.ensure(ResourceLocation.tryParse(tag.getString("FireType"))));
+    setFireType(FireManager.readNbt(tag));
   }
 }

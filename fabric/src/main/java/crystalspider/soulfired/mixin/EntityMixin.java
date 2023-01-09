@@ -140,9 +140,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Inject(method = "writeNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;writeCustomDataToNbt(Lnet/minecraft/nbt/NbtCompound;)V"))
   private void onWriteNbt(NbtCompound tag, CallbackInfoReturnable<NbtCompound> cir) {
-    if (FireManager.isRegisteredType(getFireType())) {
-      tag.putString("FireType", getFireType().toString());
-    }
+    FireManager.writeNbt(tag, getFireType());
   }
 
   /**
@@ -155,6 +153,6 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Inject(method = "readNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;readCustomDataFromNbt(Lnet/minecraft/nbt/NbtCompound;)V"))
   private void onReadNbt(NbtCompound tag, CallbackInfo ci) {
-    setFireType(FireManager.ensure(Identifier.tryParse(tag.getString("FireType"))));
+    setFireType(FireManager.readNbt(tag));
   }
 }

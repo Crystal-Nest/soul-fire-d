@@ -40,7 +40,7 @@ public abstract class CampfireBlockMixin implements FireTypeChanger {
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
    * 
    * @param caller {@link Entity} invoking (owning) the redirected method.
-   * @param damageSource original {@link DamageSource} (normale fire).
+   * @param damageSource original {@link DamageSource} (normal fire).
    * @param damage original damage (normal fire).
    * @return the result of calling the redirected method.
    */

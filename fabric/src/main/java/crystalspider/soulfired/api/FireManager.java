@@ -21,6 +21,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
@@ -34,6 +35,11 @@ public final class FireManager {
    * Logger.
    */
   private static final Logger LOGGER = LogManager.getLogger();
+
+  /**
+   * Id of the tag used to save Fire Type.
+   */
+  public static final String FIRE_TYPE_TAG = "FireType";
 
   /**
    * Fire Type of Vanilla Fire.
@@ -729,5 +735,27 @@ public final class FireManager {
       return false;
     }
     return false;
+  }
+
+  /**
+   * Writes to the given {@link NbtCompound} the given {@code fireType}.
+   * <p>
+   * If the given {@code fireType} is not registered, the {@link DEFAULT_FIRE_TYPE} will be written instead.
+   * 
+   * @param tag {@link NbtCompound} to write to.
+   * @param fireType Fire Type to save.
+   */
+  public static void writeNbt(NbtCompound tag, Identifier fireType) {
+    tag.putString(FIRE_TYPE_TAG, ensure(fireType).toString());
+  }
+
+  /**
+   * Reads the Fire Type from the given {@link NbtCompound}.
+   * 
+   * @param tag {@link NbtCompound} to read from.
+   * @return the Fire Type read from the given {@link NbtCompound}.
+   */
+  public static Identifier readNbt(NbtCompound tag) {
+    return ensure(Identifier.tryParse(tag.getString(FIRE_TYPE_TAG)));
   }
 }

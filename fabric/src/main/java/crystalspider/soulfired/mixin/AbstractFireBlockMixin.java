@@ -8,7 +8,6 @@ import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import net.minecraft.block.AbstractFireBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.CampfireBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.util.Identifier;
@@ -36,12 +35,12 @@ public abstract class AbstractFireBlockMixin implements FireTypeChanger {
   }
 
   /**
-   * Redirects the call to {@link Entity#damage(DamageSource, float)} inside the method {@link CampfireBlock#onEntityCollision(BlockState, World, BlockPos, Entity)}.
+   * Redirects the call to {@link Entity#damage(DamageSource, float)} inside the method {@link AbstractFireBlock#onEntityCollision(BlockState, World, BlockPos, Entity)}.
    * <p>
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
    * 
    * @param caller {@link Entity} invoking (owning) the redirected method.
-   * @param damageSource original {@link DamageSource} (normale fire).
+   * @param damageSource original {@link DamageSource} (normal fire).
    * @param damage original damage (normal fire).
    * @return the result of calling the redirected method.
    */

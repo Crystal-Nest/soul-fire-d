@@ -20,6 +20,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.ResourceLocationException;
@@ -35,6 +36,11 @@ public final class FireManager {
    * Logger.
    */
   private static final Logger LOGGER = LogManager.getLogger();
+
+  /**
+   * Id of the tag used to save Fire Type.
+   */
+  public static final String FIRE_TYPE_TAG = "FireType";
 
   /**
    * Fire Type of Vanilla Fire.
@@ -722,5 +728,27 @@ public final class FireManager {
       return false;
     }
     return false;
+  }
+
+  /**
+   * Writes to the given {@link CompoundNBT} the given {@code fireType}.
+   * <p>
+   * If the given {@code fireType} is not registered, the {@link DEFAULT_FIRE_TYPE} will be written instead.
+   * 
+   * @param tag {@link CompoundNBT} to write to.
+   * @param fireType Fire Type to save.
+   */
+  public static void writeNbt(CompoundNBT tag, ResourceLocation fireType) {
+    tag.putString(FIRE_TYPE_TAG, ensure(fireType).toString());
+  }
+
+  /**
+   * Reads the Fire Type from the given {@link CompoundNBT}.
+   * 
+   * @param tag {@link CompoundNBT} to read from.
+   * @return the Fire Type read from the given {@link CompoundNBT}.
+   */
+  public static ResourceLocation readNbt(CompoundNBT tag) {
+    return ensure(ResourceLocation.tryParse(tag.getString(FIRE_TYPE_TAG)));
   }
 }
