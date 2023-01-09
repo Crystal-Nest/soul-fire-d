@@ -21,7 +21,7 @@ public abstract class AbstractArrowEntityMixin implements FireTypeChanger {
   /**
    * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link AbstractArrowEntity#onHitEntity(EntityRayTraceResult)}.
    * <p>
-   * Sets the correct FireId for the Entity.
+   * Sets the correct Fire Type for the Entity.
    * 
    * @param caller {@link Entity} invoking (owning) the redirected method.
    * @param seconds seconds the entity should be set on fire for.

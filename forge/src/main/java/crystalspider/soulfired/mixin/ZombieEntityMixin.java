@@ -17,7 +17,7 @@ public abstract class ZombieEntityMixin implements FireTyped {
   /**
    * Injects into the method {@link Entity#setSecondsOnFire(int)} inside the method {@link ZombieEntity#doHurtTarget(Entity)}.
    * <p>
-   * Sets the correct FireId to the {@link Entity} being set on fire.
+   * Sets the correct Fire Type to the {@link Entity} being set on fire.
    * 
    * @param caller {@link Entity} invoking (owning) the redirected method.
    * @param seconds amount of seconds the entity should be set on fire for.
