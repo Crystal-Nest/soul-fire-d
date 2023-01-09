@@ -2,7 +2,6 @@ package crystalspider.soulfired;
 
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.config.SoulFiredConfig;
-import crystalspider.soulfired.handlers.RegistryEventHandler;
 import crystalspider.soulfired.loot.ChestLootModifier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
@@ -46,9 +45,7 @@ public class SoulFiredLoader {
   public static final RegistryObject<ChestLootModifier.Serializer> CHEST_LOOT_MODIFIER = LOOT_MODIFIERS.register("chest_loot_modifier", ChestLootModifier.Serializer::new);
 
   /**
-   * Registers the {@link RegistryEventHandler} to the mod bus.
-   * <p>
-   * Registers Soul Fire as modded fire.
+   * Registers {@link SoulFiredConfig}, {@link #LOOT_MODIFIERS} and Soul Fire.
    */
   public SoulFiredLoader() {
     ModLoadingContext.get().registerConfig(Type.COMMON, SoulFiredConfig.SPEC);
