@@ -83,6 +83,6 @@ public final class FireClient {
 
   @Override
   public String toString() {
-    return "FireClient [fireType=" + fireType + ", material0=" + spriteIdentifier0 + ", material1=" + spriteIdentifier1 + "]";
+    return "FireClient [fireType=" + fireType + ", spriteIdentifier0=" + spriteIdentifier0 + ", spriteIdentifier1=" + spriteIdentifier1 + "]";
   }
 }
