@@ -93,7 +93,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   /**
    * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link Entity#lavaHurt()}.
    * <p>
-   * Sets the base fire id.
+   * Sets the base Fire Type.
    * 
    * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as {@code this} entity.
    * @param seconds seconds to set the entity on fire for.

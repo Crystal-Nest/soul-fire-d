@@ -12,27 +12,17 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Injects into {@link BaseFireBlock} to alter Fire behavior for consistency.
  */
 @Mixin(BaseFireBlock.class)
-public abstract class BaseFireBlockMixin extends Block implements FireTypeChanger {
+public abstract class BaseFireBlockMixin implements FireTypeChanger {
   /**
    * Fire Type.
    */
   private ResourceLocation fireType;
-
-  /**
-   * Useless constructor required by the super class to make the compiler happy.
-   * 
-   * @param properties
-   */
-  private BaseFireBlockMixin(Properties properties) {
-    super(properties);
-  }
 
   @Override
   public void setFireType(ResourceLocation fireType) {
@@ -50,7 +40,7 @@ public abstract class BaseFireBlockMixin extends Block implements FireTypeChange
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
    * 
    * @param caller {@link Entity} invoking (owning) the redirected method.
-   * @param damageSource original {@link DamageSource} (normale fire).
+   * @param damageSource original {@link DamageSource} (normal fire).
    * @param damage original damage (normal fire).
    * @return the result of calling the redirected method.
    */
