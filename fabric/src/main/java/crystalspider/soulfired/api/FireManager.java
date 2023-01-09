@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +19,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
@@ -153,7 +152,7 @@ public final class FireManager {
    * @return the list of all registered {@link Fire Fires}.
    */
   public static List<Fire> getFires() {
-    return fires.values().stream().collect(Collectors.toList());
+    return fires.values().stream().toList();
   }
 
   /**
@@ -220,7 +219,7 @@ public final class FireManager {
    * @return whether the given {@code id} is a valid fire id.
    */
   public static boolean isValidFireId(String id) {
-    if (StringUtils.isNotBlank(id)) {
+    if (isNotBlank(id)) {
       try {
         new Identifier(id);
         return true;
@@ -248,7 +247,7 @@ public final class FireManager {
    * @return whether the given {@code id} is a valid mod id.
    */
   public static boolean isValidModId(String id) {
-    if (StringUtils.isNotBlank(id)) {
+    if (isNotBlank(id)) {
       try {
         new Identifier(id, "");
         return true;
@@ -302,7 +301,7 @@ public final class FireManager {
    * @return the closest well-formed Fire Type.
    */
   public static Identifier sanitize(Identifier fireType) {
-    if (StringUtils.isNotBlank(fireType.getNamespace()) && StringUtils.isNotBlank(fireType.getPath())) {
+    if (isNotBlank(fireType.getNamespace()) && isNotBlank(fireType.getPath())) {
       return fireType;
     }
     return DEFAULT_FIRE_TYPE;
@@ -343,7 +342,7 @@ public final class FireManager {
    * @return the list of all Fire Types.
    */
   public static List<Identifier> getFireTypes() {
-    return fires.keySet().stream().collect(Collectors.toList());
+    return fires.keySet().stream().toList();
   }
 
   /**
@@ -352,7 +351,7 @@ public final class FireManager {
    * @return the list of all registered fire ids.
    */
   public static List<String> getFireIds() {
-    return fires.keySet().stream().map(fireType -> fireType.getPath()).collect(Collectors.toList());
+    return fires.keySet().stream().map(fireType -> fireType.getPath()).toList();
   }
 
   /**
@@ -361,7 +360,7 @@ public final class FireManager {
    * @return the list of all registered mod ids.
    */
   public static List<String> getModIds() {
-    return fires.keySet().stream().map(fireType -> fireType.getPath()).collect(Collectors.toList());
+    return fires.keySet().stream().map(fireType -> fireType.getPath()).toList();
   }
 
   /**
@@ -547,7 +546,7 @@ public final class FireManager {
    * @return the list of all Fire Aspect enchantments registered.
    */
   public static List<FireTypedFireAspectEnchantment> getFireAspects() {
-    return fires.values().stream().map(fire -> fire.getFireAspect()).filter(optional -> optional.isPresent()).map(optional -> optional.get()).collect(Collectors.toList());
+    return fires.values().stream().map(fire -> fire.getFireAspect()).filter(optional -> optional.isPresent()).map(optional -> optional.get()).toList();
   }
 
   /**
@@ -556,7 +555,7 @@ public final class FireManager {
    * @return the list of all Flame enchantments registered.
    */
   public static List<FireTypedFlameEnchantment> getFlames() {
-    return fires.values().stream().map(fire -> fire.getFlame()).filter(optional -> optional.isPresent()).map(optional -> optional.get()).collect(Collectors.toList());
+    return fires.values().stream().map(fire -> fire.getFlame()).filter(optional -> optional.isPresent()).map(optional -> optional.get()).toList();
   }
 
   /**
@@ -734,5 +733,37 @@ public final class FireManager {
       return false;
     }
     return false;
+  }
+
+  /**
+   * Returns whether a given string is not blank, meaning it's not null and it's not made up only of whitespaces.
+   * 
+   * @param string
+   * @return whether a given string is not blank, meaning it's not null and it's not made up only of whitespaces.
+   */
+  private static boolean isNotBlank(String string) {
+    return !(string == null || string.isBlank());
+  }
+
+  /**
+   * Writes to the given {@link NbtCompound} the given {@code fireType}.
+   * <p>
+   * If the given {@code fireType} is not registered, the {@link DEFAULT_FIRE_TYPE} will be written instead.
+   * 
+   * @param tag {@link NbtCompound} to write to.
+   * @param fireType Fire Type to save.
+   */
+  public static void writeNbt(NbtCompound tag, Identifier fireType) {
+    tag.putString(FIRE_TYPE_TAG, ensure(fireType).toString());
+  }
+
+  /**
+   * Reads the Fire Type from the given {@link NbtCompound}.
+   * 
+   * @param tag {@link NbtCompound} to read from.
+   * @return the Fire Type read from the given {@link NbtCompound}.
+   */
+  public static Identifier readNbt(NbtCompound tag) {
+    return ensure(Identifier.tryParse(tag.getString(FIRE_TYPE_TAG)));
   }
 }

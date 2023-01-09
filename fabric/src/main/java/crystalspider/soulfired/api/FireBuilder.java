@@ -386,16 +386,16 @@ public final class FireBuilder {
   public Fire build() throws IllegalStateException {
     if (FireManager.isValidFireId(fireId) && FireManager.isValidModId(modId)) {
       Identifier fireType = FireManager.sanitize(modId, fireId);
-      if (source != null && !source.isPresent()) {
+      if (source != null && source.isEmpty()) {
         source = Optional.of(new Identifier(modId, fireId + "_fire"));
       }
-      if (campfire != null && !campfire.isPresent()) {
+      if (campfire != null && campfire.isEmpty()) {
         campfire = Optional.of(new Identifier(modId, fireId + "_campfire"));
       }
-      if (fireAspectConfigurator != null && !fireAspectConfigurator.isPresent()) {
+      if (fireAspectConfigurator != null && fireAspectConfigurator.isEmpty()) {
         fireAspectConfigurator = Optional.of(builder -> builder);
       }
-      if (flameConfigurator != null && !flameConfigurator.isPresent()) {
+      if (flameConfigurator != null && flameConfigurator.isEmpty()) {
         flameConfigurator = Optional.of(builder -> builder);
       }
       return new Fire(fireType, damage, invertHealAndHarm, inFire, onFire, hurtSound, get(source), get(campfire), build(fireAspectConfigurator, () -> new FireAspectBuilder(fireType)), build(flameConfigurator, () -> new FlameBuilder(fireType)));
