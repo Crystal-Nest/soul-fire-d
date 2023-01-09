@@ -62,12 +62,9 @@ public final class Fire {
   private final Optional<FireTypedFlameEnchantment> flame;
 
   /**
-   * @param modId {@link #modId}.
-   * @param id {@link #id}.
+   * @param fireType {@link #fireType}.
    * @param damage {@link #damage}.
    * @param invertHealAndHarm {@link #invertHealAndHarm}.
-   * @param material0 {@link #material0}.
-   * @param material1 {@link #material1}.
    * @param inFire {@link #inFire}.
    * @param onFire {@link #onFire}.
    * @param hurtSound {@link #hurtSound}.

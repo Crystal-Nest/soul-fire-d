@@ -1,5 +1,6 @@
 package crystalspider.soulfired.api;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,10 +12,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import crystalspider.soulfired.api.enchantment.FireTypedFireAspectEnchantment;
+import crystalspider.soulfired.api.enchantment.FireTypedFlameEnchantment;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
@@ -27,7 +29,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 /**
  * Static manager for registered Fires.
  */
-public abstract class FireManager {
+public final class FireManager {
   /**
    * Logger.
    */
@@ -53,21 +55,26 @@ public abstract class FireManager {
    */
   private static volatile ConcurrentHashMap<ResourceLocation, Fire> fires = new ConcurrentHashMap<>();
 
+  private FireManager() {}
+
   /**
    * Returns a new {@link FireBuilder}.
    * 
+   * @param modId {@code modId} of the new {@link Fire} to build.
+   * @param fireId {@code fireId} of the new {@link Fire} to build.
    * @return a new {@link FireBuilder}.
    */
-  public static final FireBuilder fireBuilder(String modId, String fireId) {
+  public static FireBuilder fireBuilder(String modId, String fireId) {
     return new FireBuilder(modId, fireId);
   }
 
   /**
    * Returns a new {@link FireBuilder}.
    * 
+   * @param fireType {@link ResourceLocation} of the new {@link Fire} to build.
    * @return a new {@link FireBuilder}.
    */
-  public static final FireBuilder fireBuilder(ResourceLocation fireType) {
+  public static FireBuilder fireBuilder(ResourceLocation fireType) {
     return new FireBuilder(fireType);
   }
 
@@ -79,7 +86,7 @@ public abstract class FireManager {
    * @param fire {@link Fire} to register.
    * @return whether the registration is successful.
    */
-  public static final synchronized boolean registerFire(Fire fire) {
+  public static synchronized boolean registerFire(Fire fire) {
     ResourceLocation fireType = fire.getFireType();
     if (!fires.containsKey(fireType)) {
       fires.put(fireType, fire);
@@ -104,11 +111,25 @@ public abstract class FireManager {
   }
 
   /**
+   * Attempts to register all the given {@link Fire fires}.
+   * 
+   * @param fires {@link Fire fires} to register.
+   * @return an {@link HashMap} with the outcome of each registration attempt.
+   */
+  public static synchronized HashMap<ResourceLocation, Boolean> registerFires(Fire... fires) {
+    HashMap<ResourceLocation, Boolean> outcomes = new HashMap<>();
+    for (Fire fire : fires) {
+      outcomes.put(fire.getFireType(), registerFire(fire));
+    }
+    return outcomes;
+  }
+
+  /**
    * Returns the list of all registered {@link Fire Fires}.
    * 
    * @return the list of all registered {@link Fire Fires}.
    */
-  public static final List<Fire> getFires() {
+  public static List<Fire> getFires() {
     return fires.values().stream().collect(Collectors.toList());
   }
 
@@ -121,7 +142,7 @@ public abstract class FireManager {
    * @param fireId
    * @return registered {@link Fire} or {@link #DEFAULT_FIRE}.
    */
-  public static final Fire getFire(String modId, String fireId) {
+  public static Fire getFire(String modId, String fireId) {
     return getFire(new ResourceLocation(modId, fireId));
   }
 
@@ -133,7 +154,7 @@ public abstract class FireManager {
    * @param fireType
    * @return registered {@link Fire} or {@link #DEFAULT_FIRE}.
    */
-  public static final Fire getFire(ResourceLocation fireType) {
+  public static Fire getFire(ResourceLocation fireType) {
     return fires.getOrDefault(fireType, DEFAULT_FIRE);
   }
 
@@ -144,7 +165,7 @@ public abstract class FireManager {
    * @param fireId
    * @return whether the given values represent a valid Fire Type.
    */
-  public static final boolean isValidType(String modId, String fireId) {
+  public static boolean isValidType(String modId, String fireId) {
     return isValidModId(modId) && isValidFireId(fireId);
   }
 
@@ -155,7 +176,7 @@ public abstract class FireManager {
    * @param fireId
    * @return whether a fire is registered with the given values.
    */
-  public static final boolean isRegisteredType(String modId, String fireId) {
+  public static boolean isRegisteredType(String modId, String fireId) {
     return isValidModId(modId) && isValidFireId(fireId) && isRegisteredType(new ResourceLocation(modId, fireId));
   }
 
@@ -165,7 +186,7 @@ public abstract class FireManager {
    * @param fireType
    * @return whether a fire is registered with the given {@code fireType}.
    */
-  public static final boolean isRegisteredType(ResourceLocation fireType) {
+  public static boolean isRegisteredType(ResourceLocation fireType) {
     return fireType != null && fires.containsKey(fireType);
   }
 
@@ -175,7 +196,7 @@ public abstract class FireManager {
    * @param id
    * @return whether the given {@code id} is a valid fire id.
    */
-  public static final boolean isValidFireId(String id) {
+  public static boolean isValidFireId(String id) {
     if (StringUtils.isNotBlank(id)) {
       try {
         new ResourceLocation(id);
@@ -193,7 +214,7 @@ public abstract class FireManager {
    * @param id
    * @return whether the given {@code id} is a valid and registered fire id.
    */
-  public static final boolean isRegisteredFireId(String id) {
+  public static boolean isRegisteredFireId(String id) {
     return isValidFireId(id) && fires.keySet().stream().anyMatch(fireType -> fireType.getPath().equals(id));
   }
 
@@ -203,7 +224,7 @@ public abstract class FireManager {
    * @param id
    * @return whether the given {@code id} is a valid mod id.
    */
-  public static final boolean isValidModId(String id) {
+  public static boolean isValidModId(String id) {
     if (StringUtils.isNotBlank(id)) {
       try {
         new ResourceLocation(id, "");
@@ -221,7 +242,7 @@ public abstract class FireManager {
    * @param id
    * @return whether the given {@code id} is a valid, loaded and registered mod id.
    */
-  public static final boolean isRegisteredModId(String id) {
+  public static boolean isRegisteredModId(String id) {
     return isValidModId(id) && ModList.get().isLoaded(id) && fires.keySet().stream().anyMatch(fireType -> fireType.getNamespace().equals(id));
   }
 
@@ -231,7 +252,7 @@ public abstract class FireManager {
    * @param damageSource
    * @return whether the given {@link DamageSource} is registered with any {@link Fire}.
    */
-  public static final boolean isFireDamageSource(DamageSource damageSource) {
+  public static boolean isFireDamageSource(DamageSource damageSource) {
     return fires.values().stream().anyMatch(fire -> fire.getInFire() == damageSource || fire.getOnFire() == damageSource);
   }
 
@@ -242,7 +263,7 @@ public abstract class FireManager {
    * @param fireId
    * @return the closest well-formed Fire Type.
    */
-  public static final ResourceLocation sanitize(String modId, String fireId) {
+  public static ResourceLocation sanitize(String modId, String fireId) {
     String trimmedModId = modId.trim(), trimmedFireId = fireId.trim();
     try {
       return sanitize(new ResourceLocation(trimmedModId, trimmedFireId));
@@ -257,7 +278,7 @@ public abstract class FireManager {
    * @param fireType
    * @return the closest well-formed Fire Type.
    */
-  public static final ResourceLocation sanitize(ResourceLocation fireType) {
+  public static ResourceLocation sanitize(ResourceLocation fireType) {
     if (StringUtils.isNotBlank(fireType.getNamespace()) && StringUtils.isNotBlank(fireType.getPath())) {
       return fireType;
     }
@@ -271,7 +292,7 @@ public abstract class FireManager {
    * @param fireId
    * @return the closest well-formed and registered fire Fire Type.
    */
-  public static final ResourceLocation ensure(String modId, String fireId) {
+  public static ResourceLocation ensure(String modId, String fireId) {
     String trimmedModId = modId.trim(), trimmedFireId = fireId.trim();
     try {
       return ensure(new ResourceLocation(trimmedModId, trimmedFireId));
@@ -286,7 +307,7 @@ public abstract class FireManager {
    * @param fireType
    * @return the closest well-formed and registered Fire Type.
    */
-  public static final ResourceLocation ensure(ResourceLocation fireType) {
+  public static ResourceLocation ensure(ResourceLocation fireType) {
     if (isRegisteredType(fireType)) {
       return fireType;
     }
@@ -298,7 +319,7 @@ public abstract class FireManager {
    * 
    * @return the list of all Fire Types.
    */
-  public static final List<ResourceLocation> getFireTypes() {
+  public static List<ResourceLocation> getFireTypes() {
     return fires.keySet().stream().collect(Collectors.toList());
   }
 
@@ -307,7 +328,7 @@ public abstract class FireManager {
    * 
    * @return the list of all registered fire ids.
    */
-  public static final List<String> getFireIds() {
+  public static List<String> getFireIds() {
     return fires.keySet().stream().map(fireType -> fireType.getPath()).collect(Collectors.toList());
   }
 
@@ -316,7 +337,7 @@ public abstract class FireManager {
    * 
    * @return the list of all registered mod ids.
    */
-  public static final List<String> getModIds() {
+  public static List<String> getModIds() {
     return fires.keySet().stream().map(fireType -> fireType.getPath()).collect(Collectors.toList());
   }
 
@@ -329,7 +350,7 @@ public abstract class FireManager {
    * @param fireId
    * @return the damage of the {@link Fire}.
    */
-  public static final float getDamage(String modId, String fireId) {
+  public static float getDamage(String modId, String fireId) {
     return getDamage(new ResourceLocation(modId, fireId));
   }
 
@@ -341,7 +362,7 @@ public abstract class FireManager {
    * @param fireType
    * @return the damage of the {@link Fire}.
    */
-  public static final float getDamage(ResourceLocation fireType) {
+  public static float getDamage(ResourceLocation fireType) {
     return fires.getOrDefault(fireType, DEFAULT_FIRE).getDamage();
   }
 
@@ -354,7 +375,7 @@ public abstract class FireManager {
    * @param fireId
    * @return the invertHealAndHarm flag of the {@link Fire}.
    */
-  public static final boolean getInvertHealAndHarm(String modId, String fireId) {
+  public static boolean getInvertHealAndHarm(String modId, String fireId) {
     return getInvertHealAndHarm(new ResourceLocation(modId, fireId));
   }
 
@@ -366,7 +387,7 @@ public abstract class FireManager {
    * @param fireType
    * @return the invertHealAndHarm flag of the {@link Fire}.
    */
-  public static final boolean getInvertHealAndHarm(ResourceLocation fireType) {
+  public static boolean getInvertHealAndHarm(ResourceLocation fireType) {
     return fires.getOrDefault(fireType, DEFAULT_FIRE).getInvertHealAndHarm();
   }
 
@@ -379,7 +400,7 @@ public abstract class FireManager {
    * @param fireId
    * @return the in damage source flag of the {@link Fire}.
    */
-  public static final DamageSource getInFireDamageSource(String modId, String fireId) {
+  public static DamageSource getInFireDamageSource(String modId, String fireId) {
     return getInFireDamageSource(new ResourceLocation(modId, fireId));
   }
 
@@ -391,7 +412,7 @@ public abstract class FireManager {
    * @param fireType
    * @return the in damage source flag of the {@link Fire}.
    */
-  public static final DamageSource getInFireDamageSource(ResourceLocation fireType) {
+  public static DamageSource getInFireDamageSource(ResourceLocation fireType) {
     return fires.getOrDefault(fireType, DEFAULT_FIRE).getInFire();
   }
 
@@ -404,7 +425,7 @@ public abstract class FireManager {
    * @param fireId
    * @return the on damage source flag of the {@link Fire}.
    */
-  public static final DamageSource getOnFireDamageSource(String modId, String fireId) {
+  public static DamageSource getOnFireDamageSource(String modId, String fireId) {
     return getOnFireDamageSource(new ResourceLocation(modId, fireId));
   }
 
@@ -416,7 +437,7 @@ public abstract class FireManager {
    * @param fireType
    * @return the on damage source flag of the {@link Fire}.
    */
-  public static final DamageSource getOnFireDamageSource(ResourceLocation fireType) {
+  public static DamageSource getOnFireDamageSource(ResourceLocation fireType) {
     return fires.getOrDefault(fireType, DEFAULT_FIRE).getOnFire();
   }
 
@@ -429,7 +450,7 @@ public abstract class FireManager {
    * @param fireId
    * @return the hurt sound of the {@link Fire}.
    */
-  public static final SoundEvent getHurtSound(String modId, String fireId) {
+  public static SoundEvent getHurtSound(String modId, String fireId) {
     return getHurtSound(new ResourceLocation(modId, fireId));
   }
 
@@ -441,7 +462,7 @@ public abstract class FireManager {
    * @param fireType
    * @return the hurt sound of the {@link Fire}.
    */
-  public static final SoundEvent getHurtSound(ResourceLocation fireType) {
+  public static SoundEvent getHurtSound(ResourceLocation fireType) {
     return fires.getOrDefault(fireType, DEFAULT_FIRE).getHurtSound();
   }
 
@@ -454,7 +475,7 @@ public abstract class FireManager {
    * @param fireId
    * @return the source block associated with {@link Fire}.
    */
-  public static final Block getSourceBlock(String modId, String fireId) {
+  public static Block getSourceBlock(String modId, String fireId) {
     return getSourceBlock(new ResourceLocation(modId, fireId));
   }
 
@@ -466,7 +487,7 @@ public abstract class FireManager {
    * @param fireType
    * @return the fire source block associated with {@link Fire}.
    */
-  public static final Block getSourceBlock(ResourceLocation fireType) {
+  public static Block getSourceBlock(ResourceLocation fireType) {
     Block sourceBlock = ForgeRegistries.BLOCKS.getValue(fires.getOrDefault(fireType, DEFAULT_FIRE).getSource().orElse(DEFAULT_FIRE.getSource().get()));
     return sourceBlock != null ? sourceBlock : Blocks.FIRE;
   }
@@ -480,7 +501,7 @@ public abstract class FireManager {
    * @param fireId
    * @return the campfire block associated with {@link Fire}.
    */
-  public static final Block getCampfireBlock(String modId, String fireId) {
+  public static Block getCampfireBlock(String modId, String fireId) {
     return getCampfireBlock(new ResourceLocation(modId, fireId));
   }
 
@@ -492,7 +513,7 @@ public abstract class FireManager {
    * @param fireType
    * @return the source block associated with {@link Fire}.
    */
-  public static final Block getCampfireBlock(ResourceLocation fireType) {
+  public static Block getCampfireBlock(ResourceLocation fireType) {
     Block campfireBlock = ForgeRegistries.BLOCKS.getValue(fires.getOrDefault(fireType, DEFAULT_FIRE).getCampfire().orElse(DEFAULT_FIRE.getSource().get()));
     return campfireBlock != null ? campfireBlock : Blocks.CAMPFIRE;
   }
@@ -502,7 +523,7 @@ public abstract class FireManager {
    * 
    * @return the list of all Fire Aspect enchantments registered.
    */
-  public static final List<Enchantment> getFireAspects() {
+  public static List<FireTypedFireAspectEnchantment> getFireAspects() {
     return fires.values().stream().map(fire -> fire.getFireAspect()).filter(optional -> optional.isPresent()).map(optional -> optional.get()).collect(Collectors.toList());
   }
 
@@ -511,7 +532,7 @@ public abstract class FireManager {
    * 
    * @return the list of all Flame enchantments registered.
    */
-  public static final List<Enchantment> getFlames() {
+  public static List<FireTypedFlameEnchantment> getFlames() {
     return fires.values().stream().map(fire -> fire.getFlame()).filter(optional -> optional.isPresent()).map(optional -> optional.get()).collect(Collectors.toList());
   }
 
@@ -525,7 +546,7 @@ public abstract class FireManager {
    * @return the Fire Aspect enchantment of the {@link Fire}.
    */
   @Nullable
-  public static final Enchantment getFireAspect(String modId, String fireId) {
+  public static FireTypedFireAspectEnchantment getFireAspect(String modId, String fireId) {
     return getFireAspect(new ResourceLocation(modId, fireId));
   }
 
@@ -538,7 +559,7 @@ public abstract class FireManager {
    * @return the Fire Aspect enchantment of the {@link Fire}.
    */
   @Nullable
-  public static final Enchantment getFireAspect(ResourceLocation fireType) {
+  public static FireTypedFireAspectEnchantment getFireAspect(ResourceLocation fireType) {
     return fires.getOrDefault(fireType, DEFAULT_FIRE).getFireAspect().orElse(null);
   }
 
@@ -552,7 +573,7 @@ public abstract class FireManager {
    * @return the Flame enchantment of the {@link Fire}.
    */
   @Nullable
-  public static final Enchantment getFlame(String modId, String fireId) {
+  public static FireTypedFlameEnchantment getFlame(String modId, String fireId) {
     return getFlame(new ResourceLocation(modId, fireId));
   }
 
@@ -565,7 +586,7 @@ public abstract class FireManager {
    * @return the Flame enchantment of the {@link Fire}.
    */
   @Nullable
-  public static final Enchantment getFlame(ResourceLocation fireType) {
+  public static FireTypedFlameEnchantment getFlame(ResourceLocation fireType) {
     return fires.getOrDefault(fireType, DEFAULT_FIRE).getFlame().orElse(null);
   }
 
@@ -577,7 +598,7 @@ public abstract class FireManager {
    * @param modId mod id of the fire.
    * @param fireId fire id of the fire.
    */
-  public static final void setOnFire(Entity entity, int seconds, String modId, String fireId) {
+  public static void setOnFire(Entity entity, int seconds, String modId, String fireId) {
     setOnFire(entity, seconds, new ResourceLocation(modId, fireId));
   }
 
@@ -588,7 +609,7 @@ public abstract class FireManager {
    * @param seconds amount of seconds the fire should last for.
    * @param fireType {@link ResourceLocation} of the fire.
    */
-  public static final void setOnFire(Entity entity, int seconds, ResourceLocation fireType) {
+  public static void setOnFire(Entity entity, int seconds, ResourceLocation fireType) {
     entity.setSecondsOnFire(seconds);
     ((FireTypeChanger) entity).setFireType(ensure(fireType));
   }
@@ -603,7 +624,7 @@ public abstract class FireManager {
    * @param modId
    * @return whether the {@code entity} has been harmed.
    */
-  public static final boolean damageInFire(Entity entity, String fireId, String modId) {
+  public static boolean damageInFire(Entity entity, String fireId, String modId) {
     return damageInFire(entity, new ResourceLocation(fireId, modId));
   }
 
@@ -616,7 +637,7 @@ public abstract class FireManager {
    * @param fireType
    * @return whether the {@code entity} has been harmed.
    */
-  public static final boolean damageInFire(Entity entity, ResourceLocation fireType) {
+  public static boolean damageInFire(Entity entity, ResourceLocation fireType) {
     if (isRegisteredType(fireType)) {
       ((FireTypeChanger) entity).setFireType(fireType);
       if (entity.tickCount % 20 == 0) {
@@ -638,7 +659,7 @@ public abstract class FireManager {
    * @param modId
    * @return whether the {@code entity} has been harmed.
    */
-  public static final boolean damageOnFire(Entity entity, String fireId, String modId) {
+  public static boolean damageOnFire(Entity entity, String fireId, String modId) {
     return damageOnFire(entity, new ResourceLocation(fireId, modId));
   }
 
@@ -651,7 +672,7 @@ public abstract class FireManager {
    * @param fireType
    * @return whether the {@code entity} has been harmed.
    */
-  public static final boolean damageOnFire(Entity entity, ResourceLocation fireType) {
+  public static boolean damageOnFire(Entity entity, ResourceLocation fireType) {
     if (isRegisteredType(fireType)) {
       ((FireTypeChanger) entity).setFireType(fireType);
       return harmOrHeal(entity, getOnFireDamageSource(fireType), getDamage(fireType), getInvertHealAndHarm(fireType));
@@ -669,7 +690,7 @@ public abstract class FireManager {
    * @param invertHealAndHarm
    * @return whether the {@code entity} has been harmed.
    */
-  private static final boolean harmOrHeal(Entity entity, DamageSource damageSource, float damage, boolean invertHealAndHarm) {
+  private static boolean harmOrHeal(Entity entity, DamageSource damageSource, float damage, boolean invertHealAndHarm) {
     if (damage > 0) {
       if (entity instanceof LivingEntity) {
         LivingEntity livingEntity = (LivingEntity) entity;

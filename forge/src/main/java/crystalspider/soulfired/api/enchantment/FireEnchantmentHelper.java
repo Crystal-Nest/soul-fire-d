@@ -16,7 +16,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * Helper for Fire related enchantments (Fire Aspect and Flame).
@@ -152,7 +152,7 @@ public class FireEnchantmentHelper {
    * @param getLevel
    * @return the {@link FireEnchantment data} of whatever Fire enchantment in the enchantments list is applied.
    */
-  private static <T> FireEnchantment getAnyFireEnchantment(T stack, List<Enchantment> enchantments, Function<T, Integer> getBaseFireEnchantment, BiFunction<Enchantment, T, Integer> getLevel) {
+  private static <T> FireEnchantment getAnyFireEnchantment(T stack, List<? extends Enchantment> enchantments, Function<T, Integer> getBaseFireEnchantment, BiFunction<Enchantment, T, Integer> getLevel) {
     int fireEnchantmentLevel = getBaseFireEnchantment.apply(stack);
     ResourceLocation fireType = FireManager.DEFAULT_FIRE_TYPE;
     if (fireEnchantmentLevel <= 0) {
@@ -201,10 +201,9 @@ public class FireEnchantmentHelper {
    * @param stack
    * @return same as {@link EnchantmentHelper#getItemEnchantmentLevel(Enchantment, ItemStack)}.
    */
-  @SuppressWarnings("deprecation")
   private static int getFireLevel(Enchantment enchantment, ItemStack stack) {
     if (!stack.isEmpty()) {
-      ResourceLocation resourcelocation = Registry.ENCHANTMENT.getKey(enchantment);
+      ResourceLocation resourcelocation = ForgeRegistries.ENCHANTMENTS.getKey(enchantment);
       ListNBT listnbt = stack.getEnchantmentTags();
       for(int i = 0; i < listnbt.size(); ++i) {
         CompoundNBT compoundnbt = listnbt.getCompound(i);

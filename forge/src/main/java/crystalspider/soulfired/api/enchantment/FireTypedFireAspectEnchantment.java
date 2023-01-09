@@ -24,7 +24,14 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
    */
   private final ResourceLocation fireType;
 
+  /**
+   * {@link Supplier} to check whether this enchantment is enabled in survival.
+   */
   private final Supplier<Boolean> enabled;
+  /**
+   * Addtional compatibility {@link Function} to call and check for when checking compatibility with other enchantments.
+   */
+  private final Function<Enchantment, Boolean> compatibility;
 
   /**
    * Whether the enchantment is treasure only.
@@ -45,17 +52,15 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
    */
   private final boolean isDiscoverable;
 
-  private final Function<Enchantment, Boolean> compatibility;
-
   /**
-   * @param fireType
-   * @param rarity
-   * @param isTreasure
-   * @param isCurse
-   * @param isTradeable
-   * @param isDiscoverable
-   * @param enabled
-   * @param compatibility
+   * @param fireType {@link #fireType}.
+   * @param rarity {@link Rarity}.
+   * @param isTreasure {@link #isTreasure}.
+   * @param isCurse {@link #isCurse}.
+   * @param isTradeable {@link #isTradeable}.
+   * @param isDiscoverable {@link #isDiscoverable}.
+   * @param enabled {@link #enabled}.
+   * @param compatibility {@link #compatibility}.
    */
   FireTypedFireAspectEnchantment(ResourceLocation fireType, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable, Supplier<Boolean> enabled, Function<Enchantment, Boolean> compatibility) {
     super(rarity, EquipmentSlotType.MAINHAND);
@@ -70,8 +75,8 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
   }
 
   @Override
-  public final void doPostAttack(LivingEntity attacker, Entity target, int level) {
-    if (!wasLastHitByProjectile((LivingEntity) target)) {
+  public void doPostAttack(LivingEntity attacker, Entity target, int level) {
+    if (!wasLastHitByProjectile(target)) {
       if (!attacker.level.isClientSide) {
         target.setSecondsOnFire(level * 4);
       }
@@ -85,7 +90,7 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
    * @param target
    * @return whether the given {@link Entity} was last hit by a projectile.
    */
-  private final boolean wasLastHitByProjectile(Entity target) {
+  private boolean wasLastHitByProjectile(Entity target) {
     if (target instanceof LivingEntity) {
       DamageSource lastDamageSource = ((LivingEntity) target).getLastDamageSource();
       return lastDamageSource != null && lastDamageSource.isProjectile();
@@ -94,47 +99,47 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
   }
 
   @Override
-  public final boolean canEnchant(ItemStack itemStack) {
+  public boolean canEnchant(ItemStack itemStack) {
     return enabled.get() && super.canEnchant(itemStack);
   }
 
   @Override
-  public final boolean canApplyAtEnchantingTable(ItemStack itemStack) {
+  public boolean canApplyAtEnchantingTable(ItemStack itemStack) {
     return enabled.get() && super.canApplyAtEnchantingTable(itemStack);
   }
 
   @Override
-  public final boolean isAllowedOnBooks() {
+  public boolean isAllowedOnBooks() {
     return enabled.get() && super.isAllowedOnBooks();
   }
 
   @Override
-  public final boolean checkCompatibility(Enchantment enchantment) {
-    return enabled.get() && super.checkCompatibility(enchantment) && compatibility.apply(enchantment);
+  public boolean checkCompatibility(Enchantment enchantment) {
+    return enabled.get() && super.checkCompatibility(enchantment) && !(enchantment instanceof FireAspectEnchantment) && !FireManager.getFireAspects().contains(enchantment) && compatibility.apply(enchantment);
   }
 
   @Override
-  public final boolean isTreasureOnly() {
+  public boolean isTreasureOnly() {
     return isTreasure;
   }
 
   @Override
-  public final boolean isCurse() {
+  public boolean isCurse() {
     return isCurse;
   }
 
   @Override
-  public final boolean isTradeable() {
+  public boolean isTradeable() {
     return isTradeable && enabled.get();
   }
 
   @Override
-  public final boolean isDiscoverable() {
+  public boolean isDiscoverable() {
     return isDiscoverable && enabled.get();
   }
 
   @Override
-  public final ResourceLocation getFireType() {
+  public ResourceLocation getFireType() {
     return fireType;
   }
 }

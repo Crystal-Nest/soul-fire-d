@@ -27,13 +27,13 @@ import net.minecraftforge.registries.ForgeRegistries;
 /**
  * Chests loot modifier.
  */
-public class ChestLootModifier extends LootModifier {
+public final class ChestLootModifier extends LootModifier {
   /**
    * Additional items to add to the chest loot.
    */
   private final HashMap<ItemStack, Float> additions;
 
-  protected ChestLootModifier(ILootCondition[] conditionsIn, HashMap<ItemStack, Float> additions) {
+  private ChestLootModifier(ILootCondition[] conditionsIn, HashMap<ItemStack, Float> additions) {
     super(conditionsIn);
     this.additions = additions;
   }

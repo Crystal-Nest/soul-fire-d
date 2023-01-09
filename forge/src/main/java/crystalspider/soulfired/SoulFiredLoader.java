@@ -1,8 +1,6 @@
 package crystalspider.soulfired;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.api.enchantment.FireAspectBuilder;
-import crystalspider.soulfired.api.enchantment.FlameBuilder;
 import crystalspider.soulfired.config.SoulFiredConfig;
 import crystalspider.soulfired.loot.ChestLootModifier;
 import net.minecraft.util.ResourceLocation;
@@ -55,8 +53,8 @@ public class SoulFiredLoader {
     FireManager.registerFire(
       FireManager.fireBuilder(FireManager.SOUL_FIRE_TYPE)
         .setDamage(2)
-        .setFireAspectBuilder(new FireAspectBuilder().setEnabled(SoulFiredConfig::getEnableSoulFireAspect))
-        .setFlameBuilder(new FlameBuilder().setEnabled(SoulFiredConfig::getEnableSoulFlame))
+        .setFireAspectConfig(builder -> builder.setEnabled(SoulFiredConfig::getEnableSoulFireAspect))
+        .setFlameConfig(builder -> builder.setEnabled(SoulFiredConfig::getEnableSoulFlame))
       .build()
     );
   }

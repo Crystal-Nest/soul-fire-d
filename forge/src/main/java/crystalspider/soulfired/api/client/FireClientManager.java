@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 /**
  * Static manager for registered Fires, client side only.
  */
-public abstract class FireClientManager {
+public final class FireClientManager {
   /**
    * Logger.
    */
@@ -26,13 +26,15 @@ public abstract class FireClientManager {
    */
   private static volatile ConcurrentHashMap<ResourceLocation, FireClient> fires = new ConcurrentHashMap<>();
 
+  private FireClientManager() {}
+
   /**
    * Registers a new {@link FireClient} from the given {@link Fire}.
    * 
    * @param fire {@link Fire} to derive a new {@link FireClient}.
    * @return whether the registration is successful.
    */
-  public static final synchronized boolean registerFire(Fire fire) {
+  public static synchronized boolean registerFire(Fire fire) {
     return registerFire(new FireClient(fire.getFireType()));
   }
 
@@ -44,7 +46,7 @@ public abstract class FireClientManager {
    * @param fire {@link FireClient} to register.
    * @return whether the registration is successful.
    */
-  private static final synchronized boolean registerFire(FireClient fire) {
+  private static synchronized boolean registerFire(FireClient fire) {
     ResourceLocation fireType = fire.getFireType();
     if (!fires.containsKey(fireType)) {
       fires.put(fireType, fire);
@@ -63,7 +65,7 @@ public abstract class FireClientManager {
    * @param fireId
    * @return the {@link FireClient#material0} of the {@link FireClient}.
    */
-  public static final RenderMaterial getMaterial0(String modId, String fireId) {
+  public static RenderMaterial getMaterial0(String modId, String fireId) {
     return getMaterial0(new ResourceLocation(modId, fireId));
   }
 
@@ -75,7 +77,7 @@ public abstract class FireClientManager {
    * @param fireType
    * @return the {@link FireClient#material0} of the {@link FireClient}.
    */
-  public static final RenderMaterial getMaterial0(ResourceLocation fireType) {
+  public static RenderMaterial getMaterial0(ResourceLocation fireType) {
     if (FireManager.isRegisteredType(fireType) && fires.containsKey(fireType)) {
       return fires.get(fireType).getMaterial0();
     }
@@ -91,7 +93,7 @@ public abstract class FireClientManager {
    * @param fireId
    * @return the {@link FireClient#material1} of the {@link FireClient}.
    */
-  public static final RenderMaterial getMaterial1(String modId, String fireId) {
+  public static RenderMaterial getMaterial1(String modId, String fireId) {
     return getMaterial1(new ResourceLocation(modId, fireId));
   }
 
@@ -103,7 +105,7 @@ public abstract class FireClientManager {
    * @param fireType
    * @return the {@link FireClient#material1} of the {@link FireClient}.
    */
-  public static final RenderMaterial getMaterial1(ResourceLocation fireType) {
+  public static RenderMaterial getMaterial1(ResourceLocation fireType) {
     if (FireManager.isRegisteredType(fireType) && fires.containsKey(fireType)) {
       return fires.get(fireType).getMaterial1();
     }
@@ -118,7 +120,7 @@ public abstract class FireClientManager {
    * @param id
    * @return the sprite 0 of the {@link FireClient}ì.
    */
-  public static final TextureAtlasSprite getSprite0(String modId, String fireId) {
+  public static TextureAtlasSprite getSprite0(String modId, String fireId) {
     return getSprite0(new ResourceLocation(modId, fireId));
   }
 
@@ -130,7 +132,7 @@ public abstract class FireClientManager {
    * @param id
    * @return the sprite 0 of the {@link FireClient}.
    */
-  public static final TextureAtlasSprite getSprite0(ResourceLocation fireType) {
+  public static TextureAtlasSprite getSprite0(ResourceLocation fireType) {
     if (FireManager.isRegisteredType(fireType) && fires.containsKey(fireType)) {
       return fires.get(fireType).getSprite0();
     }
@@ -145,7 +147,7 @@ public abstract class FireClientManager {
    * @param id
    * @return the sprite 1 of the {@link FireClient}.
    */
-  public static final TextureAtlasSprite getSprite1(String modId, String fireId) {
+  public static TextureAtlasSprite getSprite1(String modId, String fireId) {
     return getSprite1(new ResourceLocation(modId, fireId));
   }
 
@@ -157,7 +159,7 @@ public abstract class FireClientManager {
    * @param id
    * @return the sprite 1 of the {@link FireClient} registered with the given {@code fireType}.
    */
-  public static final TextureAtlasSprite getSprite1(ResourceLocation fireType) {
+  public static TextureAtlasSprite getSprite1(ResourceLocation fireType) {
     if (FireManager.isRegisteredType(fireType) && fires.containsKey(fireType)) {
       return fires.get(fireType).getSprite1();
     }

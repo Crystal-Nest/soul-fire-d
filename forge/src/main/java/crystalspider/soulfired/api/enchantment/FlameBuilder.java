@@ -1,16 +1,20 @@
 package crystalspider.soulfired.api.enchantment;
 
-import crystalspider.soulfired.api.FireManager;
-import net.minecraft.enchantment.FlameEnchantment;
 import net.minecraft.util.ResourceLocation;
 
+/**
+ * Builder for {@link FireTypedFlameEnchantment}.
+ */
 public final class FlameBuilder extends FireEnchantmentBuilder<FireTypedFlameEnchantment> {
-  public FlameBuilder() {
-    compatibility = (enchantment) -> !(enchantment instanceof FlameEnchantment) && !FireManager.getFlames().contains(enchantment);
+  /**
+   * @param fireType {@link FireEnchantmentBuilder#fireType fireType}.
+   */
+  public FlameBuilder(ResourceLocation fireType) {
+    super(fireType);
   }
 
   @Override
-  protected FireTypedFlameEnchantment make(ResourceLocation fireType) {
+  public final FireTypedFlameEnchantment build() {
     return new FireTypedFlameEnchantment(fireType, rarity, isTreasure, isCurse, isTradeable, isDiscoverable, enabled, compatibility);
   }
 }

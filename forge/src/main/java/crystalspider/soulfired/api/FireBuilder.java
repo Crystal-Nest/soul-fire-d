@@ -1,6 +1,8 @@
 package crystalspider.soulfired.api;
 
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -9,6 +11,7 @@ import crystalspider.soulfired.api.enchantment.FireEnchantmentBuilder;
 import crystalspider.soulfired.api.enchantment.FireTypedFireAspectEnchantment;
 import crystalspider.soulfired.api.enchantment.FireTypedFlameEnchantment;
 import crystalspider.soulfired.api.enchantment.FlameBuilder;
+import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantment.Rarity;
 import net.minecraft.util.DamageSource;
@@ -120,34 +123,41 @@ public final class FireBuilder {
   private Optional<ResourceLocation> campfire;
 
   /**
-   * {@link FireAspectBuilder}.
+   * {@link Function} to configure the {@link FireAspectBuilder}.
    * <p>
-   * Optional, defaults to a new {@link FireTypedFireAspectEnchantment} with {@link Rarity#VERY_RARE}.
+   * Optional, defaults to a configuration to build a new {@link FireTypedFireAspectEnchantment} with {@link Rarity#VERY_RARE}.
    * <p>
    * Default value is recommended.
    * <p>
-   * If your Fire should have a Fire Aspect enchantment, but with a different value than default, use {@link #setFireAspectBuilder(FireTypedFireAspectEnchantment)}.
+   * If your Fire should have a Fire Aspect enchantment, but with a different value than default, use {@link #setFireAspectConfig(Function)}.
    * <p>
    * If your Fire should not have a Fire Aspect enchantment, set this to null with {@link #removeFireAspect()}.
    */
-  private Optional<FireAspectBuilder> fireAspectBuilder;
+  private Optional<Function<FireAspectBuilder, FireAspectBuilder>> fireAspectConfigurator;
   /**
-   * {@link FlameBuilder}.
+   * {@link Function} to configure the {@link FlameBuilder}.
    * <p>
-   * Optional, defaults to a new {@link FireTypedFlameEnchantment} with {@link Rarity#VERY_RARE}.
+   * Optional, defaults to a configuration to build a new {@link FireTypedFlameEnchantment} with {@link Rarity#VERY_RARE}.
    * <p>
    * Default value is recommended.
    * <p>
-   * If your Fire should have a Flame enchantment, but with a different value than default, use {@link #setFlameBuilder(FireTypedFlameEnchantment)}.
+   * If your Fire should have a Flame enchantment, but with a different value than default, use {@link #setFlameConfig(Function)}.
    * <p>
    * If your Fire should not have a Flame enchantment, set this to null with {@link #removeFlame()}.
    */
-  private Optional<FlameBuilder> flameBuilder;
+  private Optional<Function<FlameBuilder, FlameBuilder>> flameConfigurator;
 
+  /**
+   * @param modId {@link #modId}.
+   * @param fireId {@link #fireId}.
+   */
   FireBuilder(String modId, String fireId) {
     reset(modId, fireId);
   }
 
+  /**
+   * @param fireType {@link ResourceLocation} to set both {@link #modId} and {@link #fireId}.
+   */
   FireBuilder(ResourceLocation fireType) {
     reset(fireType);
   }
@@ -181,34 +191,6 @@ public final class FireBuilder {
   }
 
   /**
-   * Sets the {@link DamageSource} {@link #inFire}.
-   * <p>
-   * Prefer {@link #setInFire(String)}.
-   * 
-   * @param inFire
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  private FireBuilder setInFire(DamageSource inFire) {
-    this.inFire = inFire;
-    return this;
-  }
-
-  /**
-   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the given {@code messageId}.
-   * <p>
-   * The {@link DamageSource} will have both {@link DamageSource#bypassArmor bypassArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}.
-   * <p>
-   * Prefer the use of {@link #setInFire()} after setting both {@link #modId} and {@link #fireId}.
-   * 
-   * @param messageId
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  @Deprecated
-  public FireBuilder setInFire(String messageId) {
-    return setInFire((new DamageSource(messageId)).bypassArmor().setIsFire());
-  }
-
-  /**
    * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code messageId} equal to {@code "in_" + id + "_fire"}.
    * <p>
    * The {@link DamageSource} will have both {@link DamageSource#bypassArmor bypassArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}.
@@ -218,37 +200,10 @@ public final class FireBuilder {
    */
   public FireBuilder setInFire() throws IllegalStateException {
     if (FireManager.isValidFireId(fireId)) {
-      return setInFire("in_" + fireId + "_fire");
+      this.inFire = (new DamageSource("in_" + fireId + "_fire")).bypassArmor().setIsFire();
+      return this;
     }
     throw new IllegalStateException("Attempted to create inFire DamageSource before setting a valid id");
-  }
-
-  /**
-   * Sets the {@link DamageSource} {@link #onFire}.
-   * <p>
-   * Prefer {@link #setOnFire(String)}.
-   * 
-   * @param onFire
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  private FireBuilder setOnFire(DamageSource onFire) {
-    this.onFire = onFire;
-    return this;
-  }
-
-  /**
-   * Sets the {@link DamageSource} {@link #onFire} by creating a new {@link DamageSource} with the given {@code messageId}.
-   * <p>
-   * The {@link DamageSource} will have both {@link DamageSource#bypassArmor bypassArmor} and {@link DamageSource#isFireSource isFireSource} set to {@code true}.
-   * <p>
-   * Prefer the use of {@link #setOnFire()} after setting both {@link #modId} and {@link #fireId}.
-   * 
-   * @param messageId
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  @Deprecated
-  public FireBuilder setOnFire(String messageId) {
-    return setOnFire((new DamageSource(messageId)).bypassArmor().setIsFire());
   }
 
   /**
@@ -261,7 +216,8 @@ public final class FireBuilder {
    */
   public FireBuilder setOnFire() throws IllegalStateException {
     if (FireManager.isValidFireId(fireId)) {
-      return setOnFire("on_" + fireId + "_fire");
+      this.onFire = (new DamageSource("on_" + fireId + "_fire")).bypassArmor().setIsFire();
+      return this;
     }
     throw new IllegalStateException("Attempted to create onFire DamageSource before setting a valid id");
   }
@@ -289,7 +245,7 @@ public final class FireBuilder {
   }
 
   /**
-   * Removes the fire source.
+   * Removes the {@link #source}.
    * 
    * @return this Builder to either set other properties or {@link #build}.
    */
@@ -310,7 +266,7 @@ public final class FireBuilder {
   }
 
   /**
-   * Removes the campfire.
+   * Removes the {@link #campfire}.
    * 
    * @return this Builder to either set other properties or {@link #build}.
    */
@@ -320,47 +276,55 @@ public final class FireBuilder {
   }
 
   /**
-   * Sets the {@link #fireAspectBuilder} enchantment.
+   * Sets the {@link #fireAspectConfigurator}.
    * 
-   * @param fireAspect
+   * @param fireAspectConfigurator {@link Function} to configure the {@link FireAspectBuilder}.
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder setFireAspectBuilder(FireAspectBuilder fireAspect) {
-    this.fireAspectBuilder = Optional.of(fireAspect);
+  public FireBuilder setFireAspectConfig(Function<FireAspectBuilder, FireAspectBuilder> fireAspectConfigurator) {
+    this.fireAspectConfigurator = Optional.of(fireAspectConfigurator);
     return this;
   }
 
   /**
-   * Removes the Fire Aspect enchantment.
+   * Marks the Fire Aspect enchantment for removal: it will not be registered.
    * 
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder removeFireAspectBuilder() {
-    this.fireAspectBuilder = null;
+  public FireBuilder removeFireAspect() {
+    this.fireAspectConfigurator = null;
     return this;
   }
 
   /**
-   * Sets the {@link #fireAspectBuilder} enchantment.
+   * Sets the {@link #flameConfigurator}.
    * 
-   * @param fireAspectBuilder
+   * @param flameConfigurator {@link Function} to configure the {@link FlameBuilder}.
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder setFlameBuilder(FlameBuilder flame) {
-    this.flameBuilder = Optional.of(flame);
+  public FireBuilder setFlameConfig(Function<FlameBuilder, FlameBuilder> flameConfigurator) {
+    this.flameConfigurator = Optional.of(flameConfigurator);
     return this;
   }
 
   /**
-   * Removes the Flame enchantment.
+   * Marks the Flame enchantment for removal: it will not be registered.
    * 
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public FireBuilder removeFlameBuilder() {
-    this.flameBuilder = null;
+  public FireBuilder removeFlame() {
+    this.flameConfigurator = null;
     return this;
   }
 
+  /**
+   * Resets the state of the Builder.
+   * <p>
+   * Used to avoid getting new Builders from the {@link FireManager manager} and instead use the same instance to build different {@link Fire Fires}.
+   * 
+   * @param fireType {@link ResourceLocation} of the new {@link Fire} to build.
+   * @return this Builder, reset.
+   */
   public FireBuilder reset(ResourceLocation fireType) {
     return reset(fireType.getNamespace(), fireType.getPath());
   }
@@ -369,9 +333,9 @@ public final class FireBuilder {
    * Resets the state of the Builder.
    * <p>
    * Used to avoid getting new Builders from the {@link FireManager manager} and instead use the same instance to build different {@link Fire Fires}.
-   * <p>
-   * Note that, for ease of use, the {@link #modId} is not reset.
    * 
+   * @param modId {@code modId} of the new {@link Fire} to build.
+   * @param fireId {@code fireId} of the new {@link Fire} to build.
    * @return this Builder, reset.
    */
   public FireBuilder reset(String modId, String fireId) {
@@ -384,11 +348,21 @@ public final class FireBuilder {
     hurtSound = DEFAULT_HURT_SOUND;
     source = Optional.empty();
     campfire = Optional.empty();
-    fireAspectBuilder = Optional.empty();
-    flameBuilder = Optional.empty();
+    fireAspectConfigurator = Optional.empty();
+    flameConfigurator = Optional.empty();
     return this;
   }
 
+  /**
+   * Resets the state of the Builder.
+   * <p>
+   * Used to avoid getting new Builders from the {@link FireManager manager} and instead use the same instance to build different {@link Fire Fires}.
+   * <p>
+   * Note that, for ease of use, the {@link #modId} is not reset.
+   * 
+   * @param fireId {@code fireId} of the new {@link Fire} to build.
+   * @return this Builder, reset.
+   */
   public FireBuilder reset(String fireId) {
     this.fireId = fireId;
     damage = DEFAULT_DAMAGE;
@@ -398,8 +372,8 @@ public final class FireBuilder {
     hurtSound = DEFAULT_HURT_SOUND;
     source = Optional.empty();
     campfire = Optional.empty();
-    fireAspectBuilder = Optional.empty();
-    flameBuilder = Optional.empty();
+    fireAspectConfigurator = Optional.empty();
+    flameConfigurator = Optional.empty();
     return this;
   }
 
@@ -418,15 +392,15 @@ public final class FireBuilder {
       if (campfire != null && !campfire.isPresent()) {
         campfire = Optional.of(new ResourceLocation(modId, fireId + "_campfire"));
       }
-      if (fireAspectBuilder != null && !fireAspectBuilder.isPresent()) {
-        fireAspectBuilder = Optional.of((new FireAspectBuilder()).setRarity(Rarity.VERY_RARE));
+      if (fireAspectConfigurator != null && !fireAspectConfigurator.isPresent()) {
+        fireAspectConfigurator = Optional.of(builder -> builder);
       }
-      if (flameBuilder != null && !flameBuilder.isPresent()) {
-        flameBuilder = Optional.of((new FlameBuilder()).setRarity(Rarity.VERY_RARE));
+      if (flameConfigurator != null && !flameConfigurator.isPresent()) {
+        flameConfigurator = Optional.of(builder -> builder);
       }
-      return new Fire(fireType, damage, invertHealAndHarm, inFire, onFire, hurtSound, get(source), get(campfire), build(fireAspectBuilder, fireType), build(flameBuilder, fireType));
+      return new Fire(fireType, damage, invertHealAndHarm, inFire, onFire, hurtSound, get(source), get(campfire), build(fireAspectConfigurator, () -> new FireAspectBuilder(fireType)), build(flameConfigurator, () -> new FlameBuilder(fireType)));
     }
-    throw new IllegalStateException("Attempted to build a Fire with a not valid fireId or modId");
+    throw new IllegalStateException("Attempted to build a Fire with a non-valid fireId or modId");
   }
 
   /**
@@ -439,15 +413,26 @@ public final class FireBuilder {
    * @return the value of the given {@link Optional}.
    */
   @Nullable
-  private final <T> T get(@Nullable Optional<T> optional) {
+  private <T> T get(@Nullable Optional<T> optional) {
     return optional != null && optional.isPresent() ? optional.get() : null;
   }
 
+  /**
+   * Returns the value obtained by calling {@link FireEnchantmentBuilder#build()} for the given Builder.
+   * <p>
+   * Returns {@code null} if the {@code optional} is either {@code null} or empty.
+   * 
+   * @param <B>
+   * @param <E>
+   * @param optional
+   * @param supplier
+   * @return the value obtained by calling {@link FireEnchantmentBuilder#build()}.
+   */
   @Nullable
-  private final <B extends FireEnchantmentBuilder<E>, E extends Enchantment> E build(@Nullable Optional<B> optional, ResourceLocation fireType) {
-    FireEnchantmentBuilder<E> builder = get(optional);
-    if (builder != null) {
-      return builder.build(fireType);
+  private <B extends FireEnchantmentBuilder<E>, E extends Enchantment & FireTyped> E build(@Nullable Optional<Function<B, B>> optional, Supplier<B> supplier) {
+    Function<B, B> configurator = get(optional);
+    if (configurator != null) {
+      return configurator.apply(supplier.get()).build();
     }
     return null;
   }

@@ -28,6 +28,9 @@ public final class FireClient {
    */
   private final RenderMaterial material1;
 
+  /**
+   * @param fireType {@link #fireType}.
+   */
   FireClient(ResourceLocation fireType) {
     this.fireType = fireType;
     String modId = fireType.getNamespace(), fireId = fireType.getPath();
