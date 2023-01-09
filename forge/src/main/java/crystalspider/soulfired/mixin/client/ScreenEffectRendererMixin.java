@@ -13,6 +13,7 @@ import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -33,9 +34,9 @@ public class ScreenEffectRendererMixin {
    */
   @Redirect(method = "renderScreenEffect", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/event/ForgeEventFactory;renderFireOverlay(Lnet/minecraft/world/entity/player/Player;Lcom/mojang/blaze3d/vertex/PoseStack;)Z"))
   private static boolean redirectRenderFireOverlay(Player player, PoseStack poseStack) {
-    String fireId = ((FireTyped) player).getFireId();
-    if (FireManager.isFireId(fireId)) {
-      return ForgeEventFactory.renderBlockOverlay(player, poseStack, OverlayType.FIRE, FireManager.getSourceBlock(fireId), player.blockPosition());
+    ResourceLocation fireType = ((FireTyped) player).getFireType();
+    if (FireManager.isRegisteredType(fireType)) {
+      return ForgeEventFactory.renderBlockOverlay(player, poseStack, OverlayType.FIRE, FireManager.getSourceBlock(fireType).defaultBlockState(), player.blockPosition());
     }
     return ForgeEventFactory.renderFireOverlay(player, poseStack);
   }
@@ -43,7 +44,7 @@ public class ScreenEffectRendererMixin {
   /**
    * Modifies the assignment value returned by {@link Material#sprite()} in the method {@link ScreenEffectRenderer#renderFire(Minecraft, PoseStack)}.
    * <p>
-   * Assigns the correct sprite for the fire type the player is burning from.
+   * Assigns the correct sprite for the Fire Type the player is burning from.
    * 
    * @param value original sprite returned by the modified method.
    * @param minecraft Minecraft client.
@@ -52,9 +53,10 @@ public class ScreenEffectRendererMixin {
    */
   @ModifyVariable(method = "renderFire", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/resources/model/Material;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;"))
   private static TextureAtlasSprite onRenderFire(TextureAtlasSprite value, Minecraft minecraft, PoseStack poseStack) {
-    String fireId = ((FireTyped) minecraft.player).getFireId();
-    if (FireManager.isFireId(fireId)) {
-      return FireClientManager.getSprite1(fireId);
+    @SuppressWarnings("null")
+    ResourceLocation fireType = ((FireTyped) minecraft.player).getFireType();
+    if (FireManager.isRegisteredType(fireType)) {
+      return FireClientManager.getSprite1(fireType);
     }
     return value;
   }

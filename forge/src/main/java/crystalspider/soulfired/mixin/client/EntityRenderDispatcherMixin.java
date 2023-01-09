@@ -12,6 +12,7 @@ import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 /**
@@ -32,9 +33,9 @@ public abstract class EntityRenderDispatcherMixin {
    */
   @ModifyVariable(method = "renderFlame", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/resources/model/Material;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", ordinal = 0), ordinal = 0)
   private TextureAtlasSprite onRenderFlameAtSprite0(TextureAtlasSprite value, PoseStack poseStack, MultiBufferSource multiBufferSource, Entity entity) {
-    String fireId = ((FireTyped) entity).getFireId();
-    if (FireManager.isFireId(fireId)) {
-      return FireClientManager.getSprite0(fireId);
+    ResourceLocation fireType = ((FireTyped) entity).getFireType();
+    if (FireManager.isRegisteredType(fireType)) {
+      return FireClientManager.getSprite0(fireType);
     }
     return value;
   }
@@ -52,9 +53,9 @@ public abstract class EntityRenderDispatcherMixin {
    */
   @ModifyVariable(method = "renderFlame", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/resources/model/Material;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", ordinal = 1), ordinal = 1)
   private TextureAtlasSprite onRenderFlameAtSprite1(TextureAtlasSprite value, PoseStack poseStack, MultiBufferSource multiBufferSource, Entity entity) {
-    String fireId = ((FireTyped) entity).getFireId();
-    if (FireManager.isFireId(fireId)) {
-      return FireClientManager.getSprite1(fireId);
+    ResourceLocation fireType = ((FireTyped) entity).getFireType();
+    if (FireManager.isRegisteredType(fireType)) {
+      return FireClientManager.getSprite1(fireType);
     }
     return value;
   }

@@ -7,8 +7,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,9 +21,9 @@ import net.minecraft.world.level.block.state.BlockState;
 @Mixin(BaseFireBlock.class)
 public abstract class BaseFireBlockMixin extends Block implements FireTypeChanger {
   /**
-   * Fire Id.
+   * Fire Type.
    */
-  private String fireId;
+  private ResourceLocation fireType;
 
   /**
    * Useless constructor required by the super class to make the compiler happy.
@@ -33,15 +35,13 @@ public abstract class BaseFireBlockMixin extends Block implements FireTypeChange
   }
 
   @Override
-  public void setFireId(String id) {
-    if (FireManager.isValidFireId(id)) {
-      fireId = id;
-    }
+  public void setFireType(ResourceLocation fireType) {
+    this.fireType = fireType;
   }
 
   @Override
-  public String getFireId() {
-    return fireId;
+  public ResourceLocation getFireType() {
+    return fireType;
   }
 
   /**
@@ -56,6 +56,6 @@ public abstract class BaseFireBlockMixin extends Block implements FireTypeChange
    */
   @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
-    return FireManager.damageInFire(caller, getFireId(), damageSource, damage);
+    return FireManager.damageInFire(caller, getFireType());
   }
 }

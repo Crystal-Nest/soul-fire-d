@@ -21,14 +21,14 @@ public abstract class AbstractArrowMixin implements FireTypeChanger {
   /**
    * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link AbstractArrow#onHitEntity(EntityHitResult)}.
    * <p>
-   * Sets the correct FireId for the Entity.
+   * Sets the correct Fire Type for the Entity.
    * 
    * @param caller {@link Entity} invoking (owning) the redirected method.
    * @param seconds seconds the entity should be set on fire for.
    */
   @Redirect(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setSecondsOnFire(I)V"))
   private void redirectSetSecondsOnFire(Entity caller, int seconds) {
-    FireManager.setOnFire(caller, seconds, getFireId());
+    FireManager.setOnFire(caller, seconds, getFireType());
   }
 
   /**
@@ -44,7 +44,7 @@ public abstract class AbstractArrowMixin implements FireTypeChanger {
   private void redirectSetSecondsOnFire(AbstractArrow caller, int seconds, LivingEntity entity) {
     FireEnchantment fireEnchantment = FireEnchantmentHelper.getWhichFlame(entity);
     if (fireEnchantment.isApplied()) {
-      FireManager.setOnFire(caller, seconds, fireEnchantment.getFireId());
+      FireManager.setOnFire(caller, seconds, fireEnchantment.getFireType());
     }
   }
 }

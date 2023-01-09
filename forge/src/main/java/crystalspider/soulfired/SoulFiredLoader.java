@@ -1,13 +1,14 @@
 package crystalspider.soulfired;
 
 import crystalspider.soulfired.api.FireManager;
+import crystalspider.soulfired.config.SoulFiredConfig;
 import crystalspider.soulfired.handlers.RegistryEventHandler;
 import crystalspider.soulfired.loot.ChestLootModifier;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -28,7 +29,7 @@ public class SoulFiredLoader {
   /**
    * Network channel protocol version.
    */
-  public static final String PROTOCOL_VERSION = "1.18-2.0";
+  public static final String PROTOCOL_VERSION = "1.18-3.0";
   /**
    * {@link SimpleChannel} instance for compatibility client-server.
    */
@@ -50,16 +51,14 @@ public class SoulFiredLoader {
    * Registers Soul Fire as modded fire.
    */
   public SoulFiredLoader() {
-    IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-    modEventBus.register(new RegistryEventHandler());
+    ModLoadingContext.get().registerConfig(Type.COMMON, SoulFiredConfig.SPEC);
+    LOOT_MODIFIERS.register(FMLJavaModLoadingContext.get().getModEventBus());
     FireManager.registerFire(
-      FireManager.fireBuilder()
-        .setModId(MODID)
-        .setId(FireManager.SOUL_FIRE_ID)
+      FireManager.fireBuilder(FireManager.SOUL_FIRE_TYPE)
         .setDamage(2)
-        .setSourceBlock(Blocks.SOUL_FIRE)
+        .setFireAspectConfig(builder -> builder.setEnabled(SoulFiredConfig::getEnableSoulFireAspect))
+        .setFlameConfig(builder -> builder.setEnabled(SoulFiredConfig::getEnableSoulFlame))
       .build()
     );
-    LOOT_MODIFIERS.register(modEventBus);
   }
 }
