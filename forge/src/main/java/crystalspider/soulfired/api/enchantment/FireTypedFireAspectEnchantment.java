@@ -4,6 +4,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import crystalspider.soulfired.api.FireManager;
+import crystalspider.soulfired.api.compat.Ensorcellation;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.enchantment.Enchantment;
@@ -14,6 +15,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.ModList;
 
 /**
  * Fire Aspect Enchantment sensitive to the Fire Type.
@@ -115,7 +117,14 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
 
   @Override
   public boolean checkCompatibility(Enchantment enchantment) {
-    return enabled.get() && super.checkCompatibility(enchantment) && !(enchantment instanceof FireAspectEnchantment) && !FireManager.getFireAspects().contains(enchantment) && compatibility.apply(enchantment);
+    return (
+      enabled.get() &&
+      super.checkCompatibility(enchantment) &&
+      !(enchantment instanceof FireAspectEnchantment) &&
+      !FireManager.getFireAspects().contains(enchantment) &&
+      compatibility.apply(enchantment) &&
+      (!ModList.get().isLoaded("ensorcellation") || Ensorcellation.checkFireAspectCompatibility(enchantment))
+    );
   }
 
   @Override
