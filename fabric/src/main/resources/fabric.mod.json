@@ -13,7 +13,7 @@
     "sources": "https://github.com/${github_user}/${modid_kebab}/tree/${minecraft_version}"
   },
   "license": "GPL-3.0-or-later",
-  "icon": "assets/${modid}/${modid_kebab}.jpg",
+  "icon": "assets/${modid}/${modid_kebab}.gif",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -29,6 +29,7 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
+    "forgeconfigapiport": "^${forgeconfigapiport_version}",
     "minecraft": "${minecraft_version}",
     "java": ">=17"
   }

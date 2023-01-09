@@ -12,6 +12,7 @@ import net.minecraft.client.gui.hud.InGameOverlayRenderer;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
 
 /**
  * Injects into {@link InGameOverlayRenderer} to alter Fire behavior for consistency.
@@ -21,7 +22,7 @@ public class InGameOverlayRendererMixin {
   /**
    * Modifies the assignment value returned by the call to {@link SpriteIdentifier#getSprite()} in the method {@link InGameOverlayRenderer#renderFireOverlay(MinecraftClient, MatrixStack)}.
    * <p>
-   * Assigns the correct sprite for the fire type the entity is burning from.
+   * Assigns the correct sprite for the Fire Type the player is burning from.
    * 
    * @param value original sprite returned by the modified method.
    * @param poseStack
@@ -31,9 +32,9 @@ public class InGameOverlayRendererMixin {
    */
 	@ModifyVariable(method = "renderFireOverlay", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/util/SpriteIdentifier;getSprite()Lnet/minecraft/client/texture/Sprite;"))
   private static Sprite onRenderFireOverlay(Sprite value, MinecraftClient client, MatrixStack matrices) {
-    String fireId = ((FireTyped) client.player).getFireId();
-    if (FireManager.isFireId(fireId)) {
-      return FireClientManager.getSprite1(fireId);
+    Identifier fireType = ((FireTyped) client.player).getFireType();
+    if (FireManager.isRegisteredType(fireType)) {
+      return FireClientManager.getSprite1(fireType);
     }
     return value;
   }

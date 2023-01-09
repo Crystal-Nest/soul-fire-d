@@ -1,5 +1,7 @@
 package crystalspider.soulfired.api.type;
 
+import net.minecraft.util.Identifier;
+
 /**
  * Type sensitive to the fire type it has (burns or burn).
  * <p>
@@ -7,11 +9,11 @@ package crystalspider.soulfired.api.type;
  */
 public interface FireTypeChanger extends FireTyped {
   /**
-   * Sets this {@code fireId}.
+   * Sets this {@code fireType}.
    * <p>
    * May or may not process the argument before setting.
    * 
-   * @param fireId
+   * @param fireType
    */
-  public void setFireId(String fireId);
+  public void setFireType(Identifier fireType);
 }

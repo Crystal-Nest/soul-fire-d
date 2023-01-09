@@ -1,6 +1,7 @@
 package crystalspider.soulfired.handlers;
 
 import crystalspider.soulfired.api.FireManager;
+import crystalspider.soulfired.config.SoulFiredConfig;
 import net.fabricmc.fabric.api.loot.v2.LootTableSource;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootManager;
@@ -33,13 +34,13 @@ public class LootTableEventsHandler {
    * @param lootTableSource
    */
   public static void handle(ResourceManager resourceManager, LootManager lootManager, Identifier identifier, LootTable.Builder builder, LootTableSource lootTableSource) {
-    if (identifier.equals(BASTION_CHEST_IDENTIFIER)) {
+    if (SoulFiredConfig.getEnableSoulFlame() && identifier.equals(BASTION_CHEST_IDENTIFIER)) {
       builder.pool(
         LootPool.builder()
         .rolls(ConstantLootNumberProvider.create(1))
-        .conditionally(RandomChanceLootCondition.builder(1F))
+        .conditionally(RandomChanceLootCondition.builder(0.05F))
         .with(ItemEntry.builder(Items.BOOK))
-        .apply(new EnchantRandomlyLootFunction.Builder().add(FireManager.getFlame(FireManager.SOUL_FIRE_ID)))
+        .apply(new EnchantRandomlyLootFunction.Builder().add(FireManager.getFlame(FireManager.SOUL_FIRE_TYPE)))
         .apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(1)))
       );
     }

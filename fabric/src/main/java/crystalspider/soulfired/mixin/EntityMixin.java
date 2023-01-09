@@ -17,6 +17,7 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 /**
@@ -36,9 +37,9 @@ public abstract class EntityMixin implements FireTypeChanger {
   protected DataTracker dataTracker;
 
   /**
-   * {@link TrackedData} to synchronize the Fire Id across client and server.
+   * {@link TrackedData} to synchronize the Fire Type across client and server.
    */
-  private static final TrackedData<String> DATA_FIRE_ID = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.STRING);
+  private static final TrackedData<String> DATA_FIRE_TYPE = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.STRING);
 
   /**
    * Shadowed {@link Entity#getFireTicks()}.
@@ -63,15 +64,15 @@ public abstract class EntityMixin implements FireTypeChanger {
   public abstract boolean isFireImmune();
 
   @Override
-  public void setFireId(String fireId) {
+  public void setFireType(Identifier fireType) {
     if (!this.isFireImmune()) {
-      dataTracker.set(DATA_FIRE_ID, FireManager.ensureFireId(fireId));
+      dataTracker.set(DATA_FIRE_TYPE, FireManager.ensure(fireType).toString());
     }
   }
 
   @Override
-  public String getFireId() {
-    return dataTracker.get(DATA_FIRE_ID);
+  public Identifier getFireType() {
+    return Identifier.tryParse(dataTracker.get(DATA_FIRE_TYPE));
   }
 
   /**
@@ -86,38 +87,38 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
   private boolean redirectDamage(Entity caller, DamageSource damageSource, float damage) {
-    return FireManager.damageOnFire(caller, ((FireTyped) caller).getFireId(), damageSource, damage);
+    return FireManager.damageOnFire(caller, ((FireTyped) caller).getFireType());
   }
 
   /**
    * Redirects the call to {@link Entity#setOnFireFor(int)} inside the method {@link Entity#setOnFireFromLava()}.
    * <p>
-   * Sets the base fire id.
+   * Sets the base Fire Type.
    * 
    * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as {@code this} entity.
    * @param seconds seconds to set the entity on fire for.
    */
   @Redirect(method = "setOnFireFromLava", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setOnFireFor(I)V"))
   private void redirectSetOnFireFor(Entity caller, int seconds) {
-    FireManager.setOnFire(caller, seconds, FireManager.BASE_FIRE_ID);
+    FireManager.setOnFire(caller, seconds, FireManager.DEFAULT_FIRE_TYPE);
   }
 
   /**
    * Redirects the call to {@link Entity#initDataTracker()} inside the constructor.
    * <p>
-   * Defines the {@link #DATA_FIRE_ID Fire Id data} to synchronize across client and server.
+   * Defines the {@link #DATA_FIRE_TYPE Fire Type data} to synchronize across client and server.
    * 
    * @param ci {@link CallbackInfo}.
    */
   @Inject(method = "<init>", at = @At("TAIL"))
   private void redirectInitDataTracker(CallbackInfo ci) {
-    dataTracker.startTracking(DATA_FIRE_ID, FireManager.BASE_FIRE_ID);
+    dataTracker.startTracking(DATA_FIRE_TYPE, FireManager.DEFAULT_FIRE_TYPE.toString());
   }
 
   /**
    * Injects at the start of the method {@link Entity#setFireTicks(int)}.
    * <p>
-   * Resets the FireId when this entity stops burning or catches fire from a new fire source.
+   * Resets the Fire Type when this entity stops burning or catches fire from a new fire source.
    * 
    * @param ticks ticks this entity should burn for.
    * @param ci {@link CallbackInfo}.
@@ -125,35 +126,35 @@ public abstract class EntityMixin implements FireTypeChanger {
   @Inject(method = "setFireTicks", at = @At(value = "HEAD"))
   private void onSetFireTicks(int ticks, CallbackInfo ci) {
     if (!world.isClient && ticks >= getFireTicks()) {
-      setFireId(FireManager.BASE_FIRE_ID);
+      setFireType(FireManager.DEFAULT_FIRE_TYPE);
     }
   }
 
   /**
    * Injects in the method {@link Entity#writeNbt(NbtCompound)} before the invocation of {@link Entity#writeCustomDataToNbt(NbtCompound)}.
    * <p>
-   * If valid, saves the current FireId in the given {@link NbtCompound}.
+   * If valid, saves the current Fire Type in the given {@link NbtCompound}.
    * 
    * @param tag
    * @param cir {@link CallbackInfoReturnable}.
    */
   @Inject(method = "writeNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;writeCustomDataToNbt(Lnet/minecraft/nbt/NbtCompound;)V"))
   private void onWriteNbt(NbtCompound tag, CallbackInfoReturnable<NbtCompound> cir) {
-    if (FireManager.isFireId(getFireId())) {
-      tag.putString("FireId", getFireId());
+    if (FireManager.isRegisteredType(getFireType())) {
+      tag.putString(FireManager.FIRE_TYPE_TAG, getFireType().toString());
     }
   }
 
   /**
    * Injects in the method {@link Entity#readNbt(NbtCompound)} before the invocation of {@link Entity#readCustomDataFromNbt(NbtCompound)}.
    * <p>
-   * Loads the FireId from the given {@link NbtCompound}.
+   * Loads the Fire Type from the given {@link NbtCompound}.
    * 
    * @param tag
    * @param ci {@link CallbackInfo}.
    */
   @Inject(method = "readNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;readCustomDataFromNbt(Lnet/minecraft/nbt/NbtCompound;)V"))
   private void onReadNbt(NbtCompound tag, CallbackInfo ci) {
-    setFireId(FireManager.ensureFireId(tag.getString("FireId")));
+    setFireType(FireManager.ensure(Identifier.tryParse(tag.getString(FireManager.FIRE_TYPE_TAG))));
   }
 }

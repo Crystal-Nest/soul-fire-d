@@ -7,58 +7,60 @@ import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 
 /**
- * Fire client side only.
+ * Fire, client side only.
  */
-public class FireClient {
+public final class FireClient {
   /**
-   * Mod ID.
+   * {@link Identifier} to uniquely identify this Fire.
    */
-  private final String modId;
+  private final Identifier fireType;
+
   /**
-   * Fire unique ID.
-   */
-  private final String id;
-  /**
-   * Fire {@link SpriteIdentifier} for the sprite0.
+   * Fire {@link Material} for the sprite 0.
    * <p>
    * Used only in rendering the Fire of an entity.
    */
   private final SpriteIdentifier spriteIdentifier0;
   /**
-   * Fire {@link SpriteIdentifier} for the sprite1.
+   * Fire {@link Material} for the sprite 1.
    * <p>
    * Used both for rendering the Fire of an entity and the player overlay.
    */
   private final SpriteIdentifier spriteIdentifier1;
 
-  FireClient(String modId, String id) {
-    this.modId = modId;
-    this.id = id;
-    if (modId.equals(FireManager.SOUL_FIRE_ID)) {
-      this.spriteIdentifier0 = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(modId, "block/" + id + "_fire_0"));
-      this.spriteIdentifier1 = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(modId, "block/" + id + "_fire_1"));
-    } else {
-      this.spriteIdentifier0 = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier("block/" + id + "_fire_0"));
-      this.spriteIdentifier1 = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier("block/" + id + "_fire_1"));
-    }
+  FireClient(Identifier fireType) {
+    this.fireType = fireType;
+    String modId = fireType.getNamespace(), fireId = fireType.getPath();
+    String joiner = FireManager.DEFAULT_FIRE_TYPE.equals(fireType) ? "" : "_";
+    this.spriteIdentifier0 = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(modId, "block/" + fireId + joiner + "fire_0"));
+    this.spriteIdentifier1 = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(modId, "block/" + fireId + joiner + "fire_1"));
   }
 
   /**
-   * Returns this {@link #modId}.
+   * Returns this {@link #fireType}.
    * 
-   * @return this {@link #modId}.
+   * @return this {@link #fireType}.
    */
-  public String getModId() {
-    return modId;
+  public Identifier getFireType() {
+    return fireType;
   }
 
   /**
-   * Returns this {@link #id}.
+   * Returns this {@link #spriteIdentifier0}.
    * 
-   * @return this {@link #id}.
+   * @return this {@link #spriteIdentifier0}.
    */
-  public String getId() {
-    return id;
+  public SpriteIdentifier getSpriteIdentifier0() {
+    return spriteIdentifier0;
+  }
+
+  /**
+   * Returns this {@link #spriteIdentifier1}.
+   * 
+   * @return this {@link #spriteIdentifier1}.
+   */
+  public SpriteIdentifier getSpriteIdentifier1() {
+    return spriteIdentifier1;
   }
 
   /**
@@ -81,6 +83,6 @@ public class FireClient {
 
   @Override
   public String toString() {
-    return "FireClient [spriteIdentifier0=" + spriteIdentifier0 + ", spriteIdentifier1=" + spriteIdentifier1 + "]";
+    return "FireClient [fireType=" + fireType + ", material0=" + spriteIdentifier0 + ", material1=" + spriteIdentifier1 + "]";
   }
 }

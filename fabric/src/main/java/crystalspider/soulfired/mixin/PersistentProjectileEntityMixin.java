@@ -21,14 +21,14 @@ public abstract class PersistentProjectileEntityMixin implements FireTypeChanger
   /**
    * Redirects the call to {@link Entity#setOnFireFor(int)} inside the method {@link PersistentProjectileEntity#onEntityHit(EntityHitResult)}.
    * <p>
-   * Sets the correct FireId for the Entity.
+   * Sets the correct Fire Type for the Entity.
    * 
    * @param caller {@link Entity} invoking (owning) the redirected method.
    * @param seconds seconds the entity should be set on fire for.
    */
   @Redirect(method = "onEntityHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setOnFireFor(I)V"))
   private void redirectSetOnFireFor(Entity caller, int seconds) {
-    FireManager.setOnFire(caller, seconds, getFireId());
+    FireManager.setOnFire(caller, seconds, getFireType());
   }
 
   /**
@@ -44,7 +44,7 @@ public abstract class PersistentProjectileEntityMixin implements FireTypeChanger
   private void redirectSetOnFireFor(PersistentProjectileEntity caller, int seconds, LivingEntity entity) {
     FireEnchantment fireEnchantment = FireEnchantmentHelper.getWhichFlame(entity);
     if (fireEnchantment.isApplied()) {
-      FireManager.setOnFire(caller, seconds, fireEnchantment.getFireId());
+      FireManager.setOnFire(caller, seconds, fireEnchantment.getFireType());
     }
   }
 }

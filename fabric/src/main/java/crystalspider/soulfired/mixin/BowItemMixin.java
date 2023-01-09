@@ -34,7 +34,7 @@ public class BowItemMixin {
   private void redirectSetOnFireFor(PersistentProjectileEntity caller, int seconds, ItemStack bow, World world, LivingEntity user, int remainingUseTicks) {
     FireEnchantment fireEnchantment = FireEnchantmentHelper.getWhichFlame(bow);
     if (fireEnchantment.isApplied()) {
-      FireManager.setOnFire(caller, seconds, fireEnchantment.getFireId());
+      FireManager.setOnFire(caller, seconds, fireEnchantment.getFireType());
     }
   }
 }
