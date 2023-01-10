@@ -17,8 +17,6 @@ public final class SoulFiredLoader implements ModInitializer {
    */
   public static final String MODID = "soulfired";
 
-  private SoulFiredLoader() {}
-
   @Override
   public void onInitialize() {
     ModLoadingContext.registerConfig(MODID, Type.COMMON, SoulFiredConfig.SPEC);
