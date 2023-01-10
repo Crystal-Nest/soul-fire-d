@@ -24,9 +24,10 @@ Burning from Soul Fire will deal 2 damage per second.
 For instance, but not limited to, zombies burning from Soul Fire and arrows passing through Soul Fire can set their targets on Soul Fire.  
 ![Arrows](https://github.com/Nyphet/mod-fancy-assets/blob/main/soul-fire-d/arrow.gif?raw=true)
 - **Two new enchantments: Soul Fire Aspect and Soul Flame.**  
-As their name suggests, they work exactly the same as Fire Aspect and Flame with the only difference being the kind of fire the target will burn from, with the consequent damage increase.
+As their name suggests, they work exactly the same as Fire Aspect and Flame with the only difference being the kind of fire the target will burn from, with the consequent damage increase.  
+Both these enchantments can be individually enabled (default) or disabled, having each a configuration option.  
 - **API for custom fire types:**  
-For modders who want to add their own custom fire(s), this mod provides an *easy-to-use* API to register your fire(s) and have it(them) behave consistently **automatically**. Furthermore for each new modded fire that uses this API there will be new custom Fire Aspect and Flame enchantments available in game **automatically**.  
+For modders who want to add their own custom fire(s), or implement another mod's fire, this mod provides an *easy-to-use* API to register your fire(s) and have it(them) behave consistently **automatically**. Furthermore for each new fire registered using this API there can be new custom Fire Aspect and Flame enchantments available in game **automatically**.  
 See the bottom section *For developers* to know more.
 
 ## **License and right of use**
