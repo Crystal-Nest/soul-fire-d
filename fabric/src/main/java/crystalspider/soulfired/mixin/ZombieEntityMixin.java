@@ -17,13 +17,13 @@ public abstract class ZombieEntityMixin implements FireTyped {
   /**
    * Injects into the method {@link Entity#setOnFireFor(int)} inside the method {@link ZombieEntity#tryAttack(Entity)}.
    * <p>
-   * Sets the correct FireId to the {@link Entity} being set on fire.
+   * Sets the correct Fire Type to the {@link Entity} being set on fire.
    * 
    * @param caller {@link Entity} invoking (owning) the redirected method.
    * @param seconds amount of seconds the entity should be set on fire for.
    */
   @Redirect(method = "tryAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setOnFireFor(I)V"))
   private void redirectSetOnFireFor(Entity caller, int seconds) {
-    FireManager.setOnFire(caller, seconds, getFireId());
+    FireManager.setOnFire(caller, seconds, getFireType());
   }
 }

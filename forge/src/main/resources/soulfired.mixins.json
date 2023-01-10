@@ -12,7 +12,6 @@
     "EnchantmentHelperMixin",
     "EntityMixin",
     "PlayerMixin",
-    "SoulFireBlockMixin",
     "ZombieMixin"
   ],
   "client": [

@@ -12,11 +12,10 @@ version = "${minecraft_version}-${mod_version}-${loader.toLowerCase()}"
 group = project.group
 
 repositories {
-  // Add repositories to retrieve artifacts from in here.
-  // You should only use this when depending on other mods because
-  // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-  // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-  // for more information about repositories.
+  maven {
+    name = "Fuzs Mod Resources"
+    url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+  }
 }
 
 dependencies {
@@ -26,6 +25,9 @@ dependencies {
 
   // Fabric API. This is technically optional, but you probably want it anyway.
   modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+
+  // Forge Config API Port to handle configuration.
+  modImplementation "net.minecraftforge:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
 }
 
 def resourceTarget = 'fabric.mod.json'
@@ -39,7 +41,8 @@ def replaceProperties = [
   loader_version: loader_version,
   group: group,
   author: author,
-  github_user: github_user
+  github_user: github_user,
+  forgeconfigapiport_version: forgeconfigapiport_version
 ]
 
 processResources {
@@ -105,6 +108,7 @@ curseforge {
       displayName = "[${loader} - ${minecraft_version}] ${mod_title} v${mod_version}"
       relations {
         requiredDependency 'fabric-api'
+        requiredDependency 'forge-config-api-port-fabric'
       }
     }
   }

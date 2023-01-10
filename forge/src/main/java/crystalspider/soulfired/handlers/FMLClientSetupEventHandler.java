@@ -13,7 +13,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
  * Handles the registry events.
  */
 @EventBusSubscriber(value = Dist.CLIENT, bus = Bus.MOD)
-public class FMLClientSetupEventHandler {
+public final class FMLClientSetupEventHandler {
+  private FMLClientSetupEventHandler() {}
+
   /**
    * Handles the {@link FMLClientSetupEvent} event.
    * <p>
@@ -23,8 +25,6 @@ public class FMLClientSetupEventHandler {
    */
   @SubscribeEvent
   public static void handle(FMLClientSetupEvent event) {
-    for (Fire fire : FireManager.getFires()) {
-      FireClientManager.registerFire(fire);
-    }
+    FireClientManager.registerFires(FireManager.getFires());
   }
 }

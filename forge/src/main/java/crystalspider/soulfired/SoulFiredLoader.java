@@ -3,13 +3,13 @@ package crystalspider.soulfired;
 import com.mojang.serialization.Codec;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.handlers.RegistryEventHandler;
+import crystalspider.soulfired.config.SoulFiredConfig;
 import crystalspider.soulfired.loot.ChestLootModifier;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -21,7 +21,7 @@ import net.minecraftforge.registries.RegistryObject;
  * Soul fire'd mod loader.
  */
 @Mod(SoulFiredLoader.MODID)
-public class SoulFiredLoader {
+public final class SoulFiredLoader {
   /**
    * ID of this mod.
    */
@@ -30,7 +30,7 @@ public class SoulFiredLoader {
   /**
    * Network channel protocol version.
    */
-  public static final String PROTOCOL_VERSION = "1.19-2.0";
+  public static final String PROTOCOL_VERSION = "1.19-3.0";
   /**
    * {@link SimpleChannel} instance for compatibility client-server.
    */
@@ -47,21 +47,17 @@ public class SoulFiredLoader {
   public static final RegistryObject<Codec<ChestLootModifier>> CHEST_LOOT_MODIFIER = LOOT_MODIFIERS.register("chest_loot_modifier", ChestLootModifier.CODEC);
 
   /**
-   * Registers the {@link RegistryEventHandler} to the mod bus.
-   * <p>
-   * Registers Soul Fire as modded fire.
+   * Registers {@link SoulFiredConfig}, {@link #LOOT_MODIFIERS} and Soul Fire.
    */
   public SoulFiredLoader() {
-    IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-    modEventBus.register(new RegistryEventHandler());
+    ModLoadingContext.get().registerConfig(Type.COMMON, SoulFiredConfig.SPEC);
+    LOOT_MODIFIERS.register(FMLJavaModLoadingContext.get().getModEventBus());
     FireManager.registerFire(
-      FireManager.fireBuilder()
-        .setModId(MODID)
-        .setId(FireManager.SOUL_FIRE_ID)
+      FireManager.fireBuilder(FireManager.SOUL_FIRE_TYPE)
         .setDamage(2)
-        .setSourceBlock(Blocks.SOUL_FIRE)
+        .setFireAspectConfig(builder -> builder.setEnabled(SoulFiredConfig::getEnableSoulFireAspect))
+        .setFlameConfig(builder -> builder.setEnabled(SoulFiredConfig::getEnableSoulFlame))
       .build()
     );
-    LOOT_MODIFIERS.register(modEventBus);
   }
 }
