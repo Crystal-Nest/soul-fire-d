@@ -13,9 +13,12 @@ public class FireDamageSource extends DamageSource {
     super(name);
   }
 
+  @Override
   public FireDamageSource setBypassesArmor() {
     return (FireDamageSource) super.setBypassesArmor();
   }
+
+  @Override
   public FireDamageSource setFire() {
     return (FireDamageSource) super.setFire();
   }

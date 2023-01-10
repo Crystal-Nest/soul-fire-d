@@ -9,6 +9,7 @@ import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import crystalspider.soulfired.config.SoulFiredConfig;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +25,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 /**
  * Chests loot modifier.
  */
-public class ChestLootModifier extends LootModifier {
+public final class ChestLootModifier extends LootModifier {
   /**
    * Additional items to add to the chest loot.
    */
@@ -35,7 +36,7 @@ public class ChestLootModifier extends LootModifier {
    */
   public static final Supplier<Codec<ChestLootModifier>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.create(instance -> codecStart(instance).and(Addition.CODEC.listOf().fieldOf("additions").forGetter(modifier -> modifier.additions)).apply(instance, ChestLootModifier::new)));
 
-  protected ChestLootModifier(LootItemCondition[] conditionsIn, List<Addition> additions) {
+  private ChestLootModifier(LootItemCondition[] conditionsIn, List<Addition> additions) {
     super(conditionsIn);
     this.additions = additions;
   }
@@ -47,7 +48,7 @@ public class ChestLootModifier extends LootModifier {
       generatedLoot = new ObjectArrayList<>();
     }
     for (Addition addition : additions) {
-      if (context.getRandom().nextFloat() <= addition.chance) {
+      if (SoulFiredConfig.getEnableSoulFlame() && context.getRandom().nextFloat() <= addition.chance) {
         generatedLoot.add(addition.getEnchantedBook());
       }
     }
@@ -62,7 +63,7 @@ public class ChestLootModifier extends LootModifier {
   /**
    * A single enchantment addition to the loot.
    */
-  private static class Addition {
+  private static final class Addition {
     /**
      * {@link Codec}.
      */

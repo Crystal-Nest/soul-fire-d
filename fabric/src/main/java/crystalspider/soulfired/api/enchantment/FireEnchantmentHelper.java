@@ -20,7 +20,9 @@ import net.minecraft.util.Identifier;
 /**
  * Helper for Fire related enchantments (Fire Aspect and Flame).
  */
-public class FireEnchantmentHelper {
+public final class FireEnchantmentHelper {
+  private FireEnchantmentHelper() {}
+
   /**
    * Returns the level of the base Fire Aspect enchantment.
    * 
@@ -151,20 +153,20 @@ public class FireEnchantmentHelper {
    * @param getLevel
    * @return the {@link FireEnchantment data} of whatever Fire enchantment in the enchantments list is applied.
    */
-  private static <T> FireEnchantment getAnyFireEnchantment(T stack, List<Enchantment> enchantments, Function<T, Integer> getBaseFireEnchantment, BiFunction<Enchantment, T, Integer> getLevel) {
+  private static <T> FireEnchantment getAnyFireEnchantment(T stack, List<? extends Enchantment> enchantments, Function<T, Integer> getBaseFireEnchantment, BiFunction<Enchantment, T, Integer> getLevel) {
     int fireEnchantmentLevel = getBaseFireEnchantment.apply(stack);
-    String fireId = FireManager.BASE_FIRE_ID;
+    Identifier fireType = FireManager.DEFAULT_FIRE_TYPE;
     if (fireEnchantmentLevel <= 0) {
       for (Enchantment enchantment : enchantments) {
         int enchantmentLevel = getLevel.apply(enchantment, stack);
         if (enchantmentLevel > 0) {
           fireEnchantmentLevel = enchantmentLevel;
-          fireId = ((FireTyped) enchantment).getFireId();
+          fireType = ((FireTyped) enchantment).getFireType();
           break;
         }
       }
     }
-    return new FireEnchantment(fireEnchantmentLevel, fireEnchantmentLevel > 0 ? fireId : null);
+    return new FireEnchantment(fireEnchantmentLevel, fireEnchantmentLevel > 0 ? fireType : null);
   }
 
   /**
@@ -226,18 +228,18 @@ public class FireEnchantmentHelper {
      */
     private final int level;
     /**
-     * Fire Id of the enchantment, invalid if none.
+     * Fire Type of the enchantment, invalid if none.
      */
-    private final String fireId;
+    private final Identifier fireType;
     /**
      * Whether there's a fire enchantment applied at all.
      */
     private final boolean applied;
 
-    FireEnchantment(int level, String fireId) {
+    FireEnchantment(int level, Identifier fireType) {
       this.level = level;
-      this.fireId = fireId;
-      this.applied = level > 0 && (FireManager.BASE_FIRE_ID.equals(fireId) || FireManager.isFireId(fireId));
+      this.fireType = fireType;
+      this.applied = level > 0 && (FireManager.DEFAULT_FIRE_TYPE.equals(fireType) || FireManager.isRegisteredType(fireType));
     }
 
     /**
@@ -250,12 +252,12 @@ public class FireEnchantmentHelper {
     }
 
     /**
-     * Returns this {@link #fireId}.
+     * Returns this {@link #fireType}.
      * 
-     * @return this {@link #fireId}.
+     * @return this {@link #fireType}.
      */
-    public String getFireId() {
-      return fireId;
+    public Identifier getFireType() {
+      return fireType;
     }
 
     /**
