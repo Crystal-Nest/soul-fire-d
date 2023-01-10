@@ -18,7 +18,7 @@ import net.minecraft.util.Identifier;
  * Injects into {@link InGameOverlayRenderer} to alter Fire behavior for consistency.
  */
 @Mixin(InGameOverlayRenderer.class)
-public class InGameOverlayRendererMixin {
+public abstract class InGameOverlayRendererMixin {
   /**
    * Modifies the assignment value returned by the call to {@link SpriteIdentifier#getSprite()} in the method {@link InGameOverlayRenderer#renderFireOverlay(MinecraftClient, MatrixStack)}.
    * <p>

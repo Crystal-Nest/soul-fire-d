@@ -23,7 +23,7 @@ import net.minecraftforge.event.ForgeEventFactory;
  * Injects into {@link OverlayRenderer} to alter Fire behavior for consistency.
  */
 @Mixin(OverlayRenderer.class)
-public class OverlayRendererMixin {
+public abstract class OverlayRendererMixin {
   /**
    * Redirects the call to {@link ForgeEventFactory#renderFireOverlay(PlayerEntity, MatrixStack)} inside the method {@link OverlayRenderer#renderScreenEffect(Minecraft, MatrixStack)}.
    * <p>

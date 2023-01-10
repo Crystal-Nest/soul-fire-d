@@ -13,7 +13,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
  * Handles the registry events.
  */
 @EventBusSubscriber(value = Dist.CLIENT, bus = Bus.MOD)
-public class FMLClientSetupEventHandler {
+public final class FMLClientSetupEventHandler {
+  private FMLClientSetupEventHandler() {}
+
   /**
    * Handles the {@link FMLClientSetupEvent} event.
    * <p>

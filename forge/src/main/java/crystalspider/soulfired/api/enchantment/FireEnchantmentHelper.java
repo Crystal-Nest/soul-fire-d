@@ -21,7 +21,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 /**
  * Helper for Fire related enchantments (Fire Aspect and Flame).
  */
-public class FireEnchantmentHelper {
+public final class FireEnchantmentHelper {
+  private FireEnchantmentHelper() {}
+
   /**
    * Returns the level of the base Fire Aspect enchantment.
    * 

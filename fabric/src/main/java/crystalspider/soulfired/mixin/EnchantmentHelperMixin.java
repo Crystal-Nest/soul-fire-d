@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
  * Injects into {@link EnchantmentHelper} to alter the levels returned by the enchantment level getters for Fire Aspect and Flame to include any Fire.
  */
 @Mixin(EnchantmentHelper.class)
-public class EnchantmentHelperMixin {
+public abstract class EnchantmentHelperMixin {
   /**
    * Injects at the start of the method {@link EnchantmentHelper#getEquipmentLevel(Enchantment, LivingEntity)}.
    * <p>

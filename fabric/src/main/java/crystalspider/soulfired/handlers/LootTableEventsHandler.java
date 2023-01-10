@@ -18,7 +18,9 @@ import net.minecraft.util.Identifier;
 /**
  * {@link LootTableEvents} handler.
  */
-public class LootTableEventsHandler {
+public final class LootTableEventsHandler {
+  private LootTableEventsHandler() {}
+
   /**
    * {@link Identifier} of bastion chests.
    */
