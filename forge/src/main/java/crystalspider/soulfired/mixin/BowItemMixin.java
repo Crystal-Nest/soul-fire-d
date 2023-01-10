@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
  * Injects into {@link BowItem} to alter Fire behavior for consistency.
  */
 @Mixin(BowItem.class)
-public class BowItemMixin {
+public abstract class BowItemMixin {
   /**
    * Redirects the call to {@link AbstractArrow#setSecondsOnFire(int)} inside the method {@link BowItem#releaseUsing(ItemStack, Level, LivingEntity, int)}.
    * <p>

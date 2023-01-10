@@ -23,7 +23,7 @@ import net.minecraftforge.event.ForgeEventFactory;
  * Injects into {@link ScreenEffectRenderer} to alter Fire behavior for consistency.
  */
 @Mixin(ScreenEffectRenderer.class)
-public class ScreenEffectRendererMixin {
+public abstract class ScreenEffectRendererMixin {
   /**
    * Redirects the call to {@link ForgeEventFactory#renderFireOverlay(Player, PoseStack)} inside the method {@link ScreenEffectRenderer#renderScreenEffect(Minecraft, PoseStack)}.
    * <p>

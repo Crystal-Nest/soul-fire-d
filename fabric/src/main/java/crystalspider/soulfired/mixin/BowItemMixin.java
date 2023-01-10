@@ -17,7 +17,7 @@ import net.minecraft.world.World;
  * Injects into {@link BowItem} to alter Fire behavior for consistency.
  */
 @Mixin(BowItem.class)
-public class BowItemMixin {
+public abstract class BowItemMixin {
   /**
    * Redirects the call to {@link PersistentProjectileEntity#setOnFireFor(int)} inside the method {@link BowItem#onStoppedUsing(ItemStack, World, LivingEntity, int)}.
    * <p>

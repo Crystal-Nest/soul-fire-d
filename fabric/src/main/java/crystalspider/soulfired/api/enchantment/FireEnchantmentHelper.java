@@ -20,7 +20,9 @@ import net.minecraft.util.Identifier;
 /**
  * Helper for Fire related enchantments (Fire Aspect and Flame).
  */
-public class FireEnchantmentHelper {
+public final class FireEnchantmentHelper {
+  private FireEnchantmentHelper() {}
+
   /**
    * Returns the level of the base Fire Aspect enchantment.
    * 

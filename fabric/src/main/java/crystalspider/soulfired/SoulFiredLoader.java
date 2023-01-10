@@ -11,11 +11,13 @@ import net.minecraftforge.api.ModLoadingContext;
 /**
  * Soul fire'd mod loader.
  */
-public class SoulFiredLoader implements ModInitializer {
+public final class SoulFiredLoader implements ModInitializer {
   /**
    * ID of this mod.
    */
   public static final String MODID = "soulfired";
+
+  private SoulFiredLoader() {}
 
   @Override
   public void onInitialize() {

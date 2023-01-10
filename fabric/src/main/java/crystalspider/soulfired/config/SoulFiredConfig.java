@@ -6,7 +6,7 @@ import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 /**
  * Soul Fire'd Configuration.
  */
-public class SoulFiredConfig {
+public final class SoulFiredConfig {
   /**
    * {@link ForgeConfigSpec} {@link ForgeConfigSpec.Builder Builder}.
    */
@@ -41,7 +41,7 @@ public class SoulFiredConfig {
   /**
    * Common Configuration for Torch hit!.
    */
-  public static class CommonConfig {
+  public static final class CommonConfig {
     /**
      * Whether to enable Soul Fire Aspect enchantment.
      */

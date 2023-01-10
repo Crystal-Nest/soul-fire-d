@@ -18,11 +18,13 @@ import net.minecraft.util.Identifier;
 /**
  * {@link LootTableEvents} handler.
  */
-public class LootTableEventsHandler {
+public final class LootTableEventsHandler {
   /**
    * {@link Identifier} of bastion chests.
    */
   private static final Identifier BASTION_CHEST_IDENTIFIER = new Identifier("minecraft", "chests/bastion_other");
+
+  private LootTableEventsHandler() {}
 
   /**
    * Handles modifing Vanilla loot table to include Soul Flame enchantment.

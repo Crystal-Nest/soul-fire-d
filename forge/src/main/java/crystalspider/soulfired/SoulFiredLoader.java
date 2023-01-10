@@ -19,7 +19,7 @@ import net.minecraftforge.registries.RegistryObject;
  * Soul fire'd mod loader.
  */
 @Mod(SoulFiredLoader.MODID)
-public class SoulFiredLoader {
+public final class SoulFiredLoader {
   /**
    * ID of this mod.
    */

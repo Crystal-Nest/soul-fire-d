@@ -12,7 +12,9 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
  * Handles the registry events.
  */
 @EventBusSubscriber(bus = Bus.MOD)
-public class RegistryEventHandler {
+public final class RegistryEventHandler {
+  private RegistryEventHandler() {}
+
   /**
    * Handles the {@link Register} event for {@link Enchantment Enchantments}.
    * <p>
