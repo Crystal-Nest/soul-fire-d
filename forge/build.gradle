@@ -1,35 +1,36 @@
 buildscript {
   repositories {
-    maven { url = 'https://maven.minecraftforge.net' }
+    maven { url = "https://maven.minecraftforge.net" }
     mavenCentral()
   }
   dependencies {
-    classpath 'org.spongepowered:mixingradle:0.7.+'
+    classpath "org.spongepowered:mixingradle:0.7.+"
   }
 }
 plugins {
   id 'net.minecraftforge.gradle' version '5.1.+'
-  id 'com.matthewprenger.cursegradle' version "${cursegradle_version}"
-  id "com.github.breadmoirai.github-release" version "${github_release_version}"
+  id "com.modrinth.minotaur" version "2.+"
+  id "com.matthewprenger.cursegradle" version "1.4.+"
+  id "com.github.breadmoirai.github-release" version "2.4.+"
 }
-apply plugin: 'org.spongepowered.mixin'
+apply plugin: "org.spongepowered.mixin"
 
-archivesBaseName = project.modid
+archivesBaseName = modid
 version = "${minecraft_version}-${mod_version}-${loader.toLowerCase()}"
 group = project.group
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-  mappings channel: 'official', version: "${minecraft_version}"
-  // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
+  mappings channel: "official", version: minecraft_version
+  // accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg") // Currently, this location cannot be changed from the default.
   runs {
     client {
-      workingDirectory project.file('run')
-      property 'forge.logging.markers', 'REGISTRIES'
+      workingDirectory project.file("run")
+      property "forge.logging.markers", "REGISTRIES"
       // https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-      property 'forge.logging.console.level', 'debug'
-      property 'forge.enabledGameTestNamespaces', "${modid}"
+      property "forge.logging.console.level", "debug"
+      property "forge.enabledGameTestNamespaces", modid
       mods {
         "${modid}" {
           source sourceSets.main
@@ -37,11 +38,11 @@ minecraft {
       }
     }
     server {
-      workingDirectory project.file('run')
-      property 'forge.logging.markers', 'REGISTRIES'
+      workingDirectory project.file("run")
+      property "forge.logging.markers", "REGISTRIES"
       // https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-      property 'forge.logging.console.level', 'debug'
-      property 'forge.enabledGameTestNamespaces', "${modid}"
+      property "forge.logging.console.level", "debug"
+      property "forge.enabledGameTestNamespaces", modid
       mods {
         "${modid}" {
           source sourceSets.main
@@ -49,11 +50,11 @@ minecraft {
       }
     }
     gameTestServer {
-      workingDirectory project.file('run')
-      property 'forge.logging.markers', 'REGISTRIES'
+      workingDirectory project.file("run")
+      property "forge.logging.markers", "REGISTRIES"
       // https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-      property 'forge.logging.console.level', 'debug'
-      property 'forge.enabledGameTestNamespaces', "${modid}"
+      property "forge.logging.console.level", "debug"
+      property "forge.enabledGameTestNamespaces", modid
       mods {
         "${modid}" {
           source sourceSets.main
@@ -61,11 +62,11 @@ minecraft {
       }
     }
     data {
-      workingDirectory project.file('run')
-      property 'forge.logging.markers', 'REGISTRIES'
+      workingDirectory project.file("run")
+      property "forge.logging.markers", "REGISTRIES"
       // https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-      property 'forge.logging.console.level', 'debug'
-      args '--mod', "${modid}", '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+      property "forge.logging.console.level", "debug"
+      args "--mod", modid, "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources/")
       mods {
         "${modid}" {
           source sourceSets.main
@@ -75,7 +76,7 @@ minecraft {
   }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main.resources { srcDir "src/generated/resources" }
 
 repositories {
   maven {
@@ -88,7 +89,7 @@ repositories {
 
 dependencies {
   minecraft "net.minecraftforge:forge:${minecraft_version}-${loader_version}${forge_subversion}"
-  annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+  annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 
   // Ensorcellation optional dependencies
   implementation fg.deobf("curse.maven:ensorcellation-349447:4112124")
@@ -96,11 +97,11 @@ dependencies {
 }
 
 mixin {
-  add sourceSets.main, 'soulfired.refmap.json'
-  config 'soulfired.mixins.json'
+  add sourceSets.main, "soulfired.refmap.json"
+  config "soulfired.mixins.json"
 }
 
-def resourceTarget = 'META-INF/mods.toml'
+def resourceTarget = "META-INF/mods.toml"
 def intoTargets = ["$rootDir/bin/main/"]
 def replaceProperties = [
   modid: modid,
@@ -116,7 +117,7 @@ def replaceProperties = [
 
 processResources {
   inputs.properties replaceProperties
-  replaceProperties.put 'project', project
+  replaceProperties.put "project", project
 
   filesMatching(resourceTarget) {
     expand replaceProperties
@@ -152,7 +153,7 @@ jar {
 }
 
 tasks.withType(JavaCompile).configureEach {
-  it.options.encoding = 'UTF-8'
+  it.options.encoding = "UTF-8"
   it.options.release = 17
 }
 
@@ -165,30 +166,42 @@ file("../api-keys.properties").withReader {
 }
 
 curseforge {
-  apiKey = "${api_keys.curseforge}"
+  apiKey = api_keys.curseforge
   project {
-    id = "${curseforge_id}"
-    changelogType = 'markdown'
+    id = curseforge_id
+    changelogType = "markdown"
     changelog = changelog_body
-    releaseType = 'release'
-    addGameVersion "${loader}"
-    addGameVersion "${minecraft_version}"
+    releaseType = "release"
+    addGameVersion loader
+    addGameVersion minecraft_version
     mainArtifact(jar) {
       displayName = "[${loader} - ${minecraft_version}] ${mod_title} v${mod_version}"
       // relations {}
     }
   }
   options {
+    detectNewerJava = true
     forgeGradleIntegration = false
   }
 }
 
+modrinth {
+  token = api_keys.modrinth
+  projectId = modid_kebab
+  versionNumber = mod_version
+  versionType = "release"
+  uploadFile = jar
+  gameVersions = [minecraft_version]
+  loaders = [loader.toLowerCase()]
+  dependencies {}
+}
+
 githubRelease {
-  token "${api_keys.github}"
-  owner "${github_user}"
-  repo "${modid_kebab}"
+  token api_keys.github
+  owner github_user
+  repo modid_kebab
   tagName "v${minecraft_version}-${mod_version}"
-  targetCommitish "${minecraft_version}"
+  targetCommitish minecraft_version
   releaseName "v${minecraft_version}-${mod_version}"
   generateReleaseNotes false
   body changelog_body
