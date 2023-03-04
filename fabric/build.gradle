@@ -125,7 +125,7 @@ modrinth {
   versionNumber = mod_version
   versionName = "[${loader} - ${minecraft_version}] ${mod_title} v${mod_version}"
   changelog = changelog_body
-  uploadFile = jar
+  uploadFile = remapJar
   versionType = "release"
   gameVersions = [minecraft_version]
   loaders = [loader.toLowerCase()]
