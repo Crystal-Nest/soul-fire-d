@@ -129,7 +129,7 @@ modrinth {
   loaders = [loader.toLowerCase()]
   dependencies {
     required.project "fabric-api"
-    required.project "forge-config-api-port-fabric"
+    required.project "forge-config-api-port"
   }
 }
 
