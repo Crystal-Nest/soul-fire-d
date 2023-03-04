@@ -1,13 +1,14 @@
 plugins {
-  id 'fabric-loom' version '1.0-SNAPSHOT'
-  id 'com.matthewprenger.cursegradle' version "${cursegradle_version}"
-  id "com.github.breadmoirai.github-release" version "${github_release_version}"
+  id "fabric-loom" version "1.0-SNAPSHOT"
+  id "com.modrinth.minotaur" version "2.+"
+  id "com.matthewprenger.cursegradle" version "1.4.+"
+  id "com.github.breadmoirai.github-release" version "2.4.+"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
-archivesBaseName = project.modid
+archivesBaseName = modid
 version = "${minecraft_version}-${mod_version}-${loader.toLowerCase()}"
 group = project.group
 
@@ -30,7 +31,7 @@ dependencies {
   modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
 }
 
-def resourceTarget = 'fabric.mod.json'
+def resourceTarget = "fabric.mod.json"
 def intoTargets = ["$rootDir/bin/main/"]
 def replaceProperties = [
   modid: modid,
@@ -47,7 +48,7 @@ def replaceProperties = [
 
 processResources {
   inputs.properties replaceProperties
-  replaceProperties.put 'project', project
+  replaceProperties.put "project", project
 
   filesMatching(resourceTarget) {
     expand replaceProperties
@@ -83,7 +84,7 @@ jar {
 }
 
 tasks.withType(JavaCompile).configureEach {
-  it.options.encoding = 'UTF-8'
+  it.options.encoding = "UTF-8"
   it.options.release = 17
 }
 
@@ -96,33 +97,48 @@ file("../api-keys.properties").withReader {
 }
 
 curseforge {
-  apiKey = "${api_keys.curseforge}"
+  apiKey = api_keys.curseforge
   project {
-    id = "${curseforge_id}"
-    changelogType = 'markdown'
+    id = curseforge_id
+    changelogType = "markdown"
     changelog = changelog_body
-    releaseType = 'release'
-    addGameVersion "${loader}"
-    addGameVersion "${minecraft_version}"
+    releaseType = "release"
+    addGameVersion loader
+    addGameVersion minecraft_version
     mainArtifact(remapJar) {
       displayName = "[${loader} - ${minecraft_version}] ${mod_title} v${mod_version}"
       relations {
-        requiredDependency 'fabric-api'
-        requiredDependency 'forge-config-api-port-fabric'
+        requiredDependency "fabric-api"
+        requiredDependency "forge-config-api-port-fabric"
       }
     }
   }
   options {
+    detectNewerJava = true
     forgeGradleIntegration = false
   }
 }
 
+modrinth {
+  token = api_keys.modrinth
+  projectId = modid_kebab
+  versionNumber = mod_version
+  versionType = "release"
+  uploadFile = remapJar
+  gameVersions = [minecraft_version]
+  loaders = [loader.toLowerCase()]
+  dependencies {
+    required.project "fabric-api"
+    required.project "forge-config-api-port"
+  }
+}
+
 githubRelease {
-  token "${api_keys.github}"
-  owner "${github_user}"
-  repo "${modid_kebab}"
+  token api_keys.github
+  owner github_user
+  repo modid_kebab
   tagName "v${minecraft_version}-${mod_version}"
-  targetCommitish "${minecraft_version}"
+  targetCommitish minecraft_version
   releaseName "v${minecraft_version}-${mod_version}"
   generateReleaseNotes false
   body changelog_body
