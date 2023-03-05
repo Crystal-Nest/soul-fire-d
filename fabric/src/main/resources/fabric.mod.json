@@ -8,7 +8,7 @@
     "${author}"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/soul-fired",
+    "homepage": "https://modrinth.com/mod/${modid_kebab}",
     "issues": "https://github.com/${github_user}/${modid_kebab}/issues",
     "sources": "https://github.com/${github_user}/${modid_kebab}/tree/${minecraft_version}"
   },
