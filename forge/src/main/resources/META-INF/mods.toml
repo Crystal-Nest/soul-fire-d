@@ -1,12 +1,12 @@
 modLoader="javafml"
 loaderVersion="[${loader_version},)"
-license="GNU AGPLv3"
+license="GPL-3.0-or-later"
 issueTrackerURL="https://github.com/${github_user}/${modid_kebab}/issues" #optional
 [[mods]]
 modId="${modid}"
 version="${mod_version}"
 displayName="${mod_title}"
-updateJSONURL="https://raw.githubusercontent.com/${github_user}/${modid_kebab}/master/forge/updates.json" #optional
+updateJSONURL="https://api.modrinth.com/updates/${modid_kebab}/forge_updates.json" #optional
 displayURL="https://github.com/${github_user}/${modid_kebab}/tree/${minecraft_version}" #optional
 logoFile="${modid_kebab}.gif" #optional
 # credits="Thank who deserves it." #optional
