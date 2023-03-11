@@ -32,21 +32,21 @@ public final class FireTypedFlameEnchantment extends FlameEnchantment implements
   /**
    * Whether the enchantment is treasure only.
    */
-  private final boolean isTreasure;
+  private final Supplier<Boolean> isTreasure;
   /**
    * Whether the enchantment is a curse.
    */
-  private final boolean isCurse;
+  private final Supplier<Boolean> isCurse;
   /**
    * Whether the enchantment can appear in the enchanted book trade offers of librarian villagers.
    */
-  private final boolean isTradeable;
+  private final Supplier<Boolean> isTradeable;
   /**
    * Whether the enchantment will appear in the enchanting table or loots with random enchant function.
    * <p>
    * Note that {@link #isTreasure} takes precedence.
    */
-  private final boolean isDiscoverable;
+  private final Supplier<Boolean> isDiscoverable;
 
   /**
    * @param fireType {@link #fireType}.
@@ -58,7 +58,7 @@ public final class FireTypedFlameEnchantment extends FlameEnchantment implements
    * @param enabled {@link #enabled}.
    * @param compatibility {@link #compatibility}.
    */
-  FireTypedFlameEnchantment(Identifier fireType, Rarity rarity, boolean isTreasure, boolean isCurse, boolean isTradeable, boolean isDiscoverable, Supplier<Boolean> enabled, Function<Enchantment, Boolean> compatibility) {
+  FireTypedFlameEnchantment(Identifier fireType, Rarity rarity, Supplier<Boolean> isTreasure, Supplier<Boolean> isCurse, Supplier<Boolean> isTradeable, Supplier<Boolean> isDiscoverable, Supplier<Boolean> enabled, Function<Enchantment, Boolean> compatibility) {
     super(rarity, EquipmentSlot.MAINHAND);
     this.fireType = FireManager.sanitize(fireType);
     this.isTreasure = isTreasure;
@@ -81,22 +81,22 @@ public final class FireTypedFlameEnchantment extends FlameEnchantment implements
   
   @Override
   public boolean isTreasure() {
-    return isTreasure;
+    return isTreasure.get();
   }
 
   @Override
   public boolean isCursed() {
-    return isCurse;
+    return isCurse.get();
   }
 
   @Override
   public boolean isAvailableForEnchantedBookOffer() {
-    return isTradeable && enabled.get();
+    return isTradeable.get() && enabled.get();
   }
 
   @Override
   public boolean isAvailableForRandomSelection() {
-    return isDiscoverable && enabled.get();
+    return isDiscoverable.get() && enabled.get();
   }
 
   @Override

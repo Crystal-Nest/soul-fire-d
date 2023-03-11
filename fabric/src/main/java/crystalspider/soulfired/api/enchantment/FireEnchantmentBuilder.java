@@ -36,31 +36,31 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
    */
   protected Rarity rarity = Rarity.VERY_RARE;
   /**
-   * Whether the enchantment is treasure only.
+   * {@link Supplier} for whether the enchantment is treasure only.
    * <p>
-   * Defaults to {@code false}
+   * Defaults to {@code () -> false}
    */
-  protected boolean isTreasure = false;
+  protected Supplier<Boolean> isTreasure = () -> false;
   /**
-   * Whether the enchantment is a curse.
+   * {@link Supplier} for whether the enchantment is a curse.
    * <p>
-   * Defaults to {@code false}
+   * Defaults to {@code () -> false}
    */
-  protected boolean isCurse = false;
+  protected Supplier<Boolean> isCurse = () -> false;
   /**
-   * Whether the enchantment can appear in the enchanted book trade offers of librarian villagers.
+   * {@link Supplier} for whether the enchantment can appear in the enchanted book trade offers of librarian villagers.
    * <p>
-   * Defaults to {@code true}
+   * Defaults to {@code () -> true}
    */
-  protected boolean isTradeable = true;
+  protected Supplier<Boolean> isTradeable = () -> true;
   /**
-   * Whether the enchantment will appear in the enchanting table or loots with random enchant function.
+   * {@link Supplier} for whether the enchantment will appear in the enchanting table or loots with random enchant function.
    * <p>
    * Note that {@link #isTreasure} takes precedence.
    * <p>
-   * Defaults to {@code true}
+   * Defaults to {@code () -> true}
    */
-  protected boolean isDiscoverable = true;
+  protected Supplier<Boolean> isDiscoverable = () -> true;
 
   /**
    * @param fireType {@link #fireType}.
@@ -72,7 +72,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
   /**
    * Sets the enchantment {@link #rarity}.
    * 
-   * @param <B>
+   * @param <B> builder type.
    * @param rarity
    * @return this Builder to either set other properties or {@link #build}.
    */
@@ -82,57 +82,101 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
   }
 
   /**
+   * Sets {@link #isTreasure} {@link Supplier}.
+   * 
+   * @param <B> builder type.
+   * @param isTreasure
+   * @return this Builder to either set other properties or {@link #build}.
+   */
+  public final <B extends FireEnchantmentBuilder<T>> B setIsTreasure(Supplier<Boolean> isTreasure) {
+    this.isTreasure = isTreasure;
+    return (B) this;
+  }
+
+  /**
    * Sets {@link #isTreasure}.
    * 
-   * @param <B>
+   * @param <B> builder type.
    * @param isTreasure
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setIsTreasure(boolean isTreasure) {
-    this.isTreasure = isTreasure;
+    return setIsTreasure(() -> isTreasure);
+  }
+
+  /**
+   * Sets {@link #isCurse} {@link Supplier}.
+   * 
+   * @param <B> builder type.
+   * @param isCurse
+   * @return this Builder to either set other properties or {@link #build}.
+   */
+  public final <B extends FireEnchantmentBuilder<T>> B setIsCurse(Supplier<Boolean> isCurse) {
+    this.isCurse = isCurse;
     return (B) this;
   }
 
   /**
    * Sets {@link #isCurse}.
    * 
-   * @param <B>
+   * @param <B> builder type.
    * @param isCurse
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setIsCurse(boolean isCurse) {
-    this.isCurse = isCurse;
+    return setIsCurse(() -> isCurse);
+  }
+
+  /**
+   * Sets {@link #isTradeable} {@link Supplier}.
+   * 
+   * @param <B> builder type.
+   * @param isTradeable
+   * @return this Builder to either set other properties or {@link #build}.
+   */
+  public final <B extends FireEnchantmentBuilder<T>> B setIsTradeable(Supplier<Boolean> isTradeable) {
+    this.isTradeable = isTradeable;
     return (B) this;
   }
 
   /**
    * Sets {@link #isTradeable}.
    * 
-   * @param <B>
+   * @param <B> builder type.
    * @param isTradeable
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setIsTradeable(boolean isTradeable) {
-    this.isTradeable = isTradeable;
+    return setIsTradeable(() -> isTradeable);
+  }
+
+  /**
+   * Sets {@link #isDiscoverable} {@link Supplier}.
+   * 
+   * @param <B> builder type.
+   * @param isDiscoverable
+   * @return this Builder to either set other properties or {@link #build}.
+   */
+  public final <B extends FireEnchantmentBuilder<T>> B setIsDiscoverable(Supplier<Boolean> isDiscoverable) {
+    this.isDiscoverable = isDiscoverable;
     return (B) this;
   }
 
   /**
    * Sets {@link #isDiscoverable}.
    * 
-   * @param <B>
+   * @param <B> builder type.
    * @param isDiscoverable
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setIsDiscoverable(boolean isDiscoverable) {
-    this.isDiscoverable = isDiscoverable;
-    return (B) this;
+    return setIsDiscoverable(() -> isDiscoverable);
   }
 
   /**
    * Sets the {@link #compatibility} {@link Function}.
    * 
-   * @param <B>
+   * @param <B> builder type.
    * @param compatibility
    * @return this Builder to either set other properties or {@link #build}.
    */
@@ -144,7 +188,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
   /**
    * Sets the {@link #enabled} {@link Supplier}.
    * 
-   * @param <B>
+   * @param <B> builder type.
    * @param enabled
    * @return this Builder to either set other properties or {@link #build}.
    */
@@ -156,7 +200,6 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
   /**
    * Builds a {@link T} instance.
    * 
-   * @param fireType
    * @return {@link T} instance.
    */
   public abstract T build();

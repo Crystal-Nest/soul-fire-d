@@ -408,7 +408,7 @@ public final class FireBuilder {
    * <p>
    * Returns {@code null} if the {@code optional} is either {@code null} or empty.
    * 
-   * @param <T>
+   * @param <T> value type.
    * @param optional
    * @return the value of the given {@link Optional}.
    */
@@ -422,8 +422,8 @@ public final class FireBuilder {
    * <p>
    * Returns {@code null} if the {@code optional} is either {@code null} or empty.
    * 
-   * @param <B>
-   * @param <E>
+   * @param <B> builder type.
+   * @param <E> enchantment type.
    * @param optional
    * @param supplier
    * @return the value obtained by calling {@link FireEnchantmentBuilder#build()}.
