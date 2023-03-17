@@ -13,7 +13,7 @@
     "sources": "https://github.com/${github_user}/${modid_kebab}/tree/${minecraft_version}"
   },
   "license": "GPL-3.0-or-later",
-  "icon": "assets/${modid}/${modid_kebab}.gif",
+  "icon": "assets/${modid}/${modid_kebab}.png",
   "environment": "*",
   "entrypoints": {
     "main": [

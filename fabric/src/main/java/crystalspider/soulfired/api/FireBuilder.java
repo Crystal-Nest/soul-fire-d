@@ -191,7 +191,7 @@ public final class FireBuilder {
   }
 
   /**
-   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code messageId} equal to {@code "in_" + id + "_fire"}.
+   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code messageId} equal to {@code "in_" + modId + "_" + fireId + "_fire"}.
    * <p>
    * The {@link DamageSource} will have both {@link DamageSource#bypassesArmor bypassesArmor} and {@link DamageSource#fire fire} set to {@code true}.
    * 
@@ -199,15 +199,15 @@ public final class FireBuilder {
    * @throws IllegalStateException if the either {@link #modId} or {@link #fireId} is not valid.
    */
   public FireBuilder setInFire() throws IllegalStateException {
-    if (FireManager.isValidFireId(fireId)) {
-      this.inFire = (new FireDamageSource("in_" + fireId + "_fire")).setBypassesArmor().setFire();
+    if (FireManager.isValidFireId(fireId) && FireManager.isValidModId(modId)) {
+      this.inFire = (new FireDamageSource("in_" + modId + "_" + fireId + "_fire")).setBypassesArmor().setFire();
       return this;
     }
     throw new IllegalStateException("Attempted to create inFire DamageSource before setting a valid id");
   }
 
   /**
-   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code messageId} equal to {@code "on_" + id + "_fire"}.
+   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code messageId} equal to {@code "on_" + modId + "_" + fireId + "_fire"}.
    * <p>
    * The {@link DamageSource} will have both {@link DamageSource#bypassesArmor bypassesArmor} and {@link DamageSource#fire fire} set to {@code true}.
    * 
@@ -215,8 +215,8 @@ public final class FireBuilder {
    * @throws IllegalStateException if the either {@link #modId} or {@link #fireId} is not valid.
    */
   public FireBuilder setOnFire() throws IllegalStateException {
-    if (FireManager.isValidFireId(fireId)) {
-      this.onFire = (new FireDamageSource("on_" + fireId + "_fire")).setBypassesArmor().setFire();
+    if (FireManager.isValidFireId(fireId) && FireManager.isValidModId(modId)) {
+      this.onFire = (new FireDamageSource("on_" + modId + "_" + fireId + "_fire")).setBypassesArmor().setFire();
       return this;
     }
     throw new IllegalStateException("Attempted to create onFire DamageSource before setting a valid id");
