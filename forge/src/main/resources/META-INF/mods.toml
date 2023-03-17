@@ -8,7 +8,7 @@ version="${mod_version}"
 displayName="${mod_title}"
 updateJSONURL="https://api.modrinth.com/updates/${modid_kebab}/forge_updates.json" #optional
 displayURL="https://github.com/${github_user}/${modid_kebab}/tree/${minecraft_version}" #optional
-logoFile="${modid_kebab}.gif" #optional
+logoFile="${modid_kebab}.png" #optional
 # credits="Thank who deserves it." #optional
 authors="${author}" #optional
 # Display Test controls the display for your mod in the server connection screen

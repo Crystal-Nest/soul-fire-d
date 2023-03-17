@@ -1,7 +1,7 @@
 ![Soul Fire'd banner](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/soul-fire-d/banner.gif)
 
 ---
-![Minecraft](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/minecraft.svg)[![1.19.3](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/1-19-3.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.19.3)![Separator](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/separator.svg)[![1.19.2](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/1-19-2.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.19.2)![Separator](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/separator.svg)[![1.18.2](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/1-18-2.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.18.2)![Separator](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/separator.svg)[![1.16.5](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/1-16-5.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.16.5)
+![Minecraft](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/minecraft.svg)[![1.19.4](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/1-19-4.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.19.4)![Separator](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/separator.svg)[![1.19.3](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/1-19-3.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.19.3)![Separator](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/separator.svg)[![1.19.2](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/1-19-2.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.19.2)![Separator](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/separator.svg)[![1.18.2](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/1-18-2.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.18.2)![Separator](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/separator.svg)[![1.16.5](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/minecraft/1-16-5.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.16.5)
 
 ![Loader](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/loader/loader.svg)[![Forge](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/loader/forge.svg)](https://modrinth.com/mod/soul-fire-d/versions?l=forge)![Separator](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/separator.svg)[![Fabric](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/loader/fabric.svg)](https://modrinth.com/mod/soul-fire-d/versions?l=fabric)
 
@@ -16,13 +16,13 @@ This mod makes Soul Fire actually work as one would expect, all whilst providing
 
 ## **Features**
 - **Soul Fire overlay**  
-![Overlay](https://github.com/Nyphet/mod-fancy-assets/blob/main/soul-fire-d/overlay.gif?raw=true)
+![Overlay](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/soul-fire-d/overlay.gif)
 - **Entities catching fire from Soul Fire will burn with actual Soul Fire.**  
 Burning from Soul Fire will deal 2 damage per second.  
-![Sheep](https://github.com/Nyphet/mod-fancy-assets/blob/main/soul-fire-d/sheep.gif?raw=true)
+![Sheep](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/soul-fire-d/sheep.gif)
 - **Actually consistent Soul Fire behavior.**  
 For instance, but not limited to, zombies burning from Soul Fire and arrows passing through Soul Fire can set their targets on Soul Fire.  
-![Arrows](https://github.com/Nyphet/mod-fancy-assets/blob/main/soul-fire-d/arrow.gif?raw=true)
+![Arrows](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/soul-fire-d/arrow.gif)
 - **Two new enchantments: Soul Fire Aspect and Soul Flame.**  
 As their name suggests, they work exactly the same as Fire Aspect and Flame with the only difference being the kind of fire the target will burn from, with the consequent damage increase.  
 Both these enchantments can be individually enabled (default) or disabled, having each a configuration option.  
@@ -31,8 +31,8 @@ For modders who want to add their own custom fire(s), or implement another mod's
 See the bottom section *For developers* to know more.
 
 ## **License and right of use**
-Feel free to use this mod for any modpack or video, just be sure to give credit and possibly link [here](https://github.com/Nyphet/just-vertical-slabs#readme).  
-This project is published under the [GNU General Public License v3.0](https://github.com/Nyphet/just-vertical-slabs/blob/master/LICENSE).
+Feel free to use this mod for any modpack or video, just be sure to give credit and possibly link [here](https://github.com/Nyphet/soul-fire-d#readme).  
+This project is published under the [GNU General Public License v3.0](https://github.com/Nyphet/soul-fire-d/blob/master/LICENSE).
 
 ## **For developers**
 To learn how to use the provided API follow the [Wiki](https://github.com/Nyphet/soul-fire-d/wiki) on [GitHub](https://github.com/Nyphet/soul-fire-d).
