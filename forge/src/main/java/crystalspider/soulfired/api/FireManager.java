@@ -406,50 +406,50 @@ public final class FireManager {
   }
 
   /**
-   * Returns the in damage source flag of the {@link Fire} registered with the given {@code modId} and {@code fireId}.
+   * Returns the in damage source of the {@link Fire} registered with the given {@code modId} and {@code fireId}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given values.
    * 
    * @param modId
    * @param fireId
-   * @return the in damage source flag of the {@link Fire}.
+   * @return the in damage source of the {@link Fire}.
    */
   public static DamageSource getInFireDamageSource(String modId, String fireId) {
     return getInFireDamageSource(new ResourceLocation(modId, fireId));
   }
 
   /**
-   * Returns the in damage source flag of the {@link Fire} registered with the given {@code fireType}.
+   * Returns the in damage source of the {@link Fire} registered with the given {@code fireType}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
    * 
    * @param fireType
-   * @return the in damage source flag of the {@link Fire}.
+   * @return the in damage source of the {@link Fire}.
    */
   public static DamageSource getInFireDamageSource(ResourceLocation fireType) {
     return fires.getOrDefault(fireType, DEFAULT_FIRE).getInFire();
   }
 
   /**
-   * Returns the on damage source flag of the {@link Fire} registered with the given {@code modId} and {@code fireId}.
+   * Returns the on damage source of the {@link Fire} registered with the given {@code modId} and {@code fireId}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given values.
    * 
    * @param modId
    * @param fireId
-   * @return the on damage source flag of the {@link Fire}.
+   * @return the on damage source of the {@link Fire}.
    */
   public static DamageSource getOnFireDamageSource(String modId, String fireId) {
     return getOnFireDamageSource(new ResourceLocation(modId, fireId));
   }
 
   /**
-   * Returns the on damage source flag of the {@link Fire} registered with the given {@code fireType}.
+   * Returns the on damage source of the {@link Fire} registered with the given {@code fireType}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
    * 
    * @param fireType
-   * @return the on damage source flag of the {@link Fire}.
+   * @return the on damage source of the {@link Fire}.
    */
   public static DamageSource getOnFireDamageSource(ResourceLocation fireType) {
     return fires.getOrDefault(fireType, DEFAULT_FIRE).getOnFire();
