@@ -28,7 +28,7 @@ public final class SoulFiredLoader {
   /**
    * Network channel protocol version.
    */
-  public static final String PROTOCOL_VERSION = "1.16-3.0";
+  public static final String PROTOCOL_VERSION = "1.16-3.1";
   /**
    * {@link SimpleChannel} instance for compatibility client-server.
    */
