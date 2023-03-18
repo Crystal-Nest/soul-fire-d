@@ -37,7 +37,7 @@ public final class FireBuilder {
   /**
    * Default value for {@link #onFireGetter}.
    */
-  public static final Function<Entity, DamageSource> DEFAULT_ON_FIRE_GETTER = entity -> entity.damageSources().inFire();
+  public static final Function<Entity, DamageSource> DEFAULT_ON_FIRE_GETTER = entity -> entity.damageSources().onFire();
 
   /**
    * {@link Fire} instance {@link Fire#modId modId}.
