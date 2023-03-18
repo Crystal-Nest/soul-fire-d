@@ -33,11 +33,11 @@ public final class FireBuilder {
   /**
    * Default value for {@link #inFireGetter}.
    */
-  public static final Function<Entity, DamageSource> DEFAULT_IN_FIRE_GETTER = (entity) -> entity.damageSources().inFire();
+  public static final Function<Entity, DamageSource> DEFAULT_IN_FIRE_GETTER = entity -> entity.damageSources().inFire();
   /**
    * Default value for {@link #onFireGetter}.
    */
-  public static final Function<Entity, DamageSource> DEFAULT_ON_FIRE_GETTER = (entity) -> entity.damageSources().inFire();
+  public static final Function<Entity, DamageSource> DEFAULT_ON_FIRE_GETTER = entity -> entity.damageSources().inFire();
 
   /**
    * {@link Fire} instance {@link Fire#modId modId}.
