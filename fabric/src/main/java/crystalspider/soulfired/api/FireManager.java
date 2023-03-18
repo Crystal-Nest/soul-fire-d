@@ -19,10 +19,9 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
 
@@ -53,7 +52,7 @@ public final class FireManager {
   /**
    * Default {@link Fire} used as fallback to retrieve default properties.
    */
-  public static final Fire DEFAULT_FIRE = new Fire(DEFAULT_FIRE_TYPE, FireBuilder.DEFAULT_DAMAGE, FireBuilder.DEFAULT_INVERT_HEAL_AND_HARM, FireBuilder.DEFAULT_IN_FIRE, FireBuilder.DEFAULT_ON_FIRE, FireBuilder.DEFAULT_HURT_SOUND, new Identifier("fire"), new Identifier("campfire"), null, null);
+  public static final Fire DEFAULT_FIRE = new Fire(DEFAULT_FIRE_TYPE, FireBuilder.DEFAULT_DAMAGE, FireBuilder.DEFAULT_INVERT_HEAL_AND_HARM, FireBuilder.DEFAULT_IN_FIRE_GETTER, FireBuilder.DEFAULT_ON_FIRE_GETTER, new Identifier("fire"), new Identifier("campfire"), null, null);
 
   /**
    * {@link ConcurrentHashMap} of all registered {@link Fire Fires}.
@@ -270,16 +269,6 @@ public final class FireManager {
   }
 
   /**
-   * Returns whether the given {@link DamageSource} is registered with any {@link Fire}.
-   * 
-   * @param damageSource
-   * @return whether the given {@link DamageSource} is registered with any {@link Fire}.
-   */
-  public static boolean isFireDamageSource(DamageSource damageSource) {
-    return fires.values().stream().anyMatch(fire -> fire.getInFire() == damageSource || fire.getOnFire() == damageSource);
-  }
-
-  /**
    * Returns the closest well-formed Fire Type from the given {@code modId} and {@code fireId}.
    * 
    * @param modId
@@ -415,78 +404,57 @@ public final class FireManager {
   }
 
   /**
-   * Returns the in damage source flag of the {@link Fire} registered with the given {@code modId} and {@code fireId}.
+   * Returns the in damage source of the {@link Fire} registered with the given {@code modId} and {@code fireId} for the given {@link Entity}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given values.
    * 
+   * @param entity
    * @param modId
    * @param fireId
-   * @return the in damage source flag of the {@link Fire}.
+   * @return the in damage source of the {@link Fire} for the {@link Entity}.
    */
-  public static DamageSource getInFireDamageSource(String modId, String fireId) {
-    return getInFireDamageSource(new Identifier(modId, fireId));
+  public static DamageSource getInFireDamageSourceFor(Entity entity, String modId, String fireId) {
+    return getInFireDamageSourceFor(entity, new Identifier(modId, fireId));
   }
 
   /**
-   * Returns the in damage source flag of the {@link Fire} registered with the given {@code fireType}.
+   * Returns the in damage source of the {@link Fire} registered with the given {@code fireType} for the given {@link Entity}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
    * 
+   * @param entity
    * @param fireType
-   * @return the in damage source flag of the {@link Fire}.
+   * @return the in damage source of the {@link Fire} for the {@link Entity}.
    */
-  public static DamageSource getInFireDamageSource(Identifier fireType) {
-    return fires.getOrDefault(fireType, DEFAULT_FIRE).getInFire();
+  public static DamageSource getInFireDamageSourceFor(Entity entity, Identifier fireType) {
+    return fires.getOrDefault(fireType, DEFAULT_FIRE).getInFire(entity);
   }
 
   /**
-   * Returns the on damage source flag of the {@link Fire} registered with the given {@code modId} and {@code fireId}.
+   * Returns the on damage source of the {@link Fire} registered with the given {@code modId} and {@code fireId} for the given {@link Entity}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given values.
    * 
+   * @param entity
    * @param modId
    * @param fireId
-   * @return the on damage source flag of the {@link Fire}.
+   * @return the on damage source of the {@link Fire} for the {@link Entity}.
    */
-  public static DamageSource getOnFireDamageSource(String modId, String fireId) {
-    return getOnFireDamageSource(new Identifier(modId, fireId));
+  public static DamageSource getOnFireDamageSourceFor(Entity entity, String modId, String fireId) {
+    return getOnFireDamageSourceFor(entity, new Identifier(modId, fireId));
   }
 
   /**
-   * Returns the on damage source flag of the {@link Fire} registered with the given {@code fireType}.
+   * Returns the on damage source of the {@link Fire} registered with the given {@code fireType} for the given {@link Entity}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
    * 
+   * @param entity
    * @param fireType
-   * @return the on damage source flag of the {@link Fire}.
+   * @return the on damage source of the {@link Fire} for the {@link Entity}.
    */
-  public static DamageSource getOnFireDamageSource(Identifier fireType) {
-    return fires.getOrDefault(fireType, DEFAULT_FIRE).getOnFire();
-  }
-
-  /**
-   * Returns the hurt sound of the {@link Fire} registered with the given {@code modId} and {@code fireId}.
-   * <p>
-   * Returns the default value if no {@link Fire} was registered with the given values.
-   * 
-   * @param modId
-   * @param fireId
-   * @return the hurt sound of the {@link Fire}.
-   */
-  public static SoundEvent getHurtSound(String modId, String fireId) {
-    return getHurtSound(new Identifier(modId, fireId));
-  }
-
-  /**
-   * Returns the hurt sound of the {@link Fire} registered with the given {@code fireType}.
-   * <p>
-   * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
-   * 
-   * @param fireType
-   * @return the hurt sound of the {@link Fire}.
-   */
-  public static SoundEvent getHurtSound(Identifier fireType) {
-    return fires.getOrDefault(fireType, DEFAULT_FIRE).getHurtSound();
+  public static DamageSource getOnFireDamageSourceFor(Entity entity, Identifier fireType) {
+    return fires.getOrDefault(fireType, DEFAULT_FIRE).getOnFire(entity);
   }
 
   /**
@@ -664,12 +632,12 @@ public final class FireManager {
     if (isRegisteredType(fireType)) {
       ((FireTypeChanger) entity).setFireType(fireType);
       if (entity.age % 20 == 0) {
-        return harmOrHeal(entity, getInFireDamageSource(fireType), getDamage(fireType), getInvertHealAndHarm(fireType));
+        return harmOrHeal(entity, getInFireDamageSourceFor(entity, fireType), getDamage(fireType), getInvertHealAndHarm(fireType));
       }
       return false;
     }
     ((FireTypeChanger) entity).setFireType(DEFAULT_FIRE_TYPE);
-    return harmOrHeal(entity, DEFAULT_FIRE.getInFire(), DEFAULT_FIRE.getDamage(), DEFAULT_FIRE.getInvertHealAndHarm());
+    return harmOrHeal(entity, DEFAULT_FIRE.getInFire(entity), DEFAULT_FIRE.getDamage(), DEFAULT_FIRE.getInvertHealAndHarm());
   }
   
   /**
@@ -698,10 +666,10 @@ public final class FireManager {
   public static boolean damageOnFire(Entity entity, Identifier fireType) {
     if (isRegisteredType(fireType)) {
       ((FireTypeChanger) entity).setFireType(fireType);
-      return harmOrHeal(entity, getOnFireDamageSource(fireType), getDamage(fireType), getInvertHealAndHarm(fireType));
+      return harmOrHeal(entity, getOnFireDamageSourceFor(entity, fireType), getDamage(fireType), getInvertHealAndHarm(fireType));
     }
     ((FireTypeChanger) entity).setFireType(DEFAULT_FIRE_TYPE);
-    return harmOrHeal(entity, DEFAULT_FIRE.getOnFire(), DEFAULT_FIRE.getDamage(), DEFAULT_FIRE.getInvertHealAndHarm());
+    return harmOrHeal(entity, DEFAULT_FIRE.getOnFire(entity), DEFAULT_FIRE.getDamage(), DEFAULT_FIRE.getInvertHealAndHarm());
   }
 
   /**

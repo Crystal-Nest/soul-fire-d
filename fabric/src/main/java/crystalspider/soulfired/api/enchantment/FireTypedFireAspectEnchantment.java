@@ -13,6 +13,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.util.Identifier;
 
 /**
@@ -92,7 +93,7 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
   private boolean wasLastHitByProjectile(Entity target) {
     if (target instanceof LivingEntity) {
       DamageSource lastDamageSource = ((LivingEntity) target).getRecentDamageSource();
-      return lastDamageSource != null && lastDamageSource.isProjectile();
+      return lastDamageSource != null && lastDamageSource.isIn(DamageTypeTags.IS_PROJECTILE);
     }
     return false;
   }

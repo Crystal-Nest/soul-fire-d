@@ -8,6 +8,7 @@ import crystalspider.soulfired.api.compat.Ensorcellation;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -94,7 +95,7 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
   private boolean wasLastHitByProjectile(Entity target) {
     if (target instanceof LivingEntity) {
       DamageSource lastDamageSource = ((LivingEntity) target).getLastDamageSource();
-      return lastDamageSource != null && lastDamageSource.isProjectile();
+      return lastDamageSource != null && lastDamageSource.is(DamageTypeTags.IS_PROJECTILE);
     }
     return false;
   }

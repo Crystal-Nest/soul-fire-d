@@ -10,7 +10,6 @@
     "EnchantmentHelperMixin",
     "EntityMixin",
     "PersistentProjectileEntityMixin",
-    "PlayerEntityMixin",
     "ZombieEntityMixin"
   ],
   "client": [

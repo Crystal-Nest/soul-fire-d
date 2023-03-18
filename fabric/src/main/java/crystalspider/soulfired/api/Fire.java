@@ -1,13 +1,14 @@
 package crystalspider.soulfired.api;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import crystalspider.soulfired.api.enchantment.FireTypedFireAspectEnchantment;
 import crystalspider.soulfired.api.enchantment.FireTypedFlameEnchantment;
 import net.minecraft.block.Block;
 import net.minecraft.block.CampfireBlock;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
 /**
@@ -30,18 +31,13 @@ public final class Fire {
   private final boolean invertHealAndHarm;
 
   /**
-   * Fire {@link DamageSource} for when the entity is in or on a block providing fire.
+   * {@link DamageSource} getter for when the entity is in or on a block providing fire.
    */
-  private final DamageSource inFire;
+  private final Function<Entity, DamageSource> inFireGetter;
   /**
-   * Fire {@link DamageSource} for when the entity is burning.
+   * {@link DamageSource} getter for when the entity is burning.
    */
-  private final DamageSource onFire;
-
-  /**
-   * Fire {@link SoundEvent} to use when the player is taking fire damage.
-   */
-  private final SoundEvent hurtSound;
+  private final Function<Entity, DamageSource> onFireGetter;
 
   /**
    * {@link Optional} {@link Identifier} of the {@link Block} of the Fire Block considered as the source for this Fire.
@@ -65,21 +61,19 @@ public final class Fire {
    * @param fireType {@link #fireType}.
    * @param damage {@link #damage}.
    * @param invertHealAndHarm {@link #invertHealAndHarm}.
-   * @param inFire {@link #inFire}.
-   * @param onFire {@link #onFire}.
-   * @param hurtSound {@link #hurtSound}.
+   * @param inFireGetter {@link #inFireGetter}.
+   * @param onFireGetter {@link #onFireGetter}.
    * @param source {@link #source}.
    * @param campfire {@link #campfire}.
    * @param fireAspect {@link #fireAspect}.
    * @param flame {@link #flame}.
    */
-  Fire(Identifier fireType, float damage, boolean invertHealAndHarm, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, Identifier source, Identifier campfire, FireTypedFireAspectEnchantment fireAspect, FireTypedFlameEnchantment flame) {
+  Fire(Identifier fireType, float damage, boolean invertHealAndHarm, Function<Entity, DamageSource> inFireGetter, Function<Entity, DamageSource> onFireGetter, Identifier source, Identifier campfire, FireTypedFireAspectEnchantment fireAspect, FireTypedFlameEnchantment flame) {
     this.fireType = fireType;
     this.damage = damage;
     this.invertHealAndHarm = invertHealAndHarm;
-    this.inFire = inFire;
-    this.onFire = onFire;
-    this.hurtSound = hurtSound;
+    this.inFireGetter = inFireGetter;
+    this.onFireGetter = onFireGetter;
     this.source = Optional.ofNullable(source);
     this.campfire = Optional.ofNullable(campfire);
     this.fireAspect = Optional.ofNullable(fireAspect);
@@ -114,30 +108,21 @@ public final class Fire {
   }
 
   /**
-   * Returns this {@link #inFire}.
+   * Returns the In Fire {@link DamageSource} from the given {@link Entity}.
    * 
-   * @return this {@link #inFire}.
+   * @return the In Fire {@link DamageSource} from the given {@link Entity}.
    */
-  public DamageSource getInFire() {
-    return inFire;
+  public DamageSource getInFire(Entity entity) {
+    return inFireGetter.apply(entity);
   }
 
   /**
-   * Returns this {@link #onFire}.
+   * Returns the On Fire {@link DamageSource} from the given {@link Entity}.
    * 
-   * @return this {@link #onFire}.
+   * @return the On Fire {@link DamageSource} from the given {@link Entity}.
    */
-  public DamageSource getOnFire() {
-    return onFire;
-  }
-
-  /**
-   * Returns this {@link #hurtSound}.
-   * 
-   * @return this {@link #hurtSound}.
-   */
-  public SoundEvent getHurtSound() {
-    return hurtSound;
+  public DamageSource getOnFire(Entity entity) {
+    return onFireGetter.apply(entity);
   }
 
   /**
@@ -178,6 +163,6 @@ public final class Fire {
 
   @Override
   public String toString() {
-    return "Fire [fireType=" + fireType + ", damage=" + damage + ", invertedHealAndHarm=" + invertHealAndHarm + ", inFire=" + inFire + ", onFire=" + onFire + ", hurtSound=" + hurtSound + ", source=" + source + ", campfire=" + campfire + "]";
+    return "Fire [fireType=" + fireType + ", damage=" + damage + ", invertedHealAndHarm=" + invertHealAndHarm + ", source=" + source + ", campfire=" + campfire + "]";
   }
 }

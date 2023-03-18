@@ -14,9 +14,8 @@ import crystalspider.soulfired.api.enchantment.FlameBuilder;
 import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantment.Rarity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 
 /**
@@ -32,17 +31,13 @@ public final class FireBuilder {
    */
   public static final boolean DEFAULT_INVERT_HEAL_AND_HARM = false;
   /**
-   * Default value for {@link #inFire}.
+   * Default value for {@link #inFireGetter}.
    */
-  public static final DamageSource DEFAULT_IN_FIRE = DamageSource.IN_FIRE;
+  public static final Function<Entity, DamageSource> DEFAULT_IN_FIRE_GETTER = (entity) -> entity.getDamageSources().inFire();
   /**
-   * Default value for {@link #onFire}.
+   * Default value for {@link #onFireGetter}.
    */
-  public static final DamageSource DEFAULT_ON_FIRE = DamageSource.ON_FIRE;
-  /**
-   * Default value for {@link #hurtSound}.
-   */
-  public static final SoundEvent DEFAULT_HURT_SOUND = SoundEvents.ENTITY_PLAYER_HURT_ON_FIRE;
+  public static final Function<Entity, DamageSource> DEFAULT_ON_FIRE_GETTER = (entity) -> entity.getDamageSources().inFire();
 
   /**
    * {@link Fire} instance {@link Fire#modId modId}.
@@ -72,30 +67,21 @@ public final class FireBuilder {
   private boolean invertHealAndHarm;
 
   /**
-   * {@link Fire} instance {@link Fire#inFire inFire}.
+   * {@link Fire} instance {@link Fire#inFireGetter inFireGetter}.
    * <p>
-   * Optional, defaults to {@link #DEFAULT_IN_FIRE}.
-   * <p>
-   * If changed from the default, remember to add translations for the new death messages!
-   */
-  private DamageSource inFire;
-  /**
-   * {@link Fire} instance {@link Fire#onFire onFire}.
-   * <p>
-   * Optional, defaults to {@link #DEFAULT_ON_FIRE}.
+   * Optional, defaults to {@link #DEFAULT_IN_FIRE_GETTER}.
    * <p>
    * If changed from the default, remember to add translations for the new death messages!
    */
-  private DamageSource onFire;
-
+  private Function<Entity, DamageSource> inFireGetter;
   /**
-   * {@link Fire} instance {@link Fire#hurtSound hurtSound}.
+   * {@link Fire} instance {@link Fire#onFireGetter onFireGetter}.
    * <p>
-   * Optional, defaults to {@link #DEFAULT_HURT_SOUND}.
+   * Optional, defaults to {@link #DEFAULT_ON_FIRE_GETTER}.
    * <p>
-   * Default value is recommended.
+   * If changed from the default, remember to add translations for the new death messages!
    */
-  private SoundEvent hurtSound;
+  private Function<Entity, DamageSource> onFireGetter;
 
   /**
    * {@link Fire} instance {@link Fire#source source}.
@@ -191,45 +177,22 @@ public final class FireBuilder {
   }
 
   /**
-   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code messageId} equal to {@code "in_" + modId + "_" + fireId + "_fire"}.
-   * <p>
-   * The {@link DamageSource} will have both {@link DamageSource#bypassesArmor bypassesArmor} and {@link DamageSource#fire fire} set to {@code true}.
+   * Sets the {@link DamageSource} {@link #inFireGetter}.
    * 
    * @return this Builder to either set other properties or {@link #build}.
-   * @throws IllegalStateException if the either {@link #modId} or {@link #fireId} is not valid.
    */
-  public FireBuilder setInFire() throws IllegalStateException {
-    if (FireManager.isValidFireId(fireId) && FireManager.isValidModId(modId)) {
-      this.inFire = (new FireDamageSource("in_" + modId + "_" + fireId + "_fire")).setBypassesArmor().setFire();
-      return this;
-    }
-    throw new IllegalStateException("Attempted to create inFire DamageSource before setting a valid id");
+  public FireBuilder setInFire(Function<Entity, DamageSource> getter) {
+    this.inFireGetter = getter;
+    return this;
   }
 
   /**
-   * Sets the {@link DamageSource} {@link #inFire} by creating a new {@link DamageSource} with the {@code messageId} equal to {@code "on_" + modId + "_" + fireId + "_fire"}.
-   * <p>
-   * The {@link DamageSource} will have both {@link DamageSource#bypassesArmor bypassesArmor} and {@link DamageSource#fire fire} set to {@code true}.
+   * Sets the {@link DamageSource} {@link #inFireGetter}.
    * 
    * @return this Builder to either set other properties or {@link #build}.
-   * @throws IllegalStateException if the either {@link #modId} or {@link #fireId} is not valid.
    */
-  public FireBuilder setOnFire() throws IllegalStateException {
-    if (FireManager.isValidFireId(fireId) && FireManager.isValidModId(modId)) {
-      this.onFire = (new FireDamageSource("on_" + modId + "_" + fireId + "_fire")).setBypassesArmor().setFire();
-      return this;
-    }
-    throw new IllegalStateException("Attempted to create onFire DamageSource before setting a valid id");
-  }
-
-  /**
-   * Sets the {@link #hurtSound}.
-   * 
-   * @param hurtSound
-   * @return this Builder to either set other properties or {@link #build}.
-   */
-  public FireBuilder setHurtSound(SoundEvent hurtSound) {
-    this.hurtSound = hurtSound;
+  public FireBuilder setOnFire(Function<Entity, DamageSource> getter) {
+    this.onFireGetter = getter;
     return this;
   }
 
@@ -343,9 +306,8 @@ public final class FireBuilder {
     this.fireId = fireId;
     damage = DEFAULT_DAMAGE;
     invertHealAndHarm = DEFAULT_INVERT_HEAL_AND_HARM;
-    inFire = DEFAULT_IN_FIRE;
-    onFire = DEFAULT_ON_FIRE;
-    hurtSound = DEFAULT_HURT_SOUND;
+    inFireGetter = DEFAULT_IN_FIRE_GETTER;
+    onFireGetter = DEFAULT_ON_FIRE_GETTER;
     source = Optional.empty();
     campfire = Optional.empty();
     fireAspectConfigurator = Optional.empty();
@@ -367,9 +329,8 @@ public final class FireBuilder {
     this.fireId = fireId;
     damage = DEFAULT_DAMAGE;
     invertHealAndHarm = DEFAULT_INVERT_HEAL_AND_HARM;
-    inFire = DEFAULT_IN_FIRE;
-    onFire = DEFAULT_ON_FIRE;
-    hurtSound = DEFAULT_HURT_SOUND;
+    inFireGetter = DEFAULT_IN_FIRE_GETTER;
+    onFireGetter = DEFAULT_ON_FIRE_GETTER;
     source = Optional.empty();
     campfire = Optional.empty();
     fireAspectConfigurator = Optional.empty();
@@ -398,7 +359,7 @@ public final class FireBuilder {
       if (flameConfigurator != null && flameConfigurator.isEmpty()) {
         flameConfigurator = Optional.of(builder -> builder);
       }
-      return new Fire(fireType, damage, invertHealAndHarm, inFire, onFire, hurtSound, get(source), get(campfire), build(fireAspectConfigurator, () -> new FireAspectBuilder(fireType)), build(flameConfigurator, () -> new FlameBuilder(fireType)));
+      return new Fire(fireType, damage, invertHealAndHarm, inFireGetter, onFireGetter, get(source), get(campfire), build(fireAspectConfigurator, () -> new FireAspectBuilder(fireType)), build(flameConfigurator, () -> new FlameBuilder(fireType)));
     }
     throw new IllegalStateException("Attempted to build a Fire with a non-valid fireId or modId");
   }

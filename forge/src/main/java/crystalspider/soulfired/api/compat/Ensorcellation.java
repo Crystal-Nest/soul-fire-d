@@ -12,7 +12,7 @@ public final class Ensorcellation {
   private Ensorcellation() {}
 
   /**
-   * TODO: Ensorcellation for 1.19.3 is not available yet.
+   * TODO: Ensorcellation for 1.19.4 is not available yet.
    * Returns whether the given {@link Enchantment} is is an Ensorcellation enchantment incompatible with any {@link FireTypedFireAspectEnchantment}.
    * 
    * @param enchantment
