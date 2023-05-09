@@ -30,6 +30,11 @@ Both these enchantments can be individually enabled (default) or disabled, havin
 For modders who want to add their own custom fire(s), or implement another mod's fire, this mod provides an *easy-to-use* API to register your fire(s) and have it(them) behave consistently **automatically**. Furthermore for each new fire registered using this API there can be new custom Fire Aspect and Flame enchantments available in game **automatically**.  
 See the bottom section *For developers* to know more.
 
+## **Dependencies**
+| Mod | Loader | Requirement |
+| :-: | :----: | :---------: |
+| [Forge Config API Port](https://modrinth.com/mod/forge-config-api-port) | Fabric | Required |
+
 ## **License and right of use**
 Feel free to use this mod for any modpack or video, just be sure to give credit and possibly link [here](https://github.com/Nyphet/soul-fire-d#readme).  
 This project is published under the [GNU General Public License v3.0](https://github.com/Nyphet/soul-fire-d/blob/master/LICENSE).
