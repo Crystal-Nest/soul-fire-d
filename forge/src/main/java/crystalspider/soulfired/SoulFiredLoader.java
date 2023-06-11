@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.config.SoulFiredConfig;
 import crystalspider.soulfired.loot.ChestLootModifier;
+import crystalspider.soulfired.network.SoulFiredNetwork;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -30,7 +31,7 @@ public final class SoulFiredLoader {
   /**
    * Network channel protocol version.
    */
-  public static final String PROTOCOL_VERSION = "1.19-3.1";
+  public static final String PROTOCOL_VERSION = "1.19-3.2";
   /**
    * {@link SimpleChannel} instance for compatibility client-server.
    */
@@ -47,7 +48,7 @@ public final class SoulFiredLoader {
   public static final RegistryObject<Codec<ChestLootModifier>> CHEST_LOOT_MODIFIER = LOOT_MODIFIERS.register("chest_loot_modifier", ChestLootModifier.CODEC);
 
   /**
-   * Registers {@link SoulFiredConfig}, {@link #LOOT_MODIFIERS} and Soul Fire.
+   * Registers {@link SoulFiredConfig}, {@link #LOOT_MODIFIERS}, Soul Fire and {@link SoulFiredNetwork}.
    */
   public SoulFiredLoader() {
     ModLoadingContext.get().registerConfig(Type.COMMON, SoulFiredConfig.SPEC);
@@ -59,5 +60,6 @@ public final class SoulFiredLoader {
         .setFlameConfig(builder -> builder.setEnabled(SoulFiredConfig::getEnableSoulFlame))
       .build()
     );
+    SoulFiredNetwork.register();
   }
 }

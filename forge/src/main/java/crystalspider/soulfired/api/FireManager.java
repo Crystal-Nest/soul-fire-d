@@ -139,6 +139,19 @@ public final class FireManager {
   }
 
   /**
+   * Unregisters the specified fire.
+   * <p>
+   * To be used only internally, do not use elsewhere!
+   * 
+   * @param fireType
+   * @return whether the fire was previously registered.
+   */
+  @Deprecated
+  public static synchronized boolean unregisterFire(ResourceLocation fireType) {
+    return fires.remove(fireType) != null;
+  }
+
+  /**
    * Returns the list of all registered {@link Fire Fires}.
    * 
    * @return the list of all registered {@link Fire Fires}.

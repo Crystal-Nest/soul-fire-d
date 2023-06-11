@@ -65,6 +65,19 @@ public final class FireClientManager {
   }
 
   /**
+   * Unregisters the specified fire.
+   * <p>
+   * To be used only internally, do not use elsewhere!
+   * 
+   * @param fireType
+   * @return whether the fire was previously registered.
+   */
+  @Deprecated
+  public static synchronized boolean unregisterFire(ResourceLocation fireType) {
+    return fires.remove(fireType) != null;
+  }
+
+  /**
    * Attempts to register the given {@link FireClient}.
    * <p>
    * If the {@link FireClient#fireType} is already registered, logs an error.
