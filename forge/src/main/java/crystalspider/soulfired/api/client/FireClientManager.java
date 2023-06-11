@@ -64,6 +64,10 @@ public final class FireClientManager {
     return outcomes;
   }
 
+  public static synchronized boolean unregisterFire(ResourceLocation fireType) {
+    return fires.remove(fireType) != null;
+  }
+
   /**
    * Attempts to register the given {@link FireClient}.
    * <p>

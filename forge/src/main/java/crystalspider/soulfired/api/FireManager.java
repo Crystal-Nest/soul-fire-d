@@ -137,6 +137,10 @@ public final class FireManager {
     return outcomes;
   }
 
+  public static synchronized boolean unregisterFire(ResourceLocation fireType) {
+    return fires.remove(fireType) != null;
+  }
+
   /**
    * Returns the list of all registered {@link Fire Fires}.
    * 
