@@ -1,10 +1,13 @@
 package crystalspider.soulfired.network;
 
+import org.jetbrains.annotations.Nullable;
+
 import crystalspider.soulfired.SoulFiredLoader;
 import crystalspider.soulfired.api.Fire;
 import crystalspider.soulfired.network.register.RegisterFirePacket;
 import crystalspider.soulfired.network.unregister.UnregisterFirePacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -41,20 +44,30 @@ public final class SoulFiredNetwork {
   }
 
   /**
-   * Sends a new {@link FirePacket} to all clients.
+   * Sends a new {@link RegisterFirePacket}.
    * 
+   * @param player the player to send data to, {@code null} when sending to all players.
    * @param fire
    */
-  public static void sendToClient(Fire fire) {
-    INSTANCE.send(PacketDistributor.ALL.noArg(), new RegisterFirePacket(fire));
+  public static void sendToClient(@Nullable ServerPlayer player, Fire fire) {
+    if (player == null) {
+      INSTANCE.send(PacketDistributor.ALL.noArg(), new RegisterFirePacket(fire));
+    } else {
+      INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new RegisterFirePacket(fire));
+    }
   }
 
   /**
-   * Sends a new {@link FirePacket} to all clients.
+   * Sends a new {@link UnregisterFirePacket}.
    * 
+   * @param player the player to send data to, {@code null} when sending to all players.
    * @param fire
    */
-  public static void sendToClient(ResourceLocation fireType) {
-    INSTANCE.send(PacketDistributor.ALL.noArg(), new UnregisterFirePacket(fireType));
+  public static void sendToClient(@Nullable ServerPlayer player, ResourceLocation fireType) {
+    if (player == null) {
+      INSTANCE.send(PacketDistributor.ALL.noArg(), new UnregisterFirePacket(fireType));
+    } else {
+      INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new UnregisterFirePacket(fireType));
+    }
   }
 }

@@ -24,6 +24,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -32,11 +33,20 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
  * Handles datapack reload events.
  */
 @EventBusSubscriber(bus = Bus.FORGE)
-public final class AddReloadListenerEventHandler {
+public final class DatapacksEventHandler {
   /**
    * Logger.
    */
   private static final Logger LOGGER = LogManager.getLogger();
+
+  /**
+   * Current ddfires to unregister (previous registered ddfires).
+   */
+  private static ArrayList<ResourceLocation> unregister_ddfires = new ArrayList<>();
+  /**
+   * Current registered ddfires.
+   */
+  private static ArrayList<ResourceLocation> register_ddfires = new ArrayList<>();
 
   /**
    * Handles the {@link AddReloadListenerEvent}.
@@ -48,15 +58,20 @@ public final class AddReloadListenerEventHandler {
     event.addListener(new FireResourceReloadListener());
   }
 
+  @SubscribeEvent
+  public static void handle(OnDatapackSyncEvent event) {
+    for (ResourceLocation fireType : unregister_ddfires) {
+      SoulFiredNetwork.sendToClient(event.getPlayer(), fireType);
+    }
+    for (ResourceLocation fireType : register_ddfires) {
+      SoulFiredNetwork.sendToClient(event.getPlayer(), FireManager.getFire(fireType));
+    }
+  }
+
   /**
    * Reloads the DDFires datapack.
    */
   private static class FireResourceReloadListener extends SimpleJsonResourceReloadListener {
-    /**
-     * Current registered ddfires.
-     */
-    private static ArrayList<ResourceLocation> ddfires = new ArrayList<>();
-
     private FireResourceReloadListener() {
       super(new Gson(), "fires");
     }
@@ -170,25 +185,23 @@ public final class AddReloadListenerEventHandler {
      */
     @SuppressWarnings("deprecation")
     private void unregisterFires() {
-      for (ResourceLocation fireType : ddfires) {
-        FireManager.unregisterFire(fireType);
-        SoulFiredNetwork.sendToClient(fireType);
-        // DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> new SafeRunnable() { @Override @SuppressWarnings("deprecation") public void run() { FireClientManager.unregisterFire(fireType); } });
+      for (ResourceLocation fireType : register_ddfires) {
+        if (FireManager.unregisterFire(fireType)) {
+          unregister_ddfires.add(fireType);
+        }
       }
-      ddfires.clear();
+      register_ddfires.clear();
     }
 
     /**
-     * Registers the given {@link Fire}.
+     * Registers a DDFire.
      * 
      * @param fireType
      * @param fire
      */
     private void registerFire(ResourceLocation fireType, Fire fire) {
       if (FireManager.registerFire(fire)) {
-        ddfires.add(fireType);
-        SoulFiredNetwork.sendToClient(fire);
-        // DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> new SafeRunnable() { @Override public void run() { FireClientManager.registerFire(FireManager.getFire(fireType)); } });
+        register_ddfires.add(fireType);
       } else {
         LOGGER.error("Unable to register ddfire [" + fireType + "].");
       }
