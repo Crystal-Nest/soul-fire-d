@@ -58,6 +58,11 @@ public final class DatapacksEventHandler {
     event.addListener(new FireResourceReloadListener());
   }
 
+  /**
+   * Handles the {@link OnDatapackSyncEvent}.
+   * 
+   * @param event
+   */
   @SubscribeEvent
   public static void handle(OnDatapackSyncEvent event) {
     for (ResourceLocation fireType : unregister_ddfires) {
@@ -107,6 +112,8 @@ public final class DatapacksEventHandler {
                 fireBuilder.setCampfire(new ResourceLocation(campfire));
               }
             }
+            fireBuilder.removeFireAspect();
+            fireBuilder.removeFlame();
             registerFire(fireType, fireBuilder.build());
           }
         } catch (NullPointerException | UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
@@ -208,4 +215,3 @@ public final class DatapacksEventHandler {
     }
   }
 } 
-

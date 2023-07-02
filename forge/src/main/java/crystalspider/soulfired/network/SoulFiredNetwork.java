@@ -61,7 +61,7 @@ public final class SoulFiredNetwork {
    * Sends a new {@link UnregisterFirePacket}.
    * 
    * @param player the player to send data to, {@code null} when sending to all players.
-   * @param fire
+   * @param fireType
    */
   public static void sendToClient(@Nullable ServerPlayer player, ResourceLocation fireType) {
     if (player == null) {

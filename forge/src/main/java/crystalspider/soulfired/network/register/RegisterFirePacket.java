@@ -40,6 +40,8 @@ public final class RegisterFirePacket {
     if (buffer.readBoolean()) {
       fireBuilder.setCampfire(buffer.readResourceLocation());
     }
+    fireBuilder.removeFireAspect();
+    fireBuilder.removeFlame();
     fire = fireBuilder.build();
   }
 
