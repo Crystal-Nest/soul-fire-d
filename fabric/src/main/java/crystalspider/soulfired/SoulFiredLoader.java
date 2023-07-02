@@ -2,9 +2,12 @@ package crystalspider.soulfired;
 
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.config.SoulFiredConfig;
+import crystalspider.soulfired.handlers.FireResourceReloadListener;
 import crystalspider.soulfired.handlers.LootTableEventsHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.minecraft.resource.ResourceType;
 import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.api.ModLoadingContext;
 
@@ -21,6 +24,7 @@ public final class SoulFiredLoader implements ModInitializer {
   public void onInitialize() {
     ModLoadingContext.registerConfig(MODID, Type.COMMON, SoulFiredConfig.SPEC);
     LootTableEvents.MODIFY.register(LootTableEventsHandler::handle);
+    ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new FireResourceReloadListener());
     FireManager.registerFire(
       FireManager.fireBuilder(FireManager.SOUL_FIRE_TYPE)
         .setDamage(2)
