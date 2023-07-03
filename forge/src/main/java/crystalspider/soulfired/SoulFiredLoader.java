@@ -56,8 +56,18 @@ public final class SoulFiredLoader {
     FireManager.registerFire(
       FireManager.fireBuilder(FireManager.SOUL_FIRE_TYPE)
         .setDamage(2)
-        .setFireAspectConfig(builder -> builder.setEnabled(SoulFiredConfig::getEnableSoulFireAspect))
-        .setFlameConfig(builder -> builder.setEnabled(SoulFiredConfig::getEnableSoulFlame))
+        .setFireAspectConfig(builder -> builder
+          .setEnabled(SoulFiredConfig::getEnableSoulFireAspect)
+          .setIsDiscoverable(SoulFiredConfig::getEnableSoulFireAspectDiscovery)
+          .setIsTradeable(SoulFiredConfig::getEnableSoulFireAspectTrades)
+          .setIsTreasure(SoulFiredConfig::getEnableSoulFireAspectTreasure)
+        )
+        .setFlameConfig(builder -> builder
+          .setEnabled(SoulFiredConfig::getEnableSoulFlame)
+          .setIsDiscoverable(SoulFiredConfig::getEnableSoulFlameDiscovery)
+          .setIsTradeable(SoulFiredConfig::getEnableSoulFlameTrades)
+          .setIsTreasure(SoulFiredConfig::getEnableSoulFlameTreasure)
+        )
       .build()
     );
     SoulFiredNetwork.register();
