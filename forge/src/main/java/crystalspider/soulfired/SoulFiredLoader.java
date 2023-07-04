@@ -3,6 +3,7 @@ package crystalspider.soulfired;
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.config.SoulFiredConfig;
 import crystalspider.soulfired.loot.ChestLootModifier;
+import crystalspider.soulfired.network.SoulFiredNetwork;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -28,7 +29,7 @@ public final class SoulFiredLoader {
   /**
    * Network channel protocol version.
    */
-  public static final String PROTOCOL_VERSION = "1.16-3.1";
+  public static final String PROTOCOL_VERSION = "1.16-3.2";
   /**
    * {@link SimpleChannel} instance for compatibility client-server.
    */
@@ -45,7 +46,7 @@ public final class SoulFiredLoader {
   public static final RegistryObject<ChestLootModifier.Serializer> CHEST_LOOT_MODIFIER = LOOT_MODIFIERS.register("chest_loot_modifier", ChestLootModifier.Serializer::new);
 
   /**
-   * Registers {@link SoulFiredConfig}, {@link #LOOT_MODIFIERS} and Soul Fire.
+   * Registers {@link SoulFiredConfig}, {@link #LOOT_MODIFIERS}, Soul Fire and {@link SoulFiredNetwork}.
    */
   public SoulFiredLoader() {
     ModLoadingContext.get().registerConfig(Type.COMMON, SoulFiredConfig.SPEC);
@@ -53,9 +54,20 @@ public final class SoulFiredLoader {
     FireManager.registerFire(
       FireManager.fireBuilder(FireManager.SOUL_FIRE_TYPE)
         .setDamage(2)
-        .setFireAspectConfig(builder -> builder.setEnabled(SoulFiredConfig::getEnableSoulFireAspect))
-        .setFlameConfig(builder -> builder.setEnabled(SoulFiredConfig::getEnableSoulFlame))
+        .setFireAspectConfig(builder -> builder
+          .setEnabled(SoulFiredConfig::getEnableSoulFireAspect)
+          .setIsDiscoverable(SoulFiredConfig::getEnableSoulFireAspectDiscovery)
+          .setIsTradeable(SoulFiredConfig::getEnableSoulFireAspectTrades)
+          .setIsTreasure(SoulFiredConfig::getEnableSoulFireAspectTreasure)
+        )
+        .setFlameConfig(builder -> builder
+          .setEnabled(SoulFiredConfig::getEnableSoulFlame)
+          .setIsDiscoverable(SoulFiredConfig::getEnableSoulFlameDiscovery)
+          .setIsTradeable(SoulFiredConfig::getEnableSoulFlameTrades)
+          .setIsTreasure(SoulFiredConfig::getEnableSoulFlameTreasure)
+        )
       .build()
     );
+    SoulFiredNetwork.register();
   }
 }

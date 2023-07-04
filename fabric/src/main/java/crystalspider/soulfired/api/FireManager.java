@@ -107,15 +107,15 @@ public final class FireManager {
       Optional<Identifier> source = fire.getSource();
       Optional<Identifier> campfire = fire.getCampfire();
       if (source.isPresent()) {
-        Block sourceBlock = Registry.BLOCK.get(source.get());
-        if (sourceBlock != null) {
-          ((FireTypeChanger) sourceBlock).setFireType(fireType);
+        Optional<Block> sourceBlock = Registry.BLOCK.getOrEmpty(source.get());
+        if (sourceBlock.isPresent()) {
+          ((FireTypeChanger) sourceBlock.get()).setFireType(fireType);
         }
       }
       if (campfire.isPresent()) {
-        Block campfireBlock = Registry.BLOCK.get(campfire.get());
-        if (campfireBlock != null) {
-          ((FireTypeChanger) campfireBlock).setFireType(fireType);
+        Optional<Block> campfireBlock = Registry.BLOCK.getOrEmpty(campfire.get());
+        if (campfireBlock.isPresent()) {
+          ((FireTypeChanger) campfireBlock.get()).setFireType(fireType);
         }
       }
       return true;
@@ -146,6 +146,19 @@ public final class FireManager {
       outcomes.put(fire.getFireType(), registerFire(fire));
     }
     return outcomes;
+  }
+
+  /**
+   * Unregisters the specified fire.
+   * <p>
+   * To be used only internally, do not use elsewhere!
+   * 
+   * @param fireType
+   * @return whether the fire was previously registered.
+   */
+  @Deprecated
+  public static synchronized boolean unregisterFire(Identifier fireType) {
+    return fires.remove(fireType) != null;
   }
 
   /**
