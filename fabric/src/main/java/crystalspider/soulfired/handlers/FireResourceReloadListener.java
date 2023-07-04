@@ -73,8 +73,7 @@ public class FireResourceReloadListener implements SimpleResourceReloadListener<
   public CompletableFuture<HashMap<Identifier, Fire>> load(ResourceManager manager, Profiler profiler, Executor executor) {
     return CompletableFuture.supplyAsync(() -> {
       HashMap<Identifier, Fire> data = new HashMap<>();
-      Map<Identifier, Resource> map = manager.findResources("fires", path -> path.getNamespace().equals(SoulFiredLoader.MODID) && path.getPath().endsWith(".json"));
-      for (Entry<Identifier, Resource> entry : map.entrySet()) {
+      for (Entry<Identifier, Resource> entry : manager.findResources("fires", path -> path.getNamespace().equals(SoulFiredLoader.MODID) && path.getPath().endsWith(".json"))) {
         String jsonIdentifier = entry.getKey().getPath();
         try {
           JsonObject fire = JsonParser.parseReader(new Gson().newJsonReader(entry.getValue().getReader())).getAsJsonObject();
