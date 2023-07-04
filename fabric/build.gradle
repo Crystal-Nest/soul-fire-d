@@ -28,6 +28,7 @@ dependencies {
   modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
   // Forge Config API Port to handle configuration.
+  implementation 'com.electronwill.night-config:toml:3.6.5'
   modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
 }
 
