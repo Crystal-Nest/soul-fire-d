@@ -14,6 +14,27 @@ import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 @SuppressWarnings("unchecked")
 public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> {
   /**
+   * Default rarity for fire enchantments.
+   */
+  public static final Rarity DEFAULT_RARITY = Rarity.VERY_RARE;
+  /**
+   * Default flag {@code isTreasure} for fire enchantments.
+   */
+  public static final boolean DEFAULT_IS_TREASURE = false;
+  /**
+   * Default flag {@code isCurse} for fire enchantments.
+   */
+  public static final boolean DEFAULT_IS_CURSE = false;
+  /**
+   * Default flag {@code isTradeable} for fire enchantments.
+   */
+  public static final boolean DEFAULT_IS_TRADEABLE = true;
+  /**
+   * Default flag {@code isDiscoverable} for fire enchantments.
+   */
+  public static final boolean DEFAULT_IS_DISCOVERABLE = true;
+
+  /**
    * {@link ResourceLocation} to uniquely identify the associated Fire.
    */
   protected final ResourceLocation fireType;
@@ -34,25 +55,25 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
    * <p>
    * Defaults to {@link Rarity#VERY_RARE}.
    */
-  protected Rarity rarity = Rarity.VERY_RARE;
+  protected Rarity rarity = DEFAULT_RARITY;
   /**
    * {@link Supplier} for whether the enchantment is treasure only.
    * <p>
    * Defaults to {@code () -> false}
    */
-  protected Supplier<Boolean> isTreasure = () -> false;
+  protected Supplier<Boolean> isTreasure = () -> DEFAULT_IS_TREASURE;
   /**
    * {@link Supplier} for whether the enchantment is a curse.
    * <p>
    * Defaults to {@code () -> false}
    */
-  protected Supplier<Boolean> isCurse = () -> false;
+  protected Supplier<Boolean> isCurse = () -> DEFAULT_IS_CURSE;
   /**
    * {@link Supplier} for whether the enchantment can appear in the enchanted book trade offers of librarian villagers.
    * <p>
    * Defaults to {@code () -> true}
    */
-  protected Supplier<Boolean> isTradeable = () -> true;
+  protected Supplier<Boolean> isTradeable = () -> DEFAULT_IS_TRADEABLE;
   /**
    * {@link Supplier} for whether the enchantment will appear in the enchanting table or loots with random enchant function.
    * <p>
@@ -60,7 +81,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
    * <p>
    * Defaults to {@code () -> true}
    */
-  protected Supplier<Boolean> isDiscoverable = () -> true;
+  protected Supplier<Boolean> isDiscoverable = () -> DEFAULT_IS_DISCOVERABLE;
 
   /**
    * @param fireType {@link #fireType}.
