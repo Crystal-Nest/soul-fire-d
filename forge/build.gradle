@@ -1,14 +1,10 @@
 buildscript {
-  repositories {
-    maven { url = "https://maven.minecraftforge.net" }
-    mavenCentral()
-  }
   dependencies {
     classpath "org.spongepowered:mixingradle:0.7.+"
   }
 }
 plugins {
-  id 'net.minecraftforge.gradle' version '5.1.+'
+  id 'net.minecraftforge.gradle' version '[6.0,6.2)'
   id "com.modrinth.minotaur" version "2.+"
   id "com.matthewprenger.cursegradle" version "1.4.+"
   id "com.github.breadmoirai.github-release" version "2.4.+"
@@ -101,7 +97,7 @@ mixin {
   config "soulfired.mixins.json"
 }
 
-def resourceTarget = "META-INF/mods.toml"
+def resourceTargets = ["META-INF/mods.toml", 'pack.mcmeta']
 def intoTargets = ["$rootDir/bin/main/"]
 def replaceProperties = [
   modid: modid,
@@ -119,7 +115,7 @@ processResources {
   inputs.properties replaceProperties
   replaceProperties.put "project", project
 
-  filesMatching(resourceTarget) {
+  filesMatching(resourceTargets) {
     expand replaceProperties
   }
 
@@ -127,7 +123,7 @@ processResources {
     if (file(target).exists()) {
       copy {
         from(sourceSets.main.resources) {
-          include resourceTarget
+          include resourceTargets
           expand replaceProperties
         }
         into target

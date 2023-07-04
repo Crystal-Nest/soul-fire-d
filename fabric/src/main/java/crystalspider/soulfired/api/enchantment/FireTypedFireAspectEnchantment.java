@@ -75,9 +75,10 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
   }
 
   @Override
+  @SuppressWarnings("resource")
   public void onTargetDamaged(LivingEntity attacker, Entity target, int level) {
     if (!wasLastHitByProjectile(target)) {
-      if (!attacker.world.isClient) {
+      if (!attacker.getWorld().isClient) {
         target.setOnFireFor(level * 4);
       }
       ((FireTypeChanger) target).setFireType(FireManager.ensure(fireType));

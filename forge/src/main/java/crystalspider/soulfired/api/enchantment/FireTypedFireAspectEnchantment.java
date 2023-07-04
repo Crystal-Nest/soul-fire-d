@@ -77,9 +77,10 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
   }
 
   @Override
+  @SuppressWarnings("resource")
   public void doPostAttack(LivingEntity attacker, Entity target, int level) {
     if (!wasLastHitByProjectile(target)) {
-      if (!attacker.level.isClientSide) {
+      if (!attacker.level().isClientSide) {
         target.setSecondsOnFire(level * 4);
       }
       ((FireTypeChanger) target).setFireType(FireManager.ensure(fireType));
