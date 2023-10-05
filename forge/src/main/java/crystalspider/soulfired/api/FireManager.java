@@ -635,10 +635,7 @@ public final class FireManager {
   public static boolean damageInFire(Entity entity, ResourceLocation fireType) {
     if (isRegisteredType(fireType)) {
       ((FireTypeChanger) entity).setFireType(fireType);
-      if (entity.tickCount % 20 == 0) {
-        return harmOrHeal(entity, getInFireDamageSourceFor(entity, fireType), getDamage(fireType), getInvertHealAndHarm(fireType));
-      }
-      return false;
+      return harmOrHeal(entity, getInFireDamageSourceFor(entity, fireType), getDamage(fireType), getInvertHealAndHarm(fireType));
     }
     ((FireTypeChanger) entity).setFireType(DEFAULT_FIRE_TYPE);
     return harmOrHeal(entity, DEFAULT_FIRE.getInFire(entity), DEFAULT_FIRE.getDamage(), DEFAULT_FIRE.getInvertHealAndHarm());
