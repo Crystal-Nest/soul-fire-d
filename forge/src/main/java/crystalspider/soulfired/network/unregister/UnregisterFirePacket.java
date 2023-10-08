@@ -1,13 +1,11 @@
 package crystalspider.soulfired.network.unregister;
 
-import java.util.function.Supplier;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.network.CustomPayloadEvent.Context;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.DistExecutor.SafeRunnable;
-import net.minecraftforge.network.NetworkEvent.Context;
 
 /**
  * Network packet to unregister a Fire.
@@ -48,8 +46,8 @@ public final class UnregisterFirePacket {
    * 
    * @param context
    */
-  public void handle(Supplier<Context> context) {
-    context.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> new SafeRunnable() { @Override public void run() { UnregisterFireClientPacket.handle(UnregisterFirePacket.this, context); } }));
-    context.get().setPacketHandled(true);
+  public void handle(Context context) {
+    context.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> new SafeRunnable() { @Override public void run() { UnregisterFireClientPacket.handle(UnregisterFirePacket.this, context); } }));
+    context.setPacketHandled(true);
   }
 }

@@ -1,10 +1,8 @@
 package crystalspider.soulfired.network.unregister;
 
-import java.util.function.Supplier;
-
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.client.FireClientManager;
-import net.minecraftforge.network.NetworkEvent.Context;
+import net.minecraftforge.event.network.CustomPayloadEvent.Context;
 
 /**
  * Unregister Fire Client Packet.
@@ -19,7 +17,7 @@ final class UnregisterFireClientPacket {
    * @param context
    */
   @SuppressWarnings("deprecation")
-  final static void handle(UnregisterFirePacket packet, Supplier<Context> context) {
+  final static void handle(UnregisterFirePacket packet, Context context) {
     FireManager.unregisterFire(packet.fireType);
     FireClientManager.unregisterFire(packet.fireType);
   }

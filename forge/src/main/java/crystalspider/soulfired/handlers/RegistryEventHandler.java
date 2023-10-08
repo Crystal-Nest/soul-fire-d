@@ -3,6 +3,7 @@ package crystalspider.soulfired.handlers;
 import crystalspider.soulfired.api.Fire;
 import crystalspider.soulfired.api.FireManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;

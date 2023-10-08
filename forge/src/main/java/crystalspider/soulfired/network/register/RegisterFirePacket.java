@@ -1,15 +1,13 @@
 package crystalspider.soulfired.network.register;
 
-import java.util.function.Supplier;
-
 import crystalspider.soulfired.api.Fire;
 import crystalspider.soulfired.api.FireBuilder;
 import crystalspider.soulfired.api.FireManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.network.CustomPayloadEvent.Context;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.DistExecutor.SafeRunnable;
-import net.minecraftforge.network.NetworkEvent.Context;
 
 /**
  * Network packet to register a {@link Fire}.
@@ -69,8 +67,8 @@ public final class RegisterFirePacket {
    * 
    * @param context
    */
-  public void handle(Supplier<Context> context) {
-    context.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> new SafeRunnable() { @Override public void run() { RegisterFireClientPacket.handle(RegisterFirePacket.this, context); } }));
-    context.get().setPacketHandled(true);
+  public void handle(Context context) {
+    context.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> new SafeRunnable() { @Override public void run() { RegisterFireClientPacket.handle(RegisterFirePacket.this, context); } }));
+    context.setPacketHandled(true);
   }
 }
