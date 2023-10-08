@@ -7,6 +7,9 @@ import crystalspider.soulfired.api.type.FireTyped;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantment.Rarity;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * Builder for {@link FireTyped} {@link Enchantment}.
@@ -84,10 +87,18 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
   protected Supplier<Boolean> isDiscoverable = () -> DEFAULT_IS_DISCOVERABLE;
 
   /**
-   * @param fireType {@link #fireType}.
+   * Enchantment kind identifier.
+   * Will be used as suffix when registering the enchantment.
    */
-  protected FireEnchantmentBuilder(ResourceLocation fireType) {
+  private final String kind;
+
+  /**
+   * @param fireType {@link #fireType}.
+   * @param kind {@link #kind}.
+   */
+  protected FireEnchantmentBuilder(ResourceLocation fireType, String kind) {
     this.fireType = fireType;
+    this.kind = kind;
   }
 
   /**
@@ -219,9 +230,20 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
   }
 
   /**
+   * Builds and registers the enchantment instance.
+   */
+  public ResourceLocation register() {
+    ResourceLocation key = new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_" + kind);
+    DeferredRegister<Enchantment> enchantments = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, key.getNamespace());
+    enchantments.register(FMLJavaModLoadingContext.get().getModEventBus());
+    enchantments.register(key.getPath(), this::build);
+    return key;
+  }
+
+  /**
    * Builds a {@link T} instance.
    * 
    * @return {@link T} instance.
    */
-  public abstract T build();
+  protected abstract T build();
 }

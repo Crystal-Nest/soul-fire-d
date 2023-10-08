@@ -10,11 +10,11 @@ public final class FireAspectBuilder extends FireEnchantmentBuilder<FireTypedFir
    * @param fireType {@link FireEnchantmentBuilder#fireType fireType}.
    */
   public FireAspectBuilder(ResourceLocation fireType) {
-    super(fireType);
+    super(fireType, "fire_aspect");
   }
 
   @Override
-  public final FireTypedFireAspectEnchantment build() {
+  protected final FireTypedFireAspectEnchantment build() {
     return new FireTypedFireAspectEnchantment(fireType, rarity, isTreasure, isCurse, isTradeable, isDiscoverable, enabled, compatibility);
   }
 }

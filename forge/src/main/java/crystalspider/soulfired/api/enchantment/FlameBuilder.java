@@ -10,11 +10,11 @@ public final class FlameBuilder extends FireEnchantmentBuilder<FireTypedFlameEnc
    * @param fireType {@link FireEnchantmentBuilder#fireType fireType}.
    */
   public FlameBuilder(ResourceLocation fireType) {
-    super(fireType);
+    super(fireType, "flame");
   }
 
   @Override
-  public final FireTypedFlameEnchantment build() {
+  protected final FireTypedFlameEnchantment build() {
     return new FireTypedFlameEnchantment(fireType, rarity, isTreasure, isCurse, isTradeable, isDiscoverable, enabled, compatibility);
   }
 }
