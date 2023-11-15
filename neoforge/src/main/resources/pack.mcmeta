@@ -1,0 +1,10 @@
+{
+  "pack": {
+    "description": {
+      "text": "${modid} resources"
+    },
+    "pack_format": 18,
+    "forge:resource_pack_format": 12,
+    "forge:data_pack_format": 10
+  }
+}

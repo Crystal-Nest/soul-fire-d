@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "soulfired.refmap.json",
+  "package": "crystalspider.soulfired.mixin",
+  "mixins": [
+    "AbstractArrowMixin",
+    "BaseFireBlockMixin",
+    "BowItemMixin",
+    "CampfireBlockMixin",
+    "EnchantmentHelperMixin",
+    "EntityMixin",
+    "ZombieMixin"
+  ],
+  "client": [
+    "client.EntityRenderDispatcherMixin",
+    "client.ScreenEffectRendererMixin"
+  ]
+}
