@@ -32,7 +32,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 /**
  * Handles datapack reload events.
  */
-@EventBusSubscriber(bus = Bus.FORGE)
+@EventBusSubscriber(modid = ModLoader.MOD_ID, bus = Bus.FORGE)
 public final class DatapacksEventHandler {
   /**
    * Logger.
