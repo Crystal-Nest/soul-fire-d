@@ -8,7 +8,7 @@ import net.fabricmc.api.ClientModInitializer;
 /**
  * Soul fire'd mod client loader.
  */
-public final class SoulFiredClientLoader implements ClientModInitializer {
+public final class ClientModLoader implements ClientModInitializer {
   @Override
   public void onInitializeClient() {
     FireClientManager.registerFires(FireManager.getFires());

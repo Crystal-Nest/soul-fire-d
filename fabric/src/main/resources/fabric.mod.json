@@ -17,10 +17,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "${group}.${modid}.SoulFiredLoader"
+      "${group}.${modid}.ModLoader"
     ],
     "client": [
-      "${group}.${modid}.SoulFiredClientLoader"
+      "${group}.${modid}.ClientModLoader"
     ]
   },
   "mixins": [
