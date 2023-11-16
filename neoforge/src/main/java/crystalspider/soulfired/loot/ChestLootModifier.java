@@ -9,7 +9,7 @@ import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import crystalspider.soulfired.config.SoulFiredConfig;
+import crystalspider.soulfired.config.ModConfig;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
@@ -48,7 +48,7 @@ public final class ChestLootModifier extends LootModifier {
       generatedLoot = new ObjectArrayList<>();
     }
     for (Addition addition : additions) {
-      if (SoulFiredConfig.getEnableSoulFlame() && context.getRandom().nextFloat() <= addition.chance) {
+      if (ModConfig.getEnableSoulFlame() && context.getRandom().nextFloat() <= addition.chance) {
         generatedLoot.add(addition.getEnchantedBook());
       }
     }

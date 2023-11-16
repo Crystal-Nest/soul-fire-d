@@ -8,6 +8,31 @@ and this project adheres to [Forge Semantic Versioning](https://docs.minecraftfo
 ## [Unreleased]
 - Nothing new.
 
+## [1.20.2-3.2.1.0] - 2023/11/17
+- Add [#32](https://github.com/Nyphet/soul-fire-d/issues/32).
+- Add new tweaking option for enchantments, refer to the [wiki](https://github.com/Nyphet/soul-fire-d/wiki/Registering-your-Fire#tweaking-enchantments) for more info.
+- Fix `FireManager.getModIs()` returning FireIds rather than ModIds.
+
+## [1.19.4-3.2.1.0] - 2023/11/17
+- Add [#32](https://github.com/Nyphet/soul-fire-d/issues/32).
+- Add new tweaking option for enchantments, refer to the [wiki](https://github.com/Nyphet/soul-fire-d/wiki/Registering-your-Fire#tweaking-enchantments) for more info.
+- Fix `FireManager.getModIs()` returning FireIds rather than ModIds.
+
+## [1.19.2-3.2.1.0] - 2023/11/17
+- Add [#32](https://github.com/Nyphet/soul-fire-d/issues/32).
+- Add new tweaking option for enchantments, refer to the [wiki](https://github.com/Nyphet/soul-fire-d/wiki/Registering-your-Fire#tweaking-enchantments) for more info.
+- Fix `FireManager.getModIs()` returning FireIds rather than ModIds.
+
+## [1.18.2-3.2.1.0] - 2023/11/17
+- Add [#32](https://github.com/Nyphet/soul-fire-d/issues/32).
+- Add new tweaking option for enchantments, refer to the [wiki](https://github.com/Nyphet/soul-fire-d/wiki/Registering-your-Fire#tweaking-enchantments) for more info.
+- Fix `FireManager.getModIs()` returning FireIds rather than ModIds.
+
+## [1.16.5-3.2.1.0] - 2023/11/17
+- Add [#32](https://github.com/Nyphet/soul-fire-d/issues/32).
+- Add new tweaking option for enchantments, refer to the [wiki](https://github.com/Nyphet/soul-fire-d/wiki/Registering-your-Fire#tweaking-enchantments) for more info.
+- Fix `FireManager.getModIs()` returning FireIds rather than ModIds.
+
 ## [1.20.2-3.2.0.1] - 2023/10/05
 - Fix [#28](https://github.com/Nyphet/soul-fire-d/issues/28).
 - Port to 1.20.2
@@ -287,11 +312,13 @@ So now *this* is the FINAL version. 1.16.5 will not receive further updates.
 
 [Unreleased]: https://github.com/Nyphet/soul-fire-d
 
+[1.20.2-3.2.1.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.20.2-3.2.1.0
 [1.20.2-3.2.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.20.2-3.2.0.1
 
 [1.20.1-3.2.0.1-final]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.20.1-3.2.0.1-final
 [1.20.1-3.2.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.20.1-3.2.0.0
 
+[1.19.4-3.2.1.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.4-3.2.1.0
 [1.19.4-3.2.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.4-3.2.0.1
 [1.19.4-3.2.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.4-3.2.0.0
 [1.19.4-3.2.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.4-3.2.0.0
@@ -306,6 +333,7 @@ So now *this* is the FINAL version. 1.16.5 will not receive further updates.
 [1.19.3-2.0.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.3-2.0.0.1
 [1.19.3-2.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.3-2.0.0.0
 
+[1.19.2-3.2.1.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.2-3.2.1.0
 [1.19.2-3.2.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.2-3.2.0.1
 [1.19.2-3.2.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.2-3.2.0.0
 [1.19.2-3.1.0.0-final]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19.2-3.1.0.0-final
@@ -329,6 +357,7 @@ So now *this* is the FINAL version. 1.16.5 will not receive further updates.
 [1.19-1.0.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19-1.0.0.1
 [1.19-1.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.19-1.0.0.0
 
+[1.18.2-3.2.1.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-3.2.1.0
 [1.18.2-3.2.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-3.2.0.1
 [1.18.2-3.2.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-3.2.0.0
 [1.18.2-3.1.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-3.1.0.0
@@ -342,6 +371,7 @@ So now *this* is the FINAL version. 1.16.5 will not receive further updates.
 [1.18.2-1.0.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-1.0.0.1
 [1.18.2-1.0.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.18.2-1.0.0.0
 
+[1.16.5-3.2.1.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.16.5-3.2.1.0
 [1.16.5-3.2.0.1]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.16.5-3.2.0.1
 [1.16.5-3.2.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.16.5-3.2.0.0
 [1.16.5-3.1.0.0]: https://github.com/Nyphet/soul-fire-d/releases/tag/v1.16.5-3.1.0.0

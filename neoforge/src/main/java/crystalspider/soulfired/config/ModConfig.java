@@ -6,7 +6,7 @@ import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
 /**
  * Soul Fire'd Configuration.
  */
-public final class SoulFiredConfig {
+public final class ModConfig {
   /**
    * {@link ModConfigSpec} {@link ModConfigSpec.Builder Builder}.
    */

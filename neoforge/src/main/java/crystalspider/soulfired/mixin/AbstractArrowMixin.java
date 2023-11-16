@@ -6,18 +6,26 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.enchantment.FireEnchantmentHelper;
+import crystalspider.soulfired.api.enchantment.FireTypedFlameEnchantment;
 import crystalspider.soulfired.api.enchantment.FireEnchantmentHelper.FireEnchantment;
 import crystalspider.soulfired.api.type.FireTypeChanger;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 
 /**
  * Injects into {@link AbstractArrow} to alter Fire behavior for consistency.
  */
 @Mixin(AbstractArrow.class)
-public abstract class AbstractArrowMixin implements FireTypeChanger {
+public abstract class AbstractArrowMixin extends Projectile implements FireTypeChanger {
+  private AbstractArrowMixin(EntityType<? extends Projectile> entityType, Level world) {
+    super(entityType, world);
+  }
+
   /**
    * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link AbstractArrow#onHitEntity(EntityHitResult)}.
    * <p>
@@ -28,7 +36,8 @@ public abstract class AbstractArrowMixin implements FireTypeChanger {
    */
   @Redirect(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setSecondsOnFire(I)V"))
   private void redirectSetSecondsOnFire(Entity caller, int seconds) {
-    FireManager.setOnFire(caller, seconds, getFireType());
+    FireTypedFlameEnchantment flame = FireManager.getFlame(getFireType());
+    FireManager.setOnFire(caller, flame != null ? flame.duration(this.getOwner(), caller, seconds) : seconds, getFireType());
   }
 
   /**
