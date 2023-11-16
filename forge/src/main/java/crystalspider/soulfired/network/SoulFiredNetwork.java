@@ -2,7 +2,7 @@ package crystalspider.soulfired.network;
 
 import org.jetbrains.annotations.Nullable;
 
-import crystalspider.soulfired.SoulFiredLoader;
+import crystalspider.soulfired.ModLoader;
 import crystalspider.soulfired.api.Fire;
 import crystalspider.soulfired.network.register.RegisterFirePacket;
 import crystalspider.soulfired.network.unregister.UnregisterFirePacket;
@@ -19,8 +19,8 @@ public final class SoulFiredNetwork {
   /**
    * {@link SimpleChannel} instance for compatibility client-server.
    */
-  private static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(SoulFiredLoader.MODID, "ddfires"), () -> SoulFiredLoader.PROTOCOL_VERSION, SoulFiredLoader.PROTOCOL_VERSION::equals, SoulFiredLoader.PROTOCOL_VERSION::equals);
-  
+  private static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(ModLoader.MOD_ID, "ddfires"), () -> ModLoader.PROTOCOL_VERSION, ModLoader.PROTOCOL_VERSION::equals, ModLoader.PROTOCOL_VERSION::equals);
+
   /**
    * Last packet id used to register a packet kind.
    */

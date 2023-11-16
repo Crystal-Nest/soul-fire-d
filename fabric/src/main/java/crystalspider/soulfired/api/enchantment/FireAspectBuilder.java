@@ -15,6 +15,6 @@ public final class FireAspectBuilder extends FireEnchantmentBuilder<FireTypedFir
 
   @Override
   public final FireTypedFireAspectEnchantment build() {
-    return new FireTypedFireAspectEnchantment(fireType, rarity, isTreasure, isCurse, isTradeable, isDiscoverable, enabled, compatibility);
+    return new FireTypedFireAspectEnchantment(fireType, rarity, isTreasure, isCurse, isTradeable, isDiscoverable, enabled, compatibility, duration);
   }
 }
