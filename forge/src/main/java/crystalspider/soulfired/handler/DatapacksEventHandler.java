@@ -1,4 +1,4 @@
-package crystalspider.soulfired.handlers;
+package crystalspider.soulfired.handler;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -14,7 +14,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
-import crystalspider.soulfired.SoulFiredLoader;
+import crystalspider.soulfired.ModLoader;
 import crystalspider.soulfired.api.Fire;
 import crystalspider.soulfired.api.FireBuilder;
 import crystalspider.soulfired.api.FireManager;
@@ -32,7 +32,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 /**
  * Handles datapack reload events.
  */
-@EventBusSubscriber(bus = Bus.FORGE)
+@EventBusSubscriber(modid = ModLoader.MOD_ID, bus = Bus.FORGE)
 public final class DatapacksEventHandler {
   /**
    * Logger.
@@ -134,7 +134,7 @@ public final class DatapacksEventHandler {
       try {
         return element.getAsJsonObject();
       } catch (IllegalStateException e) {
-        LOGGER.error(SoulFiredLoader.MODID + " encountered a non-blocking DDFire error!\nError parsing ddfire [" + identifier + "]: not a JSON object.");
+        LOGGER.error(ModLoader.MOD_ID + " encountered a non-blocking DDFire error!\nError parsing ddfire [" + identifier + "]: not a JSON object.");
         throw e;
       }
     }
@@ -157,7 +157,7 @@ public final class DatapacksEventHandler {
       try {
         return parser.apply(data.get(field));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
-        LOGGER.error(SoulFiredLoader.MODID + " encountered a non-blocking DDFire error!\nError parsing required field \"" + field + "\" for ddfire [" + identifier + "]: missing or malformed field.");
+        LOGGER.error(ModLoader.MOD_ID + " encountered a non-blocking DDFire error!\nError parsing required field \"" + field + "\" for ddfire [" + identifier + "]: missing or malformed field.");
         throw e;
       }
     }
@@ -182,7 +182,7 @@ public final class DatapacksEventHandler {
       } catch (NullPointerException e) {
         return fallback;
       } catch (UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
-        LOGGER.error(SoulFiredLoader.MODID + " encountered a non-blocking DDFire error!\nError parsing optional field \"" + field + "\" for ddfire [" + identifier + "]: malformed field.");
+        LOGGER.error(ModLoader.MOD_ID + " encountered a non-blocking DDFire error!\nError parsing optional field \"" + field + "\" for ddfire [" + identifier + "]: malformed field.");
         throw e;
       }
     }

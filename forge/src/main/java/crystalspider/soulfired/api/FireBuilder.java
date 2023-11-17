@@ -398,7 +398,7 @@ public final class FireBuilder {
       if (flameConfigurator != null && flameConfigurator.isEmpty()) {
         flameConfigurator = Optional.of(builder -> builder);
       }
-      return new Fire(fireType, damage, invertHealAndHarm, inFire, onFire, hurtSound, get(source), get(campfire), build(fireAspectConfigurator, () -> new FireAspectBuilder(fireType)), build(flameConfigurator, () -> new FlameBuilder(fireType)));
+      return new Fire(fireType, damage, invertHealAndHarm, inFire, onFire, hurtSound, get(source), get(campfire), register(fireAspectConfigurator, () -> new FireAspectBuilder(fireType)), register(flameConfigurator, () -> new FlameBuilder(fireType)));
     }
     throw new IllegalStateException("Attempted to build a Fire with a non-valid fireId or modId");
   }
@@ -418,7 +418,7 @@ public final class FireBuilder {
   }
 
   /**
-   * Returns the value obtained by calling {@link FireEnchantmentBuilder#build()} for the given Builder.
+   * Returns the value obtained by calling {@link FireEnchantmentBuilder#register()} for the given Builder.
    * <p>
    * Returns {@code null} if the {@code optional} is either {@code null} or empty.
    * 
@@ -426,13 +426,12 @@ public final class FireBuilder {
    * @param <E> enchantment type.
    * @param optional
    * @param supplier
-   * @return the value obtained by calling {@link FireEnchantmentBuilder#build()}.
+   * @return the value obtained by calling {@link FireEnchantmentBuilder#register()}.
    */
-  @Nullable
-  private <B extends FireEnchantmentBuilder<E>, E extends Enchantment & FireTyped> E build(@Nullable Optional<Function<B, B>> optional, Supplier<B> supplier) {
+  private <B extends FireEnchantmentBuilder<E>, E extends Enchantment & FireTyped> ResourceLocation register(@Nullable Optional<Function<B, B>> optional, Supplier<B> supplier) {
     Function<B, B> configurator = get(optional);
     if (configurator != null) {
-      return configurator.apply(supplier.get()).build();
+      return configurator.apply(supplier.get()).register();
     }
     return null;
   }

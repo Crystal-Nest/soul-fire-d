@@ -365,7 +365,7 @@ public final class FireManager {
    * @return the list of all registered mod ids.
    */
   public static List<String> getModIds() {
-    return fires.keySet().stream().map(fireType -> fireType.getPath()).toList();
+    return fires.keySet().stream().map(fireType -> fireType.getNamespace()).toList();
   }
 
   /**
@@ -551,7 +551,7 @@ public final class FireManager {
    * @return the list of all Fire Aspect enchantments registered.
    */
   public static List<FireTypedFireAspectEnchantment> getFireAspects() {
-    return fires.values().stream().map(fire -> fire.getFireAspect()).filter(optional -> optional.isPresent()).map(optional -> optional.get()).toList();
+    return fires.values().stream().map(fire -> getFireAspect(fire.getFireType())).filter(enchantment -> enchantment != null).toList();
   }
 
   /**
@@ -560,7 +560,7 @@ public final class FireManager {
    * @return the list of all Flame enchantments registered.
    */
   public static List<FireTypedFlameEnchantment> getFlames() {
-    return fires.values().stream().map(fire -> fire.getFlame()).filter(optional -> optional.isPresent()).map(optional -> optional.get()).toList();
+    return fires.values().stream().map(fire -> getFlame(fire.getFireType())).filter(enchantment -> enchantment != null).toList();
   }
 
   /**
@@ -587,7 +587,7 @@ public final class FireManager {
    */
   @Nullable
   public static FireTypedFireAspectEnchantment getFireAspect(ResourceLocation fireType) {
-    return fires.getOrDefault(fireType, DEFAULT_FIRE).getFireAspect().orElse(null);
+    return (FireTypedFireAspectEnchantment) ForgeRegistries.ENCHANTMENTS.getValue(getFire(fireType).getFireAspect().orElse(null));
   }
 
   /**
@@ -614,7 +614,7 @@ public final class FireManager {
    */
   @Nullable
   public static FireTypedFlameEnchantment getFlame(ResourceLocation fireType) {
-    return fires.getOrDefault(fireType, DEFAULT_FIRE).getFlame().orElse(null);
+    return (FireTypedFlameEnchantment) ForgeRegistries.ENCHANTMENTS.getValue(getFire(fireType).getFlame().orElse(null));
   }
 
   /**

@@ -12,6 +12,10 @@ archivesBaseName = modid
 version = "${minecraft_version}-${mod_version}-${loader.toLowerCase()}"
 group = project.group
 
+loom {
+  accessWidenerPath = file("src/main/resources/${modid}.accesswidener")
+}
+
 repositories {
   maven {
     name = "Fuzs Mod Resources"

@@ -53,13 +53,13 @@ public final class Fire {
   private final Optional<ResourceLocation> campfire;
 
   /**
-   * {@link Optional} Fire Aspect {@link FireTypedFireAspectEnchantment}.
+   * {@link Optional} Fire Aspect {@link FireTypedFireAspectEnchantment} {@link ResourceLocation}.
    */
-  private final Optional<FireTypedFireAspectEnchantment> fireAspect;
+  private final Optional<ResourceLocation> fireAspect;
   /**
-   * {@link Optional} Flame {@link FireTypedFlameEnchantment}.
+   * {@link Optional} Flame {@link FireTypedFlameEnchantment} {@link ResourceLocation}.
    */
-  private final Optional<FireTypedFlameEnchantment> flame;
+  private final Optional<ResourceLocation> flame;
 
   /**
    * @param fireType {@link #fireType}.
@@ -73,7 +73,7 @@ public final class Fire {
    * @param fireAspect {@link #fireAspect}.
    * @param flame {@link #flame}.
    */
-  Fire(ResourceLocation fireType, float damage, boolean invertHealAndHarm, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, ResourceLocation source, ResourceLocation campfire, FireTypedFireAspectEnchantment fireAspect, FireTypedFlameEnchantment flame) {
+  Fire(ResourceLocation fireType, float damage, boolean invertHealAndHarm, DamageSource inFire, DamageSource onFire, SoundEvent hurtSound, ResourceLocation source, ResourceLocation campfire, ResourceLocation fireAspect, ResourceLocation flame) {
     this.fireType = fireType;
     this.damage = damage;
     this.invertHealAndHarm = invertHealAndHarm;
@@ -163,7 +163,7 @@ public final class Fire {
    * 
    * @return this {@link #fireAspect}.
    */
-  public Optional<FireTypedFireAspectEnchantment> getFireAspect() {
+  public Optional<ResourceLocation> getFireAspect() {
     return fireAspect;
   }
 
@@ -172,7 +172,7 @@ public final class Fire {
    * 
    * @return this {@link #flame}.
    */
-  public Optional<FireTypedFlameEnchantment> getFlame() {
+  public Optional<ResourceLocation> getFlame() {
     return flame;
   }
 
