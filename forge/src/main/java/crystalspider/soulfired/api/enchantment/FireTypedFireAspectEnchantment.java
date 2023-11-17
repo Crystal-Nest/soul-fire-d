@@ -6,7 +6,8 @@ import java.util.function.Supplier;
 import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.api.compat.Ensorcellation;
 import crystalspider.soulfired.api.type.FireTypeChanger;
-import crystalspider.soulfired.api.type.FireTyped;
+import crystalspider.soulfired.api.type.FireTypedEnchantment;
+import crystalspider.soulfired.api.type.TriFunction;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.FireAspectEnchantment;
 import net.minecraft.entity.Entity;
@@ -20,7 +21,7 @@ import net.minecraftforge.fml.ModList;
 /**
  * Fire Aspect Enchantment sensitive to the Fire Type.
  */
-public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment implements FireTyped {
+public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment implements FireTypedEnchantment {
   /**
    * {@link ResourceLocation} to uniquely identify the associated Fire.
    */
@@ -34,6 +35,10 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
    * Addtional compatibility {@link Function} to call and check for when checking compatibility with other enchantments.
    */
   private final Function<Enchantment, Boolean> compatibility;
+  /**
+   * {@link TriFunction} to tweak the flame duration.
+   */
+  private final TriFunction<Entity, Entity, Integer, Integer> duration;
 
   /**
    * Whether the enchantment is treasure only.
@@ -63,8 +68,19 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
    * @param isDiscoverable {@link #isDiscoverable}.
    * @param enabled {@link #enabled}.
    * @param compatibility {@link #compatibility}.
+   * @param duration {@link #duration}.
    */
-  FireTypedFireAspectEnchantment(ResourceLocation fireType, Rarity rarity, Supplier<Boolean> isTreasure, Supplier<Boolean> isCurse, Supplier<Boolean> isTradeable, Supplier<Boolean> isDiscoverable, Supplier<Boolean> enabled, Function<Enchantment, Boolean> compatibility) {
+  FireTypedFireAspectEnchantment(
+    ResourceLocation fireType,
+    Rarity rarity,
+    Supplier<Boolean> isTreasure,
+    Supplier<Boolean> isCurse,
+    Supplier<Boolean> isTradeable,
+    Supplier<Boolean> isDiscoverable,
+    Supplier<Boolean> enabled,
+    Function<Enchantment, Boolean> compatibility,
+    TriFunction<Entity, Entity, Integer, Integer> duration
+  ) {
     super(rarity, EquipmentSlotType.MAINHAND);
     this.fireType = FireManager.sanitize(fireType);
     this.isTreasure = isTreasure;
@@ -73,14 +89,14 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
     this.isDiscoverable = isDiscoverable;
     this.enabled = enabled;
     this.compatibility = compatibility;
-    setRegistryName(fireType.getNamespace(), fireType.getPath() + "_fire_aspect");
+    this.duration = duration;
   }
 
   @Override
   public void doPostAttack(LivingEntity attacker, Entity target, int level) {
     if (!wasLastHitByProjectile(target)) {
       if (!attacker.level.isClientSide) {
-        target.setSecondsOnFire(level * 4);
+        target.setSecondsOnFire(this.duration(attacker, target, level * 4));
       }
       ((FireTypeChanger) target).setFireType(FireManager.ensure(fireType));
     }
@@ -150,5 +166,10 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
   @Override
   public ResourceLocation getFireType() {
     return fireType;
+  }
+
+  @Override
+  public int duration(Entity attacker, Entity target, Integer duration) {
+    return this.duration.apply(attacker, target, duration);
   }
 }

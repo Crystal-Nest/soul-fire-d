@@ -375,7 +375,7 @@ public final class FireManager {
    * @return the list of all registered mod ids.
    */
   public static List<String> getModIds() {
-    return fires.keySet().stream().map(fireType -> fireType.getPath()).collect(Collectors.toList());
+    return fires.keySet().stream().map(fireType -> fireType.getNamespace()).collect(Collectors.toList());
   }
 
   /**

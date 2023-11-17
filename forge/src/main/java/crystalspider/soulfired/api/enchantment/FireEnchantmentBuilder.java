@@ -4,9 +4,14 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import crystalspider.soulfired.api.type.FireTyped;
+import crystalspider.soulfired.api.type.TriFunction;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantment.Rarity;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * Builder for {@link FireTyped} {@link Enchantment}.
@@ -51,6 +56,10 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
    */
   protected Function<Enchantment, Boolean> compatibility = (enchantment) -> true;
   /**
+   * {@link TriFunction} to tweak the flame duration.
+   */
+  protected TriFunction<Entity, Entity, Integer, Integer> duration = (attacker, target, duration) -> duration;
+  /**
    * {@link Rarity} for the enchantment.
    * <p>
    * Defaults to {@link Rarity#VERY_RARE}.
@@ -84,10 +93,17 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
   protected Supplier<Boolean> isDiscoverable = () -> DEFAULT_IS_DISCOVERABLE;
 
   /**
+   * Enchantment kind identifier.
+   * Will be used as suffix when registering the enchantment.
+   */
+  private final String kind;
+
+  /**
    * @param fireType {@link #fireType}.
    */
-  protected FireEnchantmentBuilder(ResourceLocation fireType) {
+  protected FireEnchantmentBuilder(ResourceLocation fireType, String kind) {
     this.fireType = fireType;
+    this.kind = kind;
   }
 
   /**
@@ -219,9 +235,44 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
   }
 
   /**
+   * Sets the {@link #duration} {@link TriFunction}.
+   * 
+   * @param <B> builder type.
+   * @param duration
+   * @return this Builder to either set other properties or {@link #build}.
+   */
+  public final <B extends FireEnchantmentBuilder<T>> B setDuration(TriFunction<Entity, Entity, Integer, Integer> duration) {
+    this.duration = duration;
+    return (B) this;
+  }
+
+  /**
+   * Sets the {@link #duration}.
+   * 
+   * @param <B> builder type.
+   * @param duration
+   * @return this Builder to either set other properties or {@link #build}.
+   */
+  public final <B extends FireEnchantmentBuilder<T>> B setDuration(int duration) {
+    this.duration = (attacker, target, base) -> duration;
+    return (B) this;
+  }
+
+  /**
+   * Builds and registers the enchantment instance.
+   */
+  public ResourceLocation register() {
+    ResourceLocation key = new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_" + kind);
+    DeferredRegister<Enchantment> enchantments = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, key.getNamespace());
+    enchantments.register(FMLJavaModLoadingContext.get().getModEventBus());
+    enchantments.register(key.getPath(), this::build);
+    return key;
+  }
+
+  /**
    * Builds a {@link T} instance.
    * 
    * @return {@link T} instance.
    */
-  public abstract T build();
+  protected abstract T build();
 }

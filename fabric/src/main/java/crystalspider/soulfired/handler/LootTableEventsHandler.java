@@ -1,7 +1,7 @@
-package crystalspider.soulfired.handlers;
+package crystalspider.soulfired.handler;
 
 import crystalspider.soulfired.api.FireManager;
-import crystalspider.soulfired.config.SoulFiredConfig;
+import crystalspider.soulfired.config.ModConfig;
 import net.fabricmc.fabric.api.loot.v1.FabricLootSupplierBuilder;
 import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback.LootTableSetter;
 import net.minecraft.item.Items;
@@ -36,7 +36,7 @@ public final class LootTableEventsHandler {
    * @param lootTableSource
    */
   public static void handle(ResourceManager resourceManager, LootManager lootManager, Identifier identifier, FabricLootSupplierBuilder builder, LootTableSetter lootTableSource) {
-    if (SoulFiredConfig.getEnableSoulFlame() && identifier.equals(BASTION_CHEST_IDENTIFIER)) {
+    if (ModConfig.getEnableSoulFlame() && identifier.equals(BASTION_CHEST_IDENTIFIER)) {
       builder.pool(
         LootPool.builder()
           .rolls(ConstantLootTableRange.create(1))

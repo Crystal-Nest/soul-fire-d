@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import crystalspider.soulfired.config.SoulFiredConfig;
+import crystalspider.soulfired.config.ModConfig;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.item.EnchantedBookItem;
@@ -45,7 +45,7 @@ public final class ChestLootModifier extends LootModifier {
       generatedLoot = new ArrayList<>();
     }
     for (Entry<ItemStack, Float> entry : additions.entrySet()) {
-      if (SoulFiredConfig.getEnableSoulFlame() && context.getRandom().nextFloat() <= entry.getValue()) {
+      if (ModConfig.getEnableSoulFlame() && context.getRandom().nextFloat() <= entry.getValue()) {
         generatedLoot.add(entry.getKey());
       }
     }

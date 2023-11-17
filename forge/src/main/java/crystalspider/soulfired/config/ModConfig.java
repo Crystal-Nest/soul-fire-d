@@ -6,7 +6,7 @@ import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 /**
  * Soul Fire'd Configuration.
  */
-public final class SoulFiredConfig {
+public final class ModConfig {
   /**
    * {@link ForgeConfigSpec} {@link ForgeConfigSpec.Builder Builder}.
    */

@@ -1,9 +1,9 @@
 package crystalspider.soulfired.network;
 
-import crystalspider.soulfired.SoulFiredLoader;
+import crystalspider.soulfired.ModLoader;
 import crystalspider.soulfired.api.Fire;
 import crystalspider.soulfired.api.events.ServerLifecycleEvents;
-import crystalspider.soulfired.handlers.FireResourceReloadListener;
+import crystalspider.soulfired.handler.FireResourceReloadListener;
 import crystalspider.soulfired.network.packets.RegisterFirePacket;
 import crystalspider.soulfired.network.packets.UnregisterFirePacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -20,11 +20,11 @@ public final class SoulFiredNetwork {
   /**
    * {@link RegisterFirePacket} {@link Identifier}.
    */
-  public static final Identifier REGISTER_FIRE = new Identifier(SoulFiredLoader.MODID, "register_fire");
+  public static final Identifier REGISTER_FIRE = new Identifier(ModLoader.MOD_ID, "register_fire");
   /**
    * {@link UnregisterFirePacket} {@link Identifier}.
    */
-  public static final Identifier UNREGISTER_FIRE = new Identifier(SoulFiredLoader.MODID, "unregister_fire");
+  public static final Identifier UNREGISTER_FIRE = new Identifier(ModLoader.MOD_ID, "unregister_fire");
 
   /**
    * Register packets identifiers and event to send them.1

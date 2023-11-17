@@ -4,8 +4,10 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import crystalspider.soulfired.api.type.FireTyped;
+import crystalspider.soulfired.api.type.TriFunction;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantment.Rarity;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 
 /**
@@ -29,6 +31,10 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
    * Defaults to {@code (enchantment) -> true}.
    */
   protected Function<Enchantment, Boolean> compatibility = (enchantment) -> true;
+  /**
+   * {@link TriFunction} to tweak the flame duration.
+   */
+  protected TriFunction<Entity, Entity, Integer, Integer> duration = (attacker, target, duration) -> duration;
   /**
    * {@link Rarity} for the enchantment.
    * <p>
@@ -194,6 +200,30 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
    */
   public final <B extends FireEnchantmentBuilder<T>> B setEnabled(Supplier<Boolean> enabled) {
     this.enabled = enabled;
+    return (B) this;
+  }
+
+  /**
+   * Sets the {@link #duration} {@link TriFunction}.
+   * 
+   * @param <B> builder type.
+   * @param duration
+   * @return this Builder to either set other properties or {@link #build}.
+   */
+  public final <B extends FireEnchantmentBuilder<T>> B setDuration(TriFunction<Entity, Entity, Integer, Integer> duration) {
+    this.duration = duration;
+    return (B) this;
+  }
+
+  /**
+   * Sets the {@link #duration}.
+   * 
+   * @param <B> builder type.
+   * @param duration
+   * @return this Builder to either set other properties or {@link #build}.
+   */
+  public final <B extends FireEnchantmentBuilder<T>> B setDuration(int duration) {
+    this.duration = (attacker, target, base) -> duration;
     return (B) this;
   }
 
