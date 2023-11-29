@@ -47,4 +47,4 @@ Please note that the API is available even with datapacks, to know more follow t
 [![Modrinth](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/modrinth/modrinth64.png "Modrinth")](https://modrinth.com/user/Nyphet)
 [![Curseforge](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/curseforge/curseforge64.png "Curseforge")](https://www.curseforge.com/members/crystal_spider_/projects)
 
-[![Kinetic Hosting](https://raw.githubusercontent.com/Nyphet/mod-fancy-assets/main/hosting/banner-small.png "Kinetic Hosting")](https://billing.kinetichosting.net/aff.php?aff=122)
+[![Bisect Hosting](https://www.bisecthosting.com/partners/custom-banners/d559b544-474c-4109-b861-1b2e6ca6026a.webp "Bisect Hosting")](https://bisecthosting.com/crystalspider)
