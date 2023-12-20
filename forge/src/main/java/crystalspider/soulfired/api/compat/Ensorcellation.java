@@ -1,7 +1,7 @@
 package crystalspider.soulfired.api.compat;
 
-// import cofh.ensorcellation.enchantment.FrostAspectEnchantment;
-// import cofh.ensorcellation.enchantment.override.FireAspectEnchantmentImp;
+import cofh.ensorcellation.common.enchantment.FrostAspectEnchantment;
+import cofh.ensorcellation.common.enchantment.override.FireAspectEnchantmentImp;
 import crystalspider.soulfired.api.enchantment.FireTypedFireAspectEnchantment;
 import net.minecraft.world.item.enchantment.Enchantment;
 
@@ -12,14 +12,12 @@ public final class Ensorcellation {
   private Ensorcellation() {}
 
   /**
-   * TODO: Ensorcellation for 1.20.1 is not available yet.
    * Returns whether the given {@link Enchantment} is is an Ensorcellation enchantment incompatible with any {@link FireTypedFireAspectEnchantment}.
    * 
    * @param enchantment
    * @return whether the given {@link Enchantment} is an Ensorcellation enchantment incompatible with any {@link FireTypedFireAspectEnchantment}.
    */
   public static boolean checkFireAspectCompatibility(Enchantment enchantment) {
-    // return !(enchantment instanceof FireAspectEnchantmentImp || enchantment instanceof FrostAspectEnchantment);
-    return true;
+    return !(enchantment instanceof FireAspectEnchantmentImp || enchantment instanceof FrostAspectEnchantment);
   }
 }

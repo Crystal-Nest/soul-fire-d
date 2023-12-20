@@ -15,6 +15,6 @@ public final class FlameBuilder extends FireEnchantmentBuilder<FireTypedFlameEnc
 
   @Override
   public final FireTypedFlameEnchantment build() {
-    return new FireTypedFlameEnchantment(fireType, rarity, isTreasure, isCurse, isTradeable, isDiscoverable, enabled, compatibility);
+    return new FireTypedFlameEnchantment(fireType, rarity, isTreasure, isCurse, isTradeable, isDiscoverable, enabled, compatibility, duration);
   }
 }

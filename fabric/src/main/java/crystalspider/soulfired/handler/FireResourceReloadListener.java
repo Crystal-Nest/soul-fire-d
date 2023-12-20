@@ -1,4 +1,4 @@
-package crystalspider.soulfired.handlers;
+package crystalspider.soulfired.handler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
-import crystalspider.soulfired.SoulFiredLoader;
+import crystalspider.soulfired.ModLoader;
 import crystalspider.soulfired.api.Fire;
 import crystalspider.soulfired.api.FireBuilder;
 import crystalspider.soulfired.api.FireManager;
@@ -65,14 +65,14 @@ public class FireResourceReloadListener implements SimpleResourceReloadListener<
 
   @Override
   public Identifier getFabricId() {
-    return new Identifier(SoulFiredLoader.MODID, "ddfires");
+    return new Identifier(ModLoader.MOD_ID, "ddfires");
   }
 
   @Override
   public CompletableFuture<HashMap<Identifier, Fire>> load(ResourceManager manager, Profiler profiler, Executor executor) {
     return CompletableFuture.supplyAsync(() -> {
       HashMap<Identifier, Fire> data = new HashMap<>();
-      for (Entry<Identifier, Resource> entry : manager.findResources("fires", path -> path.getNamespace().equals(SoulFiredLoader.MODID) && path.getPath().endsWith(".json")).entrySet()) {
+      for (Entry<Identifier, Resource> entry : manager.findResources("fires", path -> path.getNamespace().equals(ModLoader.MOD_ID) && path.getPath().endsWith(".json")).entrySet()) {
         String jsonIdentifier = entry.getKey().getPath();
         try {
           JsonObject fire = JsonParser.parseReader(new Gson().newJsonReader(entry.getValue().getReader())).getAsJsonObject();
@@ -139,7 +139,7 @@ public class FireResourceReloadListener implements SimpleResourceReloadListener<
     try {
       return element.getAsJsonObject();
     } catch (IllegalStateException e) {
-      LOGGER.error(SoulFiredLoader.MODID + " encountered a non-blocking DDFire error!\nError parsing ddfire [" + identifier + "]: not a JSON object.");
+      LOGGER.error(ModLoader.MOD_ID + " encountered a non-blocking DDFire error!\nError parsing ddfire [" + identifier + "]: not a JSON object.");
       throw e;
     }
   }
@@ -162,7 +162,7 @@ public class FireResourceReloadListener implements SimpleResourceReloadListener<
     try {
       return parser.apply(data.get(field));
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
-      LOGGER.error(SoulFiredLoader.MODID + " encountered a non-blocking DDFire error!\nError parsing required field \"" + field + "\" for ddfire [" + identifier + "]: missing or malformed field.");
+      LOGGER.error(ModLoader.MOD_ID + " encountered a non-blocking DDFire error!\nError parsing required field \"" + field + "\" for ddfire [" + identifier + "]: missing or malformed field.");
       throw e;
     }
   }
@@ -187,7 +187,7 @@ public class FireResourceReloadListener implements SimpleResourceReloadListener<
     } catch (NullPointerException e) {
       return fallback;
     } catch (UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
-      LOGGER.error(SoulFiredLoader.MODID + " encountered a non-blocking DDFire error!\nError parsing optional field \"" + field + "\" for ddfire [" + identifier + "]: malformed field.");
+      LOGGER.error(ModLoader.MOD_ID + " encountered a non-blocking DDFire error!\nError parsing optional field \"" + field + "\" for ddfire [" + identifier + "]: malformed field.");
       throw e;
     }
   }
