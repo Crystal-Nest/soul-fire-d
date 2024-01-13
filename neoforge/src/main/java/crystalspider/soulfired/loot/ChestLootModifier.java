@@ -1,16 +1,11 @@
 package crystalspider.soulfired.loot;
 
-import java.util.List;
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
 import crystalspider.soulfired.config.ModConfig;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -20,7 +15,10 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
-import net.neoforged.neoforge.registries.ForgeRegistries;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Chests loot modifier.
@@ -68,7 +66,7 @@ public final class ChestLootModifier extends LootModifier {
      * {@link Codec}.
      */
     public static final Codec<Addition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-      ForgeRegistries.ENCHANTMENTS.getCodec().fieldOf("enchantment").forGetter(addition -> addition.enchantment),
+      BuiltInRegistries.ENCHANTMENT.byNameCodec().fieldOf("enchantment").forGetter(addition -> addition.enchantment),
       Codec.FLOAT.fieldOf("chance").forGetter(addition -> addition.chance),
       Codec.INT.fieldOf("level").forGetter(addition -> addition.level)
     ).apply(instance, Addition::new));

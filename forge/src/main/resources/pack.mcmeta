@@ -1,9 +1,9 @@
 {
   "pack": {
     "description": {
-      "text": "${modid} resources"
+      "text": "${mod_title} resources"
     },
-    "pack_format": 15,
+    "pack_format": 26,
     "forge:resource_pack_format": 12,
     "forge:data_pack_format": 10
   }

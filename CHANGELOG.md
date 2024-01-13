@@ -8,6 +8,10 @@ and this project adheres to [Forge Semantic Versioning](https://docs.minecraftfo
 ## [Unreleased]
 - Nothing new.
 
+## [1.20.4-3.2.1.0] - 2024/01/13
+- Ported to 1.20.4.
+- Fix `FireManager.getCampfireBlock()` returning the source block rather than the campfire block.
+
 ## [1.20.2-3.2.1.0] - 2023/11/17
 - Add [#32](https://github.com/Nyphet/soul-fire-d/issues/32).
 - Add new tweaking option for enchantments, refer to the [wiki](https://github.com/Nyphet/soul-fire-d/wiki/Registering-your-Fire#tweaking-enchantments) for more info.

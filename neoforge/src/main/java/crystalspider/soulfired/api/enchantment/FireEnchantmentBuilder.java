@@ -1,18 +1,17 @@
 package crystalspider.soulfired.api.enchantment;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import org.apache.commons.lang3.function.TriFunction;
-
 import crystalspider.soulfired.api.type.FireTyped;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
+import org.apache.commons.lang3.function.TriFunction;
+
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Builder for {@link FireTyped} {@link Enchantment}.
@@ -110,7 +109,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
 
   /**
    * Sets the enchantment {@link #rarity}.
-   * 
+   *
    * @param <B> builder type.
    * @param rarity
    * @return this Builder to either set other properties or {@link #build}.
@@ -122,7 +121,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
 
   /**
    * Sets {@link #isTreasure} {@link Supplier}.
-   * 
+   *
    * @param <B> builder type.
    * @param isTreasure
    * @return this Builder to either set other properties or {@link #build}.
@@ -134,7 +133,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
 
   /**
    * Sets {@link #isTreasure}.
-   * 
+   *
    * @param <B> builder type.
    * @param isTreasure
    * @return this Builder to either set other properties or {@link #build}.
@@ -145,7 +144,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
 
   /**
    * Sets {@link #isCurse} {@link Supplier}.
-   * 
+   *
    * @param <B> builder type.
    * @param isCurse
    * @return this Builder to either set other properties or {@link #build}.
@@ -157,7 +156,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
 
   /**
    * Sets {@link #isCurse}.
-   * 
+   *
    * @param <B> builder type.
    * @param isCurse
    * @return this Builder to either set other properties or {@link #build}.
@@ -168,7 +167,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
 
   /**
    * Sets {@link #isTradeable} {@link Supplier}.
-   * 
+   *
    * @param <B> builder type.
    * @param isTradeable
    * @return this Builder to either set other properties or {@link #build}.
@@ -180,7 +179,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
 
   /**
    * Sets {@link #isTradeable}.
-   * 
+   *
    * @param <B> builder type.
    * @param isTradeable
    * @return this Builder to either set other properties or {@link #build}.
@@ -191,7 +190,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
 
   /**
    * Sets {@link #isDiscoverable} {@link Supplier}.
-   * 
+   *
    * @param <B> builder type.
    * @param isDiscoverable
    * @return this Builder to either set other properties or {@link #build}.
@@ -203,7 +202,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
 
   /**
    * Sets {@link #isDiscoverable}.
-   * 
+   *
    * @param <B> builder type.
    * @param isDiscoverable
    * @return this Builder to either set other properties or {@link #build}.
@@ -214,7 +213,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
 
   /**
    * Sets the {@link #compatibility} {@link Function}.
-   * 
+   *
    * @param <B> builder type.
    * @param compatibility
    * @return this Builder to either set other properties or {@link #build}.
@@ -226,7 +225,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
 
   /**
    * Sets the {@link #enabled} {@link Supplier}.
-   * 
+   *
    * @param <B> builder type.
    * @param enabled
    * @return this Builder to either set other properties or {@link #build}.
@@ -238,7 +237,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
 
   /**
    * Sets the {@link #duration} {@link TriFunction}.
-   * 
+   *
    * @param <B> builder type.
    * @param duration
    * @return this Builder to either set other properties or {@link #build}.
@@ -250,7 +249,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
 
   /**
    * Sets the {@link #duration}.
-   * 
+   *
    * @param <B> builder type.
    * @param duration
    * @return this Builder to either set other properties or {@link #build}.
@@ -265,7 +264,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
    */
   public ResourceLocation register() {
     ResourceLocation key = new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_" + kind);
-    DeferredRegister<Enchantment> enchantments = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, key.getNamespace());
+    DeferredRegister<Enchantment> enchantments = DeferredRegister.create(BuiltInRegistries.ENCHANTMENT, key.getNamespace());
     enchantments.register(FMLJavaModLoadingContext.get().getModEventBus());
     enchantments.register(key.getPath(), this::build);
     return key;
@@ -273,7 +272,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTyped> 
 
   /**
    * Builds a {@link T} instance.
-   * 
+   *
    * @return {@link T} instance.
    */
   protected abstract T build();

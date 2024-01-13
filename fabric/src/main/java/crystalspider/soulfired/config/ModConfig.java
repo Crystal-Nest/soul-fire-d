@@ -1,24 +1,24 @@
 package crystalspider.soulfired.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue; 
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
 
 /**
  * Soul Fire'd Configuration.
  */
 public final class ModConfig {
   /**
-   * {@link ForgeConfigSpec} {@link ForgeConfigSpec.Builder Builder}.
+   * {@link ModConfigSpec} {@link ModConfigSpec.Builder Builder}.
    */
-  private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+  private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
   /**
    * Common Configuration as read from the configuration file.
    */
   public static final CommonConfig COMMON = new CommonConfig(BUILDER);
   /**
-   * {@link ForgeConfigSpec}.
+   * {@link ModConfigSpec}.
    */
-  public static final ForgeConfigSpec SPEC = BUILDER.build();
+  public static final ModConfigSpec SPEC = BUILDER.build();
 
   /**
    * Returns the value of {@link CommonConfig#enableSoulFireAspect}.
@@ -135,7 +135,7 @@ public final class ModConfig {
      *
      * @param builder
      */
-    public CommonConfig(ForgeConfigSpec.Builder builder) {
+    public CommonConfig(ModConfigSpec.Builder builder) {
       enableSoulFireAspect = builder.comment("Whether to enable Soul Fire Aspect enchantment.", "Has higher priority than all other Soul Fire Aspect configs.").define("enable soul fire aspect", true);
       enableSoulFireAspectDiscovery = builder.comment("Whether Soul Fire Aspect can appear in the enchanting table and loots.").define("enable soul fire aspect discovery", true);
       enableSoulFireAspectTrades = builder.comment("Whether Soul Fire Aspect can be traded with villagers.").define("enable soul fire aspect trades", true);

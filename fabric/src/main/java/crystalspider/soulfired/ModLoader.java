@@ -4,12 +4,12 @@ import crystalspider.soulfired.api.FireManager;
 import crystalspider.soulfired.config.ModConfig;
 import crystalspider.soulfired.handler.FireResourceReloadListener;
 import crystalspider.soulfired.handler.LootTableEventsHandler;
-import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
+import fuzs.forgeconfigapiport.api.config.v3.ForgeConfigRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.resource.ResourceType;
-import net.minecraftforge.fml.config.ModConfig.Type;
+import net.neoforged.fml.config.ModConfig.Type;
 
 /**
  * Soul fire'd mod loader.

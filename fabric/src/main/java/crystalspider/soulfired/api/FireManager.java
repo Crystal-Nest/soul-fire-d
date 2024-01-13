@@ -1,15 +1,5 @@
 package crystalspider.soulfired.api;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.Nullable;
-
 import crystalspider.soulfired.api.enchantment.FireTypedFireAspectEnchantment;
 import crystalspider.soulfired.api.enchantment.FireTypedFlameEnchantment;
 import crystalspider.soulfired.api.type.FireTypeChanger;
@@ -24,6 +14,15 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Static manager for registered Fires.
@@ -63,7 +62,7 @@ public final class FireManager {
 
   /**
    * Returns a new {@link FireBuilder}.
-   * 
+   *
    * @param modId {@code modId} of the new {@link Fire} to build.
    * @param fireId {@code fireId} of the new {@link Fire} to build.
    * @return a new {@link FireBuilder}.
@@ -74,7 +73,7 @@ public final class FireManager {
 
   /**
    * Returns a new {@link FireBuilder}.
-   * 
+   *
    * @param fireType {@link Identifier} of the new {@link Fire} to build.
    * @return a new {@link FireBuilder}.
    */
@@ -86,7 +85,7 @@ public final class FireManager {
    * Attempts to register the given {@link Fire}.
    * <p>
    * If the {@link Fire#fireType} is already registered, logs an error.
-   * 
+   *
    * @param fire {@link Fire} to register.
    * @return whether the registration is successful.
    */
@@ -94,28 +93,10 @@ public final class FireManager {
     Identifier fireType = fire.getFireType();
     if (!fires.containsKey(fireType)) {
       fires.put(fireType, fire);
-      Optional<FireTypedFireAspectEnchantment> fireAspect = fire.getFireAspect();
-      Optional<FireTypedFlameEnchantment> flame = fire.getFlame();
-      if (fireAspect.isPresent()) {
-        Registry.register(Registries.ENCHANTMENT, new Identifier(fireType.getNamespace(), fireType.getPath() + "_fire_aspect"), fireAspect.get());
-      }
-      if (flame.isPresent()) {
-        Registry.register(Registries.ENCHANTMENT, new Identifier(fireType.getNamespace(), fireType.getPath() + "_flame"), flame.get());
-      }
-      Optional<Identifier> source = fire.getSource();
-      Optional<Identifier> campfire = fire.getCampfire();
-      if (source.isPresent()) {
-        Optional<Block> sourceBlock = Registries.BLOCK.getOrEmpty(source.get());
-        if (sourceBlock.isPresent()) {
-          ((FireTypeChanger) sourceBlock.get()).setFireType(fireType);
-        }
-      }
-      if (campfire.isPresent()) {
-        Optional<Block> campfireBlock = Registries.BLOCK.getOrEmpty(campfire.get());
-        if (campfireBlock.isPresent()) {
-          ((FireTypeChanger) campfireBlock.get()).setFireType(fireType);
-        }
-      }
+      fire.getFireAspect().ifPresent(fireTypedFireAspectEnchantment -> Registry.register(Registries.ENCHANTMENT, new Identifier(fireType.getNamespace(), fireType.getPath() + "_fire_aspect"), fireTypedFireAspectEnchantment));
+      fire.getFlame().ifPresent(fireTypedFlameEnchantment -> Registry.register(Registries.ENCHANTMENT, new Identifier(fireType.getNamespace(), fireType.getPath() + "_flame"), fireTypedFlameEnchantment));
+      fire.getSource().flatMap(Registries.BLOCK::getOrEmpty).ifPresent(block -> ((FireTypeChanger) block).setFireType(fireType));
+      fire.getCampfire().flatMap(Registries.BLOCK::getOrEmpty).ifPresent(block -> ((FireTypeChanger) block).setFireType(fireType));
       return true;
     }
     LOGGER.error("Fire [" + fireType + "] was already registered with the following value: " + fires.get(fireType));
@@ -124,7 +105,7 @@ public final class FireManager {
 
   /**
    * Attempts to register all the given {@link Fire fires}.
-   * 
+   *
    * @param fires {@link Fire fires} to register.
    * @return an {@link HashMap} with the outcome of each registration attempt.
    */
@@ -134,7 +115,7 @@ public final class FireManager {
 
   /**
    * Attempts to register all the given {@link Fire fires}.
-   * 
+   *
    * @param fires {@link Fire fires} to register.
    * @return an {@link HashMap} with the outcome of each registration attempt.
    */
@@ -150,7 +131,7 @@ public final class FireManager {
    * Unregisters the specified fire.
    * <p>
    * To be used only internally, do not use elsewhere!
-   * 
+   *
    * @param fireType
    * @return whether the fire was previously registered.
    */
@@ -161,7 +142,7 @@ public final class FireManager {
 
   /**
    * Returns the list of all registered {@link Fire Fires}.
-   * 
+   *
    * @return the list of all registered {@link Fire Fires}.
    */
   public static List<Fire> getFires() {
@@ -172,7 +153,7 @@ public final class FireManager {
    * Returns the {@link Fire} registered with the given {@code id}.
    * <p>
    * Returns {@link #DEFAULT_FIRE} if no {@link Fire} is registered with the given {@code modId} and {@code fireId}.
-   * 
+   *
    * @param modId
    * @param fireId
    * @return registered {@link Fire} or {@link #DEFAULT_FIRE}.
@@ -185,7 +166,7 @@ public final class FireManager {
    * Returns the {@link Fire} registered with the given {@code id}.
    * <p>
    * Returns {@link #DEFAULT_FIRE} if no {@link Fire} is registered with the given {@code fireType}.
-   * 
+   *
    * @param fireType
    * @return registered {@link Fire} or {@link #DEFAULT_FIRE}.
    */
@@ -195,7 +176,7 @@ public final class FireManager {
 
   /**
    * Returns whether the given {@code modId} and {@code fireId} represent a valid Fire Type.
-   * 
+   *
    * @param modId
    * @param fireId
    * @return whether the given values represent a valid Fire Type.
@@ -206,7 +187,7 @@ public final class FireManager {
 
   /**
    * Returns whether a fire is registered with the given {@code modId} and {@code fireId}.
-   * 
+   *
    * @param modId
    * @param fireId
    * @return whether a fire is registered with the given values.
@@ -217,7 +198,7 @@ public final class FireManager {
 
   /**
    * Returns whether a fire is registered with the given {@code fireType}.
-   * 
+   *
    * @param fireType
    * @return whether a fire is registered with the given {@code fireType}.
    */
@@ -227,7 +208,7 @@ public final class FireManager {
 
   /**
    * Returns whether the given {@code id} is a valid fire id.
-   * 
+   *
    * @param id
    * @return whether the given {@code id} is a valid fire id.
    */
@@ -245,7 +226,7 @@ public final class FireManager {
 
   /**
    * Returns whether the given {@code id} is a valid and registered fire id.
-   * 
+   *
    * @param id
    * @return whether the given {@code id} is a valid and registered fire id.
    */
@@ -255,7 +236,7 @@ public final class FireManager {
 
   /**
    * Returns whether the given {@code id} is a valid mod id.
-   * 
+   *
    * @param id
    * @return whether the given {@code id} is a valid mod id.
    */
@@ -273,7 +254,7 @@ public final class FireManager {
 
   /**
    * Returns whether the given {@code id} is a valid, loaded and registered mod id.
-   * 
+   *
    * @param id
    * @return whether the given {@code id} is a valid, loaded and registered mod id.
    */
@@ -283,7 +264,7 @@ public final class FireManager {
 
   /**
    * Returns the closest well-formed Fire Type from the given {@code modId} and {@code fireId}.
-   * 
+   *
    * @param modId
    * @param fireId
    * @return the closest well-formed Fire Type.
@@ -299,7 +280,7 @@ public final class FireManager {
 
   /**
    * Returns the closest well-formed Fire Type from the given {@code fireType}.
-   * 
+   *
    * @param fireType
    * @return the closest well-formed Fire Type.
    */
@@ -312,7 +293,7 @@ public final class FireManager {
 
   /**
    * Returns the closest well-formed and registered Fire Type from the given {@code modId} and {@code fireId}.
-   * 
+   *
    * @param modId
    * @param fireId
    * @return the closest well-formed and registered fire Fire Type.
@@ -328,7 +309,7 @@ public final class FireManager {
 
   /**
    * Returns the closest well-formed and registered Fire Type from the given {@code fireType}.
-   * 
+   *
    * @param fireType
    * @return the closest well-formed and registered Fire Type.
    */
@@ -341,7 +322,7 @@ public final class FireManager {
 
   /**
    * Returns the list of all Fire Types.
-   * 
+   *
    * @return the list of all Fire Types.
    */
   public static List<Identifier> getFireTypes() {
@@ -350,27 +331,27 @@ public final class FireManager {
 
   /**
    * Returns the list of all registered fire ids.
-   * 
+   *
    * @return the list of all registered fire ids.
    */
   public static List<String> getFireIds() {
-    return fires.keySet().stream().map(fireType -> fireType.getPath()).toList();
+    return fires.keySet().stream().map(Identifier::getPath).toList();
   }
 
   /**
    * Returns the list of all registered mod ids.
-   * 
+   *
    * @return the list of all registered mod ids.
    */
   public static List<String> getModIds() {
-    return fires.keySet().stream().map(fireType -> fireType.getNamespace()).toList();
+    return fires.keySet().stream().map(Identifier::getNamespace).toList();
   }
 
   /**
    * Returns the damage of the {@link Fire} registered with the given {@code modId} and {@code fireId}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given values.
-   * 
+   *
    * @param modId
    * @param fireId
    * @return the damage of the {@link Fire}.
@@ -383,7 +364,7 @@ public final class FireManager {
    * Returns the damage of the {@link Fire} registered with the given {@code fireType}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
-   * 
+   *
    * @param fireType
    * @return the damage of the {@link Fire}.
    */
@@ -395,7 +376,7 @@ public final class FireManager {
    * Returns the invertHealAndHarm flag of the {@link Fire} registered with the given {@code modId} and {@code fireId}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given values.
-   * 
+   *
    * @param modId
    * @param fireId
    * @return the invertHealAndHarm flag of the {@link Fire}.
@@ -408,7 +389,7 @@ public final class FireManager {
    * Returns the invertHealAndHarm flag of the {@link Fire} registered with the given {@code fireType}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
-   * 
+   *
    * @param fireType
    * @return the invertHealAndHarm flag of the {@link Fire}.
    */
@@ -420,7 +401,7 @@ public final class FireManager {
    * Returns the in damage source of the {@link Fire} registered with the given {@code modId} and {@code fireId} for the given {@link Entity}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given values.
-   * 
+   *
    * @param entity
    * @param modId
    * @param fireId
@@ -434,7 +415,7 @@ public final class FireManager {
    * Returns the in damage source of the {@link Fire} registered with the given {@code fireType} for the given {@link Entity}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
-   * 
+   *
    * @param entity
    * @param fireType
    * @return the in damage source of the {@link Fire} for the {@link Entity}.
@@ -447,7 +428,7 @@ public final class FireManager {
    * Returns the on damage source of the {@link Fire} registered with the given {@code modId} and {@code fireId} for the given {@link Entity}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given values.
-   * 
+   *
    * @param entity
    * @param modId
    * @param fireId
@@ -461,7 +442,7 @@ public final class FireManager {
    * Returns the on damage source of the {@link Fire} registered with the given {@code fireType} for the given {@link Entity}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
-   * 
+   *
    * @param entity
    * @param fireType
    * @return the on damage source of the {@link Fire} for the {@link Entity}.
@@ -474,7 +455,7 @@ public final class FireManager {
    * Returns the source block associated with {@link Fire} registered with the given {@code modId} and {@code fireId}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given values.
-   * 
+   *
    * @param modId
    * @param fireId
    * @return the source block associated with {@link Fire}.
@@ -487,20 +468,19 @@ public final class FireManager {
    * Returns the fire source block associated with {@link Fire} registered with the given {@code fireType}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
-   * 
+   *
    * @param fireType
    * @return the fire source block associated with {@link Fire}.
    */
   public static Block getSourceBlock(Identifier fireType) {
-    Block sourceBlock = Registries.BLOCK.get(fires.getOrDefault(fireType, DEFAULT_FIRE).getSource().orElse(DEFAULT_FIRE.getSource().get()));
-    return sourceBlock != null ? sourceBlock : Blocks.FIRE;
+    return Registries.BLOCK.getOrEmpty(fires.getOrDefault(fireType, DEFAULT_FIRE).getSource().orElse(DEFAULT_FIRE.getSource().get())).orElse(Blocks.FIRE);
   }
 
   /**
    * Returns the campfire block associated with {@link Fire} registered with the given {@code modId} and {@code fireId}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given values.
-   * 
+   *
    * @param modId
    * @param fireId
    * @return the campfire block associated with {@link Fire}.
@@ -513,38 +493,37 @@ public final class FireManager {
    * Returns the source block associated with {@link Fire} registered with the given {@code fireType}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
-   * 
+   *
    * @param fireType
    * @return the source block associated with {@link Fire}.
    */
   public static Block getCampfireBlock(Identifier fireType) {
-    Block campfireBlock = Registries.BLOCK.get(fires.getOrDefault(fireType, DEFAULT_FIRE).getCampfire().orElse(DEFAULT_FIRE.getSource().get()));
-    return campfireBlock != null ? campfireBlock : Blocks.CAMPFIRE;
+    return Registries.BLOCK.getOrEmpty(fires.getOrDefault(fireType, DEFAULT_FIRE).getCampfire().orElse(DEFAULT_FIRE.getCampfire().get())).orElse(Blocks.CAMPFIRE);
   }
 
   /**
    * Returns the list of all Fire Aspect enchantments registered.
-   * 
+   *
    * @return the list of all Fire Aspect enchantments registered.
    */
   public static List<FireTypedFireAspectEnchantment> getFireAspects() {
-    return fires.values().stream().map(fire -> fire.getFireAspect()).filter(optional -> optional.isPresent()).map(optional -> optional.get()).toList();
+    return fires.values().stream().map(Fire::getFireAspect).filter(Optional::isPresent).map(Optional::get).toList();
   }
 
   /**
    * Returns the list of all Flame enchantments registered.
-   * 
+   *
    * @return the list of all Flame enchantments registered.
    */
   public static List<FireTypedFlameEnchantment> getFlames() {
-    return fires.values().stream().map(fire -> fire.getFlame()).filter(optional -> optional.isPresent()).map(optional -> optional.get()).toList();
+    return fires.values().stream().map(Fire::getFlame).filter(Optional::isPresent).map(Optional::get).toList();
   }
 
   /**
    * Returns the Fire Aspect enchantment of the {@link Fire} registered with the given {@code modId} and {@code fireId}.
    * <p>
    * Returns {@code null} if no {@link Fire} was registered with the given values.
-   * 
+   *
    * @param modId
    * @param fireId
    * @return the Fire Aspect enchantment of the {@link Fire}.
@@ -558,7 +537,7 @@ public final class FireManager {
    * Returns the Fire Aspect enchantment of the {@link Fire} registered with the given {@code fireType}.
    * <p>
    * Returns {@code null} if no {@link Fire} was registered with the given {@code fireType}.
-   * 
+   *
    * @param fireType
    * @return the Fire Aspect enchantment of the {@link Fire}.
    */
@@ -571,7 +550,7 @@ public final class FireManager {
    * Returns the Flame enchantment of the {@link Fire} registered with the given {@code modId} and {@code fireId}.
    * <p>
    * Returns {@code null} if no {@link Fire} was registered with the given values.
-   * 
+   *
    * @param modId
    * @param fireId
    * @return the Flame enchantment of the {@link Fire}.
@@ -585,7 +564,7 @@ public final class FireManager {
    * Returns the Flame enchantment of the {@link Fire} registered with the given {@code fireType}.
    * <p>
    * Returns {@code null} if no {@link Fire} was registered with the given {@code fireType}.
-   * 
+   *
    * @param fireType
    * @return the Flame enchantment of the {@link Fire}.
    */
@@ -596,7 +575,7 @@ public final class FireManager {
 
   /**
    * Set on fire the given entity for the given seconds with the given Fire Type.
-   * 
+   *
    * @param entity {@link Entity} to set on fire.
    * @param seconds amount of seconds the fire should last for.
    * @param modId mod id of the fire.
@@ -608,7 +587,7 @@ public final class FireManager {
 
   /**
    * Set on fire the given entity for the given seconds with the given Fire Type.
-   * 
+   *
    * @param entity {@link Entity} to set on fire.
    * @param seconds amount of seconds the fire should last for.
    * @param fireType {@link Identifier} of the fire.
@@ -622,7 +601,7 @@ public final class FireManager {
    * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireId} and {@code modId}.
    * <p>
    * If no {@link Fire} was registered with the given {@code fireId} and {@code modId}, defaults to the default {@code damageSource} and {@code damage} to harm the {@code entity}.
-   * 
+   *
    * @param entity {@link Entity} to harm or heal.
    * @param fireId
    * @param modId
@@ -636,7 +615,7 @@ public final class FireManager {
    * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireType}.
    * <p>
    * If no {@link Fire} was registered with the given {@code fireType}, defaults to the default {@code damageSource} and {@code damage} to harm the {@code entity}.
-   * 
+   *
    * @param entity {@link Entity} to harm or heal.
    * @param fireType
    * @return whether the {@code entity} has been harmed.
@@ -649,12 +628,12 @@ public final class FireManager {
     ((FireTypeChanger) entity).setFireType(DEFAULT_FIRE_TYPE);
     return harmOrHeal(entity, DEFAULT_FIRE.getInFire(entity), DEFAULT_FIRE.getDamage(), DEFAULT_FIRE.getInvertHealAndHarm());
   }
-  
+
   /**
    * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireId} and {@code modId}.
    * <p>
    * If no {@link Fire} was registered with the given {@code fireId} and {@code modId}, defaults to the default {@code damageSource} and {@code damage} to harm the {@code entity}.
-   * 
+   *
    * @param entity {@link Entity} to harm or heal.
    * @param fireId
    * @param modId
@@ -668,7 +647,7 @@ public final class FireManager {
    * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireType}.
    * <p>
    * If no {@link Fire} was registered with the given {@code fireType}, defaults to the default {@code damageSource} and {@code damage} to harm the {@code entity}.
-   * 
+   *
    * @param entity {@link Entity} to harm or heal.
    * @param fireType
    * @return whether the {@code entity} has been harmed.
@@ -684,7 +663,7 @@ public final class FireManager {
 
   /**
    * Harms or heals the given {@code entity}.
-   * 
+   *
    * @param entity
    * @param damageSource
    * @param damage
@@ -693,8 +672,7 @@ public final class FireManager {
    */
   private static boolean harmOrHeal(Entity entity, DamageSource damageSource, float damage, boolean invertHealAndHarm) {
     if (damage > 0) {
-      if (entity instanceof LivingEntity) {
-        LivingEntity livingEntity = (LivingEntity) entity;
+      if (entity instanceof LivingEntity livingEntity) {
         if (livingEntity.isUndead() && invertHealAndHarm) {
           livingEntity.heal(damage);
           return false;
@@ -703,8 +681,7 @@ public final class FireManager {
       }
       return entity.damage(damageSource, damage);
     }
-    if (entity instanceof LivingEntity) {
-      LivingEntity livingEntity = (LivingEntity) entity;
+    if (entity instanceof LivingEntity livingEntity) {
       if (livingEntity.isUndead() && invertHealAndHarm) {
         return livingEntity.damage(damageSource, -damage);
       }
@@ -716,7 +693,7 @@ public final class FireManager {
 
   /**
    * Returns whether a given string is not blank, meaning it's not null and it's not made up only of whitespaces.
-   * 
+   *
    * @param string
    * @return whether a given string is not blank, meaning it's not null and it's not made up only of whitespaces.
    */
@@ -727,8 +704,8 @@ public final class FireManager {
   /**
    * Writes to the given {@link NbtCompound} the given {@code fireType}.
    * <p>
-   * If the given {@code fireType} is not registered, the {@link DEFAULT_FIRE_TYPE} will be written instead.
-   * 
+   * If the given {@code fireType} is not registered, the {@link #DEFAULT_FIRE} will be written instead.
+   *
    * @param tag {@link NbtCompound} to write to.
    * @param fireType Fire Type to save.
    */
@@ -738,7 +715,7 @@ public final class FireManager {
 
   /**
    * Reads the Fire Type from the given {@link NbtCompound}.
-   * 
+   *
    * @param tag {@link NbtCompound} to read from.
    * @return the Fire Type read from the given {@link NbtCompound}.
    */
