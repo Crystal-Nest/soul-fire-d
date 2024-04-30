@@ -2,7 +2,7 @@ name: Localization
 description: File a new translation or a correction for an existing one
 title: Death message localization for [lang-tag]
 labels: localization
-assignees: Nyphet
+assignees: Crystal-Spider
 
 body:
 - type: input
