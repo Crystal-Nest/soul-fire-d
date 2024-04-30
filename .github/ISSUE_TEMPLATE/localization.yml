@@ -1,5 +1,5 @@
 name: Localization
-about: File a new translation or a correction for an existing one
+description: File a new translation or a correction for an existing one
 title: Death message localization for [lang-tag]
 labels: localization
 assignees: Nyphet
