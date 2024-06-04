@@ -71,17 +71,7 @@ public final class FireTypedFlameEnchantment extends ArrowFireEnchantment implem
    * @param compatibility {@link #compatibility}.
    * @param duration {@link #duration}.
    */
-  FireTypedFlameEnchantment(
-    ResourceLocation fireType,
-    Rarity rarity,
-    Supplier<Boolean> isTreasure,
-    Supplier<Boolean> isCurse,
-    Supplier<Boolean> isTradeable,
-    Supplier<Boolean> isDiscoverable,
-    Supplier<Boolean> enabled,
-    Function<Enchantment, Boolean> compatibility,
-    TriFunction<Entity, Entity, Integer, Integer> duration
-  ) {
+  FireTypedFlameEnchantment(ResourceLocation fireType, Rarity rarity, Supplier<Boolean> isTreasure, Supplier<Boolean> isCurse, Supplier<Boolean> isTradeable, Supplier<Boolean> isDiscoverable, Supplier<Boolean> enabled, Function<Enchantment, Boolean> compatibility, TriFunction<Entity, Entity, Integer, Integer> duration) {
     super(rarity, EquipmentSlot.MAINHAND);
     this.fireType = FireManager.sanitize(fireType);
     this.isTreasure = isTreasure;
@@ -97,16 +87,6 @@ public final class FireTypedFlameEnchantment extends ArrowFireEnchantment implem
   public boolean checkCompatibility(@NotNull Enchantment enchantment) {
     return enabled.get() && super.checkCompatibility(enchantment) && !(enchantment instanceof ArrowFireEnchantment) && compatibility.apply(enchantment);
   }
-
-//  @Override
-//  public boolean canApplyAtEnchantingTable(ItemStack itemStack) {
-//    return enabled.get() && super.canApplyAtEnchantingTable(itemStack);
-//  }
-//
-//  @Override
-//  public boolean isAllowedOnBooks() {
-//    return enabled.get() && super.isAllowedOnBooks();
-//  }
 
   @Override
   public boolean canEnchant(@NotNull ItemStack itemStack) {

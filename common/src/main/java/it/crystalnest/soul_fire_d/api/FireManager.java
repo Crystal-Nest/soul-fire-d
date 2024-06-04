@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -44,7 +45,17 @@ public final class FireManager {
   /**
    * Default {@link Fire} used as fallback to retrieve default properties.
    */
-  public static final Fire DEFAULT_FIRE = new Fire(DEFAULT_FIRE_TYPE, FireBuilder.DEFAULT_DAMAGE, FireBuilder.DEFAULT_INVERT_HEAL_AND_HARM, FireBuilder.DEFAULT_IN_FIRE_GETTER, FireBuilder.DEFAULT_ON_FIRE_GETTER, new ResourceLocation("fire"), new ResourceLocation("campfire"), null, null);
+  public static final Fire DEFAULT_FIRE = new Fire(
+    DEFAULT_FIRE_TYPE,
+    FireBuilder.DEFAULT_DAMAGE,
+    FireBuilder.DEFAULT_INVERT_HEAL_AND_HARM,
+    FireBuilder.DEFAULT_IN_FIRE_GETTER,
+    FireBuilder.DEFAULT_ON_FIRE_GETTER,
+    new ResourceLocation("fire"),
+    new ResourceLocation("campfire"),
+    null,
+    null
+  );
 
   /**
    * {@link ConcurrentHashMap} of all registered {@link Fire Fires}.
@@ -100,9 +111,9 @@ public final class FireManager {
    * Attempts to register all the given {@link Fire fires}.
    *
    * @param fires {@link Fire fires} to register.
-   * @return an {@link HashMap} with the outcome of each registration attempt.
+   * @return an {@link Map} with the outcome of each registration attempt.
    */
-  public static synchronized HashMap<ResourceLocation, Boolean> registerFires(Fire... fires) {
+  public static synchronized Map<ResourceLocation, Boolean> registerFires(Fire... fires) {
     return registerFires(List.of(fires));
   }
 
@@ -110,9 +121,9 @@ public final class FireManager {
    * Attempts to register all the given {@link Fire fires}.
    *
    * @param fires {@link Fire fires} to register.
-   * @return an {@link HashMap} with the outcome of each registration attempt.
+   * @return an {@link Map} with the outcome of each registration attempt.
    */
-  public static synchronized HashMap<ResourceLocation, Boolean> registerFires(List<Fire> fires) {
+  public static synchronized Map<ResourceLocation, Boolean> registerFires(List<Fire> fires) {
     HashMap<ResourceLocation, Boolean> outcomes = new HashMap<>();
     for (Fire fire : fires) {
       outcomes.put(fire.getFireType(), registerFire(fire));

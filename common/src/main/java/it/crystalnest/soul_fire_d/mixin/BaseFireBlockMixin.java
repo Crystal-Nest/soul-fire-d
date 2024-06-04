@@ -36,8 +36,7 @@ public abstract class BaseFireBlockMixin implements FireTypeChanger {
   }
 
   /**
-   * Redirects the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link BaseFireBlock#entityInside(BlockState, Level, BlockPos, Entity)}.
-   * <p>
+   * Redirects the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link BaseFireBlock#entityInside(BlockState, Level, BlockPos, Entity)}.<br />
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
    *
    * @param caller {@link Entity} invoking (owning) the redirected method.

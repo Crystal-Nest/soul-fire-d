@@ -15,6 +15,10 @@ public final class ModConfig extends CommonConfig {
    */
   public static final ModConfig CONFIG = register(Constants.MOD_ID, ModConfig::new);
 
+  private static final String SOUL_FIRE_ASPECT = "Soul Fire Aspect";
+
+  private static final String SOUL_FLAME = "Soul Flame";
+
   /**
    * Whether to enable Soul Fire Aspect enchantment.
    */
@@ -136,14 +140,14 @@ public final class ModConfig extends CommonConfig {
 
   @Override
   protected void define(ModConfigSpec.Builder builder) {
-    enableSoulFireAspect = defineEnableEnchantment(builder, "Soul Fire Aspect");
-    enableSoulFireAspectTreasure = defineEnableTreasure(builder, "Soul Fire Aspect");
-    enableSoulFireAspectDiscovery = defineEnableDiscovery(builder, "Soul Fire Aspect");
-    enableSoulFireAspectTrades = defineEnableTrades(builder, "Soul Fire Aspect");
-    enableSoulFlame = defineEnableEnchantment(builder, "Soul Flame");
-    enableSoulFlameTreasure = defineEnableTreasure(builder, "Soul Flame");
-    enableSoulFlameDiscovery = defineEnableDiscovery(builder, "Soul Flame");
-    enableSoulFlameTrades = defineEnableTrades(builder, "Soul Flame");
+    enableSoulFireAspect = defineEnableEnchantment(builder, SOUL_FIRE_ASPECT);
+    enableSoulFireAspectTreasure = defineEnableTreasure(builder, SOUL_FIRE_ASPECT);
+    enableSoulFireAspectDiscovery = defineEnableDiscovery(builder, SOUL_FIRE_ASPECT);
+    enableSoulFireAspectTrades = defineEnableTrades(builder, SOUL_FIRE_ASPECT);
+    enableSoulFlame = defineEnableEnchantment(builder, SOUL_FLAME);
+    enableSoulFlameTreasure = defineEnableTreasure(builder, SOUL_FLAME);
+    enableSoulFlameDiscovery = defineEnableDiscovery(builder, SOUL_FLAME);
+    enableSoulFlameTrades = defineEnableTrades(builder, SOUL_FLAME);
   }
 
   private ModConfigSpec.BooleanValue defineEnableEnchantment(ModConfigSpec.Builder builder, String enchantment) {
@@ -151,17 +155,14 @@ public final class ModConfig extends CommonConfig {
   }
 
   private ModConfigSpec.BooleanValue defineEnableTreasure(ModConfigSpec.Builder builder, String enchantment) {
-    return builder.comment(
-      " Whether " + enchantment + " cannot appear in the enchanting table.",
-      " If enabled along with [enable " + enchantment.toLowerCase() + " discovery], the enchantment won't appear in the enchanting table, but can still be found in loots."
-    ).define("enable " + enchantment.toLowerCase() + " treasure", false);
+    return builder.comment(" Whether " + enchantment + " cannot appear in the enchanting table.", " If enabled along with [enable " + enchantment.toLowerCase() + " discovery], the enchantment won't appear in the enchanting table, but can still be found in loots.").define("enable " + enchantment.toLowerCase() + " treasure", false);
   }
 
   private ModConfigSpec.BooleanValue defineEnableDiscovery(ModConfigSpec.Builder builder, String enchantment) {
-    return builder.comment(" Whether " + enchantment + " can appear in the enchanting table and loots.", " [enable " + enchantment + " treasure] takes precedence.").define("enable " + enchantment  + " discovery", true);
+    return builder.comment(" Whether " + enchantment + " can appear in the enchanting table and loots.", " [enable " + enchantment + " treasure] takes precedence.").define("enable " + enchantment + " discovery", true);
   }
 
   private ModConfigSpec.BooleanValue defineEnableTrades(ModConfigSpec.Builder builder, String enchantment) {
-    return builder.comment(" Whether " + enchantment + " can be found in villager trades.").define("enable " + enchantment  + " trades", true);
+    return builder.comment(" Whether " + enchantment + " can be found in villager trades.").define("enable " + enchantment + " trades", true);
   }
 }

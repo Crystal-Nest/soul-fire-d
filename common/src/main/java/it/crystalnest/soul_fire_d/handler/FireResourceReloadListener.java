@@ -26,12 +26,22 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
   /**
    * Current ddfires to unregister (previous registered ddfires).
    */
-  public static final ArrayList<ResourceLocation> ddfiresUnregister = new ArrayList<>();
+  protected static final ArrayList<ResourceLocation> ddfiresUnregister = new ArrayList<>();
 
   /**
    * Current registered ddfires.
    */
-  public static final ArrayList<ResourceLocation> ddfiresRegister = new ArrayList<>();
+  protected static final ArrayList<ResourceLocation> ddfiresRegister = new ArrayList<>();
+
+  /**
+   * JSON field name for a Fire's source block.
+   */
+  private static final String SOURCE_FIELD_NAME = "source";
+
+  /**
+   * JSON field name for a Fire's campfire block.
+   */
+  private static final String CAMPFIRE_FIELD_NAME = "campfire";
 
   protected FireResourceReloadListener() {
     super(new Gson(), "fires");
@@ -66,18 +76,18 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
           FireBuilder fireBuilder = FireManager.fireBuilder(fireType)
             .setDamage(parse(jsonIdentifier, "damage", jsonFire, JsonElement::getAsFloat, FireBuilder.DEFAULT_DAMAGE))
             .setInvertHealAndHarm(parse(jsonIdentifier, "invertHealAndHarm", jsonFire, JsonElement::getAsBoolean, FireBuilder.DEFAULT_INVERT_HEAL_AND_HARM));
-          if (jsonFire.get("source") != null && jsonFire.get("source").isJsonNull()) {
+          if (jsonFire.get(SOURCE_FIELD_NAME) != null && jsonFire.get(SOURCE_FIELD_NAME).isJsonNull()) {
             fireBuilder.removeSource();
           } else {
-            String source = parse(jsonIdentifier, "source", jsonFire, JsonElement::getAsString, null);
+            String source = parse(jsonIdentifier, SOURCE_FIELD_NAME, jsonFire, JsonElement::getAsString, null);
             if (source != null && ResourceLocation.isValidResourceLocation(source)) {
               fireBuilder.setSource(new ResourceLocation(source));
             }
           }
-          if (jsonFire.get("campfire") != null && jsonFire.get("campfire").isJsonNull()) {
+          if (jsonFire.get(CAMPFIRE_FIELD_NAME) != null && jsonFire.get(CAMPFIRE_FIELD_NAME).isJsonNull()) {
             fireBuilder.removeCampfire();
           } else {
-            String campfire = parse(jsonIdentifier, "campfire", jsonFire, JsonElement::getAsString, null);
+            String campfire = parse(jsonIdentifier, CAMPFIRE_FIELD_NAME, jsonFire, JsonElement::getAsString, null);
             if (campfire != null && ResourceLocation.isValidResourceLocation(campfire)) {
               fireBuilder.setCampfire(new ResourceLocation(campfire));
             }

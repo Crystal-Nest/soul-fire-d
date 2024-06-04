@@ -115,16 +115,6 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
     return enabled.get() && super.canEnchant(itemStack);
   }
 
-//  @Override
-//  public boolean canApplyAtEnchantingTable(ItemStack itemStack) {
-//    return enabled.get() && super.canApplyAtEnchantingTable(itemStack);
-//  }
-//
-//  @Override
-//  public boolean isAllowedOnBooks() {
-//    return enabled.get() && super.isAllowedOnBooks();
-//  }
-
   @Override
   @SuppressWarnings("resource")
   public void doPostAttack(@NotNull LivingEntity attacker, @NotNull Entity target, int level) {

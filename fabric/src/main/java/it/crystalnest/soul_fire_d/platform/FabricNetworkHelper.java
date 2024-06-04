@@ -19,7 +19,9 @@ public class FabricNetworkHelper implements NetworkHelper {
    * Registration is done in {@link ClientModLoader} to avoid crashes server-side.
    */
   @Override
-  public void register() {}
+  public void register() {
+    // Registration done elsewhere.
+  }
 
   @Override
   public void sendToClient(ServerPlayer player, Fire fire) {
