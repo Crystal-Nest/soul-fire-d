@@ -3,17 +3,17 @@
   "id": "${mod_id}",
   "version": "${mod_version}",
   "name": "${mod_title}",
-  "description": "Let Soul Fire burn!",
+  "description": "${description}",
   "authors": [
-    "${author}"
+    "${mod_authors}"
   ],
   "contact": {
     "homepage": "https://modrinth.com/mod/${mod_id_kebab}",
     "issues": "https://github.com/${github_user}/${mod_id_kebab}/issues",
     "sources": "https://github.com/${github_user}/${mod_id_kebab}/tree/${minecraft_version}"
   },
-  "license": "GPL-3.0-or-later",
-  "icon": "assets/${mod_id}/${mod_id_kebab}.png",
+  "license": "${license}",
+  "icon": "${mod_id}.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -24,13 +24,15 @@
     ]
   },
   "mixins": [
-    "${mod_id}.mixins.json"
+    "${mod_id}.mixins.json",
+    "${mod_id}.fabric.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=${loader_version}",
-		"fabric-api": "*",
-    "forgeconfigapiport": "^${forgeconfigapiport_version}",
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": "*",
     "minecraft": "${minecraft_version}",
-    "java": ">=17"
+    "java": ">=17",
+    "cobweb": "^${cobweb_version}",
+    "forgeconfigapiport": "~${fcap_version}"
   }
 }

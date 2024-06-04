@@ -36,7 +36,7 @@ This mod makes Soul Fire actually work as one would expect, all whilst providing
 
 ## **Compatibilities**
 
-A list of mods with full compatibility with Soul Fire'd, by integrating Soul Fire behavior and, some, registering new Fires:
+A list of mods adding full compatibility with Soul Fire'd by integrating Soul Fire behavior and, in some cases, registering new Fires:
 
 | Mod                                                             | Loader |
 |:----------------------------------------------------------------|:------:|
