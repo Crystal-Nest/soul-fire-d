@@ -85,7 +85,7 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
    * @param identifier identifier of the json file.
    * @param field field to parse.
    * @param data {@link JsonObject} with data to parse.
-   * @param parser function to use to retrive parse a json field.
+   * @param parser function to use to retrieve parse a json field.
    * @return value of the field.
    * @throws NullPointerException if there's no such field.
    * @throws UnsupportedOperationException if this element is not a {@link JsonPrimitive} or {@link JsonArray}.
@@ -108,7 +108,7 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
    * @param identifier identifier of the json file.
    * @param field field to parse.
    * @param data {@link JsonObject} with data to parse.
-   * @param parser function to use to retrive parse a json field.
+   * @param parser function to use to retrieve parse a json field.
    * @param fallback default value if no field named {@code field} exists.
    * @return value of the field or default.
    * @throws UnsupportedOperationException if this element is not a {@link JsonPrimitive} or {@link JsonArray}.

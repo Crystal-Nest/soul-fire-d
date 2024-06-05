@@ -81,13 +81,12 @@ public final class FireClientManager {
    * @return whether the registration is successful.
    */
   private static synchronized boolean registerFire(FireClient fire) {
-    ResourceLocation fireType = fire.getFireType();
-    if (!fires.containsKey(fireType)) {
-      fires.put(fireType, fire);
-      return true;
+    if (fires.putIfAbsent(fire.getFireType(), fire) != fire) {
+      ResourceLocation fireType = fire.getFireType();
+      Constants.LOGGER.error("FireClient [{}] was already registered by mod with the following value: {}", fireType, fires.get(fireType));
+      return false;
     }
-    Constants.LOGGER.error("FireClient [{}] was already registered by mod with the following value: {}", fireType, fires.get(fireType));
-    return false;
+    return true;
   }
 
   /**

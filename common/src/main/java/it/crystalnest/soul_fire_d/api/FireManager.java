@@ -95,15 +95,17 @@ public final class FireManager {
    * @return whether the registration is successful.
    */
   public static synchronized boolean registerFire(Fire fire) {
-    ResourceLocation fireType = fire.getFireType();
-    if (!fires.containsKey(fireType)) {
-      fires.put(fireType, fire);
-      fire.getSource().flatMap(BuiltInRegistries.BLOCK::getOptional).ifPresent(block -> ((FireTypeChanger) block).setFireType(fireType));
-      fire.getCampfire().flatMap(BuiltInRegistries.BLOCK::getOptional).ifPresent(block -> ((FireTypeChanger) block).setFireType(fireType));
-      return true;
+    Fire previous = fires.computeIfAbsent(fire.getFireType(), key -> {
+      fire.getSource().flatMap(BuiltInRegistries.BLOCK::getOptional).ifPresent(block -> ((FireTypeChanger) block).setFireType(key));
+      fire.getCampfire().flatMap(BuiltInRegistries.BLOCK::getOptional).ifPresent(block -> ((FireTypeChanger) block).setFireType(key));
+      return fire;
+    });
+    if (previous != fire) {
+      ResourceLocation fireType = fire.getFireType();
+      Constants.LOGGER.error("Fire [{}] was already registered with the following value: {}", fireType, fires.get(fireType));
+      return false;
     }
-    Constants.LOGGER.error("Fire [{}] was already registered with the following value: {}", fireType, fires.get(fireType));
-    return false;
+    return true;
   }
 
   /**
