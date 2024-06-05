@@ -11,6 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -38,9 +39,9 @@ public final class FireClientManager {
    * Attempts to register new {@link FireClient} for all the given {@link Fire fires}.
    *
    * @param fires {@link Fire fires} to derive {@link FireClient} to register.
-   * @return an {@link HashMap} with the outcome of each registration attempt.
+   * @return an {@link Map} with the outcome of each registration attempt.
    */
-  public static synchronized HashMap<ResourceLocation, Boolean> registerFires(Fire... fires) {
+  public static synchronized Map<ResourceLocation, Boolean> registerFires(Fire... fires) {
     return registerFires(List.of(fires));
   }
 
@@ -48,9 +49,9 @@ public final class FireClientManager {
    * Attempts to register all the given {@link Fire fires}.
    *
    * @param fires {@link Fire fires} to register.
-   * @return an {@link HashMap} with the outcome of each registration attempt.
+   * @return an {@link Map} with the outcome of each registration attempt.
    */
-  public static synchronized HashMap<ResourceLocation, Boolean> registerFires(List<Fire> fires) {
+  public static synchronized Map<ResourceLocation, Boolean> registerFires(List<Fire> fires) {
     HashMap<ResourceLocation, Boolean> outcomes = new HashMap<>();
     for (Fire fire : fires) {
       outcomes.put(fire.getFireType(), registerFire(fire));

@@ -9,6 +9,7 @@ sonar {
   properties {
     property "sonar.projectKey", "Crystal-Nest_${mod_id_kebab}"
     property "sonar.organization", "crystal-nest"
+    property "sonar.projectVersion", mod_version
     property "sonar.host.url", "https://sonarcloud.io"
     property "sonar.qualitygate.wait", "true"
   }

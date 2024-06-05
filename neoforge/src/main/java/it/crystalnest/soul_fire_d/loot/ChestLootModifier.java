@@ -28,7 +28,9 @@ public final class ChestLootModifier extends LootModifier {
   /**
    * {@link Supplier} for this {@link LootModifier} {@link Codec}.
    */
-  public static final Supplier<Codec<ChestLootModifier>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.create(instance -> codecStart(instance).and(Addition.CODEC.listOf().fieldOf("additions").forGetter(modifier -> modifier.additions)).apply(instance, ChestLootModifier::new)));
+  public static final Supplier<Codec<ChestLootModifier>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.create(instance -> codecStart(instance).and(
+    Addition.CODEC.listOf().fieldOf("additions").forGetter(modifier -> modifier.additions)
+  ).apply(instance, ChestLootModifier::new)));
 
   /**
    * Additional items to add to the chest loot.

@@ -71,7 +71,17 @@ public final class Fire {
    * @param fireAspect {@link #fireAspect}.
    * @param flame {@link #flame}.
    */
-  Fire(ResourceLocation fireType, float damage, boolean invertHealAndHarm, Function<Entity, DamageSource> inFireGetter, Function<Entity, DamageSource> onFireGetter, ResourceLocation source, ResourceLocation campfire, ResourceLocation fireAspect, ResourceLocation flame) {
+  Fire(
+    ResourceLocation fireType,
+    float damage,
+    boolean invertHealAndHarm,
+    Function<Entity, DamageSource> inFireGetter,
+    Function<Entity, DamageSource> onFireGetter,
+    ResourceLocation source,
+    ResourceLocation campfire,
+    ResourceLocation fireAspect,
+    ResourceLocation flame
+  ) {
     this.fireType = fireType;
     this.damage = damage;
     this.invertHealAndHarm = invertHealAndHarm;

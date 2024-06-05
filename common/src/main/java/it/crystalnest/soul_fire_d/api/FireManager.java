@@ -65,7 +65,6 @@ public final class FireManager {
   private FireManager() {}
 
 
-
   /**
    * Returns a new {@link FireBuilder}.
    *
@@ -274,7 +273,8 @@ public final class FireManager {
    * @return the closest well-formed Fire Type.
    */
   public static ResourceLocation sanitize(String modId, String fireId) {
-    String trimmedModId = modId.trim(), trimmedFireId = fireId.trim();
+    String trimmedModId = modId.trim();
+    String trimmedFireId = fireId.trim();
     try {
       return sanitize(new ResourceLocation(trimmedModId, trimmedFireId));
     } catch (ResourceLocationException e) {
@@ -303,7 +303,8 @@ public final class FireManager {
    * @return the closest well-formed and registered Fire Type.
    */
   public static ResourceLocation ensure(String modId, String fireId) {
-    String trimmedModId = modId.trim(), trimmedFireId = fireId.trim();
+    String trimmedModId = modId.trim();
+    String trimmedFireId = fireId.trim();
     try {
       return ensure(new ResourceLocation(trimmedModId, trimmedFireId));
     } catch (ResourceLocationException e) {

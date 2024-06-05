@@ -61,6 +61,97 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
     }
   }
 
+  /**
+   * Returns the given {@link JsonElement} as a {@link JsonObject}.
+   *
+   * @param identifier identifier of the json file.
+   * @param element
+   * @return the given {@link JsonElement} as a {@link JsonObject}.
+   * @throws IllegalStateException if the element is not a {@link JsonObject}.
+   */
+  private static JsonObject getJsonObject(String identifier, JsonElement element) throws IllegalStateException {
+    try {
+      return element.getAsJsonObject();
+    } catch (IllegalStateException e) {
+      Constants.LOGGER.error(Constants.MOD_ID + " encountered a non-blocking DDFire error!\nError parsing ddfire [{}]: not a JSON object.", identifier);
+      throw e;
+    }
+  }
+
+  /**
+   * Parses the given {@link JsonObject data} to retrieve the specified {@code field} using the provided {@code parser}.
+   *
+   * @param <T>
+   * @param identifier identifier of the json file.
+   * @param field field to parse.
+   * @param data {@link JsonObject} with data to parse.
+   * @param parser function to use to retrive parse a json field.
+   * @return value of the field.
+   * @throws NullPointerException if there's no such field.
+   * @throws UnsupportedOperationException if this element is not a {@link JsonPrimitive} or {@link JsonArray}.
+   * @throws IllegalStateException if this element is of the type {@link JsonArray} but contains more than a single element.
+   * @throws NumberFormatException if the value contained is not a valid number and the expected type ({@code T}) was a number.
+   */
+  private static <T> T parse(String identifier, String field, JsonObject data, Function<JsonElement, T> parser) throws NullPointerException, UnsupportedOperationException, IllegalStateException, NumberFormatException {
+    try {
+      return parser.apply(data.get(field));
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
+      Constants.LOGGER.error(Constants.MOD_ID + " encountered a non-blocking DDFire error!\nError parsing required field \"{}\" for ddfire [{}]: missing or malformed field.", field, identifier);
+      throw e;
+    }
+  }
+
+  /**
+   * Parses the given {@link JsonObject data} to retrieve the specified {@code field} using the provided {@code parser}.
+   *
+   * @param <T>
+   * @param identifier identifier of the json file.
+   * @param field field to parse.
+   * @param data {@link JsonObject} with data to parse.
+   * @param parser function to use to retrive parse a json field.
+   * @param fallback default value if no field named {@code field} exists.
+   * @return value of the field or default.
+   * @throws UnsupportedOperationException if this element is not a {@link JsonPrimitive} or {@link JsonArray}.
+   * @throws IllegalStateException if this element is of the type {@link JsonArray} but contains more than a single element.
+   * @throws NumberFormatException if the value contained is not a valid number and the expected type ({@code T}) was a number.
+   */
+  private static <T> T parse(String identifier, String field, JsonObject data, Function<JsonElement, T> parser, T fallback) throws UnsupportedOperationException, IllegalStateException, NumberFormatException {
+    try {
+      return parser.apply(data.get(field));
+    } catch (NullPointerException e) {
+      return fallback;
+    } catch (UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
+      Constants.LOGGER.error(Constants.MOD_ID + " encountered a non-blocking DDFire error!\nError parsing optional field \"{}\" for ddfire [{}]: malformed field.", field, identifier);
+      throw e;
+    }
+  }
+
+  /**
+   * Unregisters all DDFires.
+   */
+  private static void unregisterFires() {
+    for (ResourceLocation fireType : ddfiresRegister) {
+      if (FireManager.unregisterFire(fireType)) {
+        ddfiresUnregister.add(fireType);
+      }
+    }
+    ddfiresRegister.clear();
+  }
+
+  /**
+   * Registers a DDFire.
+   *
+   * @param fireType
+   * @param fire
+   */
+  private static void registerFire(ResourceLocation fireType, Fire fire) {
+    if (FireManager.registerFire(fire)) {
+      ddfiresRegister.add(fireType);
+    } else {
+      Constants.LOGGER.error("Unable to register ddfire [{}].", fireType);
+    }
+  }
+
   @Override
   protected void apply(Map<ResourceLocation, JsonElement> fires, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profilerFiller) {
     unregisterFires();
@@ -99,97 +190,6 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
         Constants.LOGGER.error("Registering of ddfire [{}] is canceled.", jsonIdentifier);
       }
-    }
-  }
-
-  /**
-   * Returns the given {@link JsonElement} as a {@link JsonObject}.
-   *
-   * @param identifier identifier of the json file.
-   * @param element
-   * @return the given {@link JsonElement} as a {@link JsonObject}.
-   * @throws IllegalStateException if the element is not a {@link JsonObject}.
-   */
-  private JsonObject getJsonObject(String identifier, JsonElement element) throws IllegalStateException {
-    try {
-      return element.getAsJsonObject();
-    } catch (IllegalStateException e) {
-      Constants.LOGGER.error(Constants.MOD_ID + " encountered a non-blocking DDFire error!\nError parsing ddfire [{}]: not a JSON object.", identifier);
-      throw e;
-    }
-  }
-
-  /**
-   * Parses the given {@link JsonObject data} to retrieve the specified {@code field} using the provided {@code parser}.
-   *
-   * @param <T>
-   * @param identifier identifier of the json file.
-   * @param field field to parse.
-   * @param data {@link JsonObject} with data to parse.
-   * @param parser function to use to retrive parse a json field.
-   * @return value of the field.
-   * @throws NullPointerException if there's no such field.
-   * @throws UnsupportedOperationException if this element is not a {@link JsonPrimitive} or {@link JsonArray}.
-   * @throws IllegalStateException if this element is of the type {@link JsonArray} but contains more than a single element.
-   * @throws NumberFormatException if the value contained is not a valid number and the expected type ({@code T}) was a number.
-   */
-  private <T> T parse(String identifier, String field, JsonObject data, Function<JsonElement, T> parser) throws NullPointerException, UnsupportedOperationException, IllegalStateException, NumberFormatException {
-    try {
-      return parser.apply(data.get(field));
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
-      Constants.LOGGER.error(Constants.MOD_ID + " encountered a non-blocking DDFire error!\nError parsing required field \"{}\" for ddfire [{}]: missing or malformed field.", field, identifier);
-      throw e;
-    }
-  }
-
-  /**
-   * Parses the given {@link JsonObject data} to retrieve the specified {@code field} using the provided {@code parser}.
-   *
-   * @param <T>
-   * @param identifier identifier of the json file.
-   * @param field field to parse.
-   * @param data {@link JsonObject} with data to parse.
-   * @param parser function to use to retrive parse a json field.
-   * @param fallback default value if no field named {@code field} exists.
-   * @return value of the field or default.
-   * @throws UnsupportedOperationException if this element is not a {@link JsonPrimitive} or {@link JsonArray}.
-   * @throws IllegalStateException if this element is of the type {@link JsonArray} but contains more than a single element.
-   * @throws NumberFormatException if the value contained is not a valid number and the expected type ({@code T}) was a number.
-   */
-  private <T> T parse(String identifier, String field, JsonObject data, Function<JsonElement, T> parser, T fallback) throws UnsupportedOperationException, IllegalStateException, NumberFormatException {
-    try {
-      return parser.apply(data.get(field));
-    } catch (NullPointerException e) {
-      return fallback;
-    } catch (UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
-      Constants.LOGGER.error(Constants.MOD_ID + " encountered a non-blocking DDFire error!\nError parsing optional field \"{}\" for ddfire [{}]: malformed field.", field, identifier);
-      throw e;
-    }
-  }
-
-  /**
-   * Unregisters all DDFires.
-   */
-  private void unregisterFires() {
-    for (ResourceLocation fireType : ddfiresRegister) {
-      if (FireManager.unregisterFire(fireType)) {
-        ddfiresUnregister.add(fireType);
-      }
-    }
-    ddfiresRegister.clear();
-  }
-
-  /**
-   * Registers a DDFire.
-   *
-   * @param fireType
-   * @param fire
-   */
-  private void registerFire(ResourceLocation fireType, Fire fire) {
-    if (FireManager.registerFire(fire)) {
-      ddfiresRegister.add(fireType);
-    } else {
-      Constants.LOGGER.error("Unable to register ddfire [{}].", fireType);
     }
   }
 }

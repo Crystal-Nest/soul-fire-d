@@ -6,7 +6,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.DistExecutor;
 
-public class ForgeFirePacketHandler {
+public final class ForgeFirePacketHandler {
+  private ForgeFirePacketHandler() {}
 
   public static void handleRegister(RegisterFirePacket packet, CustomPayloadEvent.Context context) {
     context.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> FirePacketHandler.handle(packet)));

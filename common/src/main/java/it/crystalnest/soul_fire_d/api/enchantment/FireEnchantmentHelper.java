@@ -15,7 +15,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 /**
  * Helper for Fire related enchantments (Fire Aspect and Flame).
@@ -153,8 +153,8 @@ public final class FireEnchantmentHelper {
    * @param getLevel
    * @return the {@link FireEnchantment data} of whatever Fire enchantment in the enchantments list is applied.
    */
-  private static <T> FireEnchantment getAnyFireEnchantment(T stack, List<? extends Enchantment> enchantments, Function<T, Integer> getBaseFireEnchantment, BiFunction<Enchantment, T, Integer> getLevel) {
-    int fireEnchantmentLevel = getBaseFireEnchantment.apply(stack);
+  private static <T> FireEnchantment getAnyFireEnchantment(T stack, List<? extends Enchantment> enchantments, ToIntFunction<T> getBaseFireEnchantment, BiFunction<Enchantment, T, Integer> getLevel) {
+    int fireEnchantmentLevel = getBaseFireEnchantment.applyAsInt(stack);
     ResourceLocation fireType = FireManager.DEFAULT_FIRE_TYPE;
     if (fireEnchantmentLevel <= 0) {
       for (Enchantment enchantment : enchantments) {

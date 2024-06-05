@@ -15,6 +15,12 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.function.Function;
 
 public class FabricNetworkHelper implements NetworkHelper {
+  private static <D, P extends CustomPacketPayload> FriendlyByteBuf encode(Function<D, P> packet, D data) {
+    FriendlyByteBuf buffer = PacketByteBufs.create();
+    packet.apply(data).write(buffer);
+    return buffer;
+  }
+
   /**
    * Registration is done in {@link ClientModLoader} to avoid crashes server-side.
    */
@@ -31,11 +37,5 @@ public class FabricNetworkHelper implements NetworkHelper {
   @Override
   public void sendToClient(ServerPlayer player, ResourceLocation fireType) {
     ServerPlayNetworking.send(player, UnregisterFirePacket.ID, encode(UnregisterFirePacket::new, fireType));
-  }
-
-  private <D, P extends CustomPacketPayload> FriendlyByteBuf encode(Function<D, P> packet, D data) {
-    FriendlyByteBuf buffer = PacketByteBufs.create();
-    packet.apply(data).write(buffer);
-    return buffer;
   }
 }

@@ -7,12 +7,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
 
-public class FabricFirePacketHandler {
+public final class FabricFirePacketHandler {
+  private FabricFirePacketHandler() {}
+
   public static void handleRegister(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
     FirePacketHandler.handle(new RegisterFirePacket(buffer));
   }
 
-  public static void handleUnregister(Minecraft minecraft, ClientPacketListener lListener, FriendlyByteBuf buffer, PacketSender sender) {
+  public static void handleUnregister(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {
     FirePacketHandler.handle(new UnregisterFirePacket(buffer));
   }
 }

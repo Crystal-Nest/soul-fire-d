@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 /**
  * Builder for {@link Fire} instances.
@@ -118,24 +119,24 @@ public final class FireBuilder {
    * <p>
    * Default value is recommended.
    * <p>
-   * If your Fire should have a Fire Aspect enchantment, but with a different value than default, use {@link #setFireAspectConfig(Function)}.
+   * If your Fire should have a Fire Aspect enchantment, but with a different value than default, use {@link #setFireAspectConfig(UnaryOperator)}.
    * <p>
    * If your Fire should not have a Fire Aspect enchantment, set this to null with {@link #removeFireAspect()}.
    */
-  private Optional<Function<FireAspectBuilder, FireAspectBuilder>> fireAspectConfigurator;
+  private Optional<UnaryOperator<FireAspectBuilder>> fireAspectConfigurator;
 
   /**
-   * {@link Function} to configure the {@link FlameBuilder}.
+   * {@link UnaryOperator} to configure the {@link FlameBuilder}.
    * <p>
    * Optional, defaults to a configuration to build a new {@link FireTypedFlameEnchantment} with {@link Enchantment.Rarity#VERY_RARE}.
    * <p>
    * Default value is recommended.
    * <p>
-   * If your Fire should have a Flame enchantment, but with a different value than default, use {@link #setFlameConfig(Function)}.
+   * If your Fire should have a Flame enchantment, but with a different value than default, use {@link #setFlameConfig(UnaryOperator)}.
    * <p>
    * If your Fire should not have a Flame enchantment, set this to null with {@link #removeFlame()}.
    */
-  private Optional<Function<FlameBuilder, FlameBuilder>> flameConfigurator;
+  private Optional<UnaryOperator<FlameBuilder>> flameConfigurator;
 
   /**
    * @param modId {@link #modId}.
@@ -150,6 +151,39 @@ public final class FireBuilder {
    */
   FireBuilder(ResourceLocation fireType) {
     reset(fireType);
+  }
+
+  /**
+   * Returns the value of the given {@link Optional}.
+   * <p>
+   * Returns {@code null} if the {@code optional} is either {@code null} or empty.
+   *
+   * @param <T> value type.
+   * @param optional
+   * @return the value of the given {@link Optional}.
+   */
+  @Nullable
+  private static <T> T get(@Nullable Optional<T> optional) {
+    return optional != null && optional.isPresent() ? optional.get() : null;
+  }
+
+  /**
+   * Returns the value obtained by calling {@link FireEnchantmentBuilder#register()} for the given Builder.
+   * <p>
+   * Returns {@code null} if the {@code optional} is either {@code null} or empty.
+   *
+   * @param <B> builder type.
+   * @param <E> enchantment type.
+   * @param optional
+   * @param builder
+   * @return the value obtained by calling {@link FireEnchantmentBuilder#register()}.
+   */
+  private static <B extends FireEnchantmentBuilder<E>, E extends Enchantment & FireTypedEnchantment> ResourceLocation register(ResourceLocation fireType, @Nullable Optional<UnaryOperator<B>> optional, Function<ResourceLocation, B> builder) {
+    UnaryOperator<B> configurator = get(optional);
+    if (configurator != null) {
+      return configurator.apply(builder.apply(fireType)).register();
+    }
+    return null;
   }
 
   /**
@@ -245,10 +279,10 @@ public final class FireBuilder {
   /**
    * Sets the {@link #fireAspectConfigurator}.
    *
-   * @param fireAspectConfigurator {@link Function} to configure the {@link FireAspectBuilder}.
+   * @param fireAspectConfigurator {@link UnaryOperator} to configure the {@link FireAspectBuilder}.
    * @return this Builder to either set other properties or {@link #register}.
    */
-  public FireBuilder setFireAspectConfig(Function<FireAspectBuilder, FireAspectBuilder> fireAspectConfigurator) {
+  public FireBuilder setFireAspectConfig(UnaryOperator<FireAspectBuilder> fireAspectConfigurator) {
     this.fireAspectConfigurator = Optional.of(fireAspectConfigurator);
     return this;
   }
@@ -266,10 +300,10 @@ public final class FireBuilder {
   /**
    * Sets the {@link #flameConfigurator}.
    *
-   * @param flameConfigurator {@link Function} to configure the {@link FlameBuilder}.
+   * @param flameConfigurator {@link UnaryOperator} to configure the {@link FlameBuilder}.
    * @return this Builder to either set other properties or {@link #register}.
    */
-  public FireBuilder setFlameConfig(Function<FlameBuilder, FlameBuilder> flameConfigurator) {
+  public FireBuilder setFlameConfig(UnaryOperator<FlameBuilder> flameConfigurator) {
     this.flameConfigurator = Optional.of(flameConfigurator);
     return this;
   }
@@ -357,38 +391,5 @@ public final class FireBuilder {
       return new Fire(fireType, damage, invertHealAndHarm, inFireGetter, onFireGetter, get(source), get(campfire), register(fireType, fireAspectConfigurator, FireAspectBuilder::new), register(fireType, flameConfigurator, FlameBuilder::new));
     }
     throw new IllegalStateException("Attempted to build a Fire with a non-valid fireId or modId");
-  }
-
-  /**
-   * Returns the value of the given {@link Optional}.
-   * <p>
-   * Returns {@code null} if the {@code optional} is either {@code null} or empty.
-   *
-   * @param <T> value type.
-   * @param optional
-   * @return the value of the given {@link Optional}.
-   */
-  @Nullable
-  private <T> T get(@Nullable Optional<T> optional) {
-    return optional != null && optional.isPresent() ? optional.get() : null;
-  }
-
-  /**
-   * Returns the value obtained by calling {@link FireEnchantmentBuilder#register()} for the given Builder.
-   * <p>
-   * Returns {@code null} if the {@code optional} is either {@code null} or empty.
-   *
-   * @param <B> builder type.
-   * @param <E> enchantment type.
-   * @param optional
-   * @param builder
-   * @return the value obtained by calling {@link FireEnchantmentBuilder#register()}.
-   */
-  private <B extends FireEnchantmentBuilder<E>, E extends Enchantment & FireTypedEnchantment> ResourceLocation register(ResourceLocation fireType, @Nullable Optional<Function<B, B>> optional, Function<ResourceLocation, B> builder) {
-    Function<B, B> configurator = get(optional);
-    if (configurator != null) {
-      return configurator.apply(builder.apply(fireType)).register();
-    }
-    return null;
   }
 }

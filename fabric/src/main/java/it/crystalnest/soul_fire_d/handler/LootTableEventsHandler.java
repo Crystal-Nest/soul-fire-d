@@ -2,6 +2,7 @@ package it.crystalnest.soul_fire_d.handler;
 
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.config.ModConfig;
+import net.fabricmc.fabric.api.loot.v2.FabricLootTableBuilder;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.loot.v2.LootTableSource;
 import net.minecraft.resources.ResourceLocation;
@@ -9,7 +10,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
@@ -36,7 +36,7 @@ public final class LootTableEventsHandler {
    * @param builder
    * @param lootTableSource
    */
-  public static void handle(ResourceManager resourceManager, LootDataManager lootDataManager, ResourceLocation resourceLocation, LootTable.Builder builder, LootTableSource lootTableSource) {
+  public static void handle(ResourceManager resourceManager, LootDataManager lootDataManager, ResourceLocation resourceLocation, FabricLootTableBuilder builder, LootTableSource lootTableSource) {
     if (ModConfig.getEnableSoulFlame() && resourceLocation.equals(BASTION_CHEST_IDENTIFIER)) {
       builder.pool(
         LootPool.lootPool()

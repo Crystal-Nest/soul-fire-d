@@ -15,9 +15,10 @@ import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 import org.jetbrains.annotations.Nullable;
 
 public class NeoForgeNetworkHelper implements NetworkHelper {
-  @Override
-  public void register() {
-    ModLoader.getBus().addListener(this::registerPackets);
+  private static void registerPackets(RegisterPayloadHandlerEvent event) {
+    IPayloadRegistrar registrar = event.registrar(Constants.MOD_ID);
+    registrar.play(RegisterFirePacket.ID, RegisterFirePacket::new, handler -> handler.client(NeoForgeFirePacketHandler::handle));
+    registrar.play(UnregisterFirePacket.ID, UnregisterFirePacket::new, handler -> handler.client(NeoForgeFirePacketHandler::handle));
   }
 
   @Override
@@ -38,9 +39,8 @@ public class NeoForgeNetworkHelper implements NetworkHelper {
     }
   }
 
-  private void registerPackets(RegisterPayloadHandlerEvent event) {
-    IPayloadRegistrar registrar = event.registrar(Constants.MOD_ID);
-    registrar.play(RegisterFirePacket.ID, RegisterFirePacket::new, handler -> handler.client(NeoForgeFirePacketHandler::handle));
-    registrar.play(UnregisterFirePacket.ID, UnregisterFirePacket::new, handler -> handler.client(NeoForgeFirePacketHandler::handle));
+  @Override
+  public void register() {
+    ModLoader.getBus().addListener(NeoForgeNetworkHelper::registerPackets);
   }
 }

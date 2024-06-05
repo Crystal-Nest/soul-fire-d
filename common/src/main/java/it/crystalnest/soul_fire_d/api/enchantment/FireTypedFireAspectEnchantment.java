@@ -17,7 +17,8 @@ import net.minecraft.world.item.enchantment.FireAspectEnchantment;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Function;
+import java.util.function.BooleanSupplier;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -32,12 +33,12 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
   /**
    * {@link Supplier} to check whether this enchantment is enabled in survival.
    */
-  private final Supplier<Boolean> enabled;
+  private final BooleanSupplier enabled;
 
   /**
-   * Addtional compatibility {@link Function} to call and check for when checking compatibility with other enchantments.
+   * Additional compatibility {@link Predicate} to call and check for when checking compatibility with other enchantments.
    */
-  private final Function<Enchantment, Boolean> compatibility;
+  private final Predicate<Enchantment> compatibility;
 
   /**
    * {@link TriFunction} to tweak the flame duration.
@@ -47,24 +48,24 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
   /**
    * Whether the enchantment is treasure only.
    */
-  private final Supplier<Boolean> isTreasure;
+  private final BooleanSupplier isTreasure;
 
   /**
    * Whether the enchantment is a curse.
    */
-  private final Supplier<Boolean> isCurse;
+  private final BooleanSupplier isCurse;
 
   /**
    * Whether the enchantment can appear in the enchanted book trade offers of librarian villagers.
    */
-  private final Supplier<Boolean> isTradeable;
+  private final BooleanSupplier isTradeable;
 
   /**
    * Whether the enchantment will appear in the enchanting table or loots with random enchant function.
    * <p>
    * Note that {@link #isTreasure} takes precedence.
    */
-  private final Supplier<Boolean> isDiscoverable;
+  private final BooleanSupplier isDiscoverable;
 
   /**
    * @param fireType {@link #fireType}.
@@ -80,12 +81,12 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
   FireTypedFireAspectEnchantment(
     ResourceLocation fireType,
     Rarity rarity,
-    Supplier<Boolean> isTreasure,
-    Supplier<Boolean> isCurse,
-    Supplier<Boolean> isTradeable,
-    Supplier<Boolean> isDiscoverable,
-    Supplier<Boolean> enabled,
-    Function<Enchantment, Boolean> compatibility,
+    BooleanSupplier isTreasure,
+    BooleanSupplier isCurse,
+    BooleanSupplier isTradeable,
+    BooleanSupplier isDiscoverable,
+    BooleanSupplier enabled,
+    Predicate<Enchantment> compatibility,
     TriFunction<Entity, Entity, Integer, Integer> duration
   ) {
     super(rarity, EquipmentSlot.MAINHAND);
@@ -99,20 +100,34 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
     this.duration = duration;
   }
 
+  /**
+   * Returns whether the given {@link Entity} was last hit by a projectile.
+   *
+   * @param target
+   * @return whether the given {@link Entity} was last hit by a projectile.
+   */
+  private static boolean wasLastHitByProjectile(Entity target) {
+    if (target instanceof LivingEntity livingEntity) {
+      DamageSource lastDamageSource = livingEntity.getLastDamageSource();
+      return lastDamageSource != null && lastDamageSource.is(DamageTypeTags.IS_PROJECTILE);
+    }
+    return false;
+  }
+
   @Override
   public boolean checkCompatibility(@NotNull Enchantment enchantment) {
     return (
-      enabled.get() &&
+      enabled.getAsBoolean() &&
       super.checkCompatibility(enchantment) &&
       !(enchantment instanceof FireAspectEnchantment) &&
-      compatibility.apply(enchantment) &&
+      compatibility.test(enchantment) &&
       (!Services.PLATFORM.isModLoaded("ensorcellation") || Ensorcellation.checkFireAspectCompatibility(enchantment))
     );
   }
 
   @Override
   public boolean canEnchant(@NotNull ItemStack itemStack) {
-    return enabled.get() && super.canEnchant(itemStack);
+    return enabled.getAsBoolean() && super.canEnchant(itemStack);
   }
 
   @Override
@@ -128,22 +143,22 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
 
   @Override
   public boolean isTreasureOnly() {
-    return isTreasure.get();
+    return isTreasure.getAsBoolean();
   }
 
   @Override
   public boolean isCurse() {
-    return isCurse.get();
+    return isCurse.getAsBoolean();
   }
 
   @Override
   public boolean isTradeable() {
-    return isTradeable.get() && enabled.get();
+    return isTradeable.getAsBoolean() && enabled.getAsBoolean();
   }
 
   @Override
   public boolean isDiscoverable() {
-    return isDiscoverable.get() && enabled.get();
+    return isDiscoverable.getAsBoolean() && enabled.getAsBoolean();
   }
 
   @Override
@@ -154,19 +169,5 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
   @Override
   public int duration(Entity attacker, Entity target, Integer duration) {
     return this.duration.apply(attacker, target, duration);
-  }
-
-  /**
-   * Returns whether the given {@link Entity} was last hit by a projectile.
-   *
-   * @param target
-   * @return whether the given {@link Entity} was last hit by a projectile.
-   */
-  private boolean wasLastHitByProjectile(Entity target) {
-    if (target instanceof LivingEntity) {
-      DamageSource lastDamageSource = ((LivingEntity) target).getLastDamageSource();
-      return lastDamageSource != null && lastDamageSource.is(DamageTypeTags.IS_PROJECTILE);
-    }
-    return false;
   }
 }

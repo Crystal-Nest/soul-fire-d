@@ -20,7 +20,7 @@ public final class FMLClientSetupEventHandler {
    * Handles the {@link FMLClientSetupEvent} event.
    * <p>
    * Registers all {@link Fire Fires} to the client.
-   * 
+   *
    * @param event
    */
   @SubscribeEvent

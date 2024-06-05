@@ -9,7 +9,9 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 import org.apache.commons.lang3.function.TriFunction;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -54,23 +56,23 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
   private final String kind;
 
   /**
-   * {@link Supplier} to check whether the enchantment is enabled in survival.
+   * {@link BooleanSupplier} to check whether the enchantment is enabled in survival.
    * <p>
    * Defaults to {@code () -> true}.
    */
-  protected Supplier<Boolean> enabled = () -> true;
+  protected BooleanSupplier enabled = () -> true;
 
   /**
-   * Additional compatibility {@link Function} to call and check for when checking compatibility with other enchantments.
+   * Additional compatibility {@link Predicate} to call and check for when checking compatibility with other enchantments.
    * <p>
    * Defaults to {@code (enchantment) -> true}.
    */
-  protected Function<Enchantment, Boolean> compatibility = (enchantment) -> true;
+  protected Predicate<Enchantment> compatibility = enchantment -> true;
 
   /**
    * {@link TriFunction} to tweak the flame duration.
    */
-  protected TriFunction<Entity, Entity, Integer, Integer> duration = (attacker, target, duration) -> duration;
+  protected TriFunction<Entity, Entity, Integer, Integer> duration = (attacker, target, seconds) -> seconds;
 
   /**
    * {@link Rarity} for the enchantment.
@@ -84,26 +86,26 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * If set to {@code true} along with {@link #isDiscoverable}, the enchantment won't appear in the enchanting table, but can still be found in loots.<br />
    * Defaults to {@code () -> false}
    */
-  protected Supplier<Boolean> isTreasure = () -> DEFAULT_IS_TREASURE;
+  protected BooleanSupplier isTreasure = () -> DEFAULT_IS_TREASURE;
 
   /**
    * {@link Supplier} for whether the enchantment is a curse.<br />
    * Defaults to {@code () -> false}
    */
-  protected Supplier<Boolean> isCurse = () -> DEFAULT_IS_CURSE;
+  protected BooleanSupplier isCurse = () -> DEFAULT_IS_CURSE;
 
   /**
    * {@link Supplier} for whether the enchantment can appear in the enchanted book trade offers of librarian villagers.<br />
    * Defaults to {@code () -> true}
    */
-  protected Supplier<Boolean> isTradeable = () -> DEFAULT_IS_TRADEABLE;
+  protected BooleanSupplier isTradeable = () -> DEFAULT_IS_TRADEABLE;
 
   /**
    * {@link Supplier} for whether the enchantment will appear in the enchanting table or loots with random enchant function.<br />
    * Note that {@link #isTreasure} takes precedence.<br />
    * Defaults to {@code () -> true}
    */
-  protected Supplier<Boolean> isDiscoverable = () -> DEFAULT_IS_DISCOVERABLE;
+  protected BooleanSupplier isDiscoverable = () -> DEFAULT_IS_DISCOVERABLE;
 
   /**
    * @param fireType {@link #fireType}.
@@ -133,7 +135,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * @param isTreasure
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public final <B extends FireEnchantmentBuilder<T>> B setIsTreasure(Supplier<Boolean> isTreasure) {
+  public final <B extends FireEnchantmentBuilder<T>> B setIsTreasure(BooleanSupplier isTreasure) {
     this.isTreasure = isTreasure;
     return (B) this;
   }
@@ -156,7 +158,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * @param isCurse
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public final <B extends FireEnchantmentBuilder<T>> B setIsCurse(Supplier<Boolean> isCurse) {
+  public final <B extends FireEnchantmentBuilder<T>> B setIsCurse(BooleanSupplier isCurse) {
     this.isCurse = isCurse;
     return (B) this;
   }
@@ -179,7 +181,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * @param isTradeable
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public final <B extends FireEnchantmentBuilder<T>> B setIsTradeable(Supplier<Boolean> isTradeable) {
+  public final <B extends FireEnchantmentBuilder<T>> B setIsTradeable(BooleanSupplier isTradeable) {
     this.isTradeable = isTradeable;
     return (B) this;
   }
@@ -202,7 +204,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * @param isDiscoverable
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public final <B extends FireEnchantmentBuilder<T>> B setIsDiscoverable(Supplier<Boolean> isDiscoverable) {
+  public final <B extends FireEnchantmentBuilder<T>> B setIsDiscoverable(BooleanSupplier isDiscoverable) {
     this.isDiscoverable = isDiscoverable;
     return (B) this;
   }
@@ -225,7 +227,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * @param compatibility
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public final <B extends FireEnchantmentBuilder<T>> B setCompatibility(Function<Enchantment, Boolean> compatibility) {
+  public final <B extends FireEnchantmentBuilder<T>> B setCompatibility(Predicate<Enchantment> compatibility) {
     this.compatibility = compatibility;
     return (B) this;
   }
@@ -237,7 +239,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * @param enabled
    * @return this Builder to either set other properties or {@link #build}.
    */
-  public final <B extends FireEnchantmentBuilder<T>> B setEnabled(Supplier<Boolean> enabled) {
+  public final <B extends FireEnchantmentBuilder<T>> B setEnabled(BooleanSupplier enabled) {
     this.enabled = enabled;
     return (B) this;
   }
