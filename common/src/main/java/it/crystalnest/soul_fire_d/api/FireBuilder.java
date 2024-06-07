@@ -54,6 +54,8 @@ public final class FireBuilder {
    */
   private String fireId;
 
+  private int light;
+
   /**
    * {@link Fire} instance {@link Fire#damage damage}.
    * <p>
@@ -184,6 +186,13 @@ public final class FireBuilder {
       return configurator.apply(builder.apply(fireType)).register();
     }
     return null;
+  }
+
+  public FireBuilder setLight(int light) {
+    if (light >= 0 && light <= 15) {
+      this.light = light;
+    }
+    return this;
   }
 
   /**
@@ -388,7 +397,7 @@ public final class FireBuilder {
       if (flameConfigurator != null && flameConfigurator.isEmpty()) {
         flameConfigurator = Optional.of(builder -> builder);
       }
-      return new Fire(fireType, damage, invertHealAndHarm, inFireGetter, onFireGetter, get(source), get(campfire), register(fireType, fireAspectConfigurator, FireAspectBuilder::new), register(fireType, flameConfigurator, FlameBuilder::new));
+      return new Fire(fireType, light, damage, invertHealAndHarm, inFireGetter, onFireGetter, get(source), get(campfire), register(fireType, fireAspectConfigurator, FireAspectBuilder::new), register(fireType, flameConfigurator, FlameBuilder::new));
     }
     throw new IllegalStateException("Attempted to build a Fire with a non-valid fireId or modId");
   }

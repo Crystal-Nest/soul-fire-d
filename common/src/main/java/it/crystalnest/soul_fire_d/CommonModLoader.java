@@ -18,22 +18,22 @@ public final class CommonModLoader {
   public static void init() {
     ModConfig.CONFIG.register();
     Services.NETWORK.register();
-    FireManager.registerFire(
-      FireManager.fireBuilder(FireManager.SOUL_FIRE_TYPE)
-        .setDamage(2)
-        .setFireAspectConfig(builder -> builder
-          .setEnabled(ModConfig::getEnableSoulFireAspect)
-          .setIsDiscoverable(ModConfig::getEnableSoulFireAspectDiscovery)
-          .setIsTradeable(ModConfig::getEnableSoulFireAspectTrades)
-          .setIsTreasure(ModConfig::getEnableSoulFireAspectTreasure)
-        )
-        .setFlameConfig(builder -> builder
-          .setEnabled(ModConfig::getEnableSoulFlame)
-          .setIsDiscoverable(ModConfig::getEnableSoulFlameDiscovery)
-          .setIsTradeable(ModConfig::getEnableSoulFlameTrades)
-          .setIsTreasure(ModConfig::getEnableSoulFlameTreasure)
-        )
-        .build()
+    FireManager.registerFire(FireManager.fireBuilder(FireManager.SOUL_FIRE_TYPE)
+      .setLight(10)
+      .setDamage(2)
+      .setFireAspectConfig(builder -> builder
+        .setEnabled(ModConfig::getEnableSoulFireAspect)
+        .setIsDiscoverable(ModConfig::getEnableSoulFireAspectDiscovery)
+        .setIsTradeable(ModConfig::getEnableSoulFireAspectTrades)
+        .setIsTreasure(ModConfig::getEnableSoulFireAspectTreasure)
+      )
+      .setFlameConfig(builder -> builder
+        .setEnabled(ModConfig::getEnableSoulFlame)
+        .setIsDiscoverable(ModConfig::getEnableSoulFlameDiscovery)
+        .setIsTradeable(ModConfig::getEnableSoulFlameTrades)
+        .setIsTreasure(ModConfig::getEnableSoulFlameTreasure)
+      )
+      .build()
     );
   }
 }

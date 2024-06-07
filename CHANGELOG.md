@@ -8,6 +8,9 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 ## [Unreleased]
 - Nothing new.
 
+## [1.20.4-3.3.1-alpha] - 2024/06/07
+- TODO
+
 ## [1.20.4-3.3.0-alpha] - 2024/06/04
 - Rewrite to new standards with multiloader environment.
 
@@ -331,6 +334,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[1.20.4-3.3.1-alpha]: https://github.com/crystal-nest/soul-fire-d/releases/tag/v1.20.4-3.3.1-alpha
 [1.20.4-3.3.0-alpha]: https://github.com/crystal-nest/soul-fire-d/releases/tag/v1.20.4-3.3.0-alpha
 [1.20.4-3.2.1.0]: https://github.com/crystal-nest/soul-fire-d/releases/tag/v1.20.4-3.2.1.0
 

@@ -44,8 +44,8 @@ public abstract class EnchantmentHelperMixin {
    * @param stack
    * @param cir {@link CallbackInfoReturnable}.
    */
-  @Inject(method = "getItemEnchantmentLevel", at = @At(value = "HEAD"), cancellable = true, remap = false)
-  private static void onGetTagEnchantmentLevel(Enchantment enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
+  @Inject(method = "getItemEnchantmentLevel", at = @At(value = "HEAD"), cancellable = true)
+  private static void onGetItemEnchantmentLevel(Enchantment enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
     if (enchantment == Enchantments.FIRE_ASPECT) {
       cir.setReturnValue(FireEnchantmentHelper.getAnyFireAspect(stack));
     }

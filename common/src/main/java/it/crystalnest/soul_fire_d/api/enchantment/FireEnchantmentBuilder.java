@@ -273,7 +273,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    */
   public ResourceLocation register() {
     ResourceLocation key = new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_" + kind);
-    Services.PLATFORM.registerEnchantment(key, this::build);
+    Services.REGISTRY.registerEnchantment(key, this::build);
     return key;
   }
 

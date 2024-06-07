@@ -1,19 +1,35 @@
 package it.crystalnest.soul_fire_d.api;
 
 import it.crystalnest.soul_fire_d.Constants;
+import it.crystalnest.soul_fire_d.api.block.CustomCampfireBlock;
+import it.crystalnest.soul_fire_d.api.block.CustomFireBlock;
+import it.crystalnest.soul_fire_d.api.block.CustomLanternBlock;
+import it.crystalnest.soul_fire_d.api.block.CustomTorchBlock;
+import it.crystalnest.soul_fire_d.api.block.CustomWallTorchBlock;
 import it.crystalnest.soul_fire_d.api.enchantment.FireTypedFireAspectEnchantment;
 import it.crystalnest.soul_fire_d.api.enchantment.FireTypedFlameEnchantment;
 import it.crystalnest.soul_fire_d.api.type.FireTypeChanger;
 import it.crystalnest.soul_fire_d.platform.Services;
 import net.minecraft.ResourceLocationException;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LanternBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.CampfireBlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Static manager for registered Fires.
@@ -47,6 +65,7 @@ public final class FireManager {
    */
   public static final Fire DEFAULT_FIRE = new Fire(
     DEFAULT_FIRE_TYPE,
+    15,
     FireBuilder.DEFAULT_DAMAGE,
     FireBuilder.DEFAULT_INVERT_HEAL_AND_HARM,
     FireBuilder.DEFAULT_IN_FIRE_GETTER,
@@ -64,6 +83,71 @@ public final class FireManager {
 
   private FireManager() {}
 
+  public static <T extends CustomFireBlock> Supplier<T> registerFireSource(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
+    return Services.REGISTRY.registerBlock(FireManager.getFire(fireType).getSource().orElseThrow(), () -> supplier.apply(fireType));
+  }
+
+  public static Supplier<CustomFireBlock> registerFireSource(ResourceLocation fireType, TagKey<Block> base, MapColor color) {
+    return Services.REGISTRY.registerBlock(FireManager.getFire(fireType).getSource().orElseThrow(), () -> new CustomFireBlock(fireType, base, color));
+  }
+
+  public static Supplier<CustomFireBlock> registerFireSource(ResourceLocation fireType, TagKey<Block> base, BlockBehaviour.Properties properties) {
+    return Services.REGISTRY.registerBlock(FireManager.getFire(fireType).getSource().orElseThrow(), () -> new CustomFireBlock(fireType, base, properties));
+  }
+
+  public static <T extends CustomCampfireBlock> Supplier<T> registerCampfire(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
+    return Services.REGISTRY.registerBlock(FireManager.getFire(fireType).getCampfire().orElseThrow(), () -> supplier.apply(fireType));
+  }
+
+  public static Supplier<CustomCampfireBlock> registerCampfire(ResourceLocation fireType, boolean spawnParticles) {
+    return Services.REGISTRY.registerBlock(FireManager.getFire(fireType).getCampfire().orElseThrow(), () -> new CustomCampfireBlock(fireType, spawnParticles));
+  }
+
+  public static Supplier<CustomCampfireBlock> registerCampfire(ResourceLocation fireType, boolean spawnParticles, BlockBehaviour.Properties properties) {
+    return Services.REGISTRY.registerBlock(FireManager.getFire(fireType).getCampfire().orElseThrow(), () -> new CustomCampfireBlock(fireType, spawnParticles, properties));
+  }
+
+  public static Supplier<BlockItem> registerCampfireItem(ResourceLocation fireType, Supplier<? extends Block> campfire) {
+    return Services.REGISTRY.registerBlockItem(FireManager.getFire(fireType).getCampfire().orElseThrow(), campfire);
+  }
+
+  @SafeVarargs
+  public static Supplier<BlockEntityType<CampfireBlockEntity>> registerCampfireBlockEntity(ResourceLocation fireType, Supplier<? extends Block>... campfires) {
+    return Services.REGISTRY.registerCampfireBlockEntity(FireManager.getFire(fireType).getCampfire().orElseThrow(), campfires);
+  }
+
+  public static Supplier<SimpleParticleType> registerParticle(ResourceLocation fireType) {
+    return Services.REGISTRY.registerParticle(new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_flame"));
+  }
+
+  public static Supplier<CustomTorchBlock> registerTorch(ResourceLocation fireType, Supplier<SimpleParticleType> particle) {
+    return Services.REGISTRY.registerBlock(
+      new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_torch"),
+      () -> new CustomTorchBlock(fireType, particle, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY))
+    );
+  }
+
+  public static Supplier<CustomWallTorchBlock> registerTorch(ResourceLocation fireType, Supplier<SimpleParticleType> particle, Supplier<CustomTorchBlock> torch) {
+    return Services.REGISTRY.registerBlock(
+      new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_wall_torch"),
+      () -> new CustomWallTorchBlock(fireType, particle, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.WOOD).dropsLike(torch.get()).pushReaction(PushReaction.DESTROY))
+    );
+  }
+
+  public static Supplier<StandingAndWallBlockItem> registerTorchItem(ResourceLocation fireType, Supplier<CustomTorchBlock> torch, Supplier<CustomWallTorchBlock> wallTorch) {
+    return Services.REGISTRY.registerStandingAndWallBlock(new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_torch"), torch, wallTorch);
+  }
+
+  public static Supplier<CustomLanternBlock> registerLantern(ResourceLocation fireType) {
+    return Services.REGISTRY.registerBlock(
+      new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_lantern"),
+      () -> new CustomLanternBlock(fireType, BlockBehaviour.Properties.of().mapColor(MapColor.METAL).forceSolidOn().requiresCorrectToolForDrops().strength(3.5F).sound(SoundType.LANTERN).noOcclusion().pushReaction(PushReaction.DESTROY))
+    );
+  }
+
+  public static Supplier<BlockItem> registerLanternItem(ResourceLocation fireType, Supplier<? extends LanternBlock> lantern) {
+    return Services.REGISTRY.registerBlockItem(new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_lantern"), lantern);
+  }
 
   /**
    * Returns a new {@link FireBuilder}.
@@ -94,7 +178,8 @@ public final class FireManager {
    * @param fire {@link Fire} to register.
    * @return whether the registration is successful.
    */
-  public static synchronized boolean registerFire(Fire fire) {
+  @Nullable
+  public static synchronized Fire registerFire(Fire fire) {
     Fire previous = fires.computeIfAbsent(fire.getFireType(), key -> {
       fire.getSource().flatMap(BuiltInRegistries.BLOCK::getOptional).ifPresent(block -> ((FireTypeChanger) block).setFireType(key));
       fire.getCampfire().flatMap(BuiltInRegistries.BLOCK::getOptional).ifPresent(block -> ((FireTypeChanger) block).setFireType(key));
@@ -103,9 +188,9 @@ public final class FireManager {
     if (previous != fire) {
       ResourceLocation fireType = fire.getFireType();
       Constants.LOGGER.error("Fire [{}] was already registered with the following value: {}", fireType, fires.get(fireType));
-      return false;
+      return null;
     }
-    return true;
+    return fire;
   }
 
   /**
@@ -114,7 +199,7 @@ public final class FireManager {
    * @param fires {@link Fire fires} to register.
    * @return an {@link Map} with the outcome of each registration attempt.
    */
-  public static synchronized Map<ResourceLocation, Boolean> registerFires(Fire... fires) {
+  public static synchronized Map<ResourceLocation, @Nullable Fire> registerFires(Fire... fires) {
     return registerFires(List.of(fires));
   }
 
@@ -124,8 +209,8 @@ public final class FireManager {
    * @param fires {@link Fire fires} to register.
    * @return an {@link Map} with the outcome of each registration attempt.
    */
-  public static synchronized Map<ResourceLocation, Boolean> registerFires(List<Fire> fires) {
-    HashMap<ResourceLocation, Boolean> outcomes = new HashMap<>();
+  public static synchronized Map<ResourceLocation, @Nullable Fire> registerFires(List<Fire> fires) {
+    HashMap<ResourceLocation, @Nullable Fire> outcomes = new HashMap<>();
     for (Fire fire : fires) {
       outcomes.put(fire.getFireType(), registerFire(fire));
     }
@@ -355,6 +440,29 @@ public final class FireManager {
   }
 
   /**
+   * Returns the light level of the {@link Fire} registered with the given {@code modId} and {@code fireId}.<br />
+   * Returns the default value if no {@link Fire} was registered with the given values.
+   *
+   * @param modId
+   * @param fireId
+   * @return the light level of the {@link Fire}.
+   */
+  public static int getLight(String modId, String fireId) {
+    return getLight(new ResourceLocation(modId, fireId));
+  }
+
+  /**
+   * Returns the light level of the {@link Fire} registered with the given {@code fireType}.<br />
+   * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
+   *
+   * @param fireType
+   * @return the light level of the {@link Fire}.
+   */
+  public static int getLight(ResourceLocation fireType) {
+    return fires.getOrDefault(fireType, DEFAULT_FIRE).getLight();
+  }
+
+  /**
    * Returns the damage of the {@link Fire} registered with the given {@code modId} and {@code fireId}.
    * <p>
    * Returns the default value if no {@link Fire} was registered with the given values.
@@ -480,7 +588,7 @@ public final class FireManager {
    * @return the fire source block associated with {@link Fire}.
    */
   public static Block getSourceBlock(ResourceLocation fireType) {
-    return BuiltInRegistries.BLOCK.getOptional(fires.getOrDefault(fireType, DEFAULT_FIRE).getSource().orElse(DEFAULT_FIRE.getSource().get())).orElse(Blocks.FIRE);
+    return BuiltInRegistries.BLOCK.getOptional(fires.getOrDefault(fireType, DEFAULT_FIRE).getSource().orElse(DEFAULT_FIRE.getSource().orElseThrow())).orElse(Blocks.FIRE);
   }
 
   /**
@@ -505,7 +613,7 @@ public final class FireManager {
    * @return the source block associated with {@link Fire}.
    */
   public static Block getCampfireBlock(ResourceLocation fireType) {
-    return BuiltInRegistries.BLOCK.getOptional(fires.getOrDefault(fireType, DEFAULT_FIRE).getCampfire().orElse(DEFAULT_FIRE.getCampfire().get())).orElse(Blocks.CAMPFIRE);
+    return BuiltInRegistries.BLOCK.getOptional(fires.getOrDefault(fireType, DEFAULT_FIRE).getCampfire().orElse(DEFAULT_FIRE.getCampfire().orElseThrow())).orElse(Blocks.CAMPFIRE);
   }
 
   /**

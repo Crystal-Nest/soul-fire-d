@@ -145,7 +145,7 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
    * @param fire
    */
   private static void registerFire(ResourceLocation fireType, Fire fire) {
-    if (FireManager.registerFire(fire)) {
+    if (FireManager.registerFire(fire) != null) {
       ddfiresRegister.add(fireType);
     } else {
       Constants.LOGGER.error("Unable to register ddfire [{}].", fireType);

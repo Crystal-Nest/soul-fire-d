@@ -20,6 +20,8 @@ public final class Fire {
    */
   private final ResourceLocation fireType;
 
+  private final int light;
+
   /**
    * Fire damage per second.
    */
@@ -73,6 +75,7 @@ public final class Fire {
    */
   Fire(
     ResourceLocation fireType,
+    int light,
     float damage,
     boolean invertHealAndHarm,
     Function<Entity, DamageSource> inFireGetter,
@@ -83,6 +86,7 @@ public final class Fire {
     ResourceLocation flame
   ) {
     this.fireType = fireType;
+    this.light = light;
     this.damage = damage;
     this.invertHealAndHarm = invertHealAndHarm;
     this.inFireGetter = inFireGetter;
@@ -100,6 +104,10 @@ public final class Fire {
    */
   public ResourceLocation getFireType() {
     return fireType;
+  }
+
+  public int getLight() {
+    return light;
   }
 
   /**

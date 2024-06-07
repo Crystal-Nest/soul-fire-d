@@ -10,7 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
  */
 @ApiStatus.Internal
 @Mod(Constants.MOD_ID)
-public class ModLoader {
+public final class ModLoader {
   /**
    * NeoForge mod event bus.
    */

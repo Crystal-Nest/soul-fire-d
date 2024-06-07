@@ -1,0 +1,3 @@
+accessWidener v2 named
+accessible field net/minecraft/world/level/block/CampfireBlock spawnParticles Z
+mutable field net/minecraft/world/level/block/TorchBlock flameParticle Lnet/minecraft/core/particles/SimpleParticleType;
