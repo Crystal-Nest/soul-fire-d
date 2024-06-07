@@ -9,7 +9,11 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 - Nothing new.
 
 ## [1.20.4-3.3.1-alpha] - 2024/06/07
-- TODO
+- Added API for registering custom fire blocks and campfire blocks, along with required block entities and renderers.
+- Added API for registering custom campfire items.
+- Added API for registering custom lantern blocks and items.
+- Added API for registering custom torch blocks and items, along with required particles.
+- Added new Fire property `light` to set the light level of the Fire.
 
 ## [1.20.4-3.3.0-alpha] - 2024/06/04
 - Rewrite to new standards with multiloader environment.
