@@ -19,6 +19,7 @@ public class CustomWallTorchBlock extends WallTorchBlock implements FireTyped {
   private final Supplier<SimpleParticleType> type;
 
   public CustomWallTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type, Properties properties) {
+    // noinspection DataFlowIssue
     super(null, properties.lightLevel(state -> FireManager.getLight(fireType)));
     this.fireType = fireType;
     this.type = type;
@@ -26,6 +27,7 @@ public class CustomWallTorchBlock extends WallTorchBlock implements FireTyped {
 
   @Override
   public void animateTick(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random) {
+    // noinspection ConstantValue
     if (this.flameParticle == null) {
       this.flameParticle = type.get();
     }
