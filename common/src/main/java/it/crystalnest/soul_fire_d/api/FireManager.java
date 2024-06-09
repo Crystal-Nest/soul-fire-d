@@ -1,5 +1,6 @@
 package it.crystalnest.soul_fire_d.api;
 
+import it.crystalnest.cobweb.api.registry.CobwebRegistry;
 import it.crystalnest.soul_fire_d.Constants;
 import it.crystalnest.soul_fire_d.api.block.CustomCampfireBlock;
 import it.crystalnest.soul_fire_d.api.block.CustomFireBlock;
@@ -11,8 +12,10 @@ import it.crystalnest.soul_fire_d.api.enchantment.FireTypedFlameEnchantment;
 import it.crystalnest.soul_fire_d.api.type.FireTypeChanger;
 import it.crystalnest.soul_fire_d.platform.Services;
 import net.minecraft.ResourceLocationException;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -20,6 +23,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -33,6 +37,7 @@ import net.minecraft.world.level.material.PushReaction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,69 +89,72 @@ public final class FireManager {
   private FireManager() {}
 
   public static <T extends CustomFireBlock> Supplier<T> registerFireSource(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
-    return Services.REGISTRY.registerBlock(FireManager.getFire(fireType).getSource().orElseThrow(), () -> supplier.apply(fireType));
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getFire(fireType).getSource().orElseThrow().getPath(), () -> supplier.apply(fireType));
   }
 
   public static Supplier<CustomFireBlock> registerFireSource(ResourceLocation fireType, TagKey<Block> base, MapColor color) {
-    return Services.REGISTRY.registerBlock(FireManager.getFire(fireType).getSource().orElseThrow(), () -> new CustomFireBlock(fireType, base, color));
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getFire(fireType).getSource().orElseThrow().getPath(), () -> new CustomFireBlock(fireType, base, color));
   }
 
   public static Supplier<CustomFireBlock> registerFireSource(ResourceLocation fireType, TagKey<Block> base, BlockBehaviour.Properties properties) {
-    return Services.REGISTRY.registerBlock(FireManager.getFire(fireType).getSource().orElseThrow(), () -> new CustomFireBlock(fireType, base, properties));
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getFire(fireType).getSource().orElseThrow().getPath(), () -> new CustomFireBlock(fireType, base, properties));
   }
 
   public static <T extends CustomCampfireBlock> Supplier<T> registerCampfire(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
-    return Services.REGISTRY.registerBlock(FireManager.getFire(fireType).getCampfire().orElseThrow(), () -> supplier.apply(fireType));
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getFire(fireType).getCampfire().orElseThrow().getPath(), () -> supplier.apply(fireType));
   }
 
   public static Supplier<CustomCampfireBlock> registerCampfire(ResourceLocation fireType, boolean spawnParticles) {
-    return Services.REGISTRY.registerBlock(FireManager.getFire(fireType).getCampfire().orElseThrow(), () -> new CustomCampfireBlock(fireType, spawnParticles));
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getFire(fireType).getCampfire().orElseThrow().getPath(), () -> new CustomCampfireBlock(fireType, spawnParticles));
   }
 
   public static Supplier<CustomCampfireBlock> registerCampfire(ResourceLocation fireType, boolean spawnParticles, BlockBehaviour.Properties properties) {
-    return Services.REGISTRY.registerBlock(FireManager.getFire(fireType).getCampfire().orElseThrow(), () -> new CustomCampfireBlock(fireType, spawnParticles, properties));
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getFire(fireType).getCampfire().orElseThrow().getPath(), () -> new CustomCampfireBlock(fireType, spawnParticles, properties));
   }
 
   public static Supplier<BlockItem> registerCampfireItem(ResourceLocation fireType, Supplier<? extends Block> campfire) {
-    return Services.REGISTRY.registerBlockItem(FireManager.getFire(fireType).getCampfire().orElseThrow(), campfire);
+    return CobwebRegistry.ofItems(fireType.getNamespace()).register(FireManager.getFire(fireType).getCampfire().orElseThrow().getPath(), () -> new BlockItem(campfire.get(), new Item.Properties()));
   }
 
   @SafeVarargs
   public static Supplier<BlockEntityType<CampfireBlockEntity>> registerCampfireBlockEntity(ResourceLocation fireType, Supplier<? extends Block>... campfires) {
-    return Services.REGISTRY.registerCampfireBlockEntity(FireManager.getFire(fireType).getCampfire().orElseThrow(), campfires);
+    return CobwebRegistry.of(Registries.BLOCK_ENTITY_TYPE, fireType.getNamespace()).register(
+      FireManager.getFire(fireType).getCampfire().orElseThrow().getPath(),
+      () -> BlockEntityType.Builder.of(CampfireBlockEntity::new, Arrays.stream(campfires).map(Supplier::get).toList().toArray(new Block[] {})).build(null)
+    );
   }
 
   public static Supplier<SimpleParticleType> registerParticle(ResourceLocation fireType) {
-    return Services.REGISTRY.registerParticle(new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_flame"));
+    return CobwebRegistry.of(Registries.PARTICLE_TYPE, fireType.getNamespace()).register(fireType.getPath() + "_flame", () -> new SimpleParticleType(false));
   }
 
   public static Supplier<CustomTorchBlock> registerTorch(ResourceLocation fireType, Supplier<SimpleParticleType> particle) {
-    return Services.REGISTRY.registerBlock(
-      new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_torch"),
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(
+      fireType.getPath() + "_torch",
       () -> new CustomTorchBlock(fireType, particle, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY))
     );
   }
 
   public static Supplier<CustomWallTorchBlock> registerTorch(ResourceLocation fireType, Supplier<SimpleParticleType> particle, Supplier<CustomTorchBlock> torch) {
-    return Services.REGISTRY.registerBlock(
-      new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_wall_torch"),
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(
+      fireType.getPath() + "_wall_torch",
       () -> new CustomWallTorchBlock(fireType, particle, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.WOOD).dropsLike(torch.get()).pushReaction(PushReaction.DESTROY))
     );
   }
 
   public static Supplier<StandingAndWallBlockItem> registerTorchItem(ResourceLocation fireType, Supplier<CustomTorchBlock> torch, Supplier<CustomWallTorchBlock> wallTorch) {
-    return Services.REGISTRY.registerStandingAndWallBlock(new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_torch"), torch, wallTorch);
+    return CobwebRegistry.ofItems(fireType.getNamespace()).register(fireType.getPath() + "_torch", () -> new StandingAndWallBlockItem(torch.get(), wallTorch.get(), new Item.Properties(), Direction.DOWN));
   }
 
   public static Supplier<CustomLanternBlock> registerLantern(ResourceLocation fireType) {
-    return Services.REGISTRY.registerBlock(
-      new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_lantern"),
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(
+      fireType.getPath() + "_lantern",
       () -> new CustomLanternBlock(fireType, BlockBehaviour.Properties.of().mapColor(MapColor.METAL).forceSolidOn().requiresCorrectToolForDrops().strength(3.5F).sound(SoundType.LANTERN).noOcclusion().pushReaction(PushReaction.DESTROY))
     );
   }
 
   public static Supplier<BlockItem> registerLanternItem(ResourceLocation fireType, Supplier<? extends LanternBlock> lantern) {
-    return Services.REGISTRY.registerBlockItem(new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_lantern"), lantern);
+    return CobwebRegistry.ofItems(fireType.getNamespace()).register(fireType.getPath() + "_lantern", () -> new BlockItem(lantern.get(), new Item.Properties()));
   }
 
   /**

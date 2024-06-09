@@ -1,8 +1,9 @@
 package it.crystalnest.soul_fire_d.api.enchantment;
 
+import it.crystalnest.cobweb.api.registry.CobwebRegistry;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import it.crystalnest.soul_fire_d.api.type.FireTypedEnchantment;
-import it.crystalnest.soul_fire_d.platform.Services;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -273,7 +274,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    */
   public ResourceLocation register() {
     ResourceLocation key = new ResourceLocation(fireType.getNamespace(), fireType.getPath() + "_" + kind);
-    Services.REGISTRY.registerEnchantment(key, this::build);
+    CobwebRegistry.of(Registries.ENCHANTMENT, key.getNamespace()).register(key.getPath(), this::build);
     return key;
   }
 
