@@ -1,5 +1,8 @@
 package it.crystalnest.soul_fire_d.api;
 
+import com.google.common.base.Suppliers;
+import it.crystalnest.cobweb.api.pack.DynamicDataPack;
+import it.crystalnest.cobweb.api.pack.DynamicTagBuilder;
 import it.crystalnest.cobweb.api.registry.CobwebRegistry;
 import it.crystalnest.soul_fire_d.Constants;
 import it.crystalnest.soul_fire_d.api.block.CustomCampfireBlock;
@@ -10,6 +13,7 @@ import it.crystalnest.soul_fire_d.api.block.CustomWallTorchBlock;
 import it.crystalnest.soul_fire_d.api.enchantment.FireTypedFireAspectEnchantment;
 import it.crystalnest.soul_fire_d.api.enchantment.FireTypedFlameEnchantment;
 import it.crystalnest.soul_fire_d.api.type.FireTypeChanger;
+import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import it.crystalnest.soul_fire_d.platform.Services;
 import net.minecraft.ResourceLocationException;
 import net.minecraft.core.Direction;
@@ -18,6 +22,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -34,6 +39,7 @@ import net.minecraft.world.level.block.entity.CampfireBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,8 +48,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -70,46 +78,65 @@ public final class FireManager {
    */
   public static final Fire DEFAULT_FIRE = new Fire(
     DEFAULT_FIRE_TYPE,
-    15,
+    FireBuilder.DEFAULT_LIGHT,
     FireBuilder.DEFAULT_DAMAGE,
     FireBuilder.DEFAULT_INVERT_HEAL_AND_HARM,
+    true,
     FireBuilder.DEFAULT_IN_FIRE_GETTER,
     FireBuilder.DEFAULT_ON_FIRE_GETTER,
+    null,
     new ResourceLocation("fire"),
     new ResourceLocation("campfire"),
     null,
     null
   );
 
+  private static final DynamicDataPack FIRE_SOURCE_TAGS = DynamicDataPack.named(new ResourceLocation(Constants.MOD_ID, "fire_source_tags"));
+
+  private static final DynamicDataPack CAMPFIRE_TAGS = DynamicDataPack.named(new ResourceLocation(Constants.MOD_ID, "campfire_tags"));
+
   /**
    * {@link ConcurrentHashMap} of all registered {@link Fire Fires}.
    */
-  private static final ConcurrentHashMap<ResourceLocation, Fire> fires = new ConcurrentHashMap<>();
+  private static final ConcurrentHashMap<ResourceLocation, Fire> FIRES = new ConcurrentHashMap<>();
+
+  static {
+    FIRE_SOURCE_TAGS.register();
+    CAMPFIRE_TAGS.register();
+  }
 
   private FireManager() {}
 
+  public static <T> T getFireProperty(ResourceLocation fireType, Function<Fire, T> getter) {
+    return getter.apply(FIRES.getOrDefault(fireType, DEFAULT_FIRE));
+  }
+
   public static <T extends CustomFireBlock> Supplier<T> registerFireSource(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
-    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getFire(fireType).getSource().orElseThrow().getPath(), () -> supplier.apply(fireType));
+    Supplier<T> source = Suppliers.memoize(() -> supplier.apply(fireType));
+    FIRE_SOURCE_TAGS.add(() -> DynamicTagBuilder.of(Registries.BLOCK, BlockTags.FIRE).addElement(source.get()));
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getFire(fireType).getSource().orElseThrow().getPath(), source);
   }
 
   public static Supplier<CustomFireBlock> registerFireSource(ResourceLocation fireType, TagKey<Block> base, MapColor color) {
-    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getFire(fireType).getSource().orElseThrow().getPath(), () -> new CustomFireBlock(fireType, base, color));
+    return registerFireSource(fireType, type -> new CustomFireBlock(type, base, color));
   }
 
   public static Supplier<CustomFireBlock> registerFireSource(ResourceLocation fireType, TagKey<Block> base, BlockBehaviour.Properties properties) {
-    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getFire(fireType).getSource().orElseThrow().getPath(), () -> new CustomFireBlock(fireType, base, properties));
+    return registerFireSource(fireType, type -> new CustomFireBlock(type, base, properties));
   }
 
   public static <T extends CustomCampfireBlock> Supplier<T> registerCampfire(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
-    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getFire(fireType).getCampfire().orElseThrow().getPath(), () -> supplier.apply(fireType));
+    Supplier<T> campfire = Suppliers.memoize(() -> supplier.apply(fireType));
+    CAMPFIRE_TAGS.add(() -> DynamicTagBuilder.of(Registries.BLOCK, BlockTags.CAMPFIRES).addElement(campfire.get()));
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getFire(fireType).getCampfire().orElseThrow().getPath(), campfire);
   }
 
   public static Supplier<CustomCampfireBlock> registerCampfire(ResourceLocation fireType, boolean spawnParticles) {
-    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getFire(fireType).getCampfire().orElseThrow().getPath(), () -> new CustomCampfireBlock(fireType, spawnParticles));
+    return registerCampfire(fireType, type -> new CustomCampfireBlock(type, spawnParticles));
   }
 
   public static Supplier<CustomCampfireBlock> registerCampfire(ResourceLocation fireType, boolean spawnParticles, BlockBehaviour.Properties properties) {
-    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getFire(fireType).getCampfire().orElseThrow().getPath(), () -> new CustomCampfireBlock(fireType, spawnParticles, properties));
+    return registerCampfire(fireType, type -> new CustomCampfireBlock(type, spawnParticles, properties));
   }
 
   public static Supplier<BlockItem> registerCampfireItem(ResourceLocation fireType, Supplier<? extends Block> campfire) {
@@ -120,7 +147,7 @@ public final class FireManager {
   public static Supplier<BlockEntityType<CampfireBlockEntity>> registerCampfireBlockEntity(ResourceLocation fireType, Supplier<? extends Block>... campfires) {
     return CobwebRegistry.of(Registries.BLOCK_ENTITY_TYPE, fireType.getNamespace()).register(
       FireManager.getFire(fireType).getCampfire().orElseThrow().getPath(),
-      () -> BlockEntityType.Builder.of(CampfireBlockEntity::new, Arrays.stream(campfires).map(Supplier::get).toList().toArray(new Block[] {})).build(null)
+      () -> BlockEntityType.Builder.of(CampfireBlockEntity::new, Arrays.stream(campfires).map(Supplier::get).toArray(Block[]::new)).build(null)
     );
   }
 
@@ -188,14 +215,14 @@ public final class FireManager {
    */
   @Nullable
   public static synchronized Fire registerFire(Fire fire) {
-    Fire previous = fires.computeIfAbsent(fire.getFireType(), key -> {
+    Fire previous = FIRES.computeIfAbsent(fire.getFireType(), key -> {
       fire.getSource().flatMap(BuiltInRegistries.BLOCK::getOptional).ifPresent(block -> ((FireTypeChanger) block).setFireType(key));
       fire.getCampfire().flatMap(BuiltInRegistries.BLOCK::getOptional).ifPresent(block -> ((FireTypeChanger) block).setFireType(key));
       return fire;
     });
     if (previous != fire) {
       ResourceLocation fireType = fire.getFireType();
-      Constants.LOGGER.error("Fire [{}] was already registered with the following value: {}", fireType, fires.get(fireType));
+      Constants.LOGGER.error("Fire [{}] was already registered with the following value: {}", fireType, FIRES.get(fireType));
       return null;
     }
     return fire;
@@ -235,7 +262,7 @@ public final class FireManager {
    */
   @ApiStatus.Internal
   public static synchronized boolean unregisterFire(ResourceLocation fireType) {
-    return fires.remove(fireType) != null;
+    return FIRES.remove(fireType) != null;
   }
 
   /**
@@ -244,7 +271,7 @@ public final class FireManager {
    * @return the list of all registered {@link Fire Fires}.
    */
   public static List<Fire> getFires() {
-    return fires.values().stream().toList();
+    return FIRES.values().stream().toList();
   }
 
   /**
@@ -269,7 +296,7 @@ public final class FireManager {
    * @return registered {@link Fire} or {@link #DEFAULT_FIRE}.
    */
   public static Fire getFire(ResourceLocation fireType) {
-    return fires.getOrDefault(fireType, DEFAULT_FIRE);
+    return FIRES.getOrDefault(fireType, DEFAULT_FIRE);
   }
 
   /**
@@ -301,7 +328,7 @@ public final class FireManager {
    * @return whether a fire is registered with the given {@code fireType}.
    */
   public static boolean isRegisteredType(ResourceLocation fireType) {
-    return fireType != null && fires.containsKey(fireType);
+    return fireType != null && FIRES.containsKey(fireType);
   }
 
   /**
@@ -311,7 +338,7 @@ public final class FireManager {
    * @return whether the given {@code id} is a valid fire id.
    */
   public static boolean isValidFireId(String id) {
-    if (isNotBlank(id)) {
+    if (Strings.isNotBlank(id)) {
       try {
         new ResourceLocation(id);
         return true;
@@ -329,7 +356,7 @@ public final class FireManager {
    * @return whether the given {@code id} is a valid and registered fire id.
    */
   public static boolean isRegisteredFireId(String id) {
-    return isValidFireId(id) && fires.keySet().stream().anyMatch(fireType -> fireType.getPath().equals(id));
+    return isValidFireId(id) && FIRES.keySet().stream().anyMatch(fireType -> fireType.getPath().equals(id));
   }
 
   /**
@@ -339,7 +366,7 @@ public final class FireManager {
    * @return whether the given {@code id} is a valid mod id.
    */
   public static boolean isValidModId(String id) {
-    if (isNotBlank(id)) {
+    if (Strings.isNotBlank(id)) {
       try {
         new ResourceLocation(id, "");
         return true;
@@ -357,7 +384,7 @@ public final class FireManager {
    * @return whether the given {@code id} is a valid, loaded and registered mod id.
    */
   public static boolean isRegisteredModId(String id) {
-    return isValidModId(id) && Services.PLATFORM.isModLoaded(id) && fires.keySet().stream().anyMatch(fireType -> fireType.getNamespace().equals(id));
+    return isValidModId(id) && Services.PLATFORM.isModLoaded(id) && FIRES.keySet().stream().anyMatch(fireType -> fireType.getNamespace().equals(id));
   }
 
   /**
@@ -384,7 +411,7 @@ public final class FireManager {
    * @return the closest well-formed Fire Type.
    */
   public static ResourceLocation sanitize(ResourceLocation fireType) {
-    if (isNotBlank(fireType.getNamespace()) && isNotBlank(fireType.getPath())) {
+    if (Strings.isNotBlank(fireType.getNamespace()) && Strings.isNotBlank(fireType.getPath())) {
       return fireType;
     }
     return DEFAULT_FIRE_TYPE;
@@ -426,7 +453,7 @@ public final class FireManager {
    * @return the list of all Fire Types.
    */
   public static List<ResourceLocation> getFireTypes() {
-    return fires.keySet().stream().toList();
+    return FIRES.keySet().stream().toList();
   }
 
   /**
@@ -435,7 +462,7 @@ public final class FireManager {
    * @return the list of all registered fire ids.
    */
   public static List<String> getFireIds() {
-    return fires.keySet().stream().map(ResourceLocation::getPath).toList();
+    return FIRES.keySet().stream().map(ResourceLocation::getPath).toList();
   }
 
   /**
@@ -444,7 +471,7 @@ public final class FireManager {
    * @return the list of all registered mod ids.
    */
   public static List<String> getModIds() {
-    return fires.keySet().stream().map(ResourceLocation::getNamespace).toList();
+    return FIRES.keySet().stream().map(ResourceLocation::getNamespace).toList();
   }
 
   /**
@@ -467,7 +494,7 @@ public final class FireManager {
    * @return the light level of the {@link Fire}.
    */
   public static int getLight(ResourceLocation fireType) {
-    return fires.getOrDefault(fireType, DEFAULT_FIRE).getLight();
+    return FIRES.getOrDefault(fireType, DEFAULT_FIRE).getLight();
   }
 
   /**
@@ -492,7 +519,7 @@ public final class FireManager {
    * @return the damage of the {@link Fire}.
    */
   public static float getDamage(ResourceLocation fireType) {
-    return fires.getOrDefault(fireType, DEFAULT_FIRE).getDamage();
+    return FIRES.getOrDefault(fireType, DEFAULT_FIRE).getDamage();
   }
 
   /**
@@ -517,7 +544,7 @@ public final class FireManager {
    * @return the invertHealAndHarm flag of the {@link Fire}.
    */
   public static boolean getInvertHealAndHarm(ResourceLocation fireType) {
-    return fires.getOrDefault(fireType, DEFAULT_FIRE).getInvertHealAndHarm();
+    return FIRES.getOrDefault(fireType, DEFAULT_FIRE).invertHealAndHarm();
   }
 
   /**
@@ -544,7 +571,7 @@ public final class FireManager {
    * @return the in damage source of the {@link Fire} for the {@link Entity}.
    */
   public static DamageSource getInFireDamageSourceFor(Entity entity, ResourceLocation fireType) {
-    return fires.getOrDefault(fireType, DEFAULT_FIRE).getInFire(entity);
+    return FIRES.getOrDefault(fireType, DEFAULT_FIRE).getInFire(entity);
   }
 
   /**
@@ -571,7 +598,7 @@ public final class FireManager {
    * @return the on damage source of the {@link Fire} for the {@link Entity}.
    */
   public static DamageSource getOnFireDamageSourceFor(Entity entity, ResourceLocation fireType) {
-    return fires.getOrDefault(fireType, DEFAULT_FIRE).getOnFire(entity);
+    return FIRES.getOrDefault(fireType, DEFAULT_FIRE).getOnFire(entity);
   }
 
   /**
@@ -596,7 +623,7 @@ public final class FireManager {
    * @return the fire source block associated with {@link Fire}.
    */
   public static Block getSourceBlock(ResourceLocation fireType) {
-    return BuiltInRegistries.BLOCK.getOptional(fires.getOrDefault(fireType, DEFAULT_FIRE).getSource().orElse(DEFAULT_FIRE.getSource().orElseThrow())).orElse(Blocks.FIRE);
+    return BuiltInRegistries.BLOCK.getOptional(FIRES.getOrDefault(fireType, DEFAULT_FIRE).getSource().orElse(DEFAULT_FIRE.getSource().orElseThrow())).orElse(Blocks.FIRE);
   }
 
   /**
@@ -621,7 +648,7 @@ public final class FireManager {
    * @return the source block associated with {@link Fire}.
    */
   public static Block getCampfireBlock(ResourceLocation fireType) {
-    return BuiltInRegistries.BLOCK.getOptional(fires.getOrDefault(fireType, DEFAULT_FIRE).getCampfire().orElse(DEFAULT_FIRE.getCampfire().orElseThrow())).orElse(Blocks.CAMPFIRE);
+    return BuiltInRegistries.BLOCK.getOptional(FIRES.getOrDefault(fireType, DEFAULT_FIRE).getCampfire().orElse(DEFAULT_FIRE.getCampfire().orElseThrow())).orElse(Blocks.CAMPFIRE);
   }
 
   /**
@@ -630,7 +657,7 @@ public final class FireManager {
    * @return the list of all Fire Aspect enchantments registered.
    */
   public static List<FireTypedFireAspectEnchantment> getFireAspects() {
-    return fires.values().stream().map(fire -> getFireAspect(fire.getFireType())).filter(Objects::nonNull).toList();
+    return FIRES.values().stream().map(fire -> getFireAspect(fire.getFireType())).filter(Objects::nonNull).toList();
   }
 
   /**
@@ -639,7 +666,7 @@ public final class FireManager {
    * @return the list of all Flame enchantments registered.
    */
   public static List<FireTypedFlameEnchantment> getFlames() {
-    return fires.values().stream().map(fire -> getFlame(fire.getFireType())).filter(Objects::nonNull).toList();
+    return FIRES.values().stream().map(fire -> getFlame(fire.getFireType())).filter(Objects::nonNull).toList();
   }
 
   /**
@@ -749,7 +776,7 @@ public final class FireManager {
       return harmOrHeal(entity, getInFireDamageSourceFor(entity, fireType), getDamage(fireType), getInvertHealAndHarm(fireType));
     }
     ((FireTypeChanger) entity).setFireType(DEFAULT_FIRE_TYPE);
-    return harmOrHeal(entity, DEFAULT_FIRE.getInFire(entity), DEFAULT_FIRE.getDamage(), DEFAULT_FIRE.getInvertHealAndHarm());
+    return harmOrHeal(entity, DEFAULT_FIRE.getInFire(entity), DEFAULT_FIRE.getDamage(), DEFAULT_FIRE.invertHealAndHarm());
   }
 
   /**
@@ -781,7 +808,7 @@ public final class FireManager {
       return harmOrHeal(entity, getOnFireDamageSourceFor(entity, fireType), getDamage(fireType), getInvertHealAndHarm(fireType));
     }
     ((FireTypeChanger) entity).setFireType(DEFAULT_FIRE_TYPE);
-    return harmOrHeal(entity, DEFAULT_FIRE.getOnFire(entity), DEFAULT_FIRE.getDamage(), DEFAULT_FIRE.getInvertHealAndHarm());
+    return harmOrHeal(entity, DEFAULT_FIRE.getOnFire(entity), DEFAULT_FIRE.getDamage(), DEFAULT_FIRE.invertHealAndHarm());
   }
 
   /**
@@ -794,34 +821,27 @@ public final class FireManager {
    * @return whether the {@code entity} has been harmed.
    */
   private static boolean harmOrHeal(Entity entity, DamageSource damageSource, float damage, boolean invertHealAndHarm) {
-    if (damage > 0) {
+    Optional<Predicate<Entity>> behavior = FireManager.getFireProperty(((FireTyped) entity).getFireType(), Fire::getBehavior);
+    if (behavior.isEmpty() || behavior.get().test(entity)) {
+      if (damage > 0) {
+        if (entity instanceof LivingEntity livingEntity) {
+          if (livingEntity.isInvertedHealAndHarm() && invertHealAndHarm) {
+            livingEntity.heal(damage);
+            return false;
+          }
+          return livingEntity.hurt(damageSource, damage);
+        }
+        return entity.hurt(damageSource, damage);
+      }
       if (entity instanceof LivingEntity livingEntity) {
         if (livingEntity.isInvertedHealAndHarm() && invertHealAndHarm) {
-          livingEntity.heal(damage);
-          return false;
+          return livingEntity.hurt(damageSource, -damage);
         }
-        return livingEntity.hurt(damageSource, damage);
+        livingEntity.heal(-damage);
+        return false;
       }
-      return entity.hurt(damageSource, damage);
-    }
-    if (entity instanceof LivingEntity livingEntity) {
-      if (livingEntity.isInvertedHealAndHarm() && invertHealAndHarm) {
-        return livingEntity.hurt(damageSource, -damage);
-      }
-      livingEntity.heal(-damage);
-      return false;
     }
     return false;
-  }
-
-  /**
-   * Returns whether a given string is not blank, meaning it's not null and it's not made up only of whitespaces.
-   *
-   * @param string
-   * @return whether a given string is not blank, meaning it's not null and it's not made up only of whitespaces.
-   */
-  private static boolean isNotBlank(String string) {
-    return !(string == null || string.isBlank());
   }
 
   /**

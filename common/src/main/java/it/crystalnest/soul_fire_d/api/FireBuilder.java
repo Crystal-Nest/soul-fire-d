@@ -10,16 +10,20 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.enchantment.Enchantment;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 /**
  * Builder for {@link Fire} instances.
  */
 public final class FireBuilder {
+  public static final int DEFAULT_LIGHT = 15;
+
   /**
    * Default value for {@link #damage}.
    */
@@ -29,6 +33,8 @@ public final class FireBuilder {
    * Default value for {@link #invertHealAndHarm}.
    */
   public static final boolean DEFAULT_INVERT_HEAL_AND_HARM = false;
+
+  public static final boolean DEFAULT_CAN_RAIN_DOUSE = false;
 
   /**
    * Default value for {@link #inFireGetter}.
@@ -70,6 +76,8 @@ public final class FireBuilder {
    */
   private boolean invertHealAndHarm;
 
+  private boolean canRainDouse;
+
   /**
    * {@link Fire} instance {@link Fire#inFireGetter inFireGetter}.
    * <p>
@@ -88,6 +96,8 @@ public final class FireBuilder {
    */
   private Function<Entity, DamageSource> onFireGetter;
 
+  private Optional<Predicate<Entity>> behavior;
+
   /**
    * {@link Fire} instance {@link Fire#source source}.
    * <p>
@@ -99,6 +109,7 @@ public final class FireBuilder {
    * <p>
    * If your Fire is not associated with any fire source, set this to null with {@link #removeSource()}.
    */
+  @Nullable
   private Optional<ResourceLocation> source;
 
   /**
@@ -112,6 +123,7 @@ public final class FireBuilder {
    * <p>
    * If your Fire is not associated with any campfire, set this to null with {@link #removeCampfire()}.
    */
+  @Nullable
   private Optional<ResourceLocation> campfire;
 
   /**
@@ -125,6 +137,7 @@ public final class FireBuilder {
    * <p>
    * If your Fire should not have a Fire Aspect enchantment, set this to null with {@link #removeFireAspect()}.
    */
+  @Nullable
   private Optional<UnaryOperator<FireAspectBuilder>> fireAspectConfigurator;
 
   /**
@@ -138,6 +151,7 @@ public final class FireBuilder {
    * <p>
    * If your Fire should not have a Flame enchantment, set this to null with {@link #removeFlame()}.
    */
+  @Nullable
   private Optional<UnaryOperator<FlameBuilder>> flameConfigurator;
 
   /**
@@ -223,6 +237,11 @@ public final class FireBuilder {
     return this;
   }
 
+  public FireBuilder setCanRainDouse(boolean canRainDouse) {
+    this.canRainDouse = canRainDouse;
+    return this;
+  }
+
   /**
    * Sets the {@link DamageSource} {@link #inFireGetter}.
    *
@@ -240,6 +259,11 @@ public final class FireBuilder {
    */
   public FireBuilder setOnFire(Function<Entity, DamageSource> getter) {
     this.onFireGetter = getter;
+    return this;
+  }
+
+  public FireBuilder setBehavior(@NotNull Predicate<Entity> behavior) {
+    this.behavior = Optional.of(behavior);
     return this;
   }
 
@@ -365,8 +389,10 @@ public final class FireBuilder {
    */
   public FireBuilder reset(String fireId) {
     this.fireId = fireId;
+    light = DEFAULT_LIGHT;
     damage = DEFAULT_DAMAGE;
     invertHealAndHarm = DEFAULT_INVERT_HEAL_AND_HARM;
+    canRainDouse = DEFAULT_CAN_RAIN_DOUSE;
     inFireGetter = DEFAULT_IN_FIRE_GETTER;
     onFireGetter = DEFAULT_ON_FIRE_GETTER;
     source = Optional.empty();
@@ -397,7 +423,20 @@ public final class FireBuilder {
       if (flameConfigurator != null && flameConfigurator.isEmpty()) {
         flameConfigurator = Optional.of(builder -> builder);
       }
-      return new Fire(fireType, light, damage, invertHealAndHarm, inFireGetter, onFireGetter, get(source), get(campfire), register(fireType, fireAspectConfigurator, FireAspectBuilder::new), register(fireType, flameConfigurator, FlameBuilder::new));
+      return new Fire(
+        fireType,
+        light,
+        damage,
+        invertHealAndHarm,
+        canRainDouse,
+        inFireGetter,
+        onFireGetter,
+        get(behavior),
+        get(source),
+        get(campfire),
+        register(fireType, fireAspectConfigurator, FireAspectBuilder::new),
+        register(fireType, flameConfigurator, FlameBuilder::new)
+      );
     }
     throw new IllegalStateException("Attempted to build a Fire with a non-valid fireId or modId");
   }

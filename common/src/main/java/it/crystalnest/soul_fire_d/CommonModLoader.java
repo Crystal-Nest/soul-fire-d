@@ -10,14 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
  */
 @ApiStatus.Internal
 public final class CommonModLoader {
-  private CommonModLoader() {}
-
-  /**
-   * Initialize common operations across loaders.
-   */
-  public static void init() {
-    ModConfig.CONFIG.register();
-    Services.NETWORK.register();
+  static {
     FireManager.registerFire(FireManager.fireBuilder(FireManager.SOUL_FIRE_TYPE)
       .setLight(10)
       .setDamage(2)
@@ -35,5 +28,15 @@ public final class CommonModLoader {
       )
       .build()
     );
+  }
+
+  private CommonModLoader() {}
+
+  /**
+   * Initialize common operations across loaders.
+   */
+  public static void init() {
+    ModConfig.CONFIG.register();
+    Services.NETWORK.register();
   }
 }

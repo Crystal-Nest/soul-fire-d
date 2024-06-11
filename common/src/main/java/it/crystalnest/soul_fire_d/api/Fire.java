@@ -7,9 +7,11 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CampfireBlock;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Fire.
@@ -20,6 +22,9 @@ public final class Fire {
    */
   private final ResourceLocation fireType;
 
+  /**
+   * Emitted light level by fire related blocks such as fire source, campfire, torch, and lantern.
+   */
   private final int light;
 
   /**
@@ -32,6 +37,8 @@ public final class Fire {
    */
   private final boolean invertHealAndHarm;
 
+  private final boolean canRainDouse;
+
   /**
    * {@link DamageSource} getter for when the entity is in or on a block providing fire.
    */
@@ -41,6 +48,11 @@ public final class Fire {
    * {@link DamageSource} getter for when the entity is burning.
    */
   private final Function<Entity, DamageSource> onFireGetter;
+
+  /**
+   * Granted for the entity to be server side.
+   */
+  private final Optional<Predicate<Entity>> behavior;
 
   /**
    * {@link Optional} {@link ResourceLocation} of the {@link Block} of the Fire Block considered as the source for this Fire.
@@ -78,19 +90,23 @@ public final class Fire {
     int light,
     float damage,
     boolean invertHealAndHarm,
+    boolean canRainDouse,
     Function<Entity, DamageSource> inFireGetter,
     Function<Entity, DamageSource> onFireGetter,
-    ResourceLocation source,
-    ResourceLocation campfire,
-    ResourceLocation fireAspect,
-    ResourceLocation flame
+    @Nullable Predicate<Entity> behavior,
+    @Nullable ResourceLocation source,
+    @Nullable ResourceLocation campfire,
+    @Nullable ResourceLocation fireAspect,
+    @Nullable ResourceLocation flame
   ) {
     this.fireType = fireType;
     this.light = light;
     this.damage = damage;
     this.invertHealAndHarm = invertHealAndHarm;
+    this.canRainDouse = canRainDouse;
     this.inFireGetter = inFireGetter;
     this.onFireGetter = onFireGetter;
+    this.behavior = Optional.ofNullable(behavior);
     this.source = Optional.ofNullable(source);
     this.campfire = Optional.ofNullable(campfire);
     this.fireAspect = Optional.ofNullable(fireAspect);
@@ -124,8 +140,12 @@ public final class Fire {
    *
    * @return this {@link #invertHealAndHarm}.
    */
-  public boolean getInvertHealAndHarm() {
+  public boolean invertHealAndHarm() {
     return invertHealAndHarm;
+  }
+
+  public boolean canRainDouse() {
+    return canRainDouse;
   }
 
   /**
@@ -144,6 +164,15 @@ public final class Fire {
    */
   public DamageSource getOnFire(Entity entity) {
     return onFireGetter.apply(entity);
+  }
+
+  /**
+   * Returns this {@link #behavior}.
+   *
+   * @return this {@link #behavior}.
+   */
+  public Optional<Predicate<Entity>> getBehavior() {
+    return behavior;
   }
 
   /**
@@ -184,6 +213,16 @@ public final class Fire {
 
   @Override
   public String toString() {
-    return "Fire [fireType=" + fireType + ", damage=" + damage + ", invertedHealAndHarm=" + invertHealAndHarm + ", source=" + source + ", campfire=" + campfire + "]";
+    return "Fire{" +
+           "fireType=" + fireType +
+           ", light=" + light +
+           ", damage=" + damage +
+           ", invertHealAndHarm=" + invertHealAndHarm +
+           ", canRainDouse=" + canRainDouse +
+           ", source=" + source +
+           ", campfire=" + campfire +
+           ", fireAspect=" + fireAspect +
+           ", flame=" + flame +
+           "}";
   }
 }

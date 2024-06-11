@@ -81,7 +81,7 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
   /**
    * Parses the given {@link JsonObject data} to retrieve the specified {@code field} using the provided {@code parser}.
    *
-   * @param <T>
+   * @param <T> element type.
    * @param identifier identifier of the json file.
    * @param field field to parse.
    * @param data {@link JsonObject} with data to parse.
@@ -104,7 +104,7 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
   /**
    * Parses the given {@link JsonObject data} to retrieve the specified {@code field} using the provided {@code parser}.
    *
-   * @param <T>
+   * @param <T> element type.
    * @param identifier identifier of the json file.
    * @param field field to parse.
    * @param data {@link JsonObject} with data to parse.

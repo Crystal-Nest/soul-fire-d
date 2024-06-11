@@ -35,7 +35,7 @@ public record RegisterFirePacket(Fire fire) implements CustomPacketPayload {
   public void write(@NotNull FriendlyByteBuf buffer) {
     buffer.writeResourceLocation(fire.getFireType());
     buffer.writeFloat(fire.getDamage());
-    buffer.writeBoolean(fire.getInvertHealAndHarm());
+    buffer.writeBoolean(fire.invertHealAndHarm());
     buffer.writeBoolean(fire.getSource().isPresent());
     if (fire.getSource().isPresent()) {
       buffer.writeResourceLocation(fire.getSource().get());
