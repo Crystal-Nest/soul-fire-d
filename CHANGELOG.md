@@ -8,6 +8,9 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 ## [Unreleased]
 - Nothing new.
 
+## [1.20.4-3.3.2-alpha] - 2024/06/09
+- Add use of Cobweb unified registration system to the fire-related stuff registration API.
+
 ## [1.20.4-3.3.1-alpha] - 2024/06/07
 - Added API for registering custom fire blocks and campfire blocks, along with required block entities and renderers.
 - Added API for registering custom campfire items.
@@ -338,6 +341,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[1.20.4-3.3.2-alpha]: https://github.com/crystal-nest/soul-fire-d/releases/tag/v1.20.4-3.3.2-alpha
 [1.20.4-3.3.1-alpha]: https://github.com/crystal-nest/soul-fire-d/releases/tag/v1.20.4-3.3.1-alpha
 [1.20.4-3.3.0-alpha]: https://github.com/crystal-nest/soul-fire-d/releases/tag/v1.20.4-3.3.0-alpha
 [1.20.4-3.2.1.0]: https://github.com/crystal-nest/soul-fire-d/releases/tag/v1.20.4-3.2.1.0
