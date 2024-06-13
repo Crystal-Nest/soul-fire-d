@@ -40,12 +40,8 @@ public abstract class BaseFireBlockMixin implements FireTypeChanger {
   }
 
   @Inject(method = "getState", at = @At(value = "RETURN"), cancellable = true)
-  private static void test(BlockGetter level, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
-    FireManager.getFires()
-      .stream().filter(fire -> fire.getCampfire().isPresent() && FireManager.getSourceBlock(fire.getFireType()) instanceof CustomFireBlock customFireBlock && customFireBlock.canSurvive(level.getBlockState(pos.below())))
-      .map(fire -> (CustomFireBlock) FireManager.getSourceBlock(fire.getFireType()))
-      .findFirst()
-      .ifPresent(fireBlock -> cir.setReturnValue(fireBlock.defaultBlockState()));
+  private static void onGetState(BlockGetter level, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
+    FireManager.getSources().stream().filter(source -> source instanceof CustomFireBlock customFireBlock && customFireBlock.canSurvive(level.getBlockState(pos.below()))).findFirst().ifPresent(source -> cir.setReturnValue(source.defaultBlockState()));
   }
 
   /**

@@ -1,5 +1,6 @@
 package it.crystalnest.soul_fire_d.api.block;
 
+import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import net.minecraft.resources.ResourceLocation;
@@ -9,7 +10,7 @@ public class CustomLanternBlock extends LanternBlock implements FireTyped {
   private final ResourceLocation fireType;
 
   public CustomLanternBlock(ResourceLocation fireType, Properties properties) {
-    super(properties.lightLevel(state -> FireManager.getLight(fireType)));
+    super(properties.lightLevel(state -> FireManager.getProperty(fireType, Fire::getLight)));
     this.fireType = fireType;
   }
 

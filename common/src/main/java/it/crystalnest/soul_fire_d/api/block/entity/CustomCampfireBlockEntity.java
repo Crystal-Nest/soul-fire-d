@@ -3,7 +3,6 @@ package it.crystalnest.soul_fire_d.api.block.entity;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.CampfireBlockEntity;
@@ -21,7 +20,7 @@ public class CustomCampfireBlockEntity extends CampfireBlockEntity implements Fi
   @NotNull
   @Override
   public BlockEntityType<?> getType() {
-    return BuiltInRegistries.BLOCK_ENTITY_TYPE.get(FireManager.getFire(getFireType()).getCampfire().orElse(FireManager.DEFAULT_FIRE.getCampfire().orElseThrow()));
+    return FireManager.CUSTOM_CAMPFIRE_ENTITY_TYPE.get();
   }
 
   @Override

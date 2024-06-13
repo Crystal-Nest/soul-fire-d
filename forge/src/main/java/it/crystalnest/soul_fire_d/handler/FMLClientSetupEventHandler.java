@@ -14,8 +14,6 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.CampfireBlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -39,14 +37,12 @@ public final class FMLClientSetupEventHandler {
    * @param event
    */
   @SubscribeEvent
+  @SuppressWarnings("deprecation")
   public static void handle(FMLClientSetupEvent event) {
     FireClientManager.registerFires(FireManager.getFires());
-    FireManager.getFires().stream()
-      .filter(fire -> fire.getCampfire().isPresent() && FireManager.getCampfireBlock(fire.getFireType()) instanceof CustomCampfireBlock)
-      .forEach(fire -> ItemBlockRenderTypes.setRenderLayer(FireManager.getCampfireBlock(fire.getFireType()), RenderType.cutout()));
-    FireManager.getFires().stream()
-      .filter(fire -> fire.getSource().isPresent() && FireManager.getSourceBlock(fire.getFireType()) instanceof CustomFireBlock)
-      .forEach(fire -> ItemBlockRenderTypes.setRenderLayer(FireManager.getSourceBlock(fire.getFireType()), RenderType.cutout()));
+    FireManager.getCampfires().stream().filter(campfire -> campfire instanceof CustomCampfireBlock).forEach(campfire -> ItemBlockRenderTypes.setRenderLayer(campfire, RenderType.cutout()));
+    FireManager.getSources().stream().filter(source -> source instanceof CustomFireBlock).forEach(source -> ItemBlockRenderTypes.setRenderLayer(source, RenderType.cutout()));
+
     FireManager.getFires().stream()
       .filter(fire -> fire.getSource().isPresent() && ForgeRegistries.BLOCKS.getValue(new ResourceLocation(fire.getFireType().getNamespace(), fire.getFireType().getPath() + "_torch")) instanceof CustomTorchBlock)
       .forEach(fire -> ItemBlockRenderTypes.setRenderLayer(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(fire.getFireType().getNamespace(), fire.getFireType().getPath() + "_torch")), RenderType.cutout()));
@@ -64,8 +60,6 @@ public final class FMLClientSetupEventHandler {
 
   @SubscribeEvent
   public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-    FireManager.getFires().stream()
-      .filter(fire -> fire.getCampfire().isPresent() && FireManager.getCampfireBlock(fire.getFireType()) instanceof CustomCampfireBlock)
-      .forEach(fire -> event.registerBlockEntityRenderer((BlockEntityType<CampfireBlockEntity>) ForgeRegistries.BLOCK_ENTITY_TYPES.getValue(fire.getCampfire().orElse(FireManager.DEFAULT_FIRE.getCampfire().orElseThrow())), CustomCampfireRenderer::new));
+    event.registerBlockEntityRenderer(FireManager.CUSTOM_CAMPFIRE_ENTITY_TYPE.get(), CustomCampfireRenderer::new);
   }
 }

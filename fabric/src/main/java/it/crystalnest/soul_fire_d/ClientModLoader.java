@@ -20,8 +20,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.CampfireBlockEntity;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
@@ -32,15 +30,10 @@ public final class ClientModLoader implements ClientModInitializer {
   @Override
   public void onInitializeClient() {
     FireClientManager.registerFires(FireManager.getFires());
-    FireManager.getFires().stream()
-      .filter(fire -> fire.getCampfire().isPresent() && FireManager.getCampfireBlock(fire.getFireType()) instanceof CustomCampfireBlock)
-      .forEach(fire -> {
-        BlockEntityRenderers.register((BlockEntityType<CampfireBlockEntity>) BuiltInRegistries.BLOCK_ENTITY_TYPE.get(fire.getCampfire().orElse(FireManager.DEFAULT_FIRE.getCampfire().orElseThrow())), CustomCampfireRenderer::new);
-        BlockRenderLayerMap.INSTANCE.putBlock(FireManager.getCampfireBlock(fire.getFireType()), RenderType.cutout());
-      });
-    FireManager.getFires().stream()
-      .filter(fire -> fire.getSource().isPresent() && FireManager.getSourceBlock(fire.getFireType()) instanceof CustomFireBlock)
-      .forEach(fire -> BlockRenderLayerMap.INSTANCE.putBlock(FireManager.getSourceBlock(fire.getFireType()), RenderType.cutout()));
+    FireManager.getSources().stream().filter(source -> source instanceof CustomFireBlock).forEach(source -> BlockRenderLayerMap.INSTANCE.putBlock(source, RenderType.cutout()));
+    FireManager.getCampfires().stream().filter(campfire -> campfire instanceof CustomCampfireBlock).forEach(campfire -> BlockRenderLayerMap.INSTANCE.putBlock(campfire, RenderType.cutout()));
+    BlockEntityRenderers.register(FireManager.CUSTOM_CAMPFIRE_ENTITY_TYPE.get(), CustomCampfireRenderer::new);
+
     FireManager.getFires().stream()
       .filter(fire -> fire.getSource().isPresent() && BuiltInRegistries.BLOCK.get(new ResourceLocation(fire.getFireType().getNamespace(), fire.getFireType().getPath() + "_torch")) instanceof CustomTorchBlock)
       .forEach(fire -> BlockRenderLayerMap.INSTANCE.putBlock(BuiltInRegistries.BLOCK.get(new ResourceLocation(fire.getFireType().getNamespace(), fire.getFireType().getPath() + "_torch")), RenderType.cutout()));
@@ -50,6 +43,7 @@ public final class ClientModLoader implements ClientModInitializer {
     FireManager.getFires().stream()
       .filter(fire -> BuiltInRegistries.PARTICLE_TYPE.get(new ResourceLocation(fire.getFireType().getNamespace(), fire.getFireType().getPath() + "_flame")) != null)
       .forEach(fire -> ParticleFactoryRegistry.getInstance().register((SimpleParticleType) BuiltInRegistries.PARTICLE_TYPE.get(new ResourceLocation(fire.getFireType().getNamespace(), fire.getFireType().getPath() + "_flame")), FlameParticle.Provider::new));
+
     ClientPlayNetworking.registerGlobalReceiver(RegisterFirePacket.ID, FabricFirePacketHandler::handleRegister);
     ClientPlayNetworking.registerGlobalReceiver(UnregisterFirePacket.ID, FabricFirePacketHandler::handleUnregister);
   }

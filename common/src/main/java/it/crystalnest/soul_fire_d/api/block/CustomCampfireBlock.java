@@ -3,11 +3,11 @@ package it.crystalnest.soul_fire_d.api.block;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.block.entity.CustomCampfireBlockEntity;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CampfireBlock;
@@ -45,8 +45,20 @@ public class CustomCampfireBlock extends CampfireBlock implements FireTyped {
   }
 
   public CustomCampfireBlock(ResourceLocation fireType, boolean spawnParticles, Properties properties) {
-    super(spawnParticles, Math.round(FireManager.getDamage(fireType)), properties.lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? FireManager.getLight(fireType) : 0));
+    super(spawnParticles, Math.round(FireManager.getProperty(fireType, Fire::getDamage)), properties.lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? FireManager.getProperty(fireType, Fire::getLight) : 0));
     this.fireType = fireType;
+  }
+
+  protected BlockEntityTicker<? super CampfireBlockEntity> particleTick() {
+    return CustomCampfireBlockEntity::particleTick;
+  }
+
+  protected BlockEntityTicker<? super CampfireBlockEntity> cookTick() {
+    return CustomCampfireBlockEntity::cookTick;
+  }
+
+  protected BlockEntityTicker<? super CampfireBlockEntity> cooldownTick() {
+    return CustomCampfireBlockEntity::cooldownTick;
   }
 
   @NotNull
@@ -55,6 +67,7 @@ public class CustomCampfireBlock extends CampfireBlock implements FireTyped {
     return CODEC;
   }
 
+  @Override
   public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
     return new CustomCampfireBlockEntity(getFireType(), pos, state);
   }
@@ -62,11 +75,11 @@ public class CustomCampfireBlock extends CampfireBlock implements FireTyped {
   @Nullable
   @Override
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType) {
-    BlockEntityType<CampfireBlockEntity> customBlockEntityType = (BlockEntityType<CampfireBlockEntity>) BuiltInRegistries.BLOCK_ENTITY_TYPE.get(FireManager.getFire(getFireType()).getCampfire().orElse(FireManager.DEFAULT_FIRE.getCampfire().orElseThrow()));
+    BlockEntityType<CampfireBlockEntity> customBlockEntityType = FireManager.CUSTOM_CAMPFIRE_ENTITY_TYPE.get();
     if (level.isClientSide) {
-      return state.getValue(LIT) ? createTickerHelper(blockEntityType, customBlockEntityType, CampfireBlockEntity::particleTick) : null;
+      return state.getValue(LIT) ? createTickerHelper(blockEntityType, customBlockEntityType, particleTick()) : null;
     } else {
-      return state.getValue(LIT) ? createTickerHelper(blockEntityType, customBlockEntityType, CampfireBlockEntity::cookTick) : createTickerHelper(blockEntityType, customBlockEntityType, CampfireBlockEntity::cooldownTick);
+      return state.getValue(LIT) ? createTickerHelper(blockEntityType, customBlockEntityType, cookTick()) : createTickerHelper(blockEntityType, customBlockEntityType, cooldownTick());
     }
   }
 

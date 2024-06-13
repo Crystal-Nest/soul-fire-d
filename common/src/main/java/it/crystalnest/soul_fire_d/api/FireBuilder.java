@@ -96,7 +96,8 @@ public final class FireBuilder {
    */
   private Function<Entity, DamageSource> onFireGetter;
 
-  private Optional<Predicate<Entity>> behavior;
+  @Nullable
+  private Predicate<Entity> behavior;
 
   /**
    * {@link Fire} instance {@link Fire#source source}.
@@ -263,7 +264,7 @@ public final class FireBuilder {
   }
 
   public FireBuilder setBehavior(@NotNull Predicate<Entity> behavior) {
-    this.behavior = Optional.of(behavior);
+    this.behavior = behavior;
     return this;
   }
 
@@ -431,7 +432,7 @@ public final class FireBuilder {
         canRainDouse,
         inFireGetter,
         onFireGetter,
-        get(behavior),
+        behavior,
         get(source),
         get(campfire),
         register(fireType, fireAspectConfigurator, FireAspectBuilder::new),

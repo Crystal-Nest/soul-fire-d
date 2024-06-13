@@ -1,5 +1,6 @@
 package it.crystalnest.soul_fire_d.api.block;
 
+import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import net.minecraft.core.BlockPos;
@@ -20,7 +21,7 @@ public class CustomTorchBlock extends TorchBlock implements FireTyped {
 
   public CustomTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type, Properties properties) {
     // noinspection DataFlowIssue
-    super(null, properties.lightLevel(state -> FireManager.getLight(fireType)));
+    super(null, properties.lightLevel(state -> FireManager.getProperty(fireType, Fire::getLight)));
     this.fireType = fireType;
     this.type = type;
   }
