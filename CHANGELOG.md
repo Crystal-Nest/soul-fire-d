@@ -8,18 +8,35 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 ## [Unreleased]
 - Nothing new.
 
-## [1.20.4-3.3.2-alpha] - 2024/06/09
+## [v3.3.4-alpha] - 2024/06/13
+
+- Improve `FireManager` and streamline related code.
+- Added new more general methods to retrieve fire properties and removed obsolete ones.
+- Fixed and improve use of `CustomCampfireBlockEntity` and its related type.
+- Made registration of `CustomCampfireBlockEntity` automatic and removed manual one.
+- Allowed to override static behaviors of `CustomCampfireBlockEntity` by overriding specific methods in `CustomCampfireBlock`.
+- Fixed NPE when lighting up a fire if there was at least one fire without a registered source block.
+-
+
+## [v3.3.3-alpha] - 2024/06/11
+
+- Added custom fire behavior.
+- Added `canRainDouse` flag.
+- Removed method overloads in `FireManager` that accepted a pair of strings instead of a `ResourceLocation` to retrieve a fire property.
+
+## [v3.3.2-alpha] - 2024/06/09
 - Add use of Cobweb unified registration system to the fire-related stuff registration API.
 
-## [1.20.4-3.3.1-alpha] - 2024/06/07
+## [v3.3.1-alpha] - 2024/06/07
 - Added API for registering custom fire blocks and campfire blocks, along with required block entities and renderers.
 - Added API for registering custom campfire items.
 - Added API for registering custom lantern blocks and items.
 - Added API for registering custom torch blocks and items, along with required particles.
 - Added new Fire property `light` to set the light level of the Fire.
 
-## [1.20.4-3.3.0-alpha] - 2024/06/04
-- Rewrite to new standards with multiloader environment.
+## [v3.3.0-alpha] - 2024/06/04
+
+- Rewrote to new standards with multiloader environment.
 
 ## Legacy
 
@@ -341,9 +358,16 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
-[1.20.4-3.3.2-alpha]: https://github.com/crystal-nest/soul-fire-d/releases/tag/v1.20.4-3.3.2-alpha
-[1.20.4-3.3.1-alpha]: https://github.com/crystal-nest/soul-fire-d/releases/tag/v1.20.4-3.3.1-alpha
-[1.20.4-3.3.0-alpha]: https://github.com/crystal-nest/soul-fire-d/releases/tag/v1.20.4-3.3.0-alpha
+[v3.3.4-alpha]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.3.4-alpha
+
+[v3.3.3-alpha]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.3.3-alpha
+
+[v3.3.2-alpha]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.3.2-alpha
+
+[v3.3.1-alpha]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.3.1-alpha
+
+[v3.3.0-alpha]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.3.0-alpha
+
 [1.20.4-3.2.1.0]: https://github.com/crystal-nest/soul-fire-d/releases/tag/v1.20.4-3.2.1.0
 
 [1.20.2-3.2.1.0]: https://github.com/crystal-nest/soul-fire-d/releases/tag/v1.20.2-3.2.1.0
