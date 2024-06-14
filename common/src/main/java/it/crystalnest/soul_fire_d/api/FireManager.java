@@ -637,7 +637,7 @@ public final class FireManager {
    */
   private static boolean harmOrHeal(Entity entity, DamageSource damageSource, float damage, boolean invertHealAndHarm) {
     Optional<Predicate<Entity>> behavior = FireManager.getProperty(((FireTyped) entity).getFireType(), Fire::getBehavior);
-    if (behavior.isEmpty() || behavior.get().test(entity)) {
+    if (behavior.isEmpty() || behavior.get().test(entity) && damage != 0) {
       if (damage > 0) {
         if (entity instanceof LivingEntity livingEntity) {
           if (livingEntity.isInvertedHealAndHarm() && invertHealAndHarm) {
