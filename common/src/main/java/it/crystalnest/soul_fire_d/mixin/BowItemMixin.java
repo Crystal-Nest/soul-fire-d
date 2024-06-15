@@ -17,11 +17,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(BowItem.class)
 public abstract class BowItemMixin {
   /**
-   * Redirects the call to {@link AbstractArrow#setSecondsOnFire(int)} inside the method {@link BowItem#releaseUsing(ItemStack, Level, LivingEntity, int)}.
-   * <p>
+   * Redirects the call to {@link AbstractArrow#setSecondsOnFire(int)} inside the method {@link BowItem#releaseUsing(ItemStack, Level, LivingEntity, int)}.<br />
    * Handles setting the arrow on the correct kind of fire if the bow has a custom fire enchantment.
    *
-   * @param caller {@link AbstractArrow} invoking (owning) the redirected method.
+   * @param instance owner of the redirected method.
    * @param seconds parameter of the redirected method: number of seconds to set the arrow on fire for.
    * @param bow bow being released.
    * @param world world inside which the arrow should be generated.
@@ -29,10 +28,10 @@ public abstract class BowItemMixin {
    * @param remainingUseTicks time left before pulling the {@code bow} to the max.
    */
   @Redirect(method = "releaseUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/AbstractArrow;setSecondsOnFire(I)V"))
-  private void redirectSetSecondsOnFire(AbstractArrow caller, int seconds, ItemStack bow, Level world, LivingEntity user, int remainingUseTicks) {
+  private void redirectSetSecondsOnFire(AbstractArrow instance, int seconds, ItemStack bow, Level world, LivingEntity user, int remainingUseTicks) {
     FireEnchantmentHelper.FireEnchantment fireEnchantment = FireEnchantmentHelper.getWhichFlame(bow);
     if (fireEnchantment.isApplied()) {
-      FireManager.setOnFire(caller, seconds, fireEnchantment.getFireType());
+      FireManager.setOnFire(instance, seconds, fireEnchantment.getFireType());
     }
   }
 }

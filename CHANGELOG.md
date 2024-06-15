@@ -8,6 +8,14 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 ## [Unreleased]
 - Nothing new.
 
+## [v3.4.0-beta] - 2024/06/15
+
+- `DynamicBlockEntityType` is now stricter and accepts only subclasses of `CustomCampfireBlockEntity`.
+- Merged registration for `CustomTorchBlock` and `CustomWallTorchBlock`.
+- Updated `FireClientManager` to match the new registering standard when registering fires.
+- Made `FireBuilder` and `FireComponent` inner classes of `Fire`, and renamed them respectively to `Builder` and `Component` (accessible as `Fire.Builder` and `Fire.Component`).
+- Added tons of Javadoc, either missing or outdated.
+
 ## [v3.3.5-alpha] - 2024/06/15
 
 - Setting fire damage to 0 now entirely prevents calls to hurt/heal entity methods.
@@ -368,6 +376,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[v3.4.0-beta]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.4.0-beta
 [v3.3.5-alpha]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.3.5-alpha
 [v3.3.4-alpha]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.3.4-alpha
 [v3.3.3-alpha]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.3.3-alpha

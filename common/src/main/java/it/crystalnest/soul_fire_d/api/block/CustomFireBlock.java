@@ -1,5 +1,6 @@
 package it.crystalnest.soul_fire_d.api.block;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.crystalnest.soul_fire_d.api.Fire;
@@ -29,11 +30,23 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Custom fire block.
+ */
 public class CustomFireBlock extends BaseFireBlock implements FireTyped {
+  /**
+   * Fire max age property.
+   */
   public static final int MAX_AGE = FireBlock.MAX_AGE;
 
+  /**
+   * Fire age property.
+   */
   public static final IntegerProperty AGE = FireBlock.AGE;
 
+  /**
+   * {@link Codec}.
+   */
   public static final MapCodec<CustomFireBlock> CODEC = RecordCodecBuilder.mapCodec(
     instance -> instance.group(
         ResourceLocation.CODEC.fieldOf("fire_type").forGetter(block -> block.fireType),
@@ -43,14 +56,32 @@ public class CustomFireBlock extends BaseFireBlock implements FireTyped {
       .apply(instance, CustomFireBlock::new)
   );
 
+  /**
+   * Fire type.
+   */
   private final ResourceLocation fireType;
 
+  /**
+   * Tag for blocks on which this fire can burn.
+   */
   private final TagKey<Block> base;
 
+  /**
+   * @param fireType fire type.
+   * @param base {@link CustomFireBlock#base}.
+   * @param color light color.
+   */
   public CustomFireBlock(ResourceLocation fireType, TagKey<Block> base, MapColor color) {
     this(fireType, base, BlockBehaviour.Properties.of().mapColor(color).replaceable().noCollission().instabreak().sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY));
   }
 
+  /**
+   * Use the {@link CustomFireBlock#CustomFireBlock(ResourceLocation, TagKey, MapColor) other constructor} if your fire should behave similarly to the Vanilla ones (suggested).
+   *
+   * @param fireType fire type.
+   * @param base {@link CustomFireBlock#base}.
+   * @param properties block properties.
+   */
   public CustomFireBlock(ResourceLocation fireType, TagKey<Block> base, Properties properties) {
     super(properties.lightLevel(state -> FireManager.getProperty(fireType, Fire::getLight)), FireManager.getProperty(fireType, Fire::getDamage));
     registerDefaultState(stateDefinition.any().setValue(AGE, 0));
@@ -97,12 +128,6 @@ public class CustomFireBlock extends BaseFireBlock implements FireTyped {
     }
   }
 
-  @Override
-  public void onPlace(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState initial, boolean updateFlags) {
-    super.onPlace(state, level, pos, initial, updateFlags);
-    scheduleTick(level, pos);
-  }
-
   @NotNull
   @Override
   public MapCodec<? extends BaseFireBlock> codec() {
@@ -115,19 +140,46 @@ public class CustomFireBlock extends BaseFireBlock implements FireTyped {
   }
 
   @Override
+  public void onPlace(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState initial, boolean updateFlags) {
+    super.onPlace(state, level, pos, initial, updateFlags);
+    scheduleTick(level, pos);
+  }
+
+  @Override
   public ResourceLocation getFireType() {
     return fireType;
   }
 
+  /**
+   * Simplified version of {@link CustomFireBlock#canSurvive(BlockState, LevelReader, BlockPos)}.
+   *
+   * @param state block state.
+   * @return whether this fire can burn on the given block.
+   */
   public boolean canSurvive(BlockState state) {
     return state.is(base);
   }
 
+  /**
+   * Copied from {@link FireBlock#getStateWithAge(LevelAccessor, BlockPos, int)}.
+   *
+   * @param level level.
+   * @param pos position.
+   * @param age {@link CustomFireBlock#AGE} value.
+   * @return correct block state.
+   */
   protected BlockState getStateWithAge(LevelAccessor level, BlockPos pos, int age) {
     BlockState state = getState(level, pos);
     return state.hasProperty(AGE) ? state.setValue(AGE, age) : state;
   }
 
+  /**
+   * Schedule the next fire tick.<br />
+   * Based on {@link FireBlock#getFireTickDelay(RandomSource)}.
+   *
+   * @param level level.
+   * @param pos position.
+   */
   protected void scheduleTick(Level level, BlockPos pos) {
     level.scheduleTick(pos, this, 30 + level.random.nextInt(10));
   }

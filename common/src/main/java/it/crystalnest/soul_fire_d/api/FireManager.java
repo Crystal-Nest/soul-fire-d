@@ -3,6 +3,7 @@ package it.crystalnest.soul_fire_d.api;
 import com.google.common.base.Suppliers;
 import it.crystalnest.cobweb.api.pack.DynamicDataPack;
 import it.crystalnest.cobweb.api.pack.DynamicTagBuilder;
+import it.crystalnest.cobweb.api.registry.CobwebRegister;
 import it.crystalnest.cobweb.api.registry.CobwebRegistry;
 import it.crystalnest.soul_fire_d.Constants;
 import it.crystalnest.soul_fire_d.api.block.CustomCampfireBlock;
@@ -32,10 +33,9 @@ import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -75,22 +75,22 @@ public final class FireManager {
   @SuppressWarnings("DataFlowIssue")
   public static final Fire DEFAULT_FIRE = new Fire(
     DEFAULT_FIRE_TYPE,
-    FireBuilder.DEFAULT_LIGHT,
-    FireBuilder.DEFAULT_DAMAGE,
-    FireBuilder.DEFAULT_INVERT_HEAL_AND_HARM,
+    Fire.Builder.DEFAULT_LIGHT,
+    Fire.Builder.DEFAULT_DAMAGE,
+    Fire.Builder.DEFAULT_INVERT_HEAL_AND_HARM,
     true,
-    FireBuilder.DEFAULT_IN_FIRE_GETTER,
-    FireBuilder.DEFAULT_ON_FIRE_GETTER,
-    FireBuilder.DEFAULT_BEHAVIOR,
+    Fire.Builder.DEFAULT_IN_FIRE_GETTER,
+    Fire.Builder.DEFAULT_ON_FIRE_GETTER,
+    Fire.Builder.DEFAULT_BEHAVIOR,
     Map.ofEntries(
-      Map.entry(FireComponent.SOURCE_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.FIRE)),
-      Map.entry(FireComponent.CAMPFIRE_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.CAMPFIRE)),
-      Map.entry(FireComponent.LANTERN_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.LANTERN)),
-      Map.entry(FireComponent.TORCH_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.TORCH)),
-      Map.entry(FireComponent.WALL_TORCH_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.WALL_TORCH)),
-      Map.entry(FireComponent.FLAME_PARTICLE, BuiltInRegistries.PARTICLE_TYPE.getKey(ParticleTypes.FLAME)),
-      Map.entry(FireComponent.FIRE_ASPECT_ENCHANTMENT, BuiltInRegistries.ENCHANTMENT.getKey(Enchantments.FIRE_ASPECT)),
-      Map.entry(FireComponent.FLAME_ENCHANTMENT, BuiltInRegistries.ENCHANTMENT.getKey(Enchantments.FLAMING_ARROWS))
+      Map.entry(Fire.Component.SOURCE_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.FIRE)),
+      Map.entry(Fire.Component.CAMPFIRE_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.CAMPFIRE)),
+      Map.entry(Fire.Component.LANTERN_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.LANTERN)),
+      Map.entry(Fire.Component.TORCH_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.TORCH)),
+      Map.entry(Fire.Component.WALL_TORCH_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.WALL_TORCH)),
+      Map.entry(Fire.Component.FLAME_PARTICLE, BuiltInRegistries.PARTICLE_TYPE.getKey(ParticleTypes.FLAME)),
+      Map.entry(Fire.Component.FIRE_ASPECT_ENCHANTMENT, BuiltInRegistries.ENCHANTMENT.getKey(Enchantments.FIRE_ASPECT)),
+      Map.entry(Fire.Component.FLAME_ENCHANTMENT, BuiltInRegistries.ENCHANTMENT.getKey(Enchantments.FLAMING_ARROWS))
     )
   );
 
@@ -120,22 +120,22 @@ public final class FireManager {
   }
 
   @Nullable
-  public static ResourceLocation getComponentId(ResourceLocation fireType, FireComponent<?, ?> component) {
+  public static ResourceLocation getComponentId(ResourceLocation fireType, Fire.Component<?, ?> component) {
     return FIRES.getOrDefault(fireType, DEFAULT_FIRE).getComponent(component);
   }
 
   @Nullable
-  public static <R, T extends R> T getComponent(ResourceLocation fireType, FireComponent<R, T> component) {
+  public static <R, T extends R> T getComponent(ResourceLocation fireType, Fire.Component<R, T> component) {
     return component.getValue(getComponentId(fireType, component));
   }
 
   @NotNull
-  private static String getComponentPath(ResourceLocation fireType, FireComponent<?, ?> component) {
+  private static String getComponentPath(ResourceLocation fireType, Fire.Component<?, ?> component) {
     return Objects.requireNonNull(getComponentId(fireType, component)).getPath();
   }
 
   @NotNull
-  private static <R, T extends R> T getRequiredComponent(ResourceLocation fireType, FireComponent<R, T> component) {
+  public static <R, T extends R> T getRequiredComponent(ResourceLocation fireType, Fire.Component<R, T> component) {
     return Objects.requireNonNull(component.getValue(getComponentId(fireType, component)));
   }
 
@@ -143,18 +143,18 @@ public final class FireManager {
     return FIRES.values().stream().map(getter).toList();
   }
 
-  public static List<ResourceLocation> getComponentIdList(FireComponent<?, ?> component) {
+  public static List<ResourceLocation> getComponentIdList(Fire.Component<?, ?> component) {
     return FIRES.values().stream().map(fire -> fire.getComponent(component)).filter(Objects::nonNull).toList();
   }
 
-  public static <R, T extends R> List<T> getComponentList(FireComponent<R, T> component) {
+  public static <R, T extends R> List<T> getComponentList(Fire.Component<R, T> component) {
     return FIRES.values().stream().map(component::getValue).filter(Objects::nonNull).toList();
   }
 
   public static <T extends CustomFireBlock> Supplier<T> registerFireSource(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
     Supplier<T> source = Suppliers.memoize(() -> supplier.apply(fireType));
     FIRE_SOURCE_TAGS.add(() -> DynamicTagBuilder.of(Registries.BLOCK, BlockTags.FIRE).addElement(source.get()));
-    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, FireComponent.SOURCE_BLOCK), source);
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.SOURCE_BLOCK), source);
   }
 
   public static Supplier<CustomFireBlock> registerFireSource(ResourceLocation fireType, TagKey<Block> base, MapColor color) {
@@ -168,7 +168,7 @@ public final class FireManager {
   public static <T extends CustomCampfireBlock> Supplier<T> registerCampfire(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
     Supplier<T> campfire = Suppliers.memoize(() -> supplier.apply(fireType));
     CAMPFIRE_TAGS.add(() -> DynamicTagBuilder.of(Registries.BLOCK, BlockTags.CAMPFIRES).addElement(campfire.get()));
-    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, FireComponent.CAMPFIRE_BLOCK), campfire);
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.CAMPFIRE_BLOCK), campfire);
   }
 
   public static Supplier<CustomCampfireBlock> registerCampfire(ResourceLocation fireType, boolean spawnParticles) {
@@ -180,67 +180,58 @@ public final class FireManager {
   }
 
   public static Supplier<BlockItem> registerCampfireItem(ResourceLocation fireType) {
-    return CobwebRegistry.ofItems(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, FireComponent.CAMPFIRE_ITEM), () -> new BlockItem(FireManager.getRequiredComponent(fireType, FireComponent.CAMPFIRE_BLOCK), new Item.Properties()));
+    return CobwebRegistry.ofItems(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.CAMPFIRE_ITEM), () -> new BlockItem(FireManager.getRequiredComponent(fireType, Fire.Component.CAMPFIRE_BLOCK), new Item.Properties()));
   }
 
   public static Supplier<SimpleParticleType> registerParticle(ResourceLocation fireType) {
-    return CobwebRegistry.of(Registries.PARTICLE_TYPE, fireType.getNamespace()).register(FireManager.getComponentPath(fireType, FireComponent.FLAME_PARTICLE), () -> new SimpleParticleType(false));
+    return CobwebRegistry.of(Registries.PARTICLE_TYPE, fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.FLAME_PARTICLE), () -> new SimpleParticleType(false));
   }
 
-  public static Supplier<CustomTorchBlock> registerTorch(ResourceLocation fireType, Supplier<SimpleParticleType> particle) {
-    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(
-      FireManager.getComponentPath(fireType, FireComponent.TORCH_BLOCK),
-      () -> new CustomTorchBlock(fireType, particle, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY))
-    );
-  }
-
-  public static Supplier<CustomWallTorchBlock> registerWallTorch(ResourceLocation fireType, Supplier<SimpleParticleType> particle) {
-    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(
-      FireManager.getComponentPath(fireType, FireComponent.WALL_TORCH_BLOCK),
-      () -> new CustomWallTorchBlock(fireType, particle, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.WOOD).dropsLike(FireManager.getRequiredComponent(fireType, FireComponent.TORCH_BLOCK)).pushReaction(PushReaction.DESTROY))
+  public static Pair<Supplier<CustomTorchBlock>, Supplier<CustomWallTorchBlock>> registerTorch(ResourceLocation fireType, Supplier<SimpleParticleType> particle) {
+    CobwebRegister<Block> blocks = CobwebRegistry.ofBlocks(fireType.getNamespace());
+    return Pair.of(
+      blocks.register(FireManager.getComponentPath(fireType, Fire.Component.TORCH_BLOCK), () -> new CustomTorchBlock(fireType, particle)),
+      blocks.register(FireManager.getComponentPath(fireType, Fire.Component.WALL_TORCH_BLOCK), () -> new CustomWallTorchBlock(fireType, particle))
     );
   }
 
   public static Supplier<StandingAndWallBlockItem> registerTorchItem(ResourceLocation fireType) {
     return CobwebRegistry.ofItems(fireType.getNamespace()).register(
-      FireManager.getComponentPath(fireType, FireComponent.TORCH_ITEM),
-      () -> new StandingAndWallBlockItem(FireManager.getRequiredComponent(fireType, FireComponent.TORCH_BLOCK), FireManager.getRequiredComponent(fireType, FireComponent.WALL_TORCH_BLOCK), new Item.Properties(), Direction.DOWN)
+      FireManager.getComponentPath(fireType, Fire.Component.TORCH_ITEM),
+      () -> new StandingAndWallBlockItem(FireManager.getRequiredComponent(fireType, Fire.Component.TORCH_BLOCK), FireManager.getRequiredComponent(fireType, Fire.Component.WALL_TORCH_BLOCK), new Item.Properties(), Direction.DOWN)
     );
   }
 
   public static Supplier<CustomLanternBlock> registerLantern(ResourceLocation fireType) {
-    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(
-      FireManager.getComponentPath(fireType, FireComponent.LANTERN_BLOCK),
-      () -> new CustomLanternBlock(fireType, BlockBehaviour.Properties.of().mapColor(MapColor.METAL).forceSolidOn().requiresCorrectToolForDrops().strength(3.5F).sound(SoundType.LANTERN).noOcclusion().pushReaction(PushReaction.DESTROY))
-    );
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.LANTERN_BLOCK), () -> new CustomLanternBlock(fireType));
   }
 
   public static Supplier<BlockItem> registerLanternItem(ResourceLocation fireType) {
     return CobwebRegistry.ofItems(fireType.getNamespace()).register(
-      FireManager.getComponentPath(fireType, FireComponent.LANTERN_ITEM),
-      () -> new BlockItem(FireManager.getRequiredComponent(fireType, FireComponent.LANTERN_BLOCK), new Item.Properties())
+      FireManager.getComponentPath(fireType, Fire.Component.LANTERN_ITEM),
+      () -> new BlockItem(FireManager.getRequiredComponent(fireType, Fire.Component.LANTERN_BLOCK), new Item.Properties())
     );
   }
 
   /**
-   * Returns a new {@link FireBuilder}.
+   * Returns a new {@link Fire.Builder}.
    *
    * @param modId {@code modId} of the new {@link Fire} to build.
    * @param fireId {@code fireId} of the new {@link Fire} to build.
-   * @return a new {@link FireBuilder}.
+   * @return a new {@link Fire.Builder}.
    */
-  public static FireBuilder fireBuilder(String modId, String fireId) {
-    return new FireBuilder(modId, fireId);
+  public static Fire.Builder fireBuilder(String modId, String fireId) {
+    return new Fire.Builder(modId, fireId);
   }
 
   /**
-   * Returns a new {@link FireBuilder}.
+   * Returns a new {@link Fire.Builder}.
    *
    * @param fireType {@link ResourceLocation} of the new {@link Fire} to build.
-   * @return a new {@link FireBuilder}.
+   * @return a new {@link Fire.Builder}.
    */
-  public static FireBuilder fireBuilder(ResourceLocation fireType) {
-    return new FireBuilder(fireType);
+  public static Fire.Builder fireBuilder(ResourceLocation fireType) {
+    return new Fire.Builder(fireType);
   }
 
   /**
@@ -255,8 +246,8 @@ public final class FireManager {
   public static synchronized Fire registerFire(Fire fire) {
     Fire previous = FIRES.computeIfAbsent(fire.getFireType(), key -> {
       // Need to manually set the fire type for blocks registered via data packs.
-      FireComponent.SOURCE_BLOCK.getOptionalValue(fire).ifPresent(block -> ((FireTypeChanger) block).setFireType(key));
-      FireComponent.CAMPFIRE_BLOCK.getOptionalValue(fire).ifPresent(block -> ((FireTypeChanger) block).setFireType(key));
+      Fire.Component.SOURCE_BLOCK.getOptionalValue(fire).ifPresent(block -> ((FireTypeChanger) block).setFireType(key));
+      Fire.Component.CAMPFIRE_BLOCK.getOptionalValue(fire).ifPresent(block -> ((FireTypeChanger) block).setFireType(key));
       return fire;
     });
     if (previous != fire) {
@@ -299,9 +290,10 @@ public final class FireManager {
    * @param fireType
    * @return whether the fire was previously registered.
    */
+  @Nullable
   @ApiStatus.Internal
-  public static synchronized boolean unregisterFire(ResourceLocation fireType) {
-    return FIRES.remove(fireType) != null;
+  public static synchronized Fire unregisterFire(ResourceLocation fireType) {
+    return FIRES.remove(fireType);
   }
 
   /**

@@ -15,8 +15,14 @@ public final class ModConfig extends CommonConfig {
    */
   public static final ModConfig CONFIG = register(Constants.MOD_ID, ModConfig::new);
 
+  /**
+   * Soul fire aspect enchantment name.
+   */
   private static final String SOUL_FIRE_ASPECT = "Soul Fire Aspect";
 
+  /**
+   * Soul flame enchantment name.
+   */
   private static final String SOUL_FLAME = "Soul Flame";
 
   /**
@@ -138,10 +144,24 @@ public final class ModConfig extends CommonConfig {
     return CONFIG.enableSoulFlameTreasure.get();
   }
 
+  /**
+   * Defines the general enable flag for the specified enchantment.
+   *
+   * @param builder configuration builder.
+   * @param enchantment enchantment name.
+   * @return defined configuration property.
+   */
   private static ModConfigSpec.BooleanValue defineEnableEnchantment(ModConfigSpec.Builder builder, String enchantment) {
     return builder.comment(" Whether to enable " + enchantment + " enchantment.", " Takes precedence over all other " + enchantment + " configs.").define("enable " + enchantment.toLowerCase(), true);
   }
 
+  /**
+   * Defined the enable treasure flag for the specified enchantment.
+   *
+   * @param builder configuration builder.
+   * @param enchantment enchantment name.
+   * @return defined configuration property.
+   */
   private static ModConfigSpec.BooleanValue defineEnableTreasure(ModConfigSpec.Builder builder, String enchantment) {
     return builder.comment(
       " Whether " + enchantment + " cannot appear in the enchanting table.",
@@ -149,10 +169,24 @@ public final class ModConfig extends CommonConfig {
     ).define("enable " + enchantment.toLowerCase() + " treasure", false);
   }
 
+  /**
+   * Defined the enable discovery flag for the specified enchantment.
+   *
+   * @param builder configuration builder.
+   * @param enchantment enchantment name.
+   * @return defined configuration property.
+   */
   private static ModConfigSpec.BooleanValue defineEnableDiscovery(ModConfigSpec.Builder builder, String enchantment) {
     return builder.comment(" Whether " + enchantment + " can appear in the enchanting table and loots.", " [enable " + enchantment + " treasure] takes precedence.").define("enable " + enchantment + " discovery", true);
   }
 
+  /**
+   * Defined the enable trades flag for the specified enchantment.
+   *
+   * @param builder configuration builder.
+   * @param enchantment enchantment name.
+   * @return defined configuration property.
+   */
   private static ModConfigSpec.BooleanValue defineEnableTrades(ModConfigSpec.Builder builder, String enchantment) {
     return builder.comment(" Whether " + enchantment + " can be found in villager trades.").define("enable " + enchantment + " trades", true);
   }

@@ -19,13 +19,12 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(ScreenEffectRenderer.class)
 public abstract class ScreenEffectRendererMixin {
   /**
-   * Modifies the assignment value returned by {@link Material#sprite()} in the method {@link ScreenEffectRenderer#renderFire(Minecraft, PoseStack)}.
-   * <p>
+   * Modifies the assignment value returned by {@link Material#sprite()} in the method {@link ScreenEffectRenderer#renderFire(Minecraft, PoseStack)}.<br />
    * Assigns the correct sprite for the Fire Type the player is burning from.
    *
    * @param value original sprite returned by the modified method.
    * @param minecraft Minecraft client.
-   * @param poseStack
+   * @param poseStack matrices.
    * @return {@link TextureAtlasSprite} to assign.
    */
   @SuppressWarnings("InvalidInjectorMethodSignature")

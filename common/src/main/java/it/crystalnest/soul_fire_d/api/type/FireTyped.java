@@ -7,8 +7,7 @@ import net.minecraft.resources.ResourceLocation;
  */
 public interface FireTyped {
   /**
-   * Returns this {@code fireType}.
-   * <p>
+   * Returns this {@code fireType}.<br />
    * May or may not process the actual fireType before returning.
    *
    * @return this {@code fireType}.

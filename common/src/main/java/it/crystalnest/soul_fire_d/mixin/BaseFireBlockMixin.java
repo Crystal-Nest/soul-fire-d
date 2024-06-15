@@ -1,6 +1,6 @@
 package it.crystalnest.soul_fire_d.mixin;
 
-import it.crystalnest.soul_fire_d.api.FireComponent;
+import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.block.CustomFireBlock;
 import it.crystalnest.soul_fire_d.api.type.FireTypeChanger;
@@ -40,9 +40,17 @@ public abstract class BaseFireBlockMixin implements FireTypeChanger {
     this.fireType = fireType;
   }
 
+  /**
+   * Injects before returning in the method {@link BaseFireBlock#getState(BlockGetter, BlockPos)}.<br />
+   * Returns the most appropriate fire {@link BlockState}.
+   *
+   * @param level level.
+   * @param pos position.
+   * @param cir {@link CallbackInfoReturnable}.
+   */
   @Inject(method = "getState", at = @At(value = "RETURN"), cancellable = true)
   private static void onGetState(BlockGetter level, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
-    FireManager.getComponentList(FireComponent.SOURCE_BLOCK).stream()
+    FireManager.getComponentList(Fire.Component.SOURCE_BLOCK).stream()
       .filter(source -> source instanceof CustomFireBlock customFireBlock && customFireBlock.canSurvive(level.getBlockState(pos.below())))
       .findFirst()
       .ifPresent(source -> cir.setReturnValue(source.defaultBlockState()));

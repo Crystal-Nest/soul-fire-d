@@ -51,22 +51,20 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
   protected final ResourceLocation fireType;
 
   /**
-   * Enchantment kind identifier.
+   * Enchantment kind identifier.<br />
    * Will be used as suffix when registering the enchantment.
    */
   private final String kind;
 
   /**
-   * {@link BooleanSupplier} to check whether the enchantment is enabled in survival.
-   * <p>
+   * {@link BooleanSupplier} to check whether the enchantment is enabled in survival.<br />
    * Defaults to {@code () -> true}.
    */
   protected BooleanSupplier enabled = () -> true;
 
   /**
-   * Additional compatibility {@link Predicate} to call and check for when checking compatibility with other enchantments.
-   * <p>
-   * Defaults to {@code (enchantment) -> true}.
+   * Additional compatibility {@link Predicate} to call and check for when checking compatibility with other enchantments.<br />
+   * Defaults to {@code enchantment -> true}.
    */
   protected Predicate<Enchantment> compatibility = enchantment -> true;
 
@@ -76,8 +74,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
   protected TriFunction<Entity, Entity, Integer, Integer> duration = (attacker, target, seconds) -> seconds;
 
   /**
-   * {@link Rarity} for the enchantment.
-   * <p>
+   * {@link Rarity} for the enchantment.<br />
    * Defaults to {@link Rarity#VERY_RARE}.
    */
   protected Rarity rarity = DEFAULT_RARITY;
@@ -121,7 +118,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * Sets the enchantment {@link #rarity}.
    *
    * @param <B> builder type.
-   * @param rarity
+   * @param rarity rarity.
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setRarity(Rarity rarity) {
@@ -133,7 +130,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * Sets {@link #isTreasure} {@link Supplier}.
    *
    * @param <B> builder type.
-   * @param isTreasure
+   * @param isTreasure {@link #isTreasure} flag supplier.
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setIsTreasure(BooleanSupplier isTreasure) {
@@ -145,7 +142,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * Sets {@link #isTreasure}.
    *
    * @param <B> builder type.
-   * @param isTreasure
+   * @param isTreasure {@link #isTreasure} flag.
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setIsTreasure(boolean isTreasure) {
@@ -156,7 +153,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * Sets {@link #isCurse} {@link Supplier}.
    *
    * @param <B> builder type.
-   * @param isCurse
+   * @param isCurse {@link #isCurse} flag supplier.
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setIsCurse(BooleanSupplier isCurse) {
@@ -168,7 +165,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * Sets {@link #isCurse}.
    *
    * @param <B> builder type.
-   * @param isCurse
+   * @param isCurse {@link #isCurse} flag.
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setIsCurse(boolean isCurse) {
@@ -179,7 +176,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * Sets {@link #isTradeable} {@link Supplier}.
    *
    * @param <B> builder type.
-   * @param isTradeable
+   * @param isTradeable {@link #isTradeable} flag supplier.
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setIsTradeable(BooleanSupplier isTradeable) {
@@ -191,7 +188,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * Sets {@link #isTradeable}.
    *
    * @param <B> builder type.
-   * @param isTradeable
+   * @param isTradeable {@link #isTradeable} flag.
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setIsTradeable(boolean isTradeable) {
@@ -202,7 +199,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * Sets {@link #isDiscoverable} {@link Supplier}.
    *
    * @param <B> builder type.
-   * @param isDiscoverable
+   * @param isDiscoverable {@link #isDiscoverable} flag supplier.
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setIsDiscoverable(BooleanSupplier isDiscoverable) {
@@ -214,7 +211,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * Sets {@link #isDiscoverable}.
    *
    * @param <B> builder type.
-   * @param isDiscoverable
+   * @param isDiscoverable {@link #isDiscoverable} flag.
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setIsDiscoverable(boolean isDiscoverable) {
@@ -225,7 +222,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * Sets the {@link #compatibility} {@link Function}.
    *
    * @param <B> builder type.
-   * @param compatibility
+   * @param compatibility compatibility predicate.
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setCompatibility(Predicate<Enchantment> compatibility) {
@@ -234,10 +231,12 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
   }
 
   /**
-   * Sets the {@link #enabled} {@link Supplier}.
+   * Sets the {@link #enabled} {@link Supplier}.<br />
+   * There is no setter for a static value for this flag as it would make no sense to do so.
+   * If you don't want the enchantment, simply remove it rather than forcing this flag to {@code false}.
    *
    * @param <B> builder type.
-   * @param enabled
+   * @param enabled {@link #isDiscoverable} flag supplier.
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setEnabled(BooleanSupplier enabled) {
@@ -249,7 +248,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * Sets the {@link #duration} {@link TriFunction}.
    *
    * @param <B> builder type.
-   * @param duration
+   * @param duration enchantment duration function.
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setDuration(TriFunction<Entity, Entity, Integer, Integer> duration) {
@@ -261,7 +260,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
    * Sets the {@link #duration}.
    *
    * @param <B> builder type.
-   * @param duration
+   * @param duration enchantment duration.
    * @return this Builder to either set other properties or {@link #build}.
    */
   public final <B extends FireEnchantmentBuilder<T>> B setDuration(int duration) {

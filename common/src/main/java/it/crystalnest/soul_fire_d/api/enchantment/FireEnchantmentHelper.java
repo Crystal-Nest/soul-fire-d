@@ -1,6 +1,6 @@
 package it.crystalnest.soul_fire_d.api.enchantment;
 
-import it.crystalnest.soul_fire_d.api.FireComponent;
+import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import it.crystalnest.soul_fire_d.mixin.EnchantmentHelperMixin;
@@ -13,9 +13,8 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.ToIntBiFunction;
 import java.util.function.ToIntFunction;
 
 /**
@@ -71,7 +70,7 @@ public final class FireEnchantmentHelper {
    * @return the {@link FireEnchantment data} of whatever Fire Aspect enchantment applied.
    */
   public static FireEnchantment getWhichFireAspect(LivingEntity entity) {
-    return getAnyFireEnchantment(entity, FireManager.getComponentList(FireComponent.FIRE_ASPECT_ENCHANTMENT), FireEnchantmentHelper::getBaseFireAspect, EnchantmentHelper::getEnchantmentLevel);
+    return getAnyFireEnchantment(entity, FireManager.getComponentList(Fire.Component.FIRE_ASPECT_ENCHANTMENT), FireEnchantmentHelper::getBaseFireAspect, EnchantmentHelper::getEnchantmentLevel);
   }
 
   /**
@@ -81,7 +80,7 @@ public final class FireEnchantmentHelper {
    * @return the {@link FireEnchantment data} of whatever Fire Aspect enchantment applied.
    */
   public static FireEnchantment getWhichFireAspect(ItemStack stack) {
-    return getAnyFireEnchantment(stack, FireManager.getComponentList(FireComponent.FIRE_ASPECT_ENCHANTMENT), FireEnchantmentHelper::getBaseFireAspect, EnchantmentHelper::getItemEnchantmentLevel);
+    return getAnyFireEnchantment(stack, FireManager.getComponentList(Fire.Component.FIRE_ASPECT_ENCHANTMENT), FireEnchantmentHelper::getBaseFireAspect, EnchantmentHelper::getItemEnchantmentLevel);
   }
 
   /**
@@ -131,7 +130,7 @@ public final class FireEnchantmentHelper {
    * @return the {@link FireEnchantment data} of whatever Flame enchantment applied.
    */
   public static FireEnchantment getWhichFlame(LivingEntity entity) {
-    return getAnyFireEnchantment(entity, FireManager.getComponentList(FireComponent.FLAME_ENCHANTMENT), FireEnchantmentHelper::getBaseFlame, EnchantmentHelper::getEnchantmentLevel);
+    return getAnyFireEnchantment(entity, FireManager.getComponentList(Fire.Component.FLAME_ENCHANTMENT), FireEnchantmentHelper::getBaseFlame, EnchantmentHelper::getEnchantmentLevel);
   }
 
   /**
@@ -141,25 +140,25 @@ public final class FireEnchantmentHelper {
    * @return the {@link FireEnchantment data} of whatever Flame enchantment applied.
    */
   public static FireEnchantment getWhichFlame(ItemStack stack) {
-    return getAnyFireEnchantment(stack, FireManager.getComponentList(FireComponent.FLAME_ENCHANTMENT), FireEnchantmentHelper::getBaseFlame, EnchantmentHelper::getItemEnchantmentLevel);
+    return getAnyFireEnchantment(stack, FireManager.getComponentList(Fire.Component.FLAME_ENCHANTMENT), FireEnchantmentHelper::getBaseFlame, EnchantmentHelper::getItemEnchantmentLevel);
   }
 
   /**
-   * Returns the {@link FireEnchantment data} of whatever Fire enchantment in the enchantments list is applied.
+   * Returns the {@link FireEnchantment data} of whatever Fire enchantment in the enchantment list is applied.
    *
-   * @param <T>
-   * @param stack
-   * @param enchantments
-   * @param getBaseFireEnchantment
-   * @param getLevel
+   * @param <T> type of what is enchanted.
+   * @param enchanted what is enchanted.
+   * @param enchantments enchantment list.
+   * @param getBaseFireEnchantment getter for the default fire enchantment.
+   * @param getLevel getter for the enchantment level.
    * @return the {@link FireEnchantment data} of whatever Fire enchantment in the enchantments list is applied.
    */
-  private static <T> FireEnchantment getAnyFireEnchantment(T stack, List<? extends Enchantment> enchantments, ToIntFunction<T> getBaseFireEnchantment, BiFunction<Enchantment, T, Integer> getLevel) {
-    int fireEnchantmentLevel = getBaseFireEnchantment.applyAsInt(stack);
+  private static <T> FireEnchantment getAnyFireEnchantment(T enchanted, List<? extends Enchantment> enchantments, ToIntFunction<T> getBaseFireEnchantment, ToIntBiFunction<Enchantment, T> getLevel) {
+    int fireEnchantmentLevel = getBaseFireEnchantment.applyAsInt(enchanted);
     ResourceLocation fireType = FireManager.DEFAULT_FIRE_TYPE;
     if (fireEnchantmentLevel <= 0) {
       for (Enchantment enchantment : enchantments) {
-        int enchantmentLevel = getLevel.apply(enchantment, stack);
+        int enchantmentLevel = getLevel.applyAsInt(enchantment, enchanted);
         if (enchantmentLevel > 0) {
           fireEnchantmentLevel = enchantmentLevel;
           fireType = ((FireTyped) enchantment).getFireType();
@@ -171,50 +170,43 @@ public final class FireEnchantmentHelper {
   }
 
   /**
-   * Logic copied from {@link EnchantmentHelper#getEnchantmentLevel(Enchantment, LivingEntity)}.
-   * <p>
+   * Logic copied from {@link EnchantmentHelper#getEnchantmentLevel(Enchantment, LivingEntity)}.<br />
    * Necessary to avoid recursion when {@link EnchantmentHelperMixin} is applied and above methods are called.
    *
-   * @param enchantment
-   * @param entity
+   * @param enchantment enchantment.
+   * @param entity entity with some enchanted equipment.
    * @return same as {@link EnchantmentHelper#getEnchantmentLevel(Enchantment, LivingEntity)}.
    */
   private static int getFireEquipmentLevel(Enchantment enchantment, LivingEntity entity) {
-    Collection<ItemStack> iterable = enchantment.getSlotItems(entity).values();
-    if (iterable != null) {
-      int i = 0;
-      for (ItemStack itemstack : iterable) {
-        int j = EnchantmentHelper.getItemEnchantmentLevel(enchantment, itemstack);
-        if (j > i) {
-          i = j;
-        }
+    int i = 0;
+    for (ItemStack stack : enchantment.getSlotItems(entity).values()) {
+      int j = EnchantmentHelper.getItemEnchantmentLevel(enchantment, stack);
+      if (j > i) {
+        i = j;
       }
-      return i;
     }
-    return 0;
+    return i;
   }
 
   /**
-   * Logic copied from {@link EnchantmentHelper#getItemEnchantmentLevel(Enchantment, ItemStack)}.
-   * <p>
+   * Logic copied from {@link EnchantmentHelper#getItemEnchantmentLevel(Enchantment, ItemStack)}.<br />
    * Necessary to avoid recursion when {@link EnchantmentHelperMixin} is applied and above methods are called.
    *
-   * @param enchantment
-   * @param stack
+   * @param enchantment enchantment.
+   * @param stack enchanted item.
    * @return same as {@link EnchantmentHelper#getItemEnchantmentLevel(Enchantment, ItemStack)}.
    */
   private static int getFireLevel(Enchantment enchantment, ItemStack stack) {
     if (!stack.isEmpty()) {
-      ResourceLocation resourcelocation = EnchantmentHelper.getEnchantmentId(enchantment);
-      ListTag listtag = stack.getEnchantmentTags();
-      for (int i = 0; i < listtag.size(); ++i) {
-        CompoundTag compoundtag = listtag.getCompound(i);
-        ResourceLocation resourcelocation1 = EnchantmentHelper.getEnchantmentId(compoundtag);
-        if (resourcelocation1 != null && resourcelocation1.equals(resourcelocation)) {
-          return EnchantmentHelper.getEnchantmentLevel(compoundtag);
+      ResourceLocation idToFind = EnchantmentHelper.getEnchantmentId(enchantment);
+      ListTag tags = stack.getEnchantmentTags();
+      for (int i = 0; i < tags.size(); ++i) {
+        CompoundTag tag = tags.getCompound(i);
+        ResourceLocation enchantmentId = EnchantmentHelper.getEnchantmentId(tag);
+        if (enchantmentId != null && enchantmentId.equals(idToFind)) {
+          return EnchantmentHelper.getEnchantmentLevel(tag);
         }
       }
-      return 0;
     }
     return 0;
   }
@@ -238,6 +230,10 @@ public final class FireEnchantmentHelper {
      */
     private final boolean applied;
 
+    /**
+     * @param level enchantment level.
+     * @param fireType fire type.
+     */
     FireEnchantment(int level, ResourceLocation fireType) {
       this.level = level;
       this.fireType = fireType;

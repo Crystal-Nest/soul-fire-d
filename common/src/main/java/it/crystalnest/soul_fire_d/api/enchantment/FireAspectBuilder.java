@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
  */
 public final class FireAspectBuilder extends FireEnchantmentBuilder<FireTypedFireAspectEnchantment> {
   /**
-   * @param fireType {@link FireEnchantmentBuilder#fireType fireType}.
+   * @param fireType {@link #fireType}.
    */
   public FireAspectBuilder(ResourceLocation fireType) {
     super(fireType, "fire_aspect");

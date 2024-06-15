@@ -40,7 +40,8 @@ public final class FireTypedFlameEnchantment extends ArrowFireEnchantment implem
   private final TriFunction<Entity, Entity, Integer, Integer> duration;
 
   /**
-   * Whether the enchantment is treasure only.
+   * Whether the enchantment cannot appear in the enchanting table.<br />
+   * If enabled along with {@link #isDiscoverable}, the enchantment won't appear in the enchanting table, but can still be found in loots.
    */
   private final BooleanSupplier isTreasure;
 
@@ -55,8 +56,7 @@ public final class FireTypedFlameEnchantment extends ArrowFireEnchantment implem
   private final BooleanSupplier isTradeable;
 
   /**
-   * Whether the enchantment will appear in the enchanting table or loots with random enchant function.
-   * <p>
+   * Whether the enchantment will appear in the enchanting table or loots with random enchant function.<br />
    * Note that {@link #isTreasure} takes precedence.
    */
   private final BooleanSupplier isDiscoverable;

@@ -17,12 +17,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EnchantmentHelper.class)
 public abstract class EnchantmentHelperMixin {
   /**
-   * Injects at the start of the method {@link EnchantmentHelper#getEnchantmentLevel(Enchantment, LivingEntity)}.
-   * <p>
+   * Injects at the start of the method {@link EnchantmentHelper#getEnchantmentLevel(Enchantment, LivingEntity)}.<br />
    * Returns the level of any Fire Aspect or Flame.
    *
-   * @param enchantment
-   * @param entity
+   * @param enchantment enchantment to calculate the level of.
+   * @param entity entity with the enchanted equipment.
    * @param cir {@link CallbackInfoReturnable}.
    */
   @Inject(method = "getEnchantmentLevel(Lnet/minecraft/world/item/enchantment/Enchantment;Lnet/minecraft/world/entity/LivingEntity;)I", at = @At(value = "HEAD"), cancellable = true)
@@ -36,12 +35,11 @@ public abstract class EnchantmentHelperMixin {
   }
 
   /**
-   * Injects at the start of the method {@link EnchantmentHelper#getItemEnchantmentLevel(Enchantment, ItemStack)}.
-   * <p>
+   * Injects at the start of the method {@link EnchantmentHelper#getItemEnchantmentLevel(Enchantment, ItemStack)}.<br />
    * Returns the level of any Fire Aspect or Flame.
    *
-   * @param enchantment
-   * @param stack
+   * @param enchantment enchantment to calculate the level of.
+   * @param stack enchanted {@link ItemStack}.
    * @param cir {@link CallbackInfoReturnable}.
    */
   @Inject(method = "getItemEnchantmentLevel", at = @At(value = "HEAD"), cancellable = true)

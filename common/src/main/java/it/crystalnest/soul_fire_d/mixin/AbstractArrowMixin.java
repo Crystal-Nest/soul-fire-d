@@ -1,6 +1,6 @@
 package it.crystalnest.soul_fire_d.mixin;
 
-import it.crystalnest.soul_fire_d.api.FireComponent;
+import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.enchantment.FireEnchantmentHelper;
 import it.crystalnest.soul_fire_d.api.enchantment.FireTypedFlameEnchantment;
@@ -20,8 +20,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(AbstractArrow.class)
 public abstract class AbstractArrowMixin implements FireTypeChanger {
   /**
-   * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link AbstractArrow#onHitEntity(EntityHitResult)}.
-   * <p>
+   * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link AbstractArrow#onHitEntity(EntityHitResult)}.<br />
    * Sets the correct Fire Type for the Entity.
    *
    * @param caller {@link Entity} invoking (owning) the redirected method.
@@ -29,13 +28,12 @@ public abstract class AbstractArrowMixin implements FireTypeChanger {
    */
   @Redirect(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setSecondsOnFire(I)V"))
   private void redirectSetSecondsOnFire(Entity caller, int seconds) {
-    FireTypedFlameEnchantment flame = FireManager.getComponent(getFireType(), FireComponent.FLAME_ENCHANTMENT);
+    FireTypedFlameEnchantment flame = FireManager.getComponent(getFireType(), Fire.Component.FLAME_ENCHANTMENT);
     FireManager.setOnFire(caller, flame != null ? flame.duration(((Projectile) (Object) this).getOwner(), caller, seconds) : seconds, getFireType());
   }
 
   /**
-   * Redirects the call to {@link AbstractArrow#setSecondsOnFire(int)} inside the method {@link AbstractArrow#setEnchantmentEffectsFromEntity(LivingEntity, float)}.
-   * <p>
+   * Redirects the call to {@link AbstractArrow#setSecondsOnFire(int)} inside the method {@link AbstractArrow#setEnchantmentEffectsFromEntity(LivingEntity, float)}.<br />
    * Handles setting this arrow on the correct kind of fire, if any.
    *
    * @param caller {@link AbstractArrow} invoking (owning) the redirected method. It's the same as {@code this}.

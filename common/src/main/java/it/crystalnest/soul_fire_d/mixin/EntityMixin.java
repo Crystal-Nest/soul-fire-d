@@ -54,14 +54,6 @@ public abstract class EntityMixin implements FireTypeChanger {
   public abstract int getRemainingFireTicks();
 
   /**
-   * Shadowed {@link Entity#isInLava()}.
-   *
-   * @return whether this entity is in lava.
-   */
-  @Shadow
-  public abstract boolean isInLava();
-
-  /**
    * Shadowed {@link Entity#fireImmune()}.
    *
    * @return whether this entity is immune to fire damage.
@@ -82,36 +74,33 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Redirects the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link Entity#baseTick()}.
-   * <p>
+   * Redirects the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link Entity#baseTick()}.<br />
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
    *
-   * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as this entity.
+   * @param instance owner of the redirected method.
    * @param damageSource original {@link DamageSource} (normal fire).
    * @param damage original damage (normal fire).
    * @return the result of calling the redirected method.
    */
   @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
-  private boolean redirectHurt(Entity caller, DamageSource damageSource, float damage) {
-    return FireManager.damageOnFire(caller, ((FireTyped) caller).getFireType());
+  private boolean redirectHurt(Entity instance, DamageSource damageSource, float damage) {
+    return FireManager.damageOnFire(instance, ((FireTyped) instance).getFireType());
   }
 
   /**
-   * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link Entity#lavaHurt()}.
-   * <p>
+   * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link Entity#lavaHurt()}.<br />
    * Sets the base Fire Type.
    *
-   * @param caller {@link Entity} invoking (owning) the redirected method. It's the same as {@code this} entity.
+   * @param instance owner of the redirected method.
    * @param seconds seconds to set the entity on fire for.
    */
   @Redirect(method = "lavaHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setSecondsOnFire(I)V"))
-  private void redirectSetSecondsOnFire(Entity caller, int seconds) {
-    FireManager.setOnFire(caller, seconds, FireManager.DEFAULT_FIRE_TYPE);
+  private void redirectSetSecondsOnFire(Entity instance, int seconds) {
+    FireManager.setOnFire(instance, seconds, FireManager.DEFAULT_FIRE_TYPE);
   }
 
   /**
-   * Injects at the end of the constructor.
-   * <p>
+   * Injects at the end of the constructor.<br />
    * Defines the {@link #DATA_FIRE_TYPE Fire Type data} to synchronize across client and server.
    *
    * @param ci {@link CallbackInfo}.
@@ -122,8 +111,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Injects at the start of the method {@link Entity#setRemainingFireTicks(int)}.
-   * <p>
+   * Injects at the start of the method {@link Entity#setRemainingFireTicks(int)}.<br />
    * Resets the Fire Type when this entity stops burning or catches fire from a new fire source.
    *
    * @param ticks ticks this entity should burn for.
@@ -137,11 +125,10 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Injects in the method {@link Entity#saveWithoutId(CompoundTag)} before the invocation of {@link Entity#addAdditionalSaveData(CompoundTag)}.
-   * <p>
+   * Injects in the method {@link Entity#saveWithoutId(CompoundTag)} before the invocation of {@link Entity#addAdditionalSaveData(CompoundTag)}.<br />
    * If valid, saves the current Fire Type in the given {@link CompoundTag}.
    *
-   * @param tag
+   * @param tag data tag.
    * @param cir {@link CallbackInfoReturnable}.
    */
   @Inject(method = "saveWithoutId", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V"))
@@ -150,11 +137,10 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Injects in the method {@link Entity#load(CompoundTag)} before the invocation of {@link Entity#readAdditionalSaveData(CompoundTag)}.
-   * <p>
+   * Injects in the method {@link Entity#load(CompoundTag)} before the invocation of {@link Entity#readAdditionalSaveData(CompoundTag)}.<br />
    * Loads the Fire Type from the given {@link CompoundTag}.
    *
-   * @param tag
+   * @param tag data tag.
    * @param ci {@link CallbackInfo}.
    */
   @Inject(method = "load", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V"))

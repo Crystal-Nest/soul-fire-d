@@ -21,13 +21,12 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(EntityRenderDispatcher.class)
 public abstract class EntityRenderDispatcherMixin {
   /**
-   * Modifies the assignment value returned by the first call to {@link Material#sprite()} in the method {@link EntityRenderDispatcher#renderFlame(PoseStack, MultiBufferSource, Entity, Quaternionf)}.
-   * <p>
+   * Modifies the assignment value returned by the first call to {@link Material#sprite()} in the method {@link EntityRenderDispatcher#renderFlame(PoseStack, MultiBufferSource, Entity, Quaternionf)}.<br />
    * Assigns the correct sprite for the fire type the entity is burning from.
    *
    * @param value original sprite returned by the modified method.
-   * @param poseStack
-   * @param multiBufferSource
+   * @param poseStack matrices.
+   * @param multiBufferSource buffer.
    * @param entity {@link Entity} that's burning.
    * @return {@link TextureAtlasSprite} to assign.
    */
@@ -42,13 +41,12 @@ public abstract class EntityRenderDispatcherMixin {
   }
 
   /**
-   * Modifies the assignment value returned by the second call to {@link Material#sprite()} in the method {@link EntityRenderDispatcher#renderFlame(PoseStack, MultiBufferSource, Entity, Quaternionf)}.
-   * <p>
+   * Modifies the assignment value returned by the second call to {@link Material#sprite()} in the method {@link EntityRenderDispatcher#renderFlame(PoseStack, MultiBufferSource, Entity, Quaternionf)}.<br />
    * Assigns the correct sprite for the fire type the entity is burning from.
    *
    * @param value original sprite returned by the modified method.
-   * @param poseStack
-   * @param multiBufferSource
+   * @param poseStack matrices.
+   * @param multiBufferSource buffer.
    * @param entity {@link Entity} that's burning.
    * @return {@link TextureAtlasSprite} to assign.
    */

@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
  */
 public final class FlameBuilder extends FireEnchantmentBuilder<FireTypedFlameEnchantment> {
   /**
-   * @param fireType {@link FireEnchantmentBuilder#fireType fireType}.
+   * @param fireType {@link #fireType}.
    */
   public FlameBuilder(ResourceLocation fireType) {
     super(fireType, "flame");

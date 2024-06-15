@@ -2,7 +2,6 @@ package it.crystalnest.soul_fire_d.handler;
 
 import it.crystalnest.soul_fire_d.Constants;
 import it.crystalnest.soul_fire_d.api.Fire;
-import it.crystalnest.soul_fire_d.api.FireComponent;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.block.CustomCampfireBlock;
 import it.crystalnest.soul_fire_d.api.block.CustomFireBlock;
@@ -39,15 +38,15 @@ public final class FMLClientSetupEventHandler {
   @SuppressWarnings("deprecation")
   public static void handle(FMLClientSetupEvent event) {
     FireClientManager.registerFires(FireManager.getFires());
-    FireManager.getComponentList(FireComponent.CAMPFIRE_BLOCK).stream().filter(CustomCampfireBlock.class::isInstance).forEach(campfire -> ItemBlockRenderTypes.setRenderLayer(campfire, RenderType.cutout()));
-    FireManager.getComponentList(FireComponent.SOURCE_BLOCK).stream().filter(CustomFireBlock.class::isInstance).forEach(source -> ItemBlockRenderTypes.setRenderLayer(source, RenderType.cutout()));
-    FireManager.getComponentList(FireComponent.TORCH_BLOCK).stream().filter(CustomTorchBlock.class::isInstance).forEach(torch -> ItemBlockRenderTypes.setRenderLayer(torch, RenderType.cutout()));
-    FireManager.getComponentList(FireComponent.WALL_TORCH_BLOCK).stream().filter(CustomWallTorchBlock.class::isInstance).forEach(torch -> ItemBlockRenderTypes.setRenderLayer(torch, RenderType.cutout()));
+    FireManager.getComponentList(Fire.Component.CAMPFIRE_BLOCK).stream().filter(CustomCampfireBlock.class::isInstance).forEach(campfire -> ItemBlockRenderTypes.setRenderLayer(campfire, RenderType.cutout()));
+    FireManager.getComponentList(Fire.Component.SOURCE_BLOCK).stream().filter(CustomFireBlock.class::isInstance).forEach(source -> ItemBlockRenderTypes.setRenderLayer(source, RenderType.cutout()));
+    FireManager.getComponentList(Fire.Component.TORCH_BLOCK).stream().filter(CustomTorchBlock.class::isInstance).forEach(torch -> ItemBlockRenderTypes.setRenderLayer(torch, RenderType.cutout()));
+    FireManager.getComponentList(Fire.Component.WALL_TORCH_BLOCK).stream().filter(CustomWallTorchBlock.class::isInstance).forEach(torch -> ItemBlockRenderTypes.setRenderLayer(torch, RenderType.cutout()));
   }
 
   @SubscribeEvent
   public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
-    FireManager.getComponentList(FireComponent.FLAME_PARTICLE).forEach(flame -> event.registerSpriteSet((SimpleParticleType) flame, FlameParticle.Provider::new));
+    FireManager.getComponentList(Fire.Component.FLAME_PARTICLE).forEach(flame -> event.registerSpriteSet((SimpleParticleType) flame, FlameParticle.Provider::new));
   }
 
   @SubscribeEvent

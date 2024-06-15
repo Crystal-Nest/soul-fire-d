@@ -7,8 +7,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import it.crystalnest.soul_fire_d.Constants;
 import it.crystalnest.soul_fire_d.api.Fire;
-import it.crystalnest.soul_fire_d.api.FireBuilder;
-import it.crystalnest.soul_fire_d.api.FireComponent;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.platform.Services;
 import net.minecraft.resources.ResourceLocation;
@@ -23,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Resource reload listener for syncing ddfires.
+ */
 public abstract class FireResourceReloadListener extends SimpleJsonResourceReloadListener {
   /**
    * Current ddfires to unregister (previous registered ddfires).
@@ -65,8 +66,8 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
   /**
    * Returns the given {@link JsonElement} as a {@link JsonObject}.
    *
-   * @param identifier identifier of the json file.
-   * @param element
+   * @param identifier identifier of the JSON file.
+   * @param element {@link JsonElement}.
    * @return the given {@link JsonElement} as a {@link JsonObject}.
    * @throws IllegalStateException if the element is not a {@link JsonObject}.
    */
@@ -83,10 +84,10 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
    * Parses the given {@link JsonObject data} to retrieve the specified {@code field} using the provided {@code parser}.
    *
    * @param <T> element type.
-   * @param identifier identifier of the json file.
+   * @param identifier identifier of the JSON file.
    * @param field field to parse.
    * @param data {@link JsonObject} with data to parse.
-   * @param parser function to use to retrieve parse a json field.
+   * @param parser function to use to retrieve parse a JSON field.
    * @return value of the field.
    * @throws NullPointerException if there's no such field.
    * @throws UnsupportedOperationException if this element is not a {@link JsonPrimitive} or {@link JsonArray}.
@@ -106,10 +107,10 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
    * Parses the given {@link JsonObject data} to retrieve the specified {@code field} using the provided {@code parser}.
    *
    * @param <T> element type.
-   * @param identifier identifier of the json file.
+   * @param identifier identifier of the JSON file.
    * @param field field to parse.
    * @param data {@link JsonObject} with data to parse.
-   * @param parser function to use to retrieve parse a json field.
+   * @param parser function to use to retrieve parse a JSON field.
    * @param fallback default value if no field named {@code field} exists.
    * @return value of the field or default.
    * @throws UnsupportedOperationException if this element is not a {@link JsonPrimitive} or {@link JsonArray}.
@@ -132,7 +133,7 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
    */
   private static void unregisterFires() {
     for (ResourceLocation fireType : ddfiresRegister) {
-      if (FireManager.unregisterFire(fireType)) {
+      if (FireManager.unregisterFire(fireType) != null) {
         ddfiresUnregister.add(fireType);
       }
     }
@@ -142,8 +143,8 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
   /**
    * Registers a DDFire.
    *
-   * @param fireType
-   * @param fire
+   * @param fireType fire type.
+   * @param fire fire.
    */
   private static void registerFire(ResourceLocation fireType, Fire fire) {
     if (FireManager.registerFire(fire) != null) {
@@ -165,36 +166,36 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
         for (JsonElement element : jsonFires) {
           JsonObject jsonFire = getJsonObject(jsonIdentifier, element);
           ResourceLocation fireType = new ResourceLocation(mod, parse(jsonIdentifier, "fire", jsonFire, JsonElement::getAsString));
-          FireBuilder fireBuilder = FireManager.fireBuilder(fireType)
-            .setDamage(parse(jsonIdentifier, "damage", jsonFire, JsonElement::getAsFloat, FireBuilder.DEFAULT_DAMAGE))
-            .setInvertHealAndHarm(parse(jsonIdentifier, "invertHealAndHarm", jsonFire, JsonElement::getAsBoolean, FireBuilder.DEFAULT_INVERT_HEAL_AND_HARM));
-          fireBuilder
-            .removeComponent(FireComponent.CAMPFIRE_ITEM)
-            .removeComponent(FireComponent.LANTERN_BLOCK)
-            .removeComponent(FireComponent.LANTERN_ITEM)
-            .removeComponent(FireComponent.TORCH_BLOCK)
-            .removeComponent(FireComponent.TORCH_ITEM)
-            .removeComponent(FireComponent.WALL_TORCH_BLOCK)
-            .removeComponent(FireComponent.FLAME_PARTICLE);
+          Fire.Builder builder = FireManager.fireBuilder(fireType)
+            .setDamage(parse(jsonIdentifier, "damage", jsonFire, JsonElement::getAsFloat, Fire.Builder.DEFAULT_DAMAGE))
+            .setInvertHealAndHarm(parse(jsonIdentifier, "invertHealAndHarm", jsonFire, JsonElement::getAsBoolean, Fire.Builder.DEFAULT_INVERT_HEAL_AND_HARM));
+          builder
+            .removeComponent(Fire.Component.CAMPFIRE_ITEM)
+            .removeComponent(Fire.Component.LANTERN_BLOCK)
+            .removeComponent(Fire.Component.LANTERN_ITEM)
+            .removeComponent(Fire.Component.TORCH_BLOCK)
+            .removeComponent(Fire.Component.TORCH_ITEM)
+            .removeComponent(Fire.Component.WALL_TORCH_BLOCK)
+            .removeComponent(Fire.Component.FLAME_PARTICLE);
           if (jsonFire.get(SOURCE_FIELD_NAME) != null && jsonFire.get(SOURCE_FIELD_NAME).isJsonNull()) {
-            fireBuilder.removeComponent(FireComponent.SOURCE_BLOCK);
+            builder.removeComponent(Fire.Component.SOURCE_BLOCK);
           } else {
             String source = parse(jsonIdentifier, SOURCE_FIELD_NAME, jsonFire, JsonElement::getAsString, null);
             if (source != null && ResourceLocation.isValidResourceLocation(source)) {
-              fireBuilder.setComponent(FireComponent.SOURCE_BLOCK, new ResourceLocation(source));
+              builder.setComponent(Fire.Component.SOURCE_BLOCK, new ResourceLocation(source));
             }
           }
           if (jsonFire.get(CAMPFIRE_FIELD_NAME) != null && jsonFire.get(CAMPFIRE_FIELD_NAME).isJsonNull()) {
-            fireBuilder.removeComponent(FireComponent.CAMPFIRE_BLOCK);
+            builder.removeComponent(Fire.Component.CAMPFIRE_BLOCK);
           } else {
             String campfire = parse(jsonIdentifier, CAMPFIRE_FIELD_NAME, jsonFire, JsonElement::getAsString, null);
             if (campfire != null && ResourceLocation.isValidResourceLocation(campfire)) {
-              fireBuilder.setComponent(FireComponent.CAMPFIRE_BLOCK, new ResourceLocation(campfire));
+              builder.setComponent(Fire.Component.CAMPFIRE_BLOCK, new ResourceLocation(campfire));
             }
           }
-          fireBuilder.removeFireAspect();
-          fireBuilder.removeFlame();
-          registerFire(fireType, fireBuilder.build());
+          builder.removeFireAspect();
+          builder.removeFlame();
+          registerFire(fireType, builder.build());
         }
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
         Constants.LOGGER.error("Registering of ddfire [{}] is canceled.", jsonIdentifier);
