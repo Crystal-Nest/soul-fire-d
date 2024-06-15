@@ -88,7 +88,7 @@ public class CustomFireBlock extends BaseFireBlock implements FireTyped {
       int age = state.getValue(AGE);
       if (
         !state.canSurvive(level, pos) ||
-        FireManager.getProperty(getFireType(), Fire::canRainDouse) && !level.getBlockState(pos.below()).is(level.dimensionType().infiniburn()) && level.isRaining() && level.isRainingAt(pos) && rand.nextFloat() < 0.2 + (float) age * 0.03
+        FireManager.getProperty(getFireType(), Fire::canRainDouse) && !level.getBlockState(pos.below()).is(level.dimensionType().infiniburn()) && level.isRaining() && level.isRainingAt(pos) && rand.nextFloat() < 0.2 + age * 0.03
       ) {
         level.removeBlock(pos, false);
       } else if (age < MAX_AGE && rand.nextInt(2) == 0) {

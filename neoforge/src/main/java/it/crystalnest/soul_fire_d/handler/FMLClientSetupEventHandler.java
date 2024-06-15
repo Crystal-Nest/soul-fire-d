@@ -39,10 +39,10 @@ public final class FMLClientSetupEventHandler {
   @SuppressWarnings("deprecation")
   public static void handle(FMLClientSetupEvent event) {
     FireClientManager.registerFires(FireManager.getFires());
-    FireManager.getComponentList(FireComponent.CAMPFIRE_BLOCK).stream().filter(campfire -> campfire instanceof CustomCampfireBlock).forEach(campfire -> ItemBlockRenderTypes.setRenderLayer(campfire, RenderType.cutout()));
-    FireManager.getComponentList(FireComponent.SOURCE_BLOCK).stream().filter(source -> source instanceof CustomFireBlock).forEach(source -> ItemBlockRenderTypes.setRenderLayer(source, RenderType.cutout()));
-    FireManager.getComponentList(FireComponent.TORCH_BLOCK).stream().filter(torch -> torch instanceof CustomTorchBlock).forEach(torch -> ItemBlockRenderTypes.setRenderLayer(torch, RenderType.cutout()));
-    FireManager.getComponentList(FireComponent.WALL_TORCH_BLOCK).stream().filter(torch -> torch instanceof CustomWallTorchBlock).forEach(torch -> ItemBlockRenderTypes.setRenderLayer(torch, RenderType.cutout()));
+    FireManager.getComponentList(FireComponent.CAMPFIRE_BLOCK).stream().filter(CustomCampfireBlock.class::isInstance).forEach(campfire -> ItemBlockRenderTypes.setRenderLayer(campfire, RenderType.cutout()));
+    FireManager.getComponentList(FireComponent.SOURCE_BLOCK).stream().filter(CustomFireBlock.class::isInstance).forEach(source -> ItemBlockRenderTypes.setRenderLayer(source, RenderType.cutout()));
+    FireManager.getComponentList(FireComponent.TORCH_BLOCK).stream().filter(CustomTorchBlock.class::isInstance).forEach(torch -> ItemBlockRenderTypes.setRenderLayer(torch, RenderType.cutout()));
+    FireManager.getComponentList(FireComponent.WALL_TORCH_BLOCK).stream().filter(CustomWallTorchBlock.class::isInstance).forEach(torch -> ItemBlockRenderTypes.setRenderLayer(torch, RenderType.cutout()));
   }
 
   @SubscribeEvent

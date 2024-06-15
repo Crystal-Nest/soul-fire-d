@@ -17,6 +17,6 @@ public class DynamicBlockEntityType<T extends BlockEntity> extends BlockEntityTy
 
   @Override
   public boolean isValid(BlockState state) {
-    return FireManager.getComponentList(FireComponent.CAMPFIRE_BLOCK).stream().filter(campfire -> campfire instanceof CustomCampfireBlock).toList().contains(state.getBlock());
+    return FireManager.getComponentList(FireComponent.CAMPFIRE_BLOCK).stream().filter(CustomCampfireBlock.class::isInstance).toList().contains(state.getBlock());
   }
 }

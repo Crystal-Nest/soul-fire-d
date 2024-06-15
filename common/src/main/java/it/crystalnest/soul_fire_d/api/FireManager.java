@@ -323,7 +323,7 @@ public final class FireManager {
    * @return registered {@link Fire} or {@link #DEFAULT_FIRE}.
    */
   public static Fire getFire(@Nullable String modId, @Nullable String fireId) {
-    return isValidModId(modId) && isValidFireId(fireId) ? getFire(new ResourceLocation(modId, fireId)) : DEFAULT_FIRE;
+    return isValidModId(modId) && isValidFireId(fireId) ? getFire(fireType(modId, fireId)) : DEFAULT_FIRE;
   }
 
   /**
@@ -367,7 +367,7 @@ public final class FireManager {
    * @return whether a fire is registered with the given values.
    */
   public static boolean isRegisteredType(@Nullable String modId, @Nullable String fireId) {
-    return isValidModId(modId) && isValidFireId(fireId) && isRegisteredType(new ResourceLocation(modId, fireId));
+    return isValidModId(modId) && isValidFireId(fireId) && isRegisteredType(fireType(modId, fireId));
   }
 
   /**
@@ -428,7 +428,7 @@ public final class FireManager {
    * @return the closest well-formed Fire Type.
    */
   public static ResourceLocation sanitize(@Nullable String modId, @Nullable String fireId) {
-    return isValidModId(modId) && isValidModId(fireId) ? sanitize(new ResourceLocation(modId, fireId)) : DEFAULT_FIRE_TYPE;
+    return isValidModId(modId) && isValidModId(fireId) ? sanitize(fireType(modId, fireId)) : DEFAULT_FIRE_TYPE;
   }
 
   /**
@@ -576,7 +576,7 @@ public final class FireManager {
    */
   private static boolean harmOrHeal(Entity entity, DamageSource damageSource, float damage, boolean invertHealAndHarm) {
     Predicate<Entity> behavior = FireManager.getProperty(((FireTyped) entity).getFireType(), Fire::getBehavior);
-    if (behavior.test(entity) && damage != 0) {
+    if (behavior.test(entity) && Float.compare(damage, 0) != 0) {
       if (damage > 0) {
         if (entity instanceof LivingEntity livingEntity) {
           if (livingEntity.isInvertedHealAndHarm() && invertHealAndHarm) {
@@ -617,5 +617,9 @@ public final class FireManager {
    */
   public static ResourceLocation readTag(CompoundTag tag) {
     return ensure(ResourceLocation.tryParse(tag.getString(FIRE_TYPE_TAG)));
+  }
+
+  private static ResourceLocation fireType(@Nullable String modId, @Nullable String fireId) {
+    return new ResourceLocation(Objects.requireNonNull(modId), Objects.requireNonNull(fireId));
   }
 }

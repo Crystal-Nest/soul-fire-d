@@ -17,8 +17,5 @@ public final class ModLoader {
   public ModLoader() {
     CommonModLoader.init();
     LootRegistry.register(FMLJavaModLoadingContext.get().getModEventBus());
-//    MinecraftForge.EVENT_BUS.addListener((RenderBlockScreenEffectEvent event) -> {
-//      FireManager.getSourceBlock(((FireTyped) event.getPlayer()).getFireType()).defaultBlockState();
-//    });
   }
 }
