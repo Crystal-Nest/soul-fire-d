@@ -1,5 +1,6 @@
 package it.crystalnest.soul_fire_d.api.enchantment;
 
+import it.crystalnest.soul_fire_d.api.FireComponent;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import it.crystalnest.soul_fire_d.mixin.EnchantmentHelperMixin;
@@ -70,7 +71,7 @@ public final class FireEnchantmentHelper {
    * @return the {@link FireEnchantment data} of whatever Fire Aspect enchantment applied.
    */
   public static FireEnchantment getWhichFireAspect(LivingEntity entity) {
-    return getAnyFireEnchantment(entity, FireManager.getFireAspects(), FireEnchantmentHelper::getBaseFireAspect, EnchantmentHelper::getEnchantmentLevel);
+    return getAnyFireEnchantment(entity, FireManager.getComponentList(FireComponent.FIRE_ASPECT_ENCHANTMENT), FireEnchantmentHelper::getBaseFireAspect, EnchantmentHelper::getEnchantmentLevel);
   }
 
   /**
@@ -80,7 +81,7 @@ public final class FireEnchantmentHelper {
    * @return the {@link FireEnchantment data} of whatever Fire Aspect enchantment applied.
    */
   public static FireEnchantment getWhichFireAspect(ItemStack stack) {
-    return getAnyFireEnchantment(stack, FireManager.getFireAspects(), FireEnchantmentHelper::getBaseFireAspect, EnchantmentHelper::getItemEnchantmentLevel);
+    return getAnyFireEnchantment(stack, FireManager.getComponentList(FireComponent.FIRE_ASPECT_ENCHANTMENT), FireEnchantmentHelper::getBaseFireAspect, EnchantmentHelper::getItemEnchantmentLevel);
   }
 
   /**
@@ -130,7 +131,7 @@ public final class FireEnchantmentHelper {
    * @return the {@link FireEnchantment data} of whatever Flame enchantment applied.
    */
   public static FireEnchantment getWhichFlame(LivingEntity entity) {
-    return getAnyFireEnchantment(entity, FireManager.getFlames(), FireEnchantmentHelper::getBaseFlame, EnchantmentHelper::getEnchantmentLevel);
+    return getAnyFireEnchantment(entity, FireManager.getComponentList(FireComponent.FLAME_ENCHANTMENT), FireEnchantmentHelper::getBaseFlame, EnchantmentHelper::getEnchantmentLevel);
   }
 
   /**
@@ -140,7 +141,7 @@ public final class FireEnchantmentHelper {
    * @return the {@link FireEnchantment data} of whatever Flame enchantment applied.
    */
   public static FireEnchantment getWhichFlame(ItemStack stack) {
-    return getAnyFireEnchantment(stack, FireManager.getFlames(), FireEnchantmentHelper::getBaseFlame, EnchantmentHelper::getItemEnchantmentLevel);
+    return getAnyFireEnchantment(stack, FireManager.getComponentList(FireComponent.FLAME_ENCHANTMENT), FireEnchantmentHelper::getBaseFlame, EnchantmentHelper::getItemEnchantmentLevel);
   }
 
   /**

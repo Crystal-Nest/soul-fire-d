@@ -13,6 +13,8 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -23,18 +25,24 @@ import java.util.function.UnaryOperator;
  * Builder for {@link Fire} instances.
  */
 public final class FireBuilder {
+  /**
+   * Default value for {@link #light}.
+   */
   public static final int DEFAULT_LIGHT = 15;
 
   /**
    * Default value for {@link #damage}.
    */
-  public static final float DEFAULT_DAMAGE = 1.0F;
+  public static final float DEFAULT_DAMAGE = 1;
 
   /**
    * Default value for {@link #invertHealAndHarm}.
    */
   public static final boolean DEFAULT_INVERT_HEAL_AND_HARM = false;
 
+  /**
+   * Default value for {@link #canRainDouse}.
+   */
   public static final boolean DEFAULT_CAN_RAIN_DOUSE = false;
 
   /**
@@ -48,85 +56,70 @@ public final class FireBuilder {
   public static final Function<Entity, DamageSource> DEFAULT_ON_FIRE_GETTER = entity -> entity.damageSources().onFire();
 
   /**
-   * {@link Fire} instance modId.
-   * <p>
+   * Default value for {@link #behavior}.
+   */
+  public static final Predicate<Entity> DEFAULT_BEHAVIOR = entity -> true;
+
+  /**
+   * {@link Fire} instance modId.<br />
    * Required.
    */
   private String modId;
 
   /**
-   * {@link Fire} instance fireId.
-   * <p>
+   * {@link Fire} instance fireId.<br />
    * Required.
    */
   private String fireId;
 
+  /**
+   * {@link Fire} instance {@link Fire#light light}.<br />
+   * Optional, defaults to {@link #DEFAULT_LIGHT}.
+   */
   private int light;
 
   /**
-   * {@link Fire} instance {@link Fire#damage damage}.
-   * <p>
+   * {@link Fire} instance {@link Fire#damage damage}.<br />
    * Optional, defaults to {@link #DEFAULT_DAMAGE}.
    */
   private float damage;
 
   /**
-   * {@link Fire} instance {@link Fire#invertHealAndHarm invertedHealAndHarm}.
-   * <p>
+   * {@link Fire} instance {@link Fire#invertHealAndHarm invertedHealAndHarm}.<br />
    * Optional, defaults to {@link #DEFAULT_INVERT_HEAL_AND_HARM}.
    */
   private boolean invertHealAndHarm;
 
+  /**
+   * {@link Fire} instance {@link Fire#canRainDouse canRainDouse}.<br />
+   * Optional, defaults to {@link #DEFAULT_CAN_RAIN_DOUSE}.
+   */
   private boolean canRainDouse;
 
   /**
-   * {@link Fire} instance {@link Fire#inFireGetter inFireGetter}.
-   * <p>
-   * Optional, defaults to {@link #DEFAULT_IN_FIRE_GETTER}.
-   * <p>
+   * {@link Fire} instance {@link Fire#inFireGetter inFireGetter}.<br />
+   * Optional, defaults to {@link #DEFAULT_IN_FIRE_GETTER}.<br />
    * If changed from the default, remember to add translations for the new death messages!
    */
   private Function<Entity, DamageSource> inFireGetter;
 
   /**
-   * {@link Fire} instance {@link Fire#onFireGetter onFireGetter}.
-   * <p>
-   * Optional, defaults to {@link #DEFAULT_ON_FIRE_GETTER}.
-   * <p>
+   * {@link Fire} instance {@link Fire#onFireGetter onFireGetter}.<br />
+   * Optional, defaults to {@link #DEFAULT_ON_FIRE_GETTER}.<br />
    * If changed from the default, remember to add translations for the new death messages!
    */
   private Function<Entity, DamageSource> onFireGetter;
 
-  @Nullable
+  /**
+   * {@link Fire} instance {@link Fire#behavior behavior}.<br />
+   * Optional, defaults to {@link #DEFAULT_BEHAVIOR}.
+   */
   private Predicate<Entity> behavior;
 
   /**
-   * {@link Fire} instance {@link Fire#source source}.
-   * <p>
-   * Optional, defaults to a new {@link ResourceLocation} with {@link #modId} as namespace and {@code fireId + "_fire"} as path.
-   * <p>
-   * Default value is recommended.
-   * <p>
-   * If your Fire is associated with a fire source, but with a different {@link ResourceLocation} than default, use {@link #setSource(ResourceLocation)}.
-   * <p>
-   * If your Fire is not associated with any fire source, set this to null with {@link #removeSource()}.
+   *
    */
-  @Nullable
-  private Optional<ResourceLocation> source;
-
-  /**
-   * {@link Fire} instance {@link Fire#campfire campfire}.
-   * <p>
-   * Optional, defaults to a new {@link ResourceLocation} with {@link #modId} as namespace and {@code fireId + "_campfire"} as path.
-   * <p>
-   * Default value is recommended.
-   * <p>
-   * If your Fire is associated with a campfire, but with a different {@link ResourceLocation} than default, use {@link #setCampfire(ResourceLocation)}.
-   * <p>
-   * If your Fire is not associated with any campfire, set this to null with {@link #removeCampfire()}.
-   */
-  @Nullable
-  private Optional<ResourceLocation> campfire;
+  private Map<FireComponent<?, ?>, ResourceLocation> components;
 
   /**
    * {@link Function} to configure the {@link FireAspectBuilder}.
@@ -264,11 +257,21 @@ public final class FireBuilder {
     return this;
   }
 
+  /**
+   * @param behavior
+   * @return
+   */
   public FireBuilder setBehavior(@NotNull Predicate<Entity> behavior) {
     this.behavior = behavior;
     return this;
   }
 
+  /**
+   *
+   *
+   * @param behavior
+   * @return
+   */
   public FireBuilder setBehavior(@NotNull Consumer<Entity> behavior) {
     this.behavior = entity -> {
       behavior.accept(entity);
@@ -278,44 +281,25 @@ public final class FireBuilder {
   }
 
   /**
-   * Sets the {@link #source}.
    *
-   * @param source
-   * @return this Builder to either set other properties or {@link #register}.
+   *
+   * @param component
+   * @param id
+   * @return
    */
-  public FireBuilder setSource(ResourceLocation source) {
-    this.source = Optional.of(source);
+  public FireBuilder setComponent(FireComponent<?, ?> component, ResourceLocation id) {
+    this.components.put(component, id);
     return this;
   }
 
   /**
-   * Removes the {@link #source}.
    *
-   * @return this Builder to either set other properties or {@link #register}.
-   */
-  public FireBuilder removeSource() {
-    this.source = null;
-    return this;
-  }
-
-  /**
-   * Sets the {@link #campfire}.
    *
-   * @param campfire
-   * @return this Builder to either set other properties or {@link #register}.
+   * @param component
+   * @return
    */
-  public FireBuilder setCampfire(ResourceLocation campfire) {
-    this.campfire = Optional.of(campfire);
-    return this;
-  }
-
-  /**
-   * Removes the {@link #campfire}.
-   *
-   * @return this Builder to either set other properties or {@link #register}.
-   */
-  public FireBuilder removeCampfire() {
-    this.campfire = null;
+  public FireBuilder removeComponent(FireComponent<?, ?> component) {
+    this.components.remove(component);
     return this;
   }
 
@@ -405,8 +389,18 @@ public final class FireBuilder {
     canRainDouse = DEFAULT_CAN_RAIN_DOUSE;
     inFireGetter = DEFAULT_IN_FIRE_GETTER;
     onFireGetter = DEFAULT_ON_FIRE_GETTER;
-    source = Optional.empty();
-    campfire = Optional.empty();
+    behavior = DEFAULT_BEHAVIOR;
+    components = new HashMap<>(Map.ofEntries(
+      FireComponent.SOURCE_BLOCK.getEntry(modId, fireId),
+      FireComponent.CAMPFIRE_BLOCK.getEntry(modId, fireId),
+      FireComponent.CAMPFIRE_ITEM.getEntry(modId, fireId),
+      FireComponent.LANTERN_BLOCK.getEntry(modId, fireId),
+      FireComponent.LANTERN_ITEM.getEntry(modId, fireId),
+      FireComponent.TORCH_BLOCK.getEntry(modId, fireId),
+      FireComponent.TORCH_ITEM.getEntry(modId, fireId),
+      FireComponent.WALL_TORCH_BLOCK.getEntry(modId, fireId),
+      FireComponent.FLAME_PARTICLE.getEntry(modId, fireId)
+    ));
     fireAspectConfigurator = Optional.empty();
     flameConfigurator = Optional.empty();
     return this;
@@ -421,33 +415,16 @@ public final class FireBuilder {
   public Fire build() throws IllegalStateException {
     if (FireManager.isValidFireId(fireId) && FireManager.isValidModId(modId)) {
       ResourceLocation fireType = FireManager.sanitize(modId, fireId);
-      if (source != null && source.isEmpty()) {
-        source = Optional.of(new ResourceLocation(modId, fireId + "_fire"));
-      }
-      if (campfire != null && campfire.isEmpty()) {
-        campfire = Optional.of(new ResourceLocation(modId, fireId + "_campfire"));
-      }
       if (fireAspectConfigurator != null && fireAspectConfigurator.isEmpty()) {
         fireAspectConfigurator = Optional.of(builder -> builder);
       }
       if (flameConfigurator != null && flameConfigurator.isEmpty()) {
         flameConfigurator = Optional.of(builder -> builder);
       }
-      return new Fire(
-        fireType,
-        light,
-        damage,
-        invertHealAndHarm,
-        canRainDouse,
-        inFireGetter,
-        onFireGetter,
-        behavior,
-        get(source),
-        get(campfire),
-        register(fireType, fireAspectConfigurator, FireAspectBuilder::new),
-        register(fireType, flameConfigurator, FlameBuilder::new)
-      );
+      components.put(FireComponent.FIRE_ASPECT_ENCHANTMENT, register(fireType, fireAspectConfigurator, FireAspectBuilder::new));
+      components.put(FireComponent.FLAME_ENCHANTMENT, register(fireType, flameConfigurator, FlameBuilder::new));
+      return new Fire(fireType, light, damage, invertHealAndHarm, canRainDouse, inFireGetter, onFireGetter, behavior, components);
     }
-    throw new IllegalStateException("Attempted to build a Fire with a non-valid fireId or modId");
+    throw new IllegalStateException("Attempted to build a Fire with a non-valid fireId [" + fireId + "] or modId [" + modId + "].");
   }
 }

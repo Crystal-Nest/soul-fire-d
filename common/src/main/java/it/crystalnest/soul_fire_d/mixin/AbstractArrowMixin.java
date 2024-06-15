@@ -1,5 +1,6 @@
 package it.crystalnest.soul_fire_d.mixin;
 
+import it.crystalnest.soul_fire_d.api.FireComponent;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.enchantment.FireEnchantmentHelper;
 import it.crystalnest.soul_fire_d.api.enchantment.FireTypedFlameEnchantment;
@@ -28,7 +29,7 @@ public abstract class AbstractArrowMixin implements FireTypeChanger {
    */
   @Redirect(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setSecondsOnFire(I)V"))
   private void redirectSetSecondsOnFire(Entity caller, int seconds) {
-    FireTypedFlameEnchantment flame = FireManager.getFlame(getFireType());
+    FireTypedFlameEnchantment flame = FireManager.getComponent(getFireType(), FireComponent.FLAME_ENCHANTMENT);
     FireManager.setOnFire(caller, flame != null ? flame.duration(((Projectile) (Object) this).getOwner(), caller, seconds) : seconds, getFireType());
   }
 

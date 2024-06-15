@@ -10,12 +10,12 @@ import it.crystalnest.soul_fire_d.api.block.CustomFireBlock;
 import it.crystalnest.soul_fire_d.api.block.CustomLanternBlock;
 import it.crystalnest.soul_fire_d.api.block.CustomTorchBlock;
 import it.crystalnest.soul_fire_d.api.block.CustomWallTorchBlock;
+import it.crystalnest.soul_fire_d.api.block.entity.CustomCampfireBlockEntity;
 import it.crystalnest.soul_fire_d.api.block.entity.DynamicBlockEntityType;
-import it.crystalnest.soul_fire_d.api.enchantment.FireTypedFireAspectEnchantment;
-import it.crystalnest.soul_fire_d.api.enchantment.FireTypedFlameEnchantment;
 import it.crystalnest.soul_fire_d.api.type.FireTypeChanger;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -32,22 +32,19 @@ import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.CampfireBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -75,6 +72,7 @@ public final class FireManager {
   /**
    * Default {@link Fire} used as fallback to retrieve default properties.
    */
+  @SuppressWarnings("DataFlowIssue")
   public static final Fire DEFAULT_FIRE = new Fire(
     DEFAULT_FIRE_TYPE,
     FireBuilder.DEFAULT_LIGHT,
@@ -83,16 +81,22 @@ public final class FireManager {
     true,
     FireBuilder.DEFAULT_IN_FIRE_GETTER,
     FireBuilder.DEFAULT_ON_FIRE_GETTER,
-    entity -> true,
-    BuiltInRegistries.BLOCK.getKey(Blocks.FIRE),
-    BuiltInRegistries.BLOCK.getKey(Blocks.CAMPFIRE),
-    BuiltInRegistries.ENCHANTMENT.getKey(Enchantments.FIRE_ASPECT),
-    BuiltInRegistries.ENCHANTMENT.getKey(Enchantments.FLAMING_ARROWS)
+    FireBuilder.DEFAULT_BEHAVIOR,
+    Map.ofEntries(
+      Map.entry(FireComponent.SOURCE_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.FIRE)),
+      Map.entry(FireComponent.CAMPFIRE_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.CAMPFIRE)),
+      Map.entry(FireComponent.LANTERN_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.LANTERN)),
+      Map.entry(FireComponent.TORCH_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.TORCH)),
+      Map.entry(FireComponent.WALL_TORCH_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.WALL_TORCH)),
+      Map.entry(FireComponent.FLAME_PARTICLE, BuiltInRegistries.PARTICLE_TYPE.getKey(ParticleTypes.FLAME)),
+      Map.entry(FireComponent.FIRE_ASPECT_ENCHANTMENT, BuiltInRegistries.ENCHANTMENT.getKey(Enchantments.FIRE_ASPECT)),
+      Map.entry(FireComponent.FLAME_ENCHANTMENT, BuiltInRegistries.ENCHANTMENT.getKey(Enchantments.FLAMING_ARROWS))
+    )
   );
 
-  public static final Supplier<DynamicBlockEntityType<CampfireBlockEntity>> CUSTOM_CAMPFIRE_ENTITY_TYPE = CobwebRegistry.of(Registries.BLOCK_ENTITY_TYPE, Constants.MOD_ID).register(
+  public static final Supplier<DynamicBlockEntityType<CustomCampfireBlockEntity>> CUSTOM_CAMPFIRE_ENTITY_TYPE = CobwebRegistry.of(Registries.BLOCK_ENTITY_TYPE, Constants.MOD_ID).register(
     "custom_campfire",
-    () -> new DynamicBlockEntityType<>(CampfireBlockEntity::new, Set.of(), null)
+    () -> new DynamicBlockEntityType<>(CustomCampfireBlockEntity::new)
   );
 
   private static final DynamicDataPack FIRE_SOURCE_TAGS = DynamicDataPack.named(new ResourceLocation(Constants.MOD_ID, "fire_source_tags"));
@@ -116,30 +120,41 @@ public final class FireManager {
   }
 
   @Nullable
-  public static <T> T getOptionalProperty(ResourceLocation fireType, Function<Fire, Optional<T>> getter) {
-    return getter.apply(FIRES.getOrDefault(fireType, DEFAULT_FIRE)).orElse(null);
+  public static ResourceLocation getComponentId(ResourceLocation fireType, FireComponent<?, ?> component) {
+    return FIRES.getOrDefault(fireType, DEFAULT_FIRE).getComponent(component);
   }
 
-  public static <T> T getDefaultedProperty(ResourceLocation fireType, Function<Fire, Optional<T>> getter) {
-    return getter.apply(FIRES.getOrDefault(fireType, DEFAULT_FIRE)).orElse(getter.apply(DEFAULT_FIRE).orElseThrow());
+  @Nullable
+  public static <R, T extends R> T getComponent(ResourceLocation fireType, FireComponent<R, T> component) {
+    return component.getValue(getComponentId(fireType, component));
+  }
+
+  @NotNull
+  private static String getComponentPath(ResourceLocation fireType, FireComponent<?, ?> component) {
+    return Objects.requireNonNull(getComponentId(fireType, component)).getPath();
+  }
+
+  @NotNull
+  private static <R, T extends R> T getRequiredComponent(ResourceLocation fireType, FireComponent<R, T> component) {
+    return Objects.requireNonNull(component.getValue(getComponentId(fireType, component)));
   }
 
   public static <T> List<T> getPropertyList(Function<Fire, T> getter) {
     return FIRES.values().stream().map(getter).toList();
   }
 
-  public static <T> List<T> getOptionalPropertyList(Function<Fire, Optional<T>> getter) {
-    return FIRES.values().stream().map(getter).filter(Optional::isPresent).map(Optional::get).toList();
+  public static List<ResourceLocation> getComponentIdList(FireComponent<?, ?> component) {
+    return FIRES.values().stream().map(fire -> fire.getComponent(component)).filter(Objects::nonNull).toList();
   }
 
-  public static <T> List<T> getDefaultedPropertyList(Function<Fire, Optional<T>> getter) {
-    return FIRES.values().stream().map(fire -> getter.apply(fire).orElse(getter.apply(DEFAULT_FIRE).orElseThrow())).toList();
+  public static <R, T extends R> List<T> getComponentList(FireComponent<R, T> component) {
+    return FIRES.values().stream().map(component::getValue).filter(Objects::nonNull).toList();
   }
 
   public static <T extends CustomFireBlock> Supplier<T> registerFireSource(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
     Supplier<T> source = Suppliers.memoize(() -> supplier.apply(fireType));
     FIRE_SOURCE_TAGS.add(() -> DynamicTagBuilder.of(Registries.BLOCK, BlockTags.FIRE).addElement(source.get()));
-    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getFire(fireType).getSource().orElseThrow().getPath(), source);
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, FireComponent.SOURCE_BLOCK), source);
   }
 
   public static Supplier<CustomFireBlock> registerFireSource(ResourceLocation fireType, TagKey<Block> base, MapColor color) {
@@ -153,7 +168,7 @@ public final class FireManager {
   public static <T extends CustomCampfireBlock> Supplier<T> registerCampfire(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
     Supplier<T> campfire = Suppliers.memoize(() -> supplier.apply(fireType));
     CAMPFIRE_TAGS.add(() -> DynamicTagBuilder.of(Registries.BLOCK, BlockTags.CAMPFIRES).addElement(campfire.get()));
-    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getProperty(fireType, Fire::getCampfire).orElseThrow().getPath(), campfire);
+    return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, FireComponent.CAMPFIRE_BLOCK), campfire);
   }
 
   public static Supplier<CustomCampfireBlock> registerCampfire(ResourceLocation fireType, boolean spawnParticles) {
@@ -164,41 +179,47 @@ public final class FireManager {
     return registerCampfire(fireType, type -> new CustomCampfireBlock(type, spawnParticles, properties));
   }
 
-  public static Supplier<BlockItem> registerCampfireItem(ResourceLocation fireType, Supplier<? extends Block> campfire) {
-    return CobwebRegistry.ofItems(fireType.getNamespace()).register(FireManager.getFire(fireType).getCampfire().orElseThrow().getPath(), () -> new BlockItem(campfire.get(), new Item.Properties()));
+  public static Supplier<BlockItem> registerCampfireItem(ResourceLocation fireType) {
+    return CobwebRegistry.ofItems(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, FireComponent.CAMPFIRE_ITEM), () -> new BlockItem(FireManager.getRequiredComponent(fireType, FireComponent.CAMPFIRE_BLOCK), new Item.Properties()));
   }
 
   public static Supplier<SimpleParticleType> registerParticle(ResourceLocation fireType) {
-    return CobwebRegistry.of(Registries.PARTICLE_TYPE, fireType.getNamespace()).register(getFlameName(fireType.getPath()), () -> new SimpleParticleType(false));
+    return CobwebRegistry.of(Registries.PARTICLE_TYPE, fireType.getNamespace()).register(FireManager.getComponentPath(fireType, FireComponent.FLAME_PARTICLE), () -> new SimpleParticleType(false));
   }
 
   public static Supplier<CustomTorchBlock> registerTorch(ResourceLocation fireType, Supplier<SimpleParticleType> particle) {
     return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(
-      getTorchName(fireType.getPath()),
+      FireManager.getComponentPath(fireType, FireComponent.TORCH_BLOCK),
       () -> new CustomTorchBlock(fireType, particle, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY))
     );
   }
 
-  public static Supplier<CustomWallTorchBlock> registerTorch(ResourceLocation fireType, Supplier<SimpleParticleType> particle, Supplier<CustomTorchBlock> torch) {
+  public static Supplier<CustomWallTorchBlock> registerWallTorch(ResourceLocation fireType, Supplier<SimpleParticleType> particle) {
     return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(
-      getWallTorchName(fireType.getPath()),
-      () -> new CustomWallTorchBlock(fireType, particle, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.WOOD).dropsLike(torch.get()).pushReaction(PushReaction.DESTROY))
+      FireManager.getComponentPath(fireType, FireComponent.WALL_TORCH_BLOCK),
+      () -> new CustomWallTorchBlock(fireType, particle, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.WOOD).dropsLike(FireManager.getRequiredComponent(fireType, FireComponent.TORCH_BLOCK)).pushReaction(PushReaction.DESTROY))
     );
   }
 
-  public static Supplier<StandingAndWallBlockItem> registerTorchItem(ResourceLocation fireType, Supplier<CustomTorchBlock> torch, Supplier<CustomWallTorchBlock> wallTorch) {
-    return CobwebRegistry.ofItems(fireType.getNamespace()).register(getTorchName(fireType.getPath()), () -> new StandingAndWallBlockItem(torch.get(), wallTorch.get(), new Item.Properties(), Direction.DOWN));
+  public static Supplier<StandingAndWallBlockItem> registerTorchItem(ResourceLocation fireType) {
+    return CobwebRegistry.ofItems(fireType.getNamespace()).register(
+      FireManager.getComponentPath(fireType, FireComponent.TORCH_ITEM),
+      () -> new StandingAndWallBlockItem(FireManager.getRequiredComponent(fireType, FireComponent.TORCH_BLOCK), FireManager.getRequiredComponent(fireType, FireComponent.WALL_TORCH_BLOCK), new Item.Properties(), Direction.DOWN)
+    );
   }
 
   public static Supplier<CustomLanternBlock> registerLantern(ResourceLocation fireType) {
     return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(
-      getLanternName(fireType.getPath()),
+      FireManager.getComponentPath(fireType, FireComponent.LANTERN_BLOCK),
       () -> new CustomLanternBlock(fireType, BlockBehaviour.Properties.of().mapColor(MapColor.METAL).forceSolidOn().requiresCorrectToolForDrops().strength(3.5F).sound(SoundType.LANTERN).noOcclusion().pushReaction(PushReaction.DESTROY))
     );
   }
 
-  public static Supplier<BlockItem> registerLanternItem(ResourceLocation fireType, Supplier<? extends LanternBlock> lantern) {
-    return CobwebRegistry.ofItems(fireType.getNamespace()).register(getLanternName(fireType.getPath()), () -> new BlockItem(lantern.get(), new Item.Properties()));
+  public static Supplier<BlockItem> registerLanternItem(ResourceLocation fireType) {
+    return CobwebRegistry.ofItems(fireType.getNamespace()).register(
+      FireManager.getComponentPath(fireType, FireComponent.LANTERN_ITEM),
+      () -> new BlockItem(FireManager.getRequiredComponent(fireType, FireComponent.LANTERN_BLOCK), new Item.Properties())
+    );
   }
 
   /**
@@ -233,8 +254,9 @@ public final class FireManager {
   @Nullable
   public static synchronized Fire registerFire(Fire fire) {
     Fire previous = FIRES.computeIfAbsent(fire.getFireType(), key -> {
-      fire.getSource().flatMap(BuiltInRegistries.BLOCK::getOptional).ifPresent(block -> ((FireTypeChanger) block).setFireType(key));
-      fire.getCampfire().flatMap(BuiltInRegistries.BLOCK::getOptional).ifPresent(block -> ((FireTypeChanger) block).setFireType(key));
+      // Need to manually set the fire type for blocks registered via data packs.
+      FireComponent.SOURCE_BLOCK.getOptionalValue(fire).ifPresent(block -> ((FireTypeChanger) block).setFireType(key));
+      FireComponent.CAMPFIRE_BLOCK.getOptionalValue(fire).ifPresent(block -> ((FireTypeChanger) block).setFireType(key));
       return fire;
     });
     if (previous != fire) {
@@ -495,89 +517,6 @@ public final class FireManager {
     return FIRES.getOrDefault(fireType, DEFAULT_FIRE).getOnFire(entity);
   }
 
-  @Nullable
-  public static Block getLantern(ResourceLocation fireType) {
-    return BuiltInRegistries.BLOCK.getOptional(new ResourceLocation(fireType.getNamespace(), getLanternName(fireType.getPath()))).orElse(null);
-  }
-
-  public static List<Block> getSources() {
-    return FIRES.keySet().stream().map(FireManager::getSource).filter(Objects::nonNull).toList();
-  }
-
-  public static List<Block> getCampfires() {
-    return FIRES.keySet().stream().map(FireManager::getCampfire).filter(Objects::nonNull).toList();
-  }
-
-  /**
-   * Returns the fire source block associated with {@link Fire} registered with the given {@code fireType}.
-   * <p>
-   * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
-   *
-   * @param fireType
-   * @return the fire source block associated with {@link Fire}.
-   */
-  @Nullable
-  public static Block getSource(ResourceLocation fireType) {
-    return BuiltInRegistries.BLOCK.getOptional(getOptionalProperty(fireType, Fire::getSource)).orElse(null);
-  }
-
-  /**
-   * Returns the source block associated with {@link Fire} registered with the given {@code fireType}.
-   * <p>
-   * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
-   *
-   * @param fireType
-   * @return the source block associated with {@link Fire}.
-   */
-  @Nullable
-  public static Block getCampfire(ResourceLocation fireType) {
-    return BuiltInRegistries.BLOCK.getOptional(getOptionalProperty(fireType, Fire::getCampfire)).orElse(null);
-  }
-
-  /**
-   * Returns the list of all Fire Aspect enchantments registered.
-   *
-   * @return the list of all Fire Aspect enchantments registered.
-   */
-  public static List<FireTypedFireAspectEnchantment> getFireAspects() {
-    return FIRES.keySet().stream().map(FireManager::getFireAspect).filter(Objects::nonNull).toList();
-  }
-
-  /**
-   * Returns the list of all Flame enchantments registered.
-   *
-   * @return the list of all Flame enchantments registered.
-   */
-  public static List<FireTypedFlameEnchantment> getFlames() {
-    return FIRES.keySet().stream().map(FireManager::getFlame).filter(Objects::nonNull).toList();
-  }
-
-  /**
-   * Returns the Fire Aspect enchantment of the {@link Fire} registered with the given {@code fireType}.
-   * <p>
-   * Returns {@code null} if no {@link Fire} was registered with the given {@code fireType}.
-   *
-   * @param fireType
-   * @return the Fire Aspect enchantment of the {@link Fire}.
-   */
-  @Nullable
-  public static FireTypedFireAspectEnchantment getFireAspect(ResourceLocation fireType) {
-    return (FireTypedFireAspectEnchantment) BuiltInRegistries.ENCHANTMENT.get(getOptionalProperty(fireType, Fire::getFireAspect));
-  }
-
-  /**
-   * Returns the Flame enchantment of the {@link Fire} registered with the given {@code fireType}.
-   * <p>
-   * Returns {@code null} if no {@link Fire} was registered with the given {@code fireType}.
-   *
-   * @param fireType
-   * @return the Flame enchantment of the {@link Fire}.
-   */
-  @Nullable
-  public static FireTypedFlameEnchantment getFlame(ResourceLocation fireType) {
-    return (FireTypedFlameEnchantment) BuiltInRegistries.ENCHANTMENT.get(getOptionalProperty(fireType, Fire::getFlame));
-  }
-
   /**
    * Set on fire the given entity for the given seconds with the given Fire Type.
    *
@@ -636,8 +575,8 @@ public final class FireManager {
    * @return whether the {@code entity} has been harmed.
    */
   private static boolean harmOrHeal(Entity entity, DamageSource damageSource, float damage, boolean invertHealAndHarm) {
-    Optional<Predicate<Entity>> behavior = FireManager.getProperty(((FireTyped) entity).getFireType(), Fire::getBehavior);
-    if (behavior.isEmpty() || behavior.get().test(entity) && damage != 0) {
+    Predicate<Entity> behavior = FireManager.getProperty(((FireTyped) entity).getFireType(), Fire::getBehavior);
+    if (behavior.test(entity) && damage != 0) {
       if (damage > 0) {
         if (entity instanceof LivingEntity livingEntity) {
           if (livingEntity.isInvertedHealAndHarm() && invertHealAndHarm) {
@@ -678,21 +617,5 @@ public final class FireManager {
    */
   public static ResourceLocation readTag(CompoundTag tag) {
     return ensure(ResourceLocation.tryParse(tag.getString(FIRE_TYPE_TAG)));
-  }
-
-  public static String getLanternName(String fireId) {
-    return fireId + "_lantern";
-  }
-
-  public static String getTorchName(String fireId) {
-    return fireId + "_torch";
-  }
-
-  public static String getWallTorchName(String fireId) {
-    return fireId + "_wall_torch";
-  }
-
-  public static String getFlameName(String fireId) {
-    return fireId + "_flame";
   }
 }

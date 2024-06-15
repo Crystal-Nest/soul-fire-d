@@ -131,7 +131,6 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
   }
 
   @Override
-  @SuppressWarnings("resource")
   public void doPostAttack(@NotNull LivingEntity attacker, @NotNull Entity target, int level) {
     if (!wasLastHitByProjectile(target)) {
       if (!attacker.level().isClientSide) {

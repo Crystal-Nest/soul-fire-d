@@ -1,15 +1,12 @@
 package it.crystalnest.soul_fire_d.api;
 
-import it.crystalnest.soul_fire_d.api.enchantment.FireTypedFireAspectEnchantment;
-import it.crystalnest.soul_fire_d.api.enchantment.FireTypedFlameEnchantment;
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CampfireBlock;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -28,15 +25,19 @@ public final class Fire {
   private final int light;
 
   /**
-   * Fire damage per second.
+   * Fire damage per second.<br />
+   * Positive will hurt, negative will heal, {@code 0} will do nothing.
    */
   private final float damage;
 
   /**
-   * Whether to invert harm and heal for mobs that have potion effects inverted (e.g. undeads).
+   * Whether to invert harm and heal for mobs that have potion effects inverted (e.g. undead).
    */
   private final boolean invertHealAndHarm;
 
+  /**
+   * Whether rain can douse this Fire.
+   */
   private final boolean canRainDouse;
 
   /**
@@ -50,40 +51,26 @@ public final class Fire {
   private final Function<Entity, DamageSource> onFireGetter;
 
   /**
-   * Granted for the entity to be server side.
+   * Custom behavior to apply before the entity takes damage or heals.<br />
+   * The returned value determines whether the default hurt/heal behavior should still apply.
    */
-  private final Optional<Predicate<Entity>> behavior;
+  private final Predicate<Entity> behavior;
 
   /**
-   * {@link Optional} {@link ResourceLocation} of the {@link Block} of the Fire Block considered as the source for this Fire.
+   *
    */
-  private final Optional<ResourceLocation> source;
-
-  /**
-   * {@link Optional} {@link ResourceLocation} of the {@link CampfireBlock} associated with this Fire.
-   */
-  private final Optional<ResourceLocation> campfire;
-
-  /**
-   * {@link Optional} Fire Aspect {@link FireTypedFireAspectEnchantment} {@link ResourceLocation}.
-   */
-  private final Optional<ResourceLocation> fireAspect;
-
-  /**
-   * {@link Optional} Flame {@link FireTypedFlameEnchantment} {@link ResourceLocation}.
-   */
-  private final Optional<ResourceLocation> flame;
+  private final ImmutableMap<FireComponent<?, ?>, ResourceLocation> components;
 
   /**
    * @param fireType {@link #fireType}.
+   * @param light {@link #light}.
    * @param damage {@link #damage}.
    * @param invertHealAndHarm {@link #invertHealAndHarm}.
+   * @param canRainDouse {@link #canRainDouse}.
    * @param inFireGetter {@link #inFireGetter}.
    * @param onFireGetter {@link #onFireGetter}.
-   * @param source {@link #source}.
-   * @param campfire {@link #campfire}.
-   * @param fireAspect {@link #fireAspect}.
-   * @param flame {@link #flame}.
+   * @param behavior {@link #behavior}.
+   * @param components {@link #components}.
    */
   Fire(
     ResourceLocation fireType,
@@ -93,11 +80,8 @@ public final class Fire {
     boolean canRainDouse,
     Function<Entity, DamageSource> inFireGetter,
     Function<Entity, DamageSource> onFireGetter,
-    @Nullable Predicate<Entity> behavior,
-    @Nullable ResourceLocation source,
-    @Nullable ResourceLocation campfire,
-    @Nullable ResourceLocation fireAspect,
-    @Nullable ResourceLocation flame
+    Predicate<Entity> behavior,
+    Map<FireComponent<?, ?>, ResourceLocation> components
   ) {
     this.fireType = fireType;
     this.light = light;
@@ -106,11 +90,8 @@ public final class Fire {
     this.canRainDouse = canRainDouse;
     this.inFireGetter = inFireGetter;
     this.onFireGetter = onFireGetter;
-    this.behavior = Optional.ofNullable(behavior);
-    this.source = Optional.ofNullable(source);
-    this.campfire = Optional.ofNullable(campfire);
-    this.fireAspect = Optional.ofNullable(fireAspect);
-    this.flame = Optional.ofNullable(flame);
+    this.behavior = behavior;
+    this.components = ImmutableMap.copyOf(components);
   }
 
   /**
@@ -144,6 +125,11 @@ public final class Fire {
     return invertHealAndHarm;
   }
 
+  /**
+   * Returns this {@link #canRainDouse}.
+   *
+   * @return this {@link #canRainDouse}.
+   */
   public boolean canRainDouse() {
     return canRainDouse;
   }
@@ -171,58 +157,23 @@ public final class Fire {
    *
    * @return this {@link #behavior}.
    */
-  public Optional<Predicate<Entity>> getBehavior() {
+  public Predicate<Entity> getBehavior() {
     return behavior;
   }
 
   /**
-   * Returns this {@link #source}.
    *
-   * @return this {@link #source}.
-   */
-  public Optional<ResourceLocation> getSource() {
-    return source;
-  }
-
-  /**
-   * Returns this {@link #campfire}.
    *
-   * @return this {@link #campfire}.
+   * @param component
+   * @return
    */
-  public Optional<ResourceLocation> getCampfire() {
-    return campfire;
-  }
-
-  /**
-   * Returns this {@link #fireAspect}.
-   *
-   * @return this {@link #fireAspect}.
-   */
-  public Optional<ResourceLocation> getFireAspect() {
-    return fireAspect;
-  }
-
-  /**
-   * Returns this {@link #flame}.
-   *
-   * @return this {@link #flame}.
-   */
-  public Optional<ResourceLocation> getFlame() {
-    return flame;
+  @Nullable
+  public ResourceLocation getComponent(FireComponent<?, ?> component) {
+    return components.get(component);
   }
 
   @Override
   public String toString() {
-    return "Fire{" +
-           "fireType=" + fireType +
-           ", light=" + light +
-           ", damage=" + damage +
-           ", invertHealAndHarm=" + invertHealAndHarm +
-           ", canRainDouse=" + canRainDouse +
-           ", source=" + source +
-           ", campfire=" + campfire +
-           ", fireAspect=" + fireAspect +
-           ", flame=" + flame +
-           "}";
+    return "Fire{" + "fireType=" + fireType + ", light=" + light + ", damage=" + damage + ", invertHealAndHarm=" + invertHealAndHarm + ", canRainDouse=" + canRainDouse + ", components=" + components + "}";
   }
 }

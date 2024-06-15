@@ -8,6 +8,7 @@ import com.google.gson.JsonPrimitive;
 import it.crystalnest.soul_fire_d.Constants;
 import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireBuilder;
+import it.crystalnest.soul_fire_d.api.FireComponent;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.platform.Services;
 import net.minecraft.resources.ResourceLocation;
@@ -167,20 +168,28 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
           FireBuilder fireBuilder = FireManager.fireBuilder(fireType)
             .setDamage(parse(jsonIdentifier, "damage", jsonFire, JsonElement::getAsFloat, FireBuilder.DEFAULT_DAMAGE))
             .setInvertHealAndHarm(parse(jsonIdentifier, "invertHealAndHarm", jsonFire, JsonElement::getAsBoolean, FireBuilder.DEFAULT_INVERT_HEAL_AND_HARM));
+          fireBuilder
+            .removeComponent(FireComponent.CAMPFIRE_ITEM)
+            .removeComponent(FireComponent.LANTERN_BLOCK)
+            .removeComponent(FireComponent.LANTERN_ITEM)
+            .removeComponent(FireComponent.TORCH_BLOCK)
+            .removeComponent(FireComponent.TORCH_ITEM)
+            .removeComponent(FireComponent.WALL_TORCH_BLOCK)
+            .removeComponent(FireComponent.FLAME_PARTICLE);
           if (jsonFire.get(SOURCE_FIELD_NAME) != null && jsonFire.get(SOURCE_FIELD_NAME).isJsonNull()) {
-            fireBuilder.removeSource();
+            fireBuilder.removeComponent(FireComponent.SOURCE_BLOCK);
           } else {
             String source = parse(jsonIdentifier, SOURCE_FIELD_NAME, jsonFire, JsonElement::getAsString, null);
             if (source != null && ResourceLocation.isValidResourceLocation(source)) {
-              fireBuilder.setSource(new ResourceLocation(source));
+              fireBuilder.setComponent(FireComponent.SOURCE_BLOCK, new ResourceLocation(source));
             }
           }
           if (jsonFire.get(CAMPFIRE_FIELD_NAME) != null && jsonFire.get(CAMPFIRE_FIELD_NAME).isJsonNull()) {
-            fireBuilder.removeCampfire();
+            fireBuilder.removeComponent(FireComponent.CAMPFIRE_BLOCK);
           } else {
             String campfire = parse(jsonIdentifier, CAMPFIRE_FIELD_NAME, jsonFire, JsonElement::getAsString, null);
             if (campfire != null && ResourceLocation.isValidResourceLocation(campfire)) {
-              fireBuilder.setCampfire(new ResourceLocation(campfire));
+              fireBuilder.setComponent(FireComponent.CAMPFIRE_BLOCK, new ResourceLocation(campfire));
             }
           }
           fireBuilder.removeFireAspect();

@@ -1,5 +1,6 @@
 package it.crystalnest.soul_fire_d.handler;
 
+import it.crystalnest.soul_fire_d.api.FireComponent;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.config.ModConfig;
 import net.fabricmc.fabric.api.loot.v2.FabricLootTableBuilder;
@@ -43,7 +44,7 @@ public final class LootTableEventsHandler {
           .setRolls(ConstantValue.exactly(1))
           .conditionally(LootItemRandomChanceCondition.randomChance(0.05F).build())
           .with(LootItem.lootTableItem(Items.BOOK).build())
-          .apply(new EnchantRandomlyFunction.Builder().withEnchantment(FireManager.getFlame(FireManager.SOUL_FIRE_TYPE)))
+          .apply(new EnchantRandomlyFunction.Builder().withEnchantment(FireManager.getComponent(FireManager.SOUL_FIRE_TYPE, FireComponent.FLAME_ENCHANTMENT)))
           .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
           .build()
       );

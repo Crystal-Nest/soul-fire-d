@@ -3,11 +3,13 @@ package it.crystalnest.soul_fire_d.network.packet;
 import it.crystalnest.soul_fire_d.Constants;
 import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireBuilder;
+import it.crystalnest.soul_fire_d.api.FireComponent;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public record RegisterFirePacket(Fire fire) implements CustomPacketPayload {
   public static final ResourceLocation ID = new ResourceLocation(Constants.MOD_ID, "register_fire");
@@ -17,16 +19,27 @@ public record RegisterFirePacket(Fire fire) implements CustomPacketPayload {
   }
 
   private static Fire decode(FriendlyByteBuf buffer) {
-    FireBuilder fireBuilder = FireManager.fireBuilder(buffer.readResourceLocation()).setDamage(buffer.readFloat()).setInvertHealAndHarm(buffer.readBoolean()).removeFireAspect().removeFlame();
+    FireBuilder fireBuilder = FireManager.fireBuilder(buffer.readResourceLocation())
+      .setDamage(buffer.readFloat())
+      .setInvertHealAndHarm(buffer.readBoolean())
+      .removeComponent(FireComponent.CAMPFIRE_ITEM)
+      .removeComponent(FireComponent.LANTERN_BLOCK)
+      .removeComponent(FireComponent.LANTERN_ITEM)
+      .removeComponent(FireComponent.TORCH_BLOCK)
+      .removeComponent(FireComponent.TORCH_ITEM)
+      .removeComponent(FireComponent.WALL_TORCH_BLOCK)
+      .removeComponent(FireComponent.FLAME_PARTICLE)
+      .removeFireAspect()
+      .removeFlame();
     if (buffer.readBoolean()) {
-      fireBuilder.setSource(buffer.readResourceLocation());
+      fireBuilder.setComponent(FireComponent.SOURCE_BLOCK, buffer.readResourceLocation());
     } else {
-      fireBuilder.removeSource();
+      fireBuilder.removeComponent(FireComponent.SOURCE_BLOCK);
     }
     if (buffer.readBoolean()) {
-      fireBuilder.setCampfire(buffer.readResourceLocation());
+      fireBuilder.setComponent(FireComponent.CAMPFIRE_BLOCK, buffer.readResourceLocation());
     } else {
-      fireBuilder.removeCampfire();
+      fireBuilder.removeComponent(FireComponent.CAMPFIRE_BLOCK);
     }
     return fireBuilder.build();
   }
@@ -36,13 +49,15 @@ public record RegisterFirePacket(Fire fire) implements CustomPacketPayload {
     buffer.writeResourceLocation(fire.getFireType());
     buffer.writeFloat(fire.getDamage());
     buffer.writeBoolean(fire.invertHealAndHarm());
-    buffer.writeBoolean(fire.getSource().isPresent());
-    if (fire.getSource().isPresent()) {
-      buffer.writeResourceLocation(fire.getSource().get());
+    @Nullable ResourceLocation source = fire.getComponent(FireComponent.SOURCE_BLOCK);
+    buffer.writeBoolean(source != null);
+    if (source != null) {
+      buffer.writeResourceLocation(source);
     }
-    buffer.writeBoolean(fire.getCampfire().isPresent());
-    if (fire.getCampfire().isPresent()) {
-      buffer.writeResourceLocation(fire.getCampfire().get());
+    @Nullable ResourceLocation campfire = fire.getComponent(FireComponent.CAMPFIRE_BLOCK);
+    buffer.writeBoolean(campfire != null);
+    if (campfire != null) {
+      buffer.writeResourceLocation(campfire);
     }
   }
 
