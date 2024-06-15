@@ -49,6 +49,10 @@ public class CustomCampfireBlock extends CampfireBlock implements FireTyped {
     this.fireType = fireType;
   }
 
+  protected BlockEntityType<? extends CustomCampfireBlockEntity> getBlockEntityType() {
+    return FireManager.CUSTOM_CAMPFIRE_ENTITY_TYPE.get();
+  }
+
   protected BlockEntityTicker<? super CampfireBlockEntity> particleTick() {
     return CustomCampfireBlockEntity::particleTick;
   }
@@ -69,13 +73,13 @@ public class CustomCampfireBlock extends CampfireBlock implements FireTyped {
 
   @Override
   public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-    return new CustomCampfireBlockEntity(getFireType(), pos, state);
+    return new CustomCampfireBlockEntity(pos, state);
   }
 
   @Nullable
   @Override
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType) {
-    BlockEntityType<CampfireBlockEntity> customBlockEntityType = FireManager.CUSTOM_CAMPFIRE_ENTITY_TYPE.get();
+    BlockEntityType<? extends CustomCampfireBlockEntity> customBlockEntityType = getBlockEntityType();
     if (level.isClientSide) {
       return state.getValue(LIT) ? createTickerHelper(blockEntityType, customBlockEntityType, particleTick()) : null;
     } else {
