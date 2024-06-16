@@ -9,6 +9,10 @@ import net.minecraft.server.level.ServerPlayer;
  * Resource (datapack) reload listener.
  */
 public final class FabricFireResourceReloadListener extends FireResourceReloadListener implements IdentifiableResourceReloadListener {
+  /**
+   * @param player player to sync data to.
+   * @param joined whether the syncing is happening because the player is joining.
+   */
   public static void handle(ServerPlayer player, boolean joined) {
     handle(player);
   }

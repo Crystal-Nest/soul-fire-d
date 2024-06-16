@@ -31,14 +31,14 @@ public final class LootTableEventsHandler {
   /**
    * Handles modifying Vanilla loot table to include Soul Flame enchantment.
    *
-   * @param resourceManager
-   * @param lootDataManager
-   * @param resourceLocation
-   * @param builder
-   * @param lootTableSource
+   * @param resourceManager the server resource manager.
+   * @param lootManager the loot manager.
+   * @param id the loot table ID.
+   * @param builder a builder of the loot table being loaded.
+   * @param source the source of the loot table.
    */
-  public static void handle(ResourceManager resourceManager, LootDataManager lootDataManager, ResourceLocation resourceLocation, FabricLootTableBuilder builder, LootTableSource lootTableSource) {
-    if (ModConfig.getEnableSoulFlame() && resourceLocation.equals(BASTION_CHEST_IDENTIFIER)) {
+  public static void handle(ResourceManager resourceManager, LootDataManager lootManager, ResourceLocation id, FabricLootTableBuilder builder, LootTableSource source) {
+    if (ModConfig.getEnableSoulFlame() && id.equals(BASTION_CHEST_IDENTIFIER)) {
       builder.pool(
         LootPool.lootPool()
           .setRolls(ConstantValue.exactly(1))

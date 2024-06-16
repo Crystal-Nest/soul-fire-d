@@ -8,6 +8,12 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 ## [Unreleased]
 - Nothing new.
 
+## [v3.4.1-beta] - 2024/06/16
+
+- Removed need to pass the particle type when registering torch blocks.
+- Added method overloads to register subclasses of the custom fire components.
+- More Javadoc.
+
 ## [v3.4.0-beta] - 2024/06/15
 
 - `DynamicBlockEntityType` is now stricter and accepts only subclasses of `CustomCampfireBlockEntity`.
@@ -376,6 +382,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[v3.4.1-beta]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.4.1-beta
 [v3.4.0-beta]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.4.0-beta
 [v3.3.5-alpha]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.3.5-alpha
 [v3.3.4-alpha]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.3.4-alpha

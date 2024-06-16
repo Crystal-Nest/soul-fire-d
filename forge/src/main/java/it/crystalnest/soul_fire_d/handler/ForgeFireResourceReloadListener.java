@@ -15,7 +15,7 @@ public final class ForgeFireResourceReloadListener extends FireResourceReloadLis
   /**
    * Handles the {@link AddReloadListenerEvent}.
    *
-   * @param event
+   * @param event {@link AddReloadListenerEvent}.
    */
   @SubscribeEvent
   public static void handle(AddReloadListenerEvent event) {
@@ -25,7 +25,7 @@ public final class ForgeFireResourceReloadListener extends FireResourceReloadLis
   /**
    * Handles the {@link OnDatapackSyncEvent}.
    *
-   * @param event
+   * @param event {@link OnDatapackSyncEvent}.
    */
   @SubscribeEvent
   public static void handle(OnDatapackSyncEvent event) {

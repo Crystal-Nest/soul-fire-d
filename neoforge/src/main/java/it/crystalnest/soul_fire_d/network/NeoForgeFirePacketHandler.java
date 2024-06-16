@@ -5,13 +5,28 @@ import it.crystalnest.soul_fire_d.network.packet.RegisterFirePacket;
 import it.crystalnest.soul_fire_d.network.packet.UnregisterFirePacket;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
+/**
+ * NeoForge fire packet handler.
+ */
 public final class NeoForgeFirePacketHandler {
   private NeoForgeFirePacketHandler() {}
 
+  /**
+   * Handles a {@link RegisterFirePacket}.
+   *
+   * @param packet {@link RegisterFirePacket}.
+   * @param context payload context.
+   */
   public static void handle(RegisterFirePacket packet, PlayPayloadContext context) {
     FirePacketHandler.handle(packet);
   }
 
+  /**
+   * Handles an {@link UnregisterFirePacket}.
+   *
+   * @param packet {@link UnregisterFirePacket}.
+   * @param context payload context.
+   */
   public static void handle(UnregisterFirePacket packet, PlayPayloadContext context) {
     FirePacketHandler.handle(packet);
   }

@@ -80,7 +80,7 @@ public final class FireClientManager {
 
   /**
    * Unregisters the specified fire.<br />
-   * To be used only internally, do not use elsewhere!
+   * Internally use only, do not use elsewhere!
    *
    * @param fireType fire type.
    * @return whether the fire was previously registered.

@@ -25,7 +25,7 @@ public final class FirePacketHandler {
   }
 
   /**
-   * Handles a {@link UnregisterFirePacket}.
+   * Handles an {@link UnregisterFirePacket}.
    *
    * @param packet {@link UnregisterFirePacket}.
    */

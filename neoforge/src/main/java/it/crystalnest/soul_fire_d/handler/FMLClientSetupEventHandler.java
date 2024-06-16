@@ -28,11 +28,10 @@ public final class FMLClientSetupEventHandler {
   private FMLClientSetupEventHandler() {}
 
   /**
-   * Handles the {@link FMLClientSetupEvent} event.
-   * <p>
+   * Handles the {@link FMLClientSetupEvent} event.<br />
    * Registers all {@link Fire Fires} to the client.
    *
-   * @param event
+   * @param event {@link FMLClientSetupEvent}.
    */
   @SubscribeEvent
   @SuppressWarnings("deprecation")
@@ -46,7 +45,7 @@ public final class FMLClientSetupEventHandler {
 
   @SubscribeEvent
   public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
-    FireManager.getComponentList(Fire.Component.FLAME_PARTICLE).forEach(flame -> event.registerSpriteSet((SimpleParticleType) flame, FlameParticle.Provider::new));
+    FireManager.getComponentList(Fire.Component.FLAME_PARTICLE).forEach(flame -> event.registerSpriteSet(flame, FlameParticle.Provider::new));
   }
 
   @SubscribeEvent

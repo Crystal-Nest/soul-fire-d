@@ -14,7 +14,19 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.function.Function;
 
+/**
+ * Fabric networking helper.
+ */
 public class FabricNetworkHelper implements NetworkHelper {
+  /**
+   * Encodes a packet into a buffer.
+   *
+   * @param packet packet constructor.
+   * @param data packet data.
+   * @param <D> packet data type.
+   * @param <P> packet type.
+   * @return buffer with encoded packet data.
+   */
   private static <D, P extends CustomPacketPayload> FriendlyByteBuf encode(Function<D, P> packet, D data) {
     FriendlyByteBuf buffer = PacketByteBufs.create();
     packet.apply(data).write(buffer);

@@ -7,7 +7,13 @@ import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
+/**
+ * Loot related registry.
+ */
 public final class LootRegistry {
+  /**
+   * Loot modifiers register.
+   */
   private static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS, Constants.MOD_ID);
 
   static {
@@ -16,6 +22,11 @@ public final class LootRegistry {
 
   private LootRegistry() {}
 
+  /**
+   * Registers this registry to the mod bus.
+   *
+   * @param bus mod bus.
+   */
   public static void register(IEventBus bus) {
     LOOT_MODIFIERS.register(bus);
   }

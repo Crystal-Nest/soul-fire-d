@@ -36,6 +36,10 @@ public final class ChestLootModifier extends LootModifier {
    */
   private final List<Addition> additions;
 
+  /**
+   * @param conditionsIn loot item conditions.
+   * @param additions item additions.
+   */
   private ChestLootModifier(LootItemCondition[] conditionsIn, List<Addition> additions) {
     super(conditionsIn);
     this.additions = additions;
@@ -88,15 +92,25 @@ public final class ChestLootModifier extends LootModifier {
      */
     private final Integer level;
 
+    /**
+     * @param item item.
+     * @param chance chance to add the item.
+     * @param quantity item quantity.
+     */
     private Addition(Enchantment item, Float chance, Integer quantity) {
       this.enchantment = item;
       this.chance = chance;
       this.level = quantity;
     }
 
+    /**
+     * Returns an enchanted book with this {@link #enchantment} applied.
+     *
+     * @return an enchanted book with this {@link #enchantment} applied.
+     */
     private ItemStack getEnchantedBook() {
       ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
-      EnchantedBookItem.addEnchantment(book, new EnchantmentInstance(enchantment, level > enchantment.getMaxLevel() ? enchantment.getMaxLevel() : level));
+      EnchantedBookItem.addEnchantment(book, new EnchantmentInstance(enchantment, Math.min(enchantment.getMaxLevel(), level)));
       return book;
     }
   }

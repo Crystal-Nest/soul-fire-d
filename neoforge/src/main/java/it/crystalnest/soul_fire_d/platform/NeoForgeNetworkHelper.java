@@ -14,7 +14,15 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * NeoForge networking helper.
+ */
 public class NeoForgeNetworkHelper implements NetworkHelper {
+  /**
+   * Registers the custom packets and their handlers.
+   *
+   * @param event {@link RegisterPayloadHandlerEvent}.
+   */
   private static void registerPackets(RegisterPayloadHandlerEvent event) {
     IPayloadRegistrar registrar = event.registrar(Constants.MOD_ID);
     registrar.play(RegisterFirePacket.ID, RegisterFirePacket::new, handler -> handler.client(NeoForgeFirePacketHandler::handle));
