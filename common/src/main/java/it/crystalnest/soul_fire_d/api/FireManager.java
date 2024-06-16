@@ -163,7 +163,7 @@ public final class FireManager {
     });
     if (previous != fire) {
       ResourceLocation fireType = fire.getFireType();
-      Constants.LOGGER.error("Fire [{}] was already registered with the following value: {}", fireType, FIRES.get(fireType));
+      Constants.LOGGER.error("Fire [{}] was already registered with the following value: {}", fireType, getFire(fireType));
       return null;
     }
     return fire;
@@ -457,7 +457,7 @@ public final class FireManager {
    * @return registered {@link Fire} or {@link #DEFAULT_FIRE}.
    */
   public static Fire getFire(@Nullable ResourceLocation fireType) {
-    return isValidType(fireType) ? FIRES.getOrDefault(fireType, DEFAULT_FIRE) : DEFAULT_FIRE;
+    return FIRES.getOrDefault(ensure(fireType), DEFAULT_FIRE);
   }
 
   /**
@@ -479,7 +479,7 @@ public final class FireManager {
    * @param <T> property type.
    */
   public static <T> T getProperty(ResourceLocation fireType, Function<Fire, T> getter) {
-    return getter.apply(FIRES.getOrDefault(fireType, DEFAULT_FIRE));
+    return getter.apply(getFire(fireType));
   }
 
   /**
@@ -492,7 +492,7 @@ public final class FireManager {
    */
   @Nullable
   public static ResourceLocation getComponentId(ResourceLocation fireType, Fire.Component<?, ?> component) {
-    return FIRES.getOrDefault(fireType, DEFAULT_FIRE).getComponent(component);
+    return getFire(fireType).getComponent(component);
   }
 
   /**
@@ -736,7 +736,7 @@ public final class FireManager {
    * @return the in damage source of the {@link Fire} for the {@link Entity}.
    */
   public static DamageSource getInFireDamageSourceFor(Entity entity, ResourceLocation fireType) {
-    return FIRES.getOrDefault(fireType, DEFAULT_FIRE).getInFire(entity);
+    return getFire(fireType).getInFire(entity);
   }
 
   /**
@@ -748,7 +748,7 @@ public final class FireManager {
    * @return the on damage source of the {@link Fire} for the {@link Entity}.
    */
   public static DamageSource getOnFireDamageSourceFor(Entity entity, ResourceLocation fireType) {
-    return FIRES.getOrDefault(fireType, DEFAULT_FIRE).getOnFire(entity);
+    return getFire(fireType).getOnFire(entity);
   }
 
   /**
