@@ -20,7 +20,7 @@ public class ForgeNetworkHelper implements NetworkHelper {
   /**
    * {@link SimpleChannel} instance.
    */
-  private static final SimpleChannel INSTANCE = ChannelBuilder.named(new ResourceLocation(Constants.MOD_ID, Constants.DDFIRES)).networkProtocolVersion(1_20_4__3_2).acceptedVersions((status, version) -> version == 1_20_4__3_2).simpleChannel();
+  private static final SimpleChannel INSTANCE = ChannelBuilder.named(new ResourceLocation(Constants.MOD_ID, Constants.DDFIRES)).networkProtocolVersion(1_20_4__4).acceptedVersions((status, version) -> version == 1_20_4__4).simpleChannel();
 
   /**
    * Latest packet ID.
