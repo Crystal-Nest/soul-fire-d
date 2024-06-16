@@ -164,6 +164,7 @@ public final class Fire {
   /**
    * Returns the In Fire {@link DamageSource} from the given {@link Entity}.
    *
+   * @param entity entity.
    * @return the In Fire {@link DamageSource} from the given {@link Entity}.
    */
   public DamageSource getInFire(Entity entity) {
@@ -173,6 +174,7 @@ public final class Fire {
   /**
    * Returns the On Fire {@link DamageSource} from the given {@link Entity}.
    *
+   * @param entity entity.
    * @return the On Fire {@link DamageSource} from the given {@link Entity}.
    */
   public DamageSource getOnFire(Entity entity) {
@@ -575,6 +577,7 @@ public final class Fire {
     /**
      * Sets the {@link DamageSource} {@link #inFireGetter}.
      *
+     * @param getter damage source getter.
      * @return this Builder to either set other properties or {@link #register}.
      */
     public Builder setInFire(Function<Entity, DamageSource> getter) {
@@ -585,6 +588,7 @@ public final class Fire {
     /**
      * Sets the {@link DamageSource} {@link #inFireGetter}.
      *
+     * @param getter damage source getter.
      * @return this Builder to either set other properties or {@link #register}.
      */
     public Builder setOnFire(Function<Entity, DamageSource> getter) {

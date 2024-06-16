@@ -27,8 +27,7 @@ public final class FMLClientSetupEventHandler {
   private FMLClientSetupEventHandler() {}
 
   /**
-   * Handles the {@link FMLClientSetupEvent} event.<br />
-   * Registers all {@link Fire Fires} to the client.
+   * Handles the {@link FMLClientSetupEvent} event.
    *
    * @param event {@link FMLClientSetupEvent}.
    */
@@ -42,11 +41,21 @@ public final class FMLClientSetupEventHandler {
     FireManager.getComponentList(Fire.Component.WALL_TORCH_BLOCK).stream().filter(CustomWallTorchBlock.class::isInstance).forEach(torch -> ItemBlockRenderTypes.setRenderLayer(torch, RenderType.cutout()));
   }
 
+  /**
+   * Handles the {@link RegisterParticleProvidersEvent} event.
+   *
+   * @param event {@link RegisterParticleProvidersEvent}.
+   */
   @SubscribeEvent
   public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
     FireManager.getComponentList(Fire.Component.FLAME_PARTICLE).forEach(flame -> event.registerSpriteSet(flame, FlameParticle.Provider::new));
   }
 
+  /**
+   * Handles the {@link EntityRenderersEvent.RegisterRenderers} event.
+   *
+   * @param event {@link EntityRenderersEvent.RegisterRenderers}.
+   */
   @SubscribeEvent
   public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
     event.registerBlockEntityRenderer(FireManager.CUSTOM_CAMPFIRE_ENTITY_TYPE.get(), CampfireRenderer::new);
