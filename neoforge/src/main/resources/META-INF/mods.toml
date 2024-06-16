@@ -1,5 +1,5 @@
 modLoader = "javafml" #mandatory
-loaderVersion = "[2,)" #mandatory
+loaderVersion = "[1,)" #mandatory
 license = "${license}" #mandatory
 issueTrackerURL="https://github.com/${github_user}/${mod_id_kebab}/issues" #optional
 [[mods]] #mandatory
@@ -18,19 +18,19 @@ issueTrackerURL="https://github.com/${github_user}/${mod_id_kebab}/issues" #opti
   config = "${mod_id}.neoforge.mixins.json"
 [[dependencies.${mod_id}]]
   modId = "neoforge" #mandatory
-  type = "required" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
+mandatory = true
   versionRange = "${neoforge_loader_version_range}" #mandatory
   ordering = "NONE" # The order that this dependency should load in relation to your mod, required to be either 'BEFORE' or 'AFTER' if the dependency is not mandatory
   side = "BOTH" # Side this dependency is applied on - 'BOTH', 'CLIENT' or 'SERVER'
 [[dependencies.${mod_id}]]
   modId = "minecraft"
-  type = "required"
+mandatory = true
   versionRange = "${minecraft_version_range}"
   ordering = "NONE"
   side = "BOTH"
 [[dependencies.${mod_id}]]
   modId = "cobweb"
-  type = "required"
+mandatory = true
   versionRange = "[${cobweb_version},)"
   ordering = "NONE"
   side = "BOTH"

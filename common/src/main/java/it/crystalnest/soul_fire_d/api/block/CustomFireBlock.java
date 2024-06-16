@@ -1,14 +1,10 @@
 package it.crystalnest.soul_fire_d.api.block;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -43,18 +39,6 @@ public class CustomFireBlock extends BaseFireBlock implements FireTyped {
    * Fire age property.
    */
   public static final IntegerProperty AGE = FireBlock.AGE;
-
-  /**
-   * {@link Codec}.
-   */
-  public static final MapCodec<CustomFireBlock> CODEC = RecordCodecBuilder.mapCodec(
-    instance -> instance.group(
-        ResourceLocation.CODEC.fieldOf("fire_type").forGetter(block -> block.fireType),
-        TagKey.codec(Registries.BLOCK).fieldOf("base").forGetter(block -> block.base),
-        propertiesCodec()
-      )
-      .apply(instance, CustomFireBlock::new)
-  );
 
   /**
    * Fire type.
@@ -126,12 +110,6 @@ public class CustomFireBlock extends BaseFireBlock implements FireTyped {
         level.setBlock(pos, state.setValue(AGE, age + 1), UPDATE_INVISIBLE);
       }
     }
-  }
-
-  @NotNull
-  @Override
-  public MapCodec<? extends BaseFireBlock> codec() {
-    return CODEC;
   }
 
   @Override

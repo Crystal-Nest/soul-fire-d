@@ -18,9 +18,14 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ForgeNetworkHelper implements NetworkHelper {
   /**
+   * Channel version.
+   */
+  private static final int CHANNEL_VERSION = 1_20_2__4;
+
+  /**
    * {@link SimpleChannel} instance.
    */
-  private static final SimpleChannel INSTANCE = ChannelBuilder.named(new ResourceLocation(Constants.MOD_ID, Constants.DDFIRES)).networkProtocolVersion(1_20_4__3_2).acceptedVersions((status, version) -> version == 1_20_4__3_2).simpleChannel();
+  private static final SimpleChannel INSTANCE = ChannelBuilder.named(new ResourceLocation(Constants.MOD_ID, Constants.DDFIRES)).networkProtocolVersion(CHANNEL_VERSION).acceptedVersions((status, version) -> version == CHANNEL_VERSION).simpleChannel();
 
   /**
    * Latest packet ID.

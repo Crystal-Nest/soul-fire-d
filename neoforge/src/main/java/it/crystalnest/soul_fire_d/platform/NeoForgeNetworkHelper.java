@@ -1,7 +1,6 @@
 package it.crystalnest.soul_fire_d.platform;
 
 import it.crystalnest.soul_fire_d.Constants;
-import it.crystalnest.soul_fire_d.ModLoader;
 import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.network.NeoForgeFirePacketHandler;
 import it.crystalnest.soul_fire_d.network.packet.RegisterFirePacket;
@@ -9,9 +8,9 @@ import it.crystalnest.soul_fire_d.network.packet.UnregisterFirePacket;
 import it.crystalnest.soul_fire_d.platform.services.NetworkHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.NetworkRegistry;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -19,36 +18,55 @@ import org.jetbrains.annotations.Nullable;
  */
 public class NeoForgeNetworkHelper implements NetworkHelper {
   /**
-   * Registers the custom packets and their handlers.
-   *
-   * @param event {@link RegisterPayloadHandlerEvent}.
+   * Channel version.
    */
-  private static void registerPackets(RegisterPayloadHandlerEvent event) {
-    IPayloadRegistrar registrar = event.registrar(Constants.MOD_ID);
-    registrar.play(RegisterFirePacket.ID, RegisterFirePacket::new, handler -> handler.client(NeoForgeFirePacketHandler::handle));
-    registrar.play(UnregisterFirePacket.ID, UnregisterFirePacket::new, handler -> handler.client(NeoForgeFirePacketHandler::handle));
+  private static final String CHANNEL_VERSION = "1.20.2-4";
+
+  /**
+   * {@link SimpleChannel} instance.
+   */
+  private static final SimpleChannel INSTANCE = NetworkRegistry.ChannelBuilder
+    .named(new ResourceLocation(Constants.MOD_ID, Constants.DDFIRES))
+    .networkProtocolVersion(() -> CHANNEL_VERSION)
+    .clientAcceptedVersions(CHANNEL_VERSION::equals)
+    .serverAcceptedVersions(CHANNEL_VERSION::equals)
+    .simpleChannel();
+
+  /**
+   * Latest packet ID.
+   */
+  private static int id = 0;
+
+  /**
+   * Get the current available packet ID.
+   *
+   * @return current available packet ID.
+   */
+  private static int id() {
+    return id++;
+  }
+
+  @Override
+  public void register() {
+    INSTANCE.messageBuilder(RegisterFirePacket.class, id()).encoder(RegisterFirePacket::write).decoder(RegisterFirePacket::new).consumerNetworkThread(NeoForgeFirePacketHandler::handle);
+    INSTANCE.messageBuilder(UnregisterFirePacket.class, id()).encoder(UnregisterFirePacket::write).decoder(UnregisterFirePacket::new).consumerNetworkThread(NeoForgeFirePacketHandler::handle);
   }
 
   @Override
   public void sendToClient(@Nullable ServerPlayer player, Fire fire) {
     if (player == null) {
-      PacketDistributor.ALL.noArg().send(new RegisterFirePacket(fire));
+      INSTANCE.send(PacketDistributor.ALL.noArg(), new RegisterFirePacket(fire));
     } else {
-      PacketDistributor.PLAYER.with(player).send(new RegisterFirePacket(fire));
+      INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new RegisterFirePacket(fire));
     }
   }
 
   @Override
   public void sendToClient(@Nullable ServerPlayer player, ResourceLocation fireType) {
     if (player == null) {
-      PacketDistributor.ALL.noArg().send(new UnregisterFirePacket(fireType));
+      INSTANCE.send(PacketDistributor.ALL.noArg(), new UnregisterFirePacket(fireType));
     } else {
-      PacketDistributor.PLAYER.with(player).send(new UnregisterFirePacket(fireType));
+      INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new UnregisterFirePacket(fireType));
     }
-  }
-
-  @Override
-  public void register() {
-    ModLoader.getBus().addListener(NeoForgeNetworkHelper::registerPackets);
   }
 }

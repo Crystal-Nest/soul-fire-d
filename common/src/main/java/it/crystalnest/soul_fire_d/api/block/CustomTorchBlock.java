@@ -46,7 +46,7 @@ public class CustomTorchBlock extends TorchBlock implements FireTyped {
    */
   public CustomTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type, Properties properties) {
     // noinspection DataFlowIssue
-    super(null, properties.lightLevel(state -> FireManager.getProperty(fireType, Fire::getLight)));
+    super(properties.lightLevel(state -> FireManager.getProperty(fireType, Fire::getLight)), null);
     this.fireType = fireType;
     this.type = type;
   }

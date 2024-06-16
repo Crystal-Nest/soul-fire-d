@@ -1,8 +1,5 @@
 package it.crystalnest.soul_fire_d.api.block;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.block.entity.CustomCampfireBlockEntity;
@@ -29,18 +26,6 @@ import org.jetbrains.annotations.Nullable;
  * Custom campfire block.
  */
 public class CustomCampfireBlock extends CampfireBlock implements FireTyped {
-  /**
-   * {@link Codec}.
-   */
-  public static final MapCodec<CampfireBlock> CODEC = RecordCodecBuilder.mapCodec(
-    instance -> instance.group(
-        ResourceLocation.CODEC.fieldOf("fire_type").forGetter(block -> ((FireTyped) block).getFireType()),
-        Codec.BOOL.fieldOf("spawn_particles").forGetter(block -> block.spawnParticles),
-        propertiesCodec()
-      )
-      .apply(instance, CustomCampfireBlock::new)
-  );
-
   /**
    * Fire type.
    */
@@ -108,12 +93,6 @@ public class CustomCampfireBlock extends CampfireBlock implements FireTyped {
    */
   protected BlockEntityTicker<CampfireBlockEntity> cooldownTick() {
     return CustomCampfireBlockEntity::cooldownTick;
-  }
-
-  @NotNull
-  @Override
-  public MapCodec<CampfireBlock> codec() {
-    return CODEC;
   }
 
   /**
