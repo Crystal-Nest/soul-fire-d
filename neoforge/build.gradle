@@ -1,170 +1,57 @@
 plugins {
-  id 'java-library'
-  id 'net.neoforged.gradle.userdev' version '7.0.26'
-  id "com.modrinth.minotaur" version "2.+"
-  id "com.matthewprenger.cursegradle" version "1.4.+"
-  id "com.github.breadmoirai.github-release" version "2.4.+"
+  id "net.neoforged.gradle.userdev" version "7.0.84"
 }
 
-archivesBaseName = modid
-version = "${minecraft_version}-${mod_version}-${loader.toLowerCase()}"
-group = project.group
-
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-
+if (file("src/main/resources/META-INF/accesstransformer.cfg").exists()) {
+  minecraft.accessTransformers.file file("src/main/resources/META-INF/accesstransformer.cfg")
+}
 runs {
   configureEach {
-    // Recommended logging data for a userdev environment
-    // The markers can be added/remove as needed separated by commas.
-    // "SCAN": For mods scan.
-    // "REGISTRIES": For firing of registry events.
-    // "REGISTRYDUMP": For getting the contents of all registries.
-    systemProperty 'forge.logging.markers', 'REGISTRIES'
-    // Recommended logging level for the console
-    // You can set various levels here.
-    // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-    systemProperty 'forge.logging.console.level', 'debug'
     modSource project.sourceSets.main
   }
   client {
-    systemProperty 'forge.enabledGameTestNamespaces', modid
+    systemProperty "neoforge.enabledGameTestNamespaces", mod_id
   }
   server {
-    systemProperty 'forge.enabledGameTestNamespaces', modid
-    programArgument '--nogui'
+    systemProperty "neoforge.enabledGameTestNamespaces", mod_id
+    programArgument "--nogui"
   }
+
   gameTestServer {
-    systemProperty 'forge.enabledGameTestNamespaces', modid
+    systemProperty "neoforge.enabledGameTestNamespaces", mod_id
   }
+
   data {
-    // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
-    // workingDirectory project.file('run-data')
-    // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-    programArguments.addAll '--mod', modid, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+    programArguments.addAll "--mod", mod_id, "--all", "--output", file("src/generated/resources/").getAbsolutePath(), "--existing", file("src/main/resources/").getAbsolutePath()
   }
 }
 
 sourceSets.main.resources { srcDir "src/generated/resources" }
 
-repositories {}
-
 dependencies {
-  implementation "net.neoforged:neoforge:${loader_version}${loader_subversion}"
+  implementation "net.neoforged:neoforge:${neoforge_version}"
+  implementation project(":common")
+  implementation "it.crystalnest:cobweb-neoforge:${minecraft_version}-${cobweb_version}"
 }
 
-def resourceTargets = ["META-INF/mods.toml", 'pack.mcmeta']
-def intoTargets = ["$rootDir/bin/main/"]
-def replaceProperties = [
-  modid: modid,
-  modid_kebab: modid_kebab,
-  mod_title: mod_title,
-  minecraft_version: minecraft_version,
-  mod_version: mod_version,
-  loader_version: loader_version,
-  loader_subversion: loader_subversion,
-  author: author,
-  github_user: github_user
-]
+// NeoGradle compiles the game, but we don't want to add our common code to the game's code
+Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
 
-processResources {
-  inputs.properties replaceProperties
-  replaceProperties.put "project", project
-
-  filesMatching(resourceTargets) {
-    expand replaceProperties
-  }
-
-  intoTargets.each { target ->
-    if (file(target).exists()) {
-      copy {
-        from(sourceSets.main.resources) {
-          include resourceTargets
-          expand replaceProperties
-        }
-        into target
-      }
-    }
-  }
+tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
+  source(project(":common").sourceSets.main.allSource)
 }
 
-jar {
-  manifest {
-    attributes([
-      "Specification-Title"     : project.mod_title,
-      "Specification-Version"   : project.mod_version,
-      "Specification-Vendor"    : project.author,
-      "Implementation-Title"    : project.mod_title,
-      "Implementation-Version"  : project.mod_version,
-      "Implementation-Vendor"   : project.author,
-      "Implementation-Vendor-Id": project.group,
-      "Implementation-URL"      : "https://github.com/${github_user}/${modid_kebab}/tree/${minecraft_version}",
-      "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-    ])
-  }
+tasks.withType(Javadoc).matching(notNeoTask).configureEach {
+  source(project(":common").sourceSets.main.allJava)
 }
 
-tasks.withType(JavaCompile).configureEach {
-  it.options.encoding = "UTF-8"
-  it.options.release = 17
+tasks.named("sourcesJar", Jar) {
+  from(project(":common").sourceSets.main.allSource)
 }
 
-def changelog_body = "See [Changelog](https://github.com/${github_user}/${modid_kebab}/blob/master/CHANGELOG.md#${minecraft_version.replaceAll('\\.', '')}-${mod_version.replaceAll('\\.', '')}---${new Date().format("yyyyMMdd")})."
-
-file("../api-keys.properties").withReader { 
-  Properties props = new Properties()
-  props.load(it)
-  project.api_keys = props
+tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
+  from project(":common").sourceSets.main.resources
 }
 
-curseforge {
-  apiKey = api_keys.curseforge
-  project {
-    id = curseforge_id
-    changelogType = "markdown"
-    changelog = changelog_body
-    releaseType = "release"
-    addGameVersion loader
-    addGameVersion minecraft_version
-    mainArtifact(jar) {
-      displayName = "[${loader} - ${minecraft_version}] ${mod_title} v${mod_version}"
-      // relations {}
-    }
-  }
-  options {
-    detectNewerJava = true
-    forgeGradleIntegration = false
-  }
-}
-
-modrinth {
-  token = api_keys.modrinth
-  projectId = modid_kebab
-  versionNumber = mod_version
-  versionName = "[${loader} - ${minecraft_version}] ${mod_title} v${mod_version}"
-  changelog = changelog_body
-  uploadFile = jar
-  versionType = "release"
-  gameVersions = [minecraft_version]
-  loaders = [loader.toLowerCase()]
-  dependencies {}
-}
-
-githubRelease {
-  token api_keys.github
-  owner github_user
-  repo modid_kebab
-  tagName "v${minecraft_version}-${mod_version}"
-  targetCommitish minecraft_version
-  releaseName "v${minecraft_version}-${mod_version}"
-  generateReleaseNotes false
-  body changelog_body
-  draft true
-  prerelease false
-  releaseAssets jar
-  // Setting this to true will allow this plugin to upload artifacts to a release if it found an existing one. If overwrite is set to true, this option is ignored.
-  allowUploadToExisting true
-  // By default false; if set to true, will delete an existing release with the same tag and name
-  // overwrite true
-  // by default false; you can use this to see what actions would be taken without making a release
-  // dryRun false
-}
+// Task seems bugged, breaks build because of mod dependencies in the Common project, with no apparent workaround.
+tasks.named('compileTestJava').get().setEnabled(false)
