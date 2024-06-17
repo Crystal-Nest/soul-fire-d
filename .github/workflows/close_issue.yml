@@ -1,0 +1,13 @@
+name: Close Inactive Issue
+
+on:
+  schedule:
+  - cron: "00 00 * * *"
+     
+jobs:
+  call-analyze-workflow:
+    permissions:
+      issues: write
+      pull-requests: write
+    uses: crystal-nest/.github/.github/workflows/close_issue.yml@main
+    secrets: inherit 
