@@ -12,7 +12,7 @@ minecraft {
 dependencies {
   compileOnly group: "org.spongepowered", name: "mixin", version: "0.8.5"
   implementation "it.crystalnest:cobweb-common:${minecraft_version}-${cobweb_version}"
-  implementation "fuzs.forgeconfigapiport:forgeconfigapiport-common:${fcap_version}"
+  implementation "net.minecraftforge:forgeconfigapiport-fabric:${fcap_version}"
 }
 
 // Disable publishing tasks where common is not published

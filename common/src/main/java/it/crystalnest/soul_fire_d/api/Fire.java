@@ -10,8 +10,6 @@ import it.crystalnest.soul_fire_d.api.type.FireTypedEnchantment;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
@@ -63,14 +61,14 @@ public final class Fire {
   private final boolean canRainDouse;
 
   /**
-   * {@link DamageSource} getter for when the entity is in or on a block providing fire.
+   * {@link DamageSource} for when the entity is in or on a block providing fire.
    */
-  private final Function<Entity, DamageSource> inFireGetter;
+  private final DamageSource inFire;
 
   /**
-   * {@link DamageSource} getter for when the entity is burning.
+   * {@link DamageSource} for when the entity is burning.
    */
-  private final Function<Entity, DamageSource> onFireGetter;
+  private final DamageSource onFire;
 
   /**
    * Custom behavior to apply before the entity takes damage or heals.<br />
@@ -89,8 +87,8 @@ public final class Fire {
    * @param damage {@link #damage}.
    * @param invertHealAndHarm {@link #invertHealAndHarm}.
    * @param canRainDouse {@link #canRainDouse}.
-   * @param inFireGetter {@link #inFireGetter}.
-   * @param onFireGetter {@link #onFireGetter}.
+   * @param inFire {@link #inFire}.
+   * @param onFire {@link #onFire}.
    * @param behavior {@link #behavior}.
    * @param components {@link #components}.
    */
@@ -100,8 +98,8 @@ public final class Fire {
     float damage,
     boolean invertHealAndHarm,
     boolean canRainDouse,
-    Function<Entity, DamageSource> inFireGetter,
-    Function<Entity, DamageSource> onFireGetter,
+    DamageSource inFire,
+    DamageSource onFire,
     Predicate<Entity> behavior,
     Map<Component<?, ?>, ResourceLocation> components
   ) {
@@ -110,8 +108,8 @@ public final class Fire {
     this.damage = damage;
     this.invertHealAndHarm = invertHealAndHarm;
     this.canRainDouse = canRainDouse;
-    this.inFireGetter = inFireGetter;
-    this.onFireGetter = onFireGetter;
+    this.inFire = inFire;
+    this.onFire = onFire;
     this.behavior = behavior;
     this.components = ImmutableMap.copyOf(components);
   }
@@ -162,23 +160,21 @@ public final class Fire {
   }
 
   /**
-   * Returns the In Fire {@link DamageSource} from the given {@link Entity}.
+   * Returns the In Fire {@link DamageSource}.
    *
-   * @param entity entity.
-   * @return the In Fire {@link DamageSource} from the given {@link Entity}.
+   * @return the In Fire {@link DamageSource}.
    */
-  public DamageSource getInFire(Entity entity) {
-    return inFireGetter.apply(entity);
+  public DamageSource getInFire() {
+    return inFire;
   }
 
   /**
-   * Returns the On Fire {@link DamageSource} from the given {@link Entity}.
+   * Returns the On Fire {@link DamageSource}.
    *
-   * @param entity entity.
-   * @return the On Fire {@link DamageSource} from the given {@link Entity}.
+   * @return the On Fire {@link DamageSource}.
    */
-  public DamageSource getOnFire(Entity entity) {
-    return onFireGetter.apply(entity);
+  public DamageSource getOnFire() {
+    return onFire;
   }
 
   /**
@@ -217,57 +213,57 @@ public final class Fire {
     /**
      * Source block component.
      */
-    public static final Component<Block, Block> SOURCE_BLOCK = new Component<>(Registries.BLOCK, "_fire");
+    public static final Component<Block, Block> SOURCE_BLOCK = new Component<>(Registry.BLOCK_REGISTRY, "_fire");
 
     /**
      * Campfire block component.
      */
-    public static final Component<Block, Block> CAMPFIRE_BLOCK = new Component<>(Registries.BLOCK, "_campfire");
+    public static final Component<Block, Block> CAMPFIRE_BLOCK = new Component<>(Registry.BLOCK_REGISTRY, "_campfire");
 
     /**
      * Campfire item component.
      */
-    public static final Component<Item, BlockItem> CAMPFIRE_ITEM = new Component<>(Registries.ITEM, "_campfire");
+    public static final Component<Item, BlockItem> CAMPFIRE_ITEM = new Component<>(Registry.ITEM_REGISTRY, "_campfire");
 
     /**
      * Lantern block component.
      */
-    public static final Component<Block, Block> LANTERN_BLOCK = new Component<>(Registries.BLOCK, "_lantern");
+    public static final Component<Block, Block> LANTERN_BLOCK = new Component<>(Registry.BLOCK_REGISTRY, "_lantern");
 
     /**
      * Lantern item component.
      */
-    public static final Component<Item, BlockItem> LANTERN_ITEM = new Component<>(Registries.ITEM, "_lantern");
+    public static final Component<Item, BlockItem> LANTERN_ITEM = new Component<>(Registry.ITEM_REGISTRY, "_lantern");
 
     /**
      * Torch block component.
      */
-    public static final Component<Block, Block> TORCH_BLOCK = new Component<>(Registries.BLOCK, "_torch");
+    public static final Component<Block, Block> TORCH_BLOCK = new Component<>(Registry.BLOCK_REGISTRY, "_torch");
 
     /**
      * Torch item component.
      */
-    public static final Component<Item, StandingAndWallBlockItem> TORCH_ITEM = new Component<>(Registries.ITEM, "_torch");
+    public static final Component<Item, StandingAndWallBlockItem> TORCH_ITEM = new Component<>(Registry.ITEM_REGISTRY, "_torch");
 
     /**
      * Wall torch block component.
      */
-    public static final Component<Block, Block> WALL_TORCH_BLOCK = new Component<>(Registries.BLOCK, "_wall_torch");
+    public static final Component<Block, Block> WALL_TORCH_BLOCK = new Component<>(Registry.BLOCK_REGISTRY, "_wall_torch");
 
     /**
      * Flame particle component.
      */
-    public static final Component<ParticleType<?>, SimpleParticleType> FLAME_PARTICLE = new Component<>(Registries.PARTICLE_TYPE, "_flame");
+    public static final Component<ParticleType<?>, SimpleParticleType> FLAME_PARTICLE = new Component<>(Registry.PARTICLE_TYPE_REGISTRY, "_flame");
 
     /**
      * Fire Aspect enchantment component.
      */
-    public static final Component<Enchantment, FireTypedFireAspectEnchantment> FIRE_ASPECT_ENCHANTMENT = new Component<>(Registries.ENCHANTMENT, "_fire_aspect");
+    public static final Component<Enchantment, FireTypedFireAspectEnchantment> FIRE_ASPECT_ENCHANTMENT = new Component<>(Registry.ENCHANTMENT_REGISTRY, "_fire_aspect");
 
     /**
      * Flame enchantment component.
      */
-    public static final Component<Enchantment, FireTypedFlameEnchantment> FLAME_ENCHANTMENT = new Component<>(Registries.ENCHANTMENT, "_flame");
+    public static final Component<Enchantment, FireTypedFlameEnchantment> FLAME_ENCHANTMENT = new Component<>(Registry.ENCHANTMENT_REGISTRY, "_flame");
 
     /**
      * Registry key where the value associated to this component is stored.
@@ -296,7 +292,7 @@ public final class Fire {
     @NotNull
     @SuppressWarnings("unchecked")
     Registry<R> getRegistry() {
-      return (Registry<R>) BuiltInRegistries.REGISTRY.get(key.location());
+      return (Registry<R>) Registry.REGISTRY.get(key.location());
     }
 
     /**
@@ -382,14 +378,14 @@ public final class Fire {
     public static final boolean DEFAULT_CAN_RAIN_DOUSE = false;
 
     /**
-     * Default value for {@link #inFireGetter}.
+     * Default value for {@link #inFire}.
      */
-    public static final Function<Entity, DamageSource> DEFAULT_IN_FIRE_GETTER = entity -> entity.damageSources().inFire();
+    public static final DamageSource DEFAULT_IN_FIRE = DamageSource.IN_FIRE;
 
     /**
-     * Default value for {@link #onFireGetter}.
+     * Default value for {@link #onFire}.
      */
-    public static final Function<Entity, DamageSource> DEFAULT_ON_FIRE_GETTER = entity -> entity.damageSources().onFire();
+    public static final DamageSource DEFAULT_ON_FIRE = DamageSource.ON_FIRE;
 
     /**
      * Default value for {@link #behavior}.
@@ -433,18 +429,18 @@ public final class Fire {
     private boolean canRainDouse;
 
     /**
-     * {@link Fire} instance {@link Fire#inFireGetter inFireGetter}.<br />
-     * Optional, defaults to {@link #DEFAULT_IN_FIRE_GETTER}.<br />
+     * {@link Fire} instance {@link Fire#inFire inFire}.<br />
+     * Optional, defaults to {@link #DEFAULT_IN_FIRE}.<br />
      * If changed from the default, remember to add translations for the new death messages!
      */
-    private Function<Entity, DamageSource> inFireGetter;
+    private DamageSource inFire;
 
     /**
-     * {@link Fire} instance {@link Fire#onFireGetter onFireGetter}.<br />
-     * Optional, defaults to {@link #DEFAULT_ON_FIRE_GETTER}.<br />
+     * {@link Fire} instance {@link Fire#onFire onFire}.<br />
+     * Optional, defaults to {@link #DEFAULT_ON_FIRE}.<br />
      * If changed from the default, remember to add translations for the new death messages!
      */
-    private Function<Entity, DamageSource> onFireGetter;
+    private DamageSource onFire;
 
     /**
      * {@link Fire} instance {@link Fire#behavior behavior}.<br />
@@ -575,24 +571,24 @@ public final class Fire {
     }
 
     /**
-     * Sets the {@link DamageSource} {@link #inFireGetter}.
+     * Sets the {@link DamageSource} {@link #inFire}.
      *
-     * @param getter damage source getter.
+     * @param inFire damage source.
      * @return this Builder to either set other properties or {@link #register}.
      */
-    public Builder setInFire(Function<Entity, DamageSource> getter) {
-      this.inFireGetter = getter;
+    public Builder setInFire(DamageSource inFire) {
+      this.inFire = inFire;
       return this;
     }
 
     /**
-     * Sets the {@link DamageSource} {@link #inFireGetter}.
+     * Sets the {@link DamageSource} {@link #onFire}.
      *
-     * @param getter damage source getter.
+     * @param onFire damage source.
      * @return this Builder to either set other properties or {@link #register}.
      */
-    public Builder setOnFire(Function<Entity, DamageSource> getter) {
-      this.onFireGetter = getter;
+    public Builder setOnFire(DamageSource onFire) {
+      this.onFire = onFire;
       return this;
     }
 
@@ -728,8 +724,8 @@ public final class Fire {
       damage = DEFAULT_DAMAGE;
       invertHealAndHarm = DEFAULT_INVERT_HEAL_AND_HARM;
       canRainDouse = DEFAULT_CAN_RAIN_DOUSE;
-      inFireGetter = DEFAULT_IN_FIRE_GETTER;
-      onFireGetter = DEFAULT_ON_FIRE_GETTER;
+      inFire = DEFAULT_IN_FIRE;
+      onFire = DEFAULT_ON_FIRE;
       behavior = DEFAULT_BEHAVIOR;
       components = new HashMap<>(Map.ofEntries(
         Component.SOURCE_BLOCK.getEntry(modId, fireId),
@@ -764,7 +760,7 @@ public final class Fire {
         }
         components.put(Component.FIRE_ASPECT_ENCHANTMENT, register(fireType, fireAspectConfigurator, FireAspectBuilder::new));
         components.put(Component.FLAME_ENCHANTMENT, register(fireType, flameConfigurator, FlameBuilder::new));
-        return new Fire(fireType, light, damage, invertHealAndHarm, canRainDouse, inFireGetter, onFireGetter, behavior, components);
+        return new Fire(fireType, light, damage, invertHealAndHarm, canRainDouse, inFire, onFire, behavior, components);
       }
       throw new IllegalStateException("Attempted to build a Fire with a non-valid fireId [" + fireId + "] or modId [" + modId + "].");
     }

@@ -4,7 +4,6 @@ import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTypeChanger;
 import it.crystalnest.soul_fire_d.api.type.FireTypedEnchantment;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -107,7 +106,7 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
   private static boolean wasLastHitByProjectile(Entity target) {
     if (target instanceof LivingEntity livingEntity) {
       DamageSource lastDamageSource = livingEntity.getLastDamageSource();
-      return lastDamageSource != null && lastDamageSource.is(DamageTypeTags.IS_PROJECTILE);
+      return lastDamageSource != null && lastDamageSource.isProjectile();
     }
     return false;
   }

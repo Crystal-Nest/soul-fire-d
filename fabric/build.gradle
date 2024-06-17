@@ -7,7 +7,7 @@ dependencies {
   modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
   compileOnly project(":common")
   modImplementation "it.crystalnest:cobweb-fabric:${minecraft_version}-${cobweb_version}"
-  modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${fcap_version}"
+  modImplementation "net.minecraftforge:forgeconfigapiport-fabric:${fcap_version}"
 }
 
 loom {

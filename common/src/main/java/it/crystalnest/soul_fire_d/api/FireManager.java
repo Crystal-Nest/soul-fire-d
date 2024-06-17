@@ -15,11 +15,9 @@ import it.crystalnest.soul_fire_d.api.block.entity.CustomCampfireBlockEntity;
 import it.crystalnest.soul_fire_d.api.block.entity.DynamicBlockEntityType;
 import it.crystalnest.soul_fire_d.api.type.FireTypeChanger;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
-import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -80,25 +78,25 @@ public final class FireManager {
     Fire.Builder.DEFAULT_DAMAGE,
     Fire.Builder.DEFAULT_INVERT_HEAL_AND_HARM,
     true,
-    Fire.Builder.DEFAULT_IN_FIRE_GETTER,
-    Fire.Builder.DEFAULT_ON_FIRE_GETTER,
+    Fire.Builder.DEFAULT_IN_FIRE,
+    Fire.Builder.DEFAULT_ON_FIRE,
     Fire.Builder.DEFAULT_BEHAVIOR,
     Map.ofEntries(
-      Map.entry(Fire.Component.SOURCE_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.FIRE)),
-      Map.entry(Fire.Component.CAMPFIRE_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.CAMPFIRE)),
-      Map.entry(Fire.Component.LANTERN_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.LANTERN)),
-      Map.entry(Fire.Component.TORCH_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.TORCH)),
-      Map.entry(Fire.Component.WALL_TORCH_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.WALL_TORCH)),
-      Map.entry(Fire.Component.FLAME_PARTICLE, BuiltInRegistries.PARTICLE_TYPE.getKey(ParticleTypes.FLAME)),
-      Map.entry(Fire.Component.FIRE_ASPECT_ENCHANTMENT, BuiltInRegistries.ENCHANTMENT.getKey(Enchantments.FIRE_ASPECT)),
-      Map.entry(Fire.Component.FLAME_ENCHANTMENT, BuiltInRegistries.ENCHANTMENT.getKey(Enchantments.FLAMING_ARROWS))
+      Map.entry(Fire.Component.SOURCE_BLOCK, Registry.BLOCK.getKey(Blocks.FIRE)),
+      Map.entry(Fire.Component.CAMPFIRE_BLOCK, Registry.BLOCK.getKey(Blocks.CAMPFIRE)),
+      Map.entry(Fire.Component.LANTERN_BLOCK, Registry.BLOCK.getKey(Blocks.LANTERN)),
+      Map.entry(Fire.Component.TORCH_BLOCK, Registry.BLOCK.getKey(Blocks.TORCH)),
+      Map.entry(Fire.Component.WALL_TORCH_BLOCK, Registry.BLOCK.getKey(Blocks.WALL_TORCH)),
+      Map.entry(Fire.Component.FLAME_PARTICLE, Registry.PARTICLE_TYPE.getKey(ParticleTypes.FLAME)),
+      Map.entry(Fire.Component.FIRE_ASPECT_ENCHANTMENT, Registry.ENCHANTMENT.getKey(Enchantments.FIRE_ASPECT)),
+      Map.entry(Fire.Component.FLAME_ENCHANTMENT, Registry.ENCHANTMENT.getKey(Enchantments.FLAMING_ARROWS))
     )
   );
 
   /**
    * Default {@link DynamicBlockEntityType} for custom campfires.
    */
-  public static final Supplier<DynamicBlockEntityType<CustomCampfireBlockEntity>> CUSTOM_CAMPFIRE_ENTITY_TYPE = CobwebRegistry.of(Registries.BLOCK_ENTITY_TYPE, Constants.MOD_ID).register(
+  public static final Supplier<DynamicBlockEntityType<CustomCampfireBlockEntity>> CUSTOM_CAMPFIRE_ENTITY_TYPE = CobwebRegistry.of(Registry.BLOCK_ENTITY_TYPE, Constants.MOD_ID).register(
     "custom_campfire",
     () -> new DynamicBlockEntityType<>(CustomCampfireBlockEntity::new)
   );
@@ -240,7 +238,7 @@ public final class FireManager {
    */
   public static <T extends CustomFireBlock> Supplier<T> registerFireSource(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
     Supplier<T> source = Suppliers.memoize(() -> supplier.apply(fireType));
-    FIRE_SOURCE_TAGS.add(() -> DynamicTagBuilder.of(Registries.BLOCK, BlockTags.FIRE).addElement(source.get()));
+    FIRE_SOURCE_TAGS.add(() -> DynamicTagBuilder.of(Registry.BLOCK, BlockTags.FIRE).addElement(source.get()));
     return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.SOURCE_BLOCK), source);
   }
 
@@ -277,7 +275,7 @@ public final class FireManager {
    */
   public static <T extends CustomCampfireBlock> Supplier<T> registerCampfire(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
     Supplier<T> campfire = Suppliers.memoize(() -> supplier.apply(fireType));
-    CAMPFIRE_TAGS.add(() -> DynamicTagBuilder.of(Registries.BLOCK, BlockTags.CAMPFIRES).addElement(campfire.get()));
+    CAMPFIRE_TAGS.add(() -> DynamicTagBuilder.of(Registry.BLOCK, BlockTags.CAMPFIRES).addElement(campfire.get()));
     return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.CAMPFIRE_BLOCK), campfire);
   }
 
@@ -324,7 +322,7 @@ public final class FireManager {
    * @return supplier for the registered particle type.
    */
   public static <T extends SimpleParticleType> Supplier<T> registerParticle(ResourceLocation fireType, Supplier<T> supplier) {
-    return CobwebRegistry.of(Registries.PARTICLE_TYPE, fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.FLAME_PARTICLE), supplier);
+    return CobwebRegistry.of(Registry.PARTICLE_TYPE, fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.FLAME_PARTICLE), supplier);
   }
 
   /**
@@ -369,7 +367,7 @@ public final class FireManager {
    * @return supplier for the registered torch item.
    */
   public static Supplier<StandingAndWallBlockItem> registerTorchItem(ResourceLocation fireType) {
-    return registerTorchItem(fireType, (torch, wallTorch) -> new StandingAndWallBlockItem(torch, wallTorch, new Item.Properties(), Direction.DOWN));
+    return registerTorchItem(fireType, (torch, wallTorch) -> new StandingAndWallBlockItem(torch, wallTorch, new Item.Properties()));
   }
 
   /**
@@ -475,8 +473,8 @@ public final class FireManager {
    *
    * @param fireType fire type.
    * @param getter property getter.
-   * @return property value.
    * @param <T> property type.
+   * @return property value.
    */
   public static <T> T getProperty(ResourceLocation fireType, Function<Fire, T> getter) {
     return getter.apply(getFire(fireType));
@@ -728,27 +726,25 @@ public final class FireManager {
   }
 
   /**
-   * Returns the in damage source of the {@link Fire} registered with the given {@code fireType} for the given {@link Entity}.<br />
+   * Returns the in damage source of the {@link Fire} registered with the given {@code fireType}.<br />
    * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
    *
-   * @param entity entity.
    * @param fireType fire type.
-   * @return the in damage source of the {@link Fire} for the {@link Entity}.
+   * @return the in damage source of the {@link Fire}.
    */
-  public static DamageSource getInFireDamageSourceFor(Entity entity, ResourceLocation fireType) {
-    return getFire(fireType).getInFire(entity);
+  public static DamageSource getInFireDamageSource(ResourceLocation fireType) {
+    return getFire(fireType).getInFire();
   }
 
   /**
-   * Returns the on damage source of the {@link Fire} registered with the given {@code fireType} for the given {@link Entity}.<br />
+   * Returns the on damage source of the {@link Fire} registered with the given {@code fireType}.<br />
    * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
    *
-   * @param entity entity.
    * @param fireType fire type.
-   * @return the on damage source of the {@link Fire} for the {@link Entity}.
+   * @return the on damage source of the {@link Fire}.
    */
-  public static DamageSource getOnFireDamageSourceFor(Entity entity, ResourceLocation fireType) {
-    return getFire(fireType).getOnFire(entity);
+  public static DamageSource getOnFireDamageSource(ResourceLocation fireType) {
+    return getFire(fireType).getOnFire();
   }
 
   /**
@@ -773,7 +769,7 @@ public final class FireManager {
    */
   public static boolean damageInFire(Entity entity, ResourceLocation fireType) {
     ((FireTypeChanger) entity).setFireType(ensure(fireType));
-    return harmOrHeal(entity, getInFireDamageSourceFor(entity, fireType), FireManager.getProperty(fireType, Fire::getDamage), FireManager.getProperty(fireType, Fire::invertHealAndHarm));
+    return harmOrHeal(entity, getInFireDamageSource(fireType), FireManager.getProperty(fireType, Fire::getDamage), FireManager.getProperty(fireType, Fire::invertHealAndHarm));
   }
 
   /**
@@ -786,7 +782,7 @@ public final class FireManager {
    */
   public static boolean damageOnFire(Entity entity, ResourceLocation fireType) {
     ((FireTypeChanger) entity).setFireType(ensure(fireType));
-    return harmOrHeal(entity, getOnFireDamageSourceFor(entity, fireType), FireManager.getProperty(fireType, Fire::getDamage), FireManager.getProperty(fireType, Fire::invertHealAndHarm));
+    return harmOrHeal(entity, getOnFireDamageSource(fireType), FireManager.getProperty(fireType, Fire::getDamage), FireManager.getProperty(fireType, Fire::invertHealAndHarm));
   }
 
   /**

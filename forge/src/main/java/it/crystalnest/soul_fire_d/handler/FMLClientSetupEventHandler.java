@@ -32,7 +32,7 @@ public final class FMLClientSetupEventHandler {
    * @param event {@link FMLClientSetupEvent}.
    */
   @SubscribeEvent
-  @SuppressWarnings("deprecation")
+  @SuppressWarnings("removal")
   public static void handle(FMLClientSetupEvent event) {
     FireClientManager.registerFires(FireManager.getFires());
     FireManager.getComponentList(Fire.Component.CAMPFIRE_BLOCK).stream().filter(CustomCampfireBlock.class::isInstance).forEach(campfire -> ItemBlockRenderTypes.setRenderLayer(campfire, RenderType.cutout()));
@@ -48,7 +48,7 @@ public final class FMLClientSetupEventHandler {
    */
   @SubscribeEvent
   public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
-    FireManager.getComponentList(Fire.Component.FLAME_PARTICLE).forEach(flame -> event.registerSpriteSet(flame, FlameParticle.Provider::new));
+    FireManager.getComponentList(Fire.Component.FLAME_PARTICLE).forEach(flame -> event.register(flame, FlameParticle.Provider::new));
   }
 
   /**
