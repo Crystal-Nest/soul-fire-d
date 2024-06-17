@@ -1,10 +1,8 @@
 package it.crystalnest.soul_fire_d.api.enchantment;
 
 import it.crystalnest.soul_fire_d.api.FireManager;
-import it.crystalnest.soul_fire_d.api.compat.Ensorcellation;
 import it.crystalnest.soul_fire_d.api.type.FireTypeChanger;
 import it.crystalnest.soul_fire_d.api.type.FireTypedEnchantment;
-import it.crystalnest.soul_fire_d.platform.Services;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
@@ -116,13 +114,7 @@ public final class FireTypedFireAspectEnchantment extends FireAspectEnchantment 
 
   @Override
   public boolean checkCompatibility(@NotNull Enchantment enchantment) {
-    return (
-      enabled.getAsBoolean() &&
-      super.checkCompatibility(enchantment) &&
-      !(enchantment instanceof FireAspectEnchantment) &&
-      compatibility.test(enchantment) &&
-      (!Services.PLATFORM.isModLoaded("ensorcellation") || Ensorcellation.checkFireAspectCompatibility(enchantment))
-    );
+    return enabled.getAsBoolean() && super.checkCompatibility(enchantment) && !(enchantment instanceof FireAspectEnchantment) && compatibility.test(enchantment);
   }
 
   @Override
