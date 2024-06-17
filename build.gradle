@@ -102,8 +102,6 @@ subprojects { subproject ->
       "fabric_loader_version"        : fabric_loader_version,
       "forge_version"                : forge_version,
       "forge_loader_version_range"   : forge_loader_version_range,
-      "neoforge_version"             : neoforge_version,
-      "neoforge_loader_version_range": neoforge_loader_version_range,
       "cobweb_version"               : cobweb_version,
       "fcap_version"                 : fcap_version,
     ]
@@ -127,9 +125,6 @@ subprojects { subproject ->
       break
     case "forge":
       loader = "Forge"
-      break
-    case "neoforge":
-      loader = "NeoForge"
       break
   }
 
@@ -217,9 +212,6 @@ subprojects { subproject ->
           required "forge-config-api-port"
           break
         case "Forge":
-          required "forge-config-api-port"
-          break
-        case "NeoForge":
           break
       }
     }
@@ -231,9 +223,6 @@ subprojects { subproject ->
           required "forge-config-api-port-fabric"
           break
         case "Forge":
-          required "forge-config-api-port-fabric"
-          break
-        case "NeoForge":
           break
       }
     }

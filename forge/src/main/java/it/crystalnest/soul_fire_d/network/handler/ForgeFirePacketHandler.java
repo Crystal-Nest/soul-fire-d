@@ -3,8 +3,10 @@ package it.crystalnest.soul_fire_d.network.handler;
 import it.crystalnest.soul_fire_d.network.packet.RegisterFirePacket;
 import it.crystalnest.soul_fire_d.network.packet.UnregisterFirePacket;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
 
 /**
  * Forge fire packet handler.
@@ -18,9 +20,9 @@ public final class ForgeFirePacketHandler {
    * @param packet {@link RegisterFirePacket}.
    * @param context custom payload context.
    */
-  public static void handleRegister(RegisterFirePacket packet, CustomPayloadEvent.Context context) {
-    context.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> FirePacketHandler.handle(packet)));
-    context.setPacketHandled(true);
+  public static void handleRegister(RegisterFirePacket packet, Supplier<NetworkEvent.Context>  context) {
+    context.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> FirePacketHandler.handle(packet)));
+    context.get().setPacketHandled(true);
   }
 
   /**
@@ -29,8 +31,8 @@ public final class ForgeFirePacketHandler {
    * @param packet {@link UnregisterFirePacket}.
    * @param context custom payload context.
    */
-  public static void handleUnregister(UnregisterFirePacket packet, CustomPayloadEvent.Context context) {
-    context.enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> FirePacketHandler.handle(packet)));
-    context.setPacketHandled(true);
+  public static void handleUnregister(UnregisterFirePacket packet, Supplier<NetworkEvent.Context> context) {
+    context.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> FirePacketHandler.handle(packet)));
+    context.get().setPacketHandled(true);
   }
 }

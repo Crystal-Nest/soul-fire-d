@@ -2,8 +2,8 @@ package it.crystalnest.soul_fire_d.network.packet;
 
 import it.crystalnest.soul_fire_d.Constants;
 import it.crystalnest.soul_fire_d.api.Fire;
+import it.crystalnest.soul_fire_d.network.CustomPacketPayload;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 

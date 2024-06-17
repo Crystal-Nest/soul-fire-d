@@ -2,13 +2,13 @@ package it.crystalnest.soul_fire_d.platform;
 
 import it.crystalnest.soul_fire_d.ClientModLoader;
 import it.crystalnest.soul_fire_d.api.Fire;
+import it.crystalnest.soul_fire_d.network.CustomPacketPayload;
 import it.crystalnest.soul_fire_d.network.packet.RegisterFirePacket;
 import it.crystalnest.soul_fire_d.network.packet.UnregisterFirePacket;
 import it.crystalnest.soul_fire_d.platform.services.NetworkHelper;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 

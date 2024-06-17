@@ -8,9 +8,9 @@ import it.crystalnest.soul_fire_d.network.packet.UnregisterFirePacket;
 import it.crystalnest.soul_fire_d.platform.services.NetworkHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.ChannelBuilder;
+import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.SimpleChannel;
+import net.minecraftforge.network.simple.SimpleChannel;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -20,12 +20,17 @@ public class ForgeNetworkHelper implements NetworkHelper {
   /**
    * Channel version.
    */
-  private static final int CHANNEL_VERSION = 1_20_2__4;
+  private static final String CHANNEL_VERSION = "1.20.1-4";
 
   /**
    * {@link SimpleChannel} instance.
    */
-  private static final SimpleChannel INSTANCE = ChannelBuilder.named(new ResourceLocation(Constants.MOD_ID, Constants.DDFIRES)).networkProtocolVersion(CHANNEL_VERSION).acceptedVersions((status, version) -> version == CHANNEL_VERSION).simpleChannel();
+  private static final SimpleChannel INSTANCE = NetworkRegistry.ChannelBuilder
+    .named(new ResourceLocation(Constants.MOD_ID, Constants.DDFIRES))
+    .networkProtocolVersion(() -> CHANNEL_VERSION)
+    .clientAcceptedVersions(CHANNEL_VERSION::equals)
+    .serverAcceptedVersions(CHANNEL_VERSION::equals)
+    .simpleChannel();
 
   /**
    * Latest packet ID.
@@ -50,18 +55,18 @@ public class ForgeNetworkHelper implements NetworkHelper {
   @Override
   public void sendToClient(@Nullable ServerPlayer player, Fire fire) {
     if (player == null) {
-      INSTANCE.send(new RegisterFirePacket(fire), PacketDistributor.ALL.noArg());
+      INSTANCE.send(PacketDistributor.ALL.noArg(), new RegisterFirePacket(fire));
     } else {
-      INSTANCE.send(new RegisterFirePacket(fire), PacketDistributor.PLAYER.with(player));
+      INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new RegisterFirePacket(fire));
     }
   }
 
   @Override
   public void sendToClient(@Nullable ServerPlayer player, ResourceLocation fireType) {
     if (player == null) {
-      INSTANCE.send(new UnregisterFirePacket(fireType), PacketDistributor.ALL.noArg());
+      INSTANCE.send(PacketDistributor.ALL.noArg(), new UnregisterFirePacket(fireType));
     } else {
-      INSTANCE.send(new UnregisterFirePacket(fireType), PacketDistributor.PLAYER.with(player));
+      INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new UnregisterFirePacket(fireType));
     }
   }
 }
