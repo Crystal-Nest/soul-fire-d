@@ -1,157 +1,48 @@
-plugins {
-  id "fabric-loom" version "1.2-SNAPSHOT"
-  id "com.modrinth.minotaur" version "2.+"
-  id "com.matthewprenger.cursegradle" version "1.4.+"
-  id "com.github.breadmoirai.github-release" version "2.4.+"
-}
-
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
-archivesBaseName = modid
-version = "${minecraft_version}-${mod_version}-${loader.toLowerCase()}"
-group = project.group
-
-repositories {
-  maven {
-    name = "Fuzs Mod Resources"
-    url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
-  }
-}
+plugins {}
 
 dependencies {
   minecraft "com.mojang:minecraft:${minecraft_version}"
-  mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
-  modImplementation "net.fabricmc:fabric-loader:${loader_version}"
-
-  // Fabric API. This is technically optional, but you probably want it anyway.
+  mappings loom.officialMojangMappings()
+  modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
   modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-
-  // Forge Config API Port to handle configuration.
-  implementation 'com.electronwill.night-config:toml:3.6.5'
-  modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${forgeconfigapiport_version}"
+  compileOnly project(":common")
+  modImplementation "it.crystalnest:cobweb-fabric:${minecraft_version}-${cobweb_version}"
+  modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${fcap_version}"
 }
 
-def resourceTarget = "fabric.mod.json"
-def intoTargets = ["$rootDir/bin/main/"]
-def replaceProperties = [
-  modid: modid,
-  modid_kebab: modid_kebab,
-  mod_title: mod_title,
-  minecraft_version: minecraft_version,
-  mod_version: mod_version,
-  loader_version: loader_version,
-  group: group,
-  author: author,
-  github_user: github_user,
-  forgeconfigapiport_version: forgeconfigapiport_version
-]
-
-processResources {
-  inputs.properties replaceProperties
-  replaceProperties.put "project", project
-
-  filesMatching(resourceTarget) {
-    expand replaceProperties
+loom {
+  if (project(":common").file("src/main/resources/${mod_id}.accesswidener").exists()) {
+    accessWidenerPath.set(project(":common").file("src/main/resources/${mod_id}.accesswidener"))
   }
-
-  intoTargets.each { target ->
-    if (file(target).exists()) {
-      copy {
-        from(sourceSets.main.resources) {
-          include resourceTarget
-          expand replaceProperties
-        }
-        into target
-      }
+  mixin {
+    defaultRefmapName.set("${mod_id}.refmap.json")
+  }
+  runs {
+    client {
+      client()
+      setConfigName("Fabric Client")
+      ideConfigGenerated(true)
+      runDir("run")
     }
-  }
-}
-
-jar {
-  manifest {
-    attributes([
-      "Specification-Title"     : project.mod_title,
-      "Specification-Version"   : project.mod_version,
-      "Specification-Vendor"    : project.author,
-      "Implementation-Title"    : project.mod_title,
-      "Implementation-Version"  : project.mod_version,
-      "Implementation-Vendor"   : project.author,
-      "Implementation-Vendor-Id": project.group,
-      "Implementation-URL"      : "https://github.com/${github_user}/${modid_kebab}/tree/${minecraft_version}",
-      "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-    ])
+    server {
+      server()
+      setConfigName("Fabric Server")
+      ideConfigGenerated(true)
+      runDir("run")
+    }
   }
 }
 
 tasks.withType(JavaCompile).configureEach {
-  it.options.encoding = "UTF-8"
-  it.options.release = 17
+  source(project(":common").sourceSets.main.allSource)
+}
+tasks.withType(Javadoc).configureEach {
+  source(project(":common").sourceSets.main.allJava)
+}
+tasks.named("sourcesJar", Jar) {
+  from(project(":common").sourceSets.main.allSource)
 }
 
-def changelog_body = "See [Changelog](https://github.com/${github_user}/${modid_kebab}/blob/master/CHANGELOG.md#${minecraft_version.replaceAll('\\.', '')}-${mod_version.replaceAll('\\.', '')}---${new Date().format("yyyyMMdd")})."
-
-file("../api-keys.properties").withReader { 
-  Properties props = new Properties()
-  props.load(it)
-  project.api_keys = props
-}
-
-curseforge {
-  apiKey = api_keys.curseforge
-  project {
-    id = curseforge_id
-    changelogType = "markdown"
-    changelog = changelog_body
-    releaseType = "release"
-    addGameVersion loader
-    addGameVersion minecraft_version
-    mainArtifact(remapJar) {
-      displayName = "[${loader} - ${minecraft_version}] ${mod_title} v${mod_version}"
-      relations {
-        requiredDependency "fabric-api"
-        requiredDependency "forge-config-api-port-fabric"
-      }
-    }
-  }
-  options {
-    detectNewerJava = true
-    forgeGradleIntegration = false
-  }
-}
-
-modrinth {
-  token = api_keys.modrinth
-  projectId = modid_kebab
-  versionNumber = mod_version
-  versionName = "[${loader} - ${minecraft_version}] ${mod_title} v${mod_version}"
-  changelog = changelog_body
-  uploadFile = remapJar
-  versionType = "release"
-  gameVersions = [minecraft_version]
-  loaders = [loader.toLowerCase()]
-  dependencies {
-    required.project "fabric-api"
-    required.project "forge-config-api-port"
-  }
-}
-
-githubRelease {
-  token api_keys.github
-  owner github_user
-  repo modid_kebab
-  tagName "v${minecraft_version}-${mod_version}"
-  targetCommitish minecraft_version
-  releaseName "v${minecraft_version}-${mod_version}"
-  generateReleaseNotes false
-  body changelog_body
-  draft true
-  prerelease false
-  releaseAssets remapJar
-  // Setting this to true will allow this plugin to upload artifacts to a release if it found an existing one. If overwrite is set to true, this option is ignored.
-  allowUploadToExisting true
-  // By default false; if set to true, will delete an existing release with the same tag and name
-  // overwrite true
-  // by default false; you can use this to see what actions would be taken without making a release
-  // dryRun false
+processResources {
+  from project(":common").sourceSets.main.resources
 }
