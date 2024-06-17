@@ -1,219 +1,108 @@
-buildscript {
-  repositories {
-    maven { url = "https://maven.minecraftforge.net" }
-    mavenCentral()
-  }
-  dependencies {
-    classpath "org.spongepowered:mixingradle:0.7.+"
-  }
-}
 plugins {
-  id 'net.minecraftforge.gradle' version '5.1.+'
-  id "com.modrinth.minotaur" version "2.+"
-  id "com.matthewprenger.cursegradle" version "1.4.+"
-  id "com.github.breadmoirai.github-release" version "2.4.+"
-}
-apply plugin: "org.spongepowered.mixin"
-
-archivesBaseName = modid
-version = "${minecraft_version}-${mod_version}-${loader.toLowerCase()}"
-group = project.group
-
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-
-minecraft {
-  mappings channel: "official", version: minecraft_version
-  // accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg") // Currently, this location cannot be changed from the default.
-  runs {
-    client {
-      workingDirectory project.file("run")
-      property "forge.logging.markers", "REGISTRIES"
-      // https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-      property "forge.logging.console.level", "debug"
-      property "forge.enabledGameTestNamespaces", modid
-      mods {
-        "${modid}" {
-          source sourceSets.main
-        }
-      }
-    }
-    server {
-      workingDirectory project.file("run")
-      property "forge.logging.markers", "REGISTRIES"
-      // https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-      property "forge.logging.console.level", "debug"
-      property "forge.enabledGameTestNamespaces", modid
-      mods {
-        "${modid}" {
-          source sourceSets.main
-        }
-      }
-    }
-    gameTestServer {
-      workingDirectory project.file("run")
-      property "forge.logging.markers", "REGISTRIES"
-      // https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-      property "forge.logging.console.level", "debug"
-      property "forge.enabledGameTestNamespaces", modid
-      mods {
-        "${modid}" {
-          source sourceSets.main
-        }
-      }
-    }
-    data {
-      workingDirectory project.file("run")
-      property "forge.logging.markers", "REGISTRIES"
-      // https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-      property "forge.logging.console.level", "debug"
-      args "--mod", modid, "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources/")
-      mods {
-        "${modid}" {
-          source sourceSets.main
-        }
-      }
-    }
-  }
-}
-
-sourceSets.main.resources { srcDir "src/generated/resources" }
-
-repositories {
-  maven {
-    url "https://cursemaven.com"
-    content {
-      includeGroup "curse.maven"
-    }
-  }
-}
-
-dependencies {
-  minecraft "net.minecraftforge:forge:${minecraft_version}-${loader_version}${forge_subversion}"
-  annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
-
-  // Ensorcellation optional dependencies
-  implementation fg.deobf("curse.maven:ensorcellation-349447:4112124")
-  implementation fg.deobf("curse.maven:cofhcore-69162:4202944")
+  id "net.minecraftforge.gradle" version "[6.0,6.2)"
+  id "org.spongepowered.mixin" version "0.7-SNAPSHOT"
 }
 
 mixin {
-  add sourceSets.main, "soulfired.refmap.json"
-  config "soulfired.mixins.json"
+  add(sourceSets.main, "${mod_id}.refmap.json")
+  config("${mod_id}.mixins.json")
+  config("${mod_id}.forge.mixins.json")
 }
 
-def resourceTarget = "META-INF/mods.toml"
-def intoTargets = ["$rootDir/bin/main/"]
-def replaceProperties = [
-  modid: modid,
-  modid_kebab: modid_kebab,
-  mod_title: mod_title,
-  minecraft_version: minecraft_version,
-  mod_version: mod_version,
-  loader_version: loader_version,
-  forge_subversion: forge_subversion,
-  author: author,
-  github_user: github_user
-]
+minecraft {
+  mappings channel: "official", version: minecraft_version
 
-processResources {
-  inputs.properties replaceProperties
-  replaceProperties.put "project", project
+  copyIdeResources = true // Calls processResources when in dev
 
-  filesMatching(resourceTarget) {
-    expand replaceProperties
+  if (file("src/main/resources/META-INF/accesstransformer.cfg").exists()) {
+    accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
   }
 
-  intoTargets.each { target ->
-    if (file(target).exists()) {
-      copy {
-        from(sourceSets.main.resources) {
-          include resourceTarget
-          expand replaceProperties
+  runs {
+    client {
+      workingDirectory project.file("run")
+      ideaModule "${rootProject.name}.${project.name}.main"
+      taskName "Client"
+      property "mixin.env.remapRefMap", 'true'
+      property "mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg"
+      mods {
+        modClientRun {
+          source sourceSets.main
+          source project(":common").sourceSets.main
         }
-        into target
+      }
+    }
+
+    server {
+      workingDirectory project.file("run")
+      ideaModule "${rootProject.name}.${project.name}.main"
+      taskName "Server"
+      property "mixin.env.remapRefMap", "true"
+      property "mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg"
+      mods {
+        modServerRun {
+          source sourceSets.main
+          source project(":common").sourceSets.main
+        }
+      }
+    }
+
+    data {
+      workingDirectory project.file("run")
+      ideaModule "${rootProject.name}.${project.name}.main"
+      args "--mod", mod_id, "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources/")
+      taskName "Data"
+      property "mixin.env.remapRefMap", "true"
+      property "mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg"
+      mods {
+        modDataRun {
+          source sourceSets.main
+          source project(":common").sourceSets.main
+        }
       }
     }
   }
 }
 
-jar {
-  manifest {
-    attributes([
-      "Specification-Title"     : project.mod_title,
-      "Specification-Version"   : project.mod_version,
-      "Specification-Vendor"    : project.author,
-      "Implementation-Title"    : project.mod_title,
-      "Implementation-Version"  : project.mod_version,
-      "Implementation-Vendor"   : project.author,
-      "Implementation-Vendor-Id": project.group,
-      "Implementation-URL"      : "https://github.com/${github_user}/${modid_kebab}/tree/${minecraft_version}",
-      "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-    ])
-  }
+sourceSets.main.resources.srcDir "src/generated/resources"
+
+dependencies {
+  minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+  compileOnly project(":common")
+  annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+  implementation fg.deobf("it.crystalnest:cobweb-forge:${minecraft_version}-${cobweb_version}")
 }
 
 tasks.withType(JavaCompile).configureEach {
-  it.options.encoding = "UTF-8"
-  it.options.release = 17
+  source(project(":common").sourceSets.main.allSource)
+}
+tasks.withType(Javadoc).configureEach {
+  source(project(":common").sourceSets.main.allJava)
+}
+tasks.named("sourcesJar", Jar) {
+  from(project(":common").sourceSets.main.allSource)
 }
 
-def changelog_body = "See [Changelog](https://github.com/${github_user}/${modid_kebab}/blob/master/CHANGELOG.md#${minecraft_version.replaceAll('\\.', '')}-${mod_version.replaceAll('\\.', '')}---${new Date().format("yyyyMMdd")})."
-
-file("../api-keys.properties").withReader { 
-  Properties props = new Properties()
-  props.load(it)
-  project.api_keys = props
+processResources {
+  from project(":common").sourceSets.main.resources
 }
 
-curseforge {
-  apiKey = api_keys.curseforge
-  project {
-    id = curseforge_id
-    changelogType = "markdown"
-    changelog = changelog_body
-    releaseType = "release"
-    addGameVersion loader
-    addGameVersion minecraft_version
-    mainArtifact(jar) {
-      displayName = "[${loader} - ${minecraft_version}] ${mod_title} v${mod_version}"
-      // relations {}
+jar.finalizedBy("configureReobfTaskForReobfJar")
+jar.finalizedBy("reobfJar")
+
+// Task seems bugged, breaks build because of mod dependencies in the Common project, with no apparent workaround.
+tasks.named("compileTestJava").get().setEnabled(false)
+
+sourceSets.each {
+  def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
+  it.output.resourcesDir = dir
+  it.java.destinationDirectory = dir
+}
+
+publishing {
+  publications {
+    gpr(MavenPublication) {
+      fg.component(it)
     }
   }
-  options {
-    detectNewerJava = true
-    forgeGradleIntegration = false
-  }
-}
-
-modrinth {
-  token = api_keys.modrinth
-  projectId = modid_kebab
-  versionNumber = mod_version
-  versionName = "[${loader} - ${minecraft_version}] ${mod_title} v${mod_version}"
-  changelog = changelog_body
-  uploadFile = jar
-  versionType = "release"
-  gameVersions = [minecraft_version]
-  loaders = [loader.toLowerCase()]
-  dependencies {}
-}
-
-githubRelease {
-  token api_keys.github
-  owner github_user
-  repo modid_kebab
-  tagName "v${minecraft_version}-${mod_version}"
-  targetCommitish minecraft_version
-  releaseName "v${minecraft_version}-${mod_version}"
-  generateReleaseNotes false
-  body changelog_body
-  draft true
-  prerelease false
-  releaseAssets jar
-  // Setting this to true will allow this plugin to upload artifacts to a release if it found an existing one. If overwrite is set to true, this option is ignored.
-  allowUploadToExisting true
-  // By default false; if set to true, will delete an existing release with the same tag and name
-  // overwrite true
-  // by default false; you can use this to see what actions would be taken without making a release
-  // dryRun false
 }

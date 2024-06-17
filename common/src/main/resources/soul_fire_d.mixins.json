@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "${group}.${mod_id}.mixin",
+  "refmap": "${mod_id}.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AbstractArrowMixin",
+    "BaseFireBlockMixin",
+    "BowItemMixin",
+    "CampfireBlockMixin",
+    "EnchantmentHelperMixin",
+    "EntityMixin",
+    "ZombieMixin"
+  ],
+  "client": [
+    "client.EntityRenderDispatcherMixin",
+    "client.ScreenEffectRendererMixin"
+  ],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
+
