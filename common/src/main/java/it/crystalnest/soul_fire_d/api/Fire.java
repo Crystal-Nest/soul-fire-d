@@ -586,7 +586,7 @@ public final class Fire {
     }
 
     /**
-     * Sets the {@link DamageSource} {@link #inFireGetter}.
+     * Sets the {@link DamageSource} {@link #onFireGetter}.
      *
      * @param getter damage source getter.
      * @return this Builder to either set other properties or {@link #register}.
