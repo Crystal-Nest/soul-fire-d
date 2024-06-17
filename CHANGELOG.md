@@ -8,6 +8,10 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 ## [Unreleased]
 - Nothing new.
 
+## [v3.4.2-beta] - 2024/06/18
+
+- Fixed possible NPE when trying to get a fire, a fire property, or a fire component.
+
 ## [v3.4.1-beta] - 2024/06/16
 
 - Removed need to pass the particle type when registering torch blocks.
@@ -382,6 +386,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[v3.4.2-beta]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.4.2-beta
 [v3.4.1-beta]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.4.1-beta
 [v3.4.0-beta]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.4.0-beta
 [v3.3.5-alpha]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.3.5-alpha
