@@ -43,7 +43,7 @@ public abstract class EntityMixin implements FireTypeChanger {
    * Shadowed {@link Entity#level}.
    */
   @Shadow
-  private Level level;
+  public Level level;
 
   /**
    * Shadowed {@link Entity#getRemainingFireTicks()}.

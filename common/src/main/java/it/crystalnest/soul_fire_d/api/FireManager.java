@@ -34,7 +34,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.MaterialColor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.ApiStatus;
@@ -214,7 +214,7 @@ public final class FireManager {
    * @param color light color.
    * @return supplier for the registered source block.
    */
-  public static Supplier<CustomFireBlock> registerFireSource(ResourceLocation fireType, TagKey<Block> base, MapColor color) {
+  public static Supplier<CustomFireBlock> registerFireSource(ResourceLocation fireType, TagKey<Block> base, MaterialColor color) {
     return registerFireSource(fireType, type -> new CustomFireBlock(type, base, color));
   }
 

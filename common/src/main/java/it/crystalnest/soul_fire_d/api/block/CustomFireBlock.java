@@ -18,12 +18,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -55,12 +54,12 @@ public class CustomFireBlock extends BaseFireBlock implements FireTyped {
    * @param base {@link CustomFireBlock#base}.
    * @param color light color.
    */
-  public CustomFireBlock(ResourceLocation fireType, TagKey<Block> base, MapColor color) {
-    this(fireType, base, BlockBehaviour.Properties.of().mapColor(color).replaceable().noCollission().instabreak().sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY));
+  public CustomFireBlock(ResourceLocation fireType, TagKey<Block> base, MaterialColor color) {
+    this(fireType, base, Properties.of(Material.FIRE, color).noCollission().instabreak().sound(SoundType.WOOL));
   }
 
   /**
-   * Use the {@link CustomFireBlock#CustomFireBlock(ResourceLocation, TagKey, MapColor) other constructor} if your fire should behave similarly to the Vanilla ones (suggested).
+   * Use the {@link CustomFireBlock#CustomFireBlock(ResourceLocation, TagKey, MaterialColor) other constructor} if your fire should behave similarly to the Vanilla ones (suggested).
    *
    * @param fireType fire type.
    * @param base {@link CustomFireBlock#base}.

@@ -10,9 +10,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.WallTorchBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
@@ -36,7 +35,7 @@ public class CustomWallTorchBlock extends WallTorchBlock implements FireTyped {
    * @param type particle type.
    */
   public CustomWallTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type) {
-    this(fireType, type, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.WOOD).dropsLike(FireManager.getRequiredComponent(fireType, Fire.Component.TORCH_BLOCK)).pushReaction(PushReaction.DESTROY));
+    this(fireType, type, Properties.of(Material.DECORATION).noCollission().instabreak().sound(SoundType.WOOD).dropsLike(FireManager.getRequiredComponent(fireType, Fire.Component.TORCH_BLOCK)));
   }
 
   /**

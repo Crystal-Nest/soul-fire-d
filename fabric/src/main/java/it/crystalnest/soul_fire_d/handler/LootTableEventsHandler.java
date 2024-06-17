@@ -3,14 +3,14 @@ package it.crystalnest.soul_fire_d.handler;
 import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.config.ModConfig;
-import net.fabricmc.fabric.api.loot.v2.FabricLootTableBuilder;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.loot.v2.LootTableSource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
@@ -37,7 +37,7 @@ public final class LootTableEventsHandler {
    * @param builder a builder of the loot table being loaded.
    * @param source the source of the loot table.
    */
-  public static void handle(ResourceManager resourceManager, LootDataManager lootManager, ResourceLocation id, FabricLootTableBuilder builder, LootTableSource source) {
+  public static void handle(ResourceManager resourceManager, LootTables lootManager, ResourceLocation id, LootTable.Builder builder, LootTableSource source) {
     if (ModConfig.getEnableSoulFlame() && id.equals(BASTION_CHEST_IDENTIFIER)) {
       builder.pool(
         LootPool.lootPool()
