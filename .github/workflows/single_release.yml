@@ -1,0 +1,54 @@
+name: Single Release Workflow
+
+on:
+  workflow_dispatch:
+     inputs:
+      loader_forge:
+        type: boolean
+        description: Forge Loader
+        default: false
+      loader_fabric:
+        type: boolean
+        description: Fabric Loader
+        default: false
+      loader_neoforge:
+        type: boolean
+        description: NeoForge Loader
+        default: false
+      loader_common:
+        type: boolean
+        description: Common Loader
+        default: false
+      platform_maven:
+        type: boolean
+        description: Publish to Maven
+        default: false
+      platform_github:
+        type: boolean
+        description: Publish to GitHub
+        default: false
+      platform_curseforge:
+        type: boolean
+        description: Publish to CurseForge
+        default: false
+      platform_modrinth:
+        type: boolean
+        description: Publish to Modrinth
+        default: false 
+
+jobs:
+  call-workflow:
+    permissions: 
+      contents: write
+      packages: write
+    uses: crystal-nest/.github/.github/workflows/single_release.yml@main
+    with:
+      loader_forge: ${{ github.event.inputs.loader_forge }}
+      loader_fabric: ${{ github.event.inputs.loader_fabric }}
+      loader_neoforge: ${{ github.event.inputs.loader_neoforge }}
+      loader_common: ${{ github.event.inputs.loader_common }}
+      platform_maven: ${{ github.event.inputs.platform_maven }}
+      platform_github: ${{ github.event.inputs.platform_github }}
+      platform_curseforge: ${{ github.event.inputs.platform_curseforge }}
+      platform_modrinth: ${{ github.event.inputs.platform_modrinth }}
+    secrets: inherit
