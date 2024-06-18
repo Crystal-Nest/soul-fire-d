@@ -8,6 +8,10 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 ## [Unreleased]
 - Nothing new.
 
+## [v4.0.0] - 2024/06/18
+
+- Stable release.
+
 ## [v3.4.3-beta] - 2024/06/18
 
 - Updated Cobweb dependency version to `1.0.0`.
@@ -389,6 +393,8 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
+
+[v4.0.0]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.0
 
 [v3.4.3-beta]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.4.3-beta
 [v3.4.2-beta]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.4.2-beta
