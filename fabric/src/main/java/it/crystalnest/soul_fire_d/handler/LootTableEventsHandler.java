@@ -42,7 +42,7 @@ public final class LootTableEventsHandler {
       builder.pool(
         LootPool.lootPool()
           .setRolls(ConstantValue.exactly(1))
-          .conditionally(LootItemRandomChanceCondition.randomChance(0.05F).build())
+          .conditionally(LootItemRandomChanceCondition.randomChance(1F).build())
           .with(LootItem.lootTableItem(Items.BOOK).build())
           .apply(new EnchantRandomlyFunction.Builder().withEnchantment(FireManager.getComponent(FireManager.SOUL_FIRE_TYPE, Fire.Component.FLAME_ENCHANTMENT)))
           .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))

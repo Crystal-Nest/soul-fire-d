@@ -8,13 +8,14 @@ import it.crystalnest.soul_fire_d.api.block.CustomFireBlock;
 import it.crystalnest.soul_fire_d.api.block.CustomTorchBlock;
 import it.crystalnest.soul_fire_d.api.block.CustomWallTorchBlock;
 import it.crystalnest.soul_fire_d.api.client.FireClientManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.CampfireRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -32,7 +33,6 @@ public final class FMLClientSetupEventHandler {
    * @param event {@link FMLClientSetupEvent}.
    */
   @SubscribeEvent
-  @SuppressWarnings("removal")
   public static void handle(FMLClientSetupEvent event) {
     FireClientManager.registerFires(FireManager.getFires());
     FireManager.getComponentList(Fire.Component.CAMPFIRE_BLOCK).stream().filter(CustomCampfireBlock.class::isInstance).forEach(campfire -> ItemBlockRenderTypes.setRenderLayer(campfire, RenderType.cutout()));
@@ -42,13 +42,13 @@ public final class FMLClientSetupEventHandler {
   }
 
   /**
-   * Handles the {@link RegisterParticleProvidersEvent} event.
+   * Handles the {@link ParticleFactoryRegisterEvent} event.
    *
-   * @param event {@link RegisterParticleProvidersEvent}.
+   * @param event {@link ParticleFactoryRegisterEvent}.
    */
   @SubscribeEvent
-  public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
-    FireManager.getComponentList(Fire.Component.FLAME_PARTICLE).forEach(flame -> event.register(flame, FlameParticle.Provider::new));
+  public static void registerParticleProviders(ParticleFactoryRegisterEvent event) {
+    FireManager.getComponentList(Fire.Component.FLAME_PARTICLE).forEach(flame -> Minecraft.getInstance().particleEngine.register(flame, FlameParticle.Provider::new));
   }
 
   /**

@@ -64,6 +64,7 @@ subprojects { subproject ->
 
   repositories {
     mavenCentral()
+    maven { url = "https://jitpack.io" }
     maven {
       name = "Sponge / Mixin"
       url = "https://repo.spongepowered.org/repository/maven-public/"

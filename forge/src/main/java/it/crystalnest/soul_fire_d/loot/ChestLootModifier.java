@@ -1,10 +1,10 @@
 package it.crystalnest.soul_fire_d.loot;
 
-import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.crystalnest.soul_fire_d.config.ModConfig;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -12,106 +12,71 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.Map;
 
 /**
  * Chests loot modifier.
  */
 public final class ChestLootModifier extends LootModifier {
   /**
-   * {@link Supplier} for this {@link LootModifier} {@link Codec}.
-   */
-  public static final Supplier<Codec<ChestLootModifier>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.create(instance -> codecStart(instance).and(
-    Addition.CODEC.listOf().fieldOf("additions").forGetter(modifier -> modifier.additions)
-  ).apply(instance, ChestLootModifier::new)));
-
-  /**
    * Additional items to add to the chest loot.
    */
-  private final List<Addition> additions;
+  private final HashMap<ItemStack, Float> additions;
 
   /**
    * @param conditionsIn loot item conditions.
    * @param additions item additions.
    */
-  private ChestLootModifier(LootItemCondition[] conditionsIn, List<Addition> additions) {
+  private ChestLootModifier(LootItemCondition[] conditionsIn, HashMap<ItemStack, Float> additions) {
     super(conditionsIn);
     this.additions = additions;
   }
 
   @Override
   @Nonnull
-  protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
+  protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
     if (generatedLoot == null) {
-      generatedLoot = new ObjectArrayList<>();
+      generatedLoot = new ArrayList<>();
     }
-    for (Addition addition : additions) {
-      if (ModConfig.getEnableSoulFlame() && context.getRandom().nextFloat() <= addition.chance) {
-        generatedLoot.add(addition.getEnchantedBook());
+    for (Map.Entry<ItemStack, Float> addition : additions.entrySet()) {
+      if (ModConfig.getEnableSoulFlame() && context.getRandom().nextFloat() <= addition.getValue()) {
+        generatedLoot.add(addition.getKey());
       }
     }
     return generatedLoot;
   }
 
-  @Override
-  public Codec<? extends IGlobalLootModifier> codec() {
-    return CODEC.get();
-  }
-
   /**
-   * A single enchantment addition to the loot.
+   * {@link ChestLootModifier} Serializer.
    */
-  private static final class Addition {
-    /**
-     * {@link Codec}.
-     */
-    public static final Codec<Addition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-      ForgeRegistries.ENCHANTMENTS.getCodec().fieldOf("enchantment").forGetter(addition -> addition.enchantment),
-      Codec.FLOAT.fieldOf("chance").forGetter(addition -> addition.chance),
-      Codec.INT.fieldOf("level").forGetter(addition -> addition.level)
-    ).apply(instance, Addition::new));
-
-    /**
-     * {@link Enchantment} to add to the loot.
-     */
-    private final Enchantment enchantment;
-
-    /**
-     * Chance for this {@link #enchantment} to add to the loot.
-     */
-    private final Float chance;
-
-    /**
-     * Level of this {@link #enchantment} to add to the loot.
-     */
-    private final Integer level;
-
-    /**
-     * @param item item.
-     * @param chance chance to add the item.
-     * @param quantity item quantity.
-     */
-    private Addition(Enchantment item, Float chance, Integer quantity) {
-      this.enchantment = item;
-      this.chance = chance;
-      this.level = quantity;
+  public static class Serializer extends GlobalLootModifierSerializer<ChestLootModifier> {
+    @Override
+    public ChestLootModifier read(ResourceLocation name, JsonObject json, LootItemCondition[] conditionsIn) {
+      HashMap<ItemStack, Float> additions = new HashMap<>();
+      for (JsonElement jsonElement : GsonHelper.getAsJsonArray(json, "additions")) {
+        JsonObject entry = jsonElement.getAsJsonObject();
+        Enchantment enchantment = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(GsonHelper.getAsString(entry, "enchantment")));
+        if (enchantment != null) {
+          ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
+          int level = GsonHelper.getAsInt(entry, "level"), maxLevel = enchantment.getMaxLevel();
+          EnchantedBookItem.addEnchantment(book, new EnchantmentInstance(enchantment, Math.min(level, maxLevel)));
+          additions.put(book, GsonHelper.getAsFloat(entry, "chance"));
+        }
+      }
+      return new ChestLootModifier(conditionsIn, additions);
     }
 
-    /**
-     * Returns an enchanted book with this {@link #enchantment} applied.
-     *
-     * @return an enchanted book with this {@link #enchantment} applied.
-     */
-    private ItemStack getEnchantedBook() {
-      ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
-      EnchantedBookItem.addEnchantment(book, new EnchantmentInstance(enchantment, Math.min(enchantment.getMaxLevel(), level)));
-      return book;
+    @Override
+    public JsonObject write(ChestLootModifier instance) {
+      return makeConditions(instance.conditions);
     }
   }
 }

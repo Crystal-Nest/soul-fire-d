@@ -8,7 +8,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -24,6 +23,8 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Random;
 
 /**
  * Custom fire block.
@@ -91,11 +92,11 @@ public class CustomFireBlock extends BaseFireBlock implements FireTyped {
   }
 
   /**
-   * Refer to {@link FireBlock#tick(BlockState, ServerLevel, BlockPos, RandomSource)}.
+   * Refer to {@link FireBlock#tick(BlockState, ServerLevel, BlockPos, Random)}.
    */
   @Override
   @SuppressWarnings("deprecation")
-  public void tick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource rand) {
+  public void tick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull Random rand) {
     super.tick(state, level, pos, rand);
     scheduleTick(level, pos);
     if (level.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK)) {
@@ -152,7 +153,7 @@ public class CustomFireBlock extends BaseFireBlock implements FireTyped {
 
   /**
    * Schedule the next fire tick.<br />
-   * Based on {@link FireBlock#getFireTickDelay(RandomSource)}.
+   * Based on {@link FireBlock#getFireTickDelay(Random)}.
    *
    * @param level level.
    * @param pos position.

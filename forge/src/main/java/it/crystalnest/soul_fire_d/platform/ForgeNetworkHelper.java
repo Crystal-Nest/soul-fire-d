@@ -20,7 +20,7 @@ public class ForgeNetworkHelper implements NetworkHelper {
   /**
    * Channel version.
    */
-  private static final String CHANNEL_VERSION = "1.20.1-4";
+  private static final String CHANNEL_VERSION = "1.18.2-4";
 
   /**
    * {@link SimpleChannel} instance.
@@ -48,8 +48,8 @@ public class ForgeNetworkHelper implements NetworkHelper {
 
   @Override
   public void register() {
-    INSTANCE.messageBuilder(RegisterFirePacket.class, id()).encoder(RegisterFirePacket::write).decoder(RegisterFirePacket::new).consumerNetworkThread(ForgeFirePacketHandler::handleRegister);
-    INSTANCE.messageBuilder(UnregisterFirePacket.class, id()).encoder(UnregisterFirePacket::write).decoder(UnregisterFirePacket::new).consumerNetworkThread(ForgeFirePacketHandler::handleUnregister);
+    INSTANCE.registerMessage(id(), RegisterFirePacket.class, RegisterFirePacket::write, RegisterFirePacket::new, ForgeFirePacketHandler::handleRegister);
+    INSTANCE.registerMessage(id(), UnregisterFirePacket.class, UnregisterFirePacket::write, UnregisterFirePacket::new, ForgeFirePacketHandler::handleUnregister);
   }
 
   @Override
