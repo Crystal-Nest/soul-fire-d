@@ -20,7 +20,7 @@ public class ForgeNetworkHelper implements NetworkHelper {
   /**
    * Channel version.
    */
-  private static final String CHANNEL_VERSION = "1.20.1-4";
+  private static final String CHANNEL_VERSION = "1.19.2-4";
 
   /**
    * {@link SimpleChannel} instance.
