@@ -8,6 +8,10 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 ## [Unreleased]
 - Nothing new.
 
+## [v3.4.3-beta] - 2024/06/18
+
+- Updated Cobweb dependency version to `1.0.0`.
+
 ## [v3.4.2-beta] - 2024/06/18
 
 - Fixed possible NPE when trying to get a fire, a fire property, or a fire component.
@@ -386,6 +390,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[v3.4.3-beta]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.4.3-beta
 [v3.4.2-beta]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.4.2-beta
 [v3.4.1-beta]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.4.1-beta
 [v3.4.0-beta]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.4.0-beta
