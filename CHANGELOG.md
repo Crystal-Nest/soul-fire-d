@@ -10,6 +10,10 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 ## [v4.0.0] - 2024/06/20
 
+- Fixed in-game icon.
+
+## [v4.0.0] - 2024/06/20
+
 - Stable release.
 - Fix mod version wrongly including Minecraft version too.
 
