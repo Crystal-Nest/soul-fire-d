@@ -8,7 +8,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 ## [Unreleased]
 - Nothing new.
 
-## [v4.0.0] - 2024/06/20
+## [v4.0.1] - 2024/06/20
 
 - Fixed in-game icon.
 
@@ -399,6 +399,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[v4.0.1]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.1
 [v4.0.0]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.0
 
 [v3.4.3-beta]: https://github.com/crystal-nest/soul-fire-d/releases?q=3.4.3-beta
