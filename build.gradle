@@ -179,7 +179,7 @@ subprojects { subproject ->
       curseforge System.getenv("CURSEFORGE_TOKEN") ?: ""
     }
     setDebug(noPublish)
-    setVersion(project.version)
+    setVersion(mod_version)
     setChangelog(changelog_body)
     setVersionType(version_type)
     setArtifact(isFabric ? remapJar : jar)
