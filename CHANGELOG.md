@@ -8,9 +8,10 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 ## [Unreleased]
 - Nothing new.
 
-## [v4.0.0] - 2024/06/18
+## [v4.0.0] - 2024/06/20
 
 - Stable release.
+- Fix mod version wrongly including Minecraft version too.
 
 ## [v3.4.3-beta] - 2024/06/18
 
