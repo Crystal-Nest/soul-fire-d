@@ -21,7 +21,7 @@ public final class ForgeFirePacketHandler {
    * @param context custom payload context.
    */
   public static void handleRegister(RegisterFirePacket packet, Supplier<NetworkEvent.Context>  context) {
-    context.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> FirePacketHandler.handle(packet)));
+    context.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> new DistExecutor.SafeRunnable() { @Override public void run() { FirePacketHandler.handle(packet); } }));
     context.get().setPacketHandled(true);
   }
 
@@ -32,7 +32,7 @@ public final class ForgeFirePacketHandler {
    * @param context custom payload context.
    */
   public static void handleUnregister(UnregisterFirePacket packet, Supplier<NetworkEvent.Context> context) {
-    context.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> FirePacketHandler.handle(packet)));
+    context.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> new DistExecutor.SafeRunnable() { @Override public void run() { FirePacketHandler.handle(packet); } }));
     context.get().setPacketHandled(true);
   }
 }
