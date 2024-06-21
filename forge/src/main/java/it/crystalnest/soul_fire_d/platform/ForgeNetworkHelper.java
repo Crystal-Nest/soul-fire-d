@@ -18,9 +18,14 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ForgeNetworkHelper implements NetworkHelper {
   /**
+   * Channel version.
+   */
+  private static final int CHANNEL_VERSION = 1_20_4__4;
+
+  /**
    * {@link SimpleChannel} instance.
    */
-  private static final SimpleChannel INSTANCE = ChannelBuilder.named(new ResourceLocation(Constants.MOD_ID, Constants.DDFIRES)).networkProtocolVersion(1_20_4__4).acceptedVersions((status, version) -> version == 1_20_4__4).simpleChannel();
+  private static final SimpleChannel INSTANCE = ChannelBuilder.named(new ResourceLocation(Constants.MOD_ID, Constants.DDFIRES)).networkProtocolVersion(CHANNEL_VERSION).acceptedVersions((status, version) -> version == CHANNEL_VERSION).simpleChannel();
 
   /**
    * Latest packet ID.
@@ -38,8 +43,8 @@ public class ForgeNetworkHelper implements NetworkHelper {
 
   @Override
   public void register() {
-    INSTANCE.messageBuilder(RegisterFirePacket.class, id()).encoder(RegisterFirePacket::write).decoder(RegisterFirePacket::new).consumerNetworkThread(ForgeFirePacketHandler::handleRegister);
-    INSTANCE.messageBuilder(UnregisterFirePacket.class, id()).encoder(UnregisterFirePacket::write).decoder(UnregisterFirePacket::new).consumerNetworkThread(ForgeFirePacketHandler::handleUnregister);
+    INSTANCE.messageBuilder(RegisterFirePacket.class, id()).encoder(RegisterFirePacket::write).decoder(RegisterFirePacket::new).consumerNetworkThread(ForgeFirePacketHandler::handleRegister).add();
+    INSTANCE.messageBuilder(UnregisterFirePacket.class, id()).encoder(UnregisterFirePacket::write).decoder(UnregisterFirePacket::new).consumerNetworkThread(ForgeFirePacketHandler::handleUnregister).add();
   }
 
   @Override
