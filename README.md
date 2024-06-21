@@ -38,12 +38,13 @@ This mod makes Soul Fire actually work as one would expect, all whilst providing
 
 A list of mods adding full compatibility with Soul Fire'd by integrating Soul Fire behavior and, in some cases, registering new Fires:
 
-| Mod                                                             | Loader |
-|:----------------------------------------------------------------|:------:|
-| [Oh The Biomes You'll Go](https://modrinth.com/mod/biomesyougo) | Forge  |
-| [Decorative Blocks](https://modrinth.com/mod/decorative-blocks) |  All   |
-| [Danger Close](https://modrinth.com/mod/danger-close)           |  All   |
-| [Torch hit!](https://modrinth.com/mod/torch-hit)                |  All   |
+| Mod                                                                                                          | Loader |
+|:-------------------------------------------------------------------------------------------------------------|:------:|
+| [Oh The Biomes You'll Go](https://modrinth.com/mod/biomesyougo)                                              |     Forge      |
+| [Tetra](https://modrinth.com/mod/decorative-blocks) with [Tetracelium](https://modrinth.com/mod/tetracelium) | Forge/NeoForge |
+| [Decorative Blocks](https://modrinth.com/mod/decorative-blocks)                                              |      All       |
+| [Danger Close](https://modrinth.com/mod/danger-close)                                                        |      All       |
+| [Torch hit!](https://modrinth.com/mod/torch-hit)                                                             |      All       |
 
 If you want your mod to appear in this list, open an issue [here](https://github.com/Crystal-Nest/soul-fire-d/issues/new?assignees=Crystal-Spider&labels=question%2Cmedium+priority&projects=&template=information_request.yml) and provide a link to your mod!
 
