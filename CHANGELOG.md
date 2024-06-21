@@ -8,6 +8,11 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 ## [Unreleased]
 - Nothing new.
 
+## [v4.0.2] - 2024/06/21
+
+- Fixed [#45](https://github.com/Crystal-Nest/soul-fire-d/issues/45), DDFires datapacks not working.
+- Fixed [#46](https://github.com/Crystal-Nest/soul-fire-d/issues/46), flaming arrows hitting entities cause game crash.
+
 ## [v4.0.1] - 2024/06/20
 
 - Fixed in-game icon.
@@ -399,6 +404,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[v4.0.2]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.2
 [v4.0.1]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.1
 [v4.0.0]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.0
 
