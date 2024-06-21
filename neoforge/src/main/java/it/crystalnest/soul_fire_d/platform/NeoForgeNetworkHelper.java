@@ -48,8 +48,8 @@ public class NeoForgeNetworkHelper implements NetworkHelper {
 
   @Override
   public void register() {
-    INSTANCE.messageBuilder(RegisterFirePacket.class, id()).encoder(RegisterFirePacket::write).decoder(RegisterFirePacket::new).consumerNetworkThread(NeoForgeFirePacketHandler::handle);
-    INSTANCE.messageBuilder(UnregisterFirePacket.class, id()).encoder(UnregisterFirePacket::write).decoder(UnregisterFirePacket::new).consumerNetworkThread(NeoForgeFirePacketHandler::handle);
+    INSTANCE.messageBuilder(RegisterFirePacket.class, id()).encoder(RegisterFirePacket::write).decoder(RegisterFirePacket::new).consumerNetworkThread(NeoForgeFirePacketHandler::handle).add();
+    INSTANCE.messageBuilder(UnregisterFirePacket.class, id()).encoder(UnregisterFirePacket::write).decoder(UnregisterFirePacket::new).consumerNetworkThread(NeoForgeFirePacketHandler::handle).add();
   }
 
   @Override
