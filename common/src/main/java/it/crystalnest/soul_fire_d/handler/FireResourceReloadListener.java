@@ -162,43 +162,46 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
       try {
         JsonObject jsonData = getJsonObject(jsonIdentifier, fire.getValue());
         String mod = parse(jsonIdentifier, "mod", jsonData, JsonElement::getAsString);
-        JsonArray jsonFires = parse(jsonIdentifier, "fires", jsonData, JsonElement::getAsJsonArray);
-        for (JsonElement element : jsonFires) {
-          JsonObject jsonFire = getJsonObject(jsonIdentifier, element);
-          ResourceLocation fireType = new ResourceLocation(mod, parse(jsonIdentifier, "fire", jsonFire, JsonElement::getAsString));
-          Fire.Builder builder = FireManager.fireBuilder(fireType)
-            .setDamage(parse(jsonIdentifier, "damage", jsonFire, JsonElement::getAsFloat, Fire.Builder.DEFAULT_DAMAGE))
-            .setInvertHealAndHarm(parse(jsonIdentifier, "invertHealAndHarm", jsonFire, JsonElement::getAsBoolean, Fire.Builder.DEFAULT_INVERT_HEAL_AND_HARM));
-          builder
-            .removeComponent(Fire.Component.CAMPFIRE_ITEM)
-            .removeComponent(Fire.Component.LANTERN_BLOCK)
-            .removeComponent(Fire.Component.LANTERN_ITEM)
-            .removeComponent(Fire.Component.TORCH_BLOCK)
-            .removeComponent(Fire.Component.TORCH_ITEM)
-            .removeComponent(Fire.Component.WALL_TORCH_BLOCK)
-            .removeComponent(Fire.Component.FLAME_PARTICLE);
-          if (jsonFire.get(SOURCE_FIELD_NAME) != null && jsonFire.get(SOURCE_FIELD_NAME).isJsonNull()) {
-            builder.removeComponent(Fire.Component.SOURCE_BLOCK);
-          } else {
-            String source = parse(jsonIdentifier, SOURCE_FIELD_NAME, jsonFire, JsonElement::getAsString, null);
-            if (source != null && ResourceLocation.isValidResourceLocation(source)) {
-              builder.setComponent(Fire.Component.SOURCE_BLOCK, new ResourceLocation(source));
+        if (Services.PLATFORM.isModLoaded(mod)) {
+          JsonArray jsonFires = parse(jsonIdentifier, "fires", jsonData, JsonElement::getAsJsonArray);
+          for (JsonElement element : jsonFires) {
+            JsonObject jsonFire = getJsonObject(jsonIdentifier, element);
+            ResourceLocation fireType = new ResourceLocation(mod, parse(jsonIdentifier, "fire", jsonFire, JsonElement::getAsString));
+            Fire.Builder builder = FireManager.fireBuilder(fireType)
+              .setDamage(parse(fireType.toString(), "damage", jsonFire, JsonElement::getAsFloat, Fire.Builder.DEFAULT_DAMAGE))
+              .setInvertHealAndHarm(parse(fireType.toString(), "invertHealAndHarm", jsonFire, JsonElement::getAsBoolean, Fire.Builder.DEFAULT_INVERT_HEAL_AND_HARM))
+              .removeComponent(Fire.Component.CAMPFIRE_ITEM)
+              .removeComponent(Fire.Component.LANTERN_BLOCK)
+              .removeComponent(Fire.Component.LANTERN_ITEM)
+              .removeComponent(Fire.Component.TORCH_BLOCK)
+              .removeComponent(Fire.Component.TORCH_ITEM)
+              .removeComponent(Fire.Component.WALL_TORCH_BLOCK)
+              .removeComponent(Fire.Component.FLAME_PARTICLE);
+            if (jsonFire.get(SOURCE_FIELD_NAME) != null && jsonFire.get(SOURCE_FIELD_NAME).isJsonNull()) {
+              builder.removeComponent(Fire.Component.SOURCE_BLOCK);
+            } else {
+              String source = parse(fireType.toString(), SOURCE_FIELD_NAME, jsonFire, JsonElement::getAsString, null);
+              if (source != null && ResourceLocation.isValidResourceLocation(source)) {
+                builder.setComponent(Fire.Component.SOURCE_BLOCK, new ResourceLocation(source));
+              }
             }
-          }
-          if (jsonFire.get(CAMPFIRE_FIELD_NAME) != null && jsonFire.get(CAMPFIRE_FIELD_NAME).isJsonNull()) {
-            builder.removeComponent(Fire.Component.CAMPFIRE_BLOCK);
-          } else {
-            String campfire = parse(jsonIdentifier, CAMPFIRE_FIELD_NAME, jsonFire, JsonElement::getAsString, null);
-            if (campfire != null && ResourceLocation.isValidResourceLocation(campfire)) {
-              builder.setComponent(Fire.Component.CAMPFIRE_BLOCK, new ResourceLocation(campfire));
+            if (jsonFire.get(CAMPFIRE_FIELD_NAME) != null && jsonFire.get(CAMPFIRE_FIELD_NAME).isJsonNull()) {
+              builder.removeComponent(Fire.Component.CAMPFIRE_BLOCK);
+            } else {
+              String campfire = parse(fireType.toString(), CAMPFIRE_FIELD_NAME, jsonFire, JsonElement::getAsString, null);
+              if (campfire != null && ResourceLocation.isValidResourceLocation(campfire)) {
+                builder.setComponent(Fire.Component.CAMPFIRE_BLOCK, new ResourceLocation(campfire));
+              }
             }
+            builder.removeFireAspect();
+            builder.removeFlame();
+            registerFire(fireType, builder.build());
           }
-          builder.removeFireAspect();
-          builder.removeFlame();
-          registerFire(fireType, builder.build());
+        } else {
+          Constants.LOGGER.warn("Registering of ddfires for [{}] is canceled: {} is not loaded.", mod, mod);
         }
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
-        Constants.LOGGER.error("Registering of ddfire [{}] is canceled.", jsonIdentifier);
+        Constants.LOGGER.error("Registering of ddfires for [{}] is canceled.", jsonIdentifier);
       }
     }
   }
