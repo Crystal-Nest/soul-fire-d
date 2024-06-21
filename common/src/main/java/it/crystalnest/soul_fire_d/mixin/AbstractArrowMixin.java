@@ -28,8 +28,7 @@ public abstract class AbstractArrowMixin implements FireTypeChanger {
    */
   @Redirect(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setSecondsOnFire(I)V"))
   private void redirectSetSecondsOnFire(Entity caller, int seconds) {
-    FireTypedFlameEnchantment flame = FireManager.getComponent(getFireType(), Fire.Component.FLAME_ENCHANTMENT);
-    FireManager.setOnFire(caller, flame != null ? flame.duration(((Projectile) (Object) this).getOwner(), caller, seconds) : seconds, getFireType());
+    FireManager.setOnFire(caller, FireManager.getComponent(getFireType(), Fire.Component.FLAME_ENCHANTMENT) instanceof FireTypedFlameEnchantment flame ? flame.duration(((Projectile) (Object) this).getOwner(), caller, seconds) : seconds, getFireType());
   }
 
   /**
