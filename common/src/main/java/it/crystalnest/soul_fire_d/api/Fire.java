@@ -19,7 +19,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.StandingAndWallBlockItem;
+import net.minecraft.world.item.enchantment.ArrowFireEnchantment;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.FireAspectEnchantment;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -262,12 +264,12 @@ public final class Fire {
     /**
      * Fire Aspect enchantment component.
      */
-    public static final Component<Enchantment, FireTypedFireAspectEnchantment> FIRE_ASPECT_ENCHANTMENT = new Component<>(Registries.ENCHANTMENT, "_fire_aspect");
+    public static final Component<Enchantment, FireAspectEnchantment> FIRE_ASPECT_ENCHANTMENT = new Component<>(Registries.ENCHANTMENT, "_fire_aspect");
 
     /**
      * Flame enchantment component.
      */
-    public static final Component<Enchantment, FireTypedFlameEnchantment> FLAME_ENCHANTMENT = new Component<>(Registries.ENCHANTMENT, "_flame");
+    public static final Component<Enchantment, ArrowFireEnchantment> FLAME_ENCHANTMENT = new Component<>(Registries.ENCHANTMENT, "_flame");
 
     /**
      * Registry key where the value associated to this component is stored.
@@ -756,14 +758,18 @@ public final class Fire {
     public Fire build() throws IllegalStateException {
       if (FireManager.isValidFireId(fireId) && FireManager.isValidModId(modId)) {
         ResourceLocation fireType = FireManager.sanitize(modId, fireId);
-        if (fireAspectConfigurator != null && fireAspectConfigurator.isEmpty()) {
-          fireAspectConfigurator = Optional.of(builder -> builder);
+        if (fireAspectConfigurator != null) {
+          if (fireAspectConfigurator.isEmpty()) {
+            fireAspectConfigurator = Optional.of(builder -> builder);
+          }
+          components.put(Component.FIRE_ASPECT_ENCHANTMENT, register(fireType, fireAspectConfigurator, FireAspectBuilder::new));
         }
-        if (flameConfigurator != null && flameConfigurator.isEmpty()) {
-          flameConfigurator = Optional.of(builder -> builder);
+        if (flameConfigurator != null) {
+          if (flameConfigurator.isEmpty()) {
+            flameConfigurator = Optional.of(builder -> builder);
+          }
+          components.put(Component.FLAME_ENCHANTMENT, register(fireType, flameConfigurator, FlameBuilder::new));
         }
-        components.put(Component.FIRE_ASPECT_ENCHANTMENT, register(fireType, fireAspectConfigurator, FireAspectBuilder::new));
-        components.put(Component.FLAME_ENCHANTMENT, register(fireType, flameConfigurator, FlameBuilder::new));
         return new Fire(fireType, light, damage, invertHealAndHarm, canRainDouse, inFireGetter, onFireGetter, behavior, components);
       }
       throw new IllegalStateException("Attempted to build a Fire with a non-valid fireId [" + fireId + "] or modId [" + modId + "].");
