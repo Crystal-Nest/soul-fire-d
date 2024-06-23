@@ -52,7 +52,7 @@ If you want your mod to appear in this list, open an issue [here](https://github
 
 | Mod                                                                     |         Loader         | Requirement |
 |:------------------------------------------------------------------------|:----------------------:|:-----------:|
-| [Cobweb](https://modrinth.com/mod/forge-config-api-port)                |          All           |  Required   |
+| [Cobweb](https://modrinth.com/mod/cobweb)                               |          All           |  Required   |
 | [Forge Config API Port](https://modrinth.com/mod/forge-config-api-port) | Fabric; Forge ≥ 1.20.2 |  Required   |
 
 ## **License and right of use**
