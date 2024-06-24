@@ -118,7 +118,7 @@ subprojects { subproject ->
     enabled = false
   }
 
-  def changelog_body = "See [Changelog](https://github.com/${github_user}/${mod_id_kebab}/blob/master/CHANGELOG.md#${minecraft_version.replaceAll('\\.', '')}-${mod_version.replaceAll('\\.', '')}---${new Date().format("yyyyMMdd")})."
+  def changelog_body = "See [Changelog](https://github.com/${github_user}/${mod_id_kebab}/blob/master/CHANGELOG.md#v${mod_version.replaceAll('\\.', '')}---${new Date().format("yyyyMMdd")})."
   def version_type = mod_version.replaceFirst("([0-9]+\\.?)+-?", "") ?: "release"
   def loader = "Common"
   switch (subproject.name) {
