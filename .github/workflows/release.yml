@@ -2,18 +2,33 @@ name: Release Workflow
 
 on:
   workflow_dispatch:
-     inputs:
+    inputs:
       version:
         type: string
         description: Version number
-        required: true   
+        required: true
+      disable_checks:
+        type: boolean
+        description: Disable version consistency checks
+        default: false
 
 jobs:
+  call-version-validation-workflow:
+    permissions:
+      contents: read
+    uses: crystal-nest/.github/.github/workflows/version_validation.yml@main
+    with:
+      version: ${{ github.event.inputs.version }}
+      disable_checks: ${{ github.event.inputs.disable_checks }}
+    secrets: inherit
   call-analyze-workflow:
+    needs: call-version-validation-workflow
+    permissions:
+      contents: read
     uses: crystal-nest/.github/.github/workflows/analyze.yml@main
     secrets: inherit 
   call-version-update-workflow:
-    needs: call-analyze-workflow
+    needs: [call-version-validation-workflow, call-analyze-workflow]
     permissions: 
       contents: write
     uses: crystal-nest/.github/.github/workflows/version_update.yml@main
@@ -21,7 +36,7 @@ jobs:
       version: ${{ github.event.inputs.version }}
     secrets: inherit
   call-release-workflow:
-    needs: [call-analyze-workflow, call-version-update-workflow]
+    needs: [call-version-validation-workflow, call-analyze-workflow, call-version-update-workflow]
     permissions: 
       contents: write
       packages: write
