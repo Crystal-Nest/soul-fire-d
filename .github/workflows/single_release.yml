@@ -37,7 +37,13 @@ on:
         default: false 
 
 jobs:
-  call-workflow:
+  call-analyze-workflow:
+    uses: crystal-nest/.github/.github/workflows/analyze.yml@main
+    permissions:
+      contents: read
+    secrets: inherit
+  call-release-workflow:
+    needs: call-analyze-workflow
     permissions: 
       contents: write
       packages: write
