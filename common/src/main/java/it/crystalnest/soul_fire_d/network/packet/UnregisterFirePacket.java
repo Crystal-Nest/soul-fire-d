@@ -3,6 +3,7 @@ package it.crystalnest.soul_fire_d.network.packet;
 import it.crystalnest.soul_fire_d.Constants;
 import it.crystalnest.soul_fire_d.api.Fire;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -14,25 +15,19 @@ import org.jetbrains.annotations.NotNull;
  */
 public record UnregisterFirePacket(ResourceLocation fireType) implements CustomPacketPayload {
   /**
-   * Packet ID.
+   * Packet type.
    */
-  public static final ResourceLocation ID = new ResourceLocation(Constants.MOD_ID, "unregister_fire");
+  public static final Type<UnregisterFirePacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "unregister_fire"));
 
-  /**
-   * @param buffer buffer.
-   */
-  public UnregisterFirePacket(FriendlyByteBuf buffer) {
-    this(buffer.readResourceLocation());
-  }
-
-  @Override
-  public void write(@NotNull FriendlyByteBuf buffer) {
-    buffer.writeResourceLocation(fireType);
-  }
+  public static final StreamCodec<FriendlyByteBuf, UnregisterFirePacket> CODEC = StreamCodec.composite(
+    ResourceLocation.STREAM_CODEC,
+    UnregisterFirePacket::fireType,
+    UnregisterFirePacket::new
+  );
 
   @NotNull
   @Override
-  public ResourceLocation id() {
-    return ID;
+  public Type<? extends CustomPacketPayload> type() {
+    return TYPE;
   }
 }

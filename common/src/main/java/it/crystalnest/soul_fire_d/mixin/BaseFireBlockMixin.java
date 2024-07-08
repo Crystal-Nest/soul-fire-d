@@ -67,6 +67,6 @@ public abstract class BaseFireBlockMixin implements FireTypeChanger {
    */
   @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity instance, DamageSource damageSource, float damage) {
-    return FireManager.damageInFire(instance, getFireType());
+    return FireManager.affect(instance, getFireType(), Fire::getInFire);
   }
 }

@@ -181,7 +181,7 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
    * @param jsonIdentifier JSON ID.
    */
   private void registerFire(JsonObject jsonFire, String mod, String jsonIdentifier) {
-    ResourceLocation fireType = new ResourceLocation(mod, parse(jsonIdentifier, "fire", jsonFire, JsonElement::getAsString));
+    ResourceLocation fireType = ResourceLocation.fromNamespaceAndPath(mod, parse(jsonIdentifier, "fire", jsonFire, JsonElement::getAsString));
     Fire.Builder builder = FireManager.fireBuilder(fireType)
       .setDamage(parse(fireType.toString(), "damage", jsonFire, JsonElement::getAsFloat, Fire.Builder.DEFAULT_DAMAGE))
       .setInvertHealAndHarm(parse(fireType.toString(), "invertHealAndHarm", jsonFire, JsonElement::getAsBoolean, Fire.Builder.DEFAULT_INVERT_HEAL_AND_HARM))
@@ -196,20 +196,18 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
       builder.removeComponent(Fire.Component.SOURCE_BLOCK);
     } else {
       String source = parse(fireType.toString(), SOURCE_FIELD_NAME, jsonFire, JsonElement::getAsString, null);
-      if (source != null && ResourceLocation.isValidResourceLocation(source)) {
-        builder.setComponent(Fire.Component.SOURCE_BLOCK, new ResourceLocation(source));
+      if (source != null && ResourceLocation.tryParse(source) != null) {
+        builder.setComponent(Fire.Component.SOURCE_BLOCK, ResourceLocation.parse(source));
       }
     }
     if (jsonFire.get(CAMPFIRE_FIELD_NAME) != null && jsonFire.get(CAMPFIRE_FIELD_NAME).isJsonNull()) {
       builder.removeComponent(Fire.Component.CAMPFIRE_BLOCK);
     } else {
       String campfire = parse(fireType.toString(), CAMPFIRE_FIELD_NAME, jsonFire, JsonElement::getAsString, null);
-      if (campfire != null && ResourceLocation.isValidResourceLocation(campfire)) {
-        builder.setComponent(Fire.Component.CAMPFIRE_BLOCK, new ResourceLocation(campfire));
+      if (campfire != null && ResourceLocation.tryParse(campfire) != null) {
+        builder.setComponent(Fire.Component.CAMPFIRE_BLOCK, ResourceLocation.parse(campfire));
       }
     }
-    builder.removeFireAspect();
-    builder.removeFlame();
     registerFire(fireType, builder.build());
   }
 }

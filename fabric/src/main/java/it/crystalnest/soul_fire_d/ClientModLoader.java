@@ -7,7 +7,7 @@ import it.crystalnest.soul_fire_d.api.block.CustomFireBlock;
 import it.crystalnest.soul_fire_d.api.block.CustomTorchBlock;
 import it.crystalnest.soul_fire_d.api.block.CustomWallTorchBlock;
 import it.crystalnest.soul_fire_d.api.client.FireClientManager;
-import it.crystalnest.soul_fire_d.network.handler.FabricFirePacketHandler;
+import it.crystalnest.soul_fire_d.network.handler.FirePacketHandler;
 import it.crystalnest.soul_fire_d.network.packet.RegisterFirePacket;
 import it.crystalnest.soul_fire_d.network.packet.UnregisterFirePacket;
 import net.fabricmc.api.ClientModInitializer;
@@ -34,7 +34,7 @@ public final class ClientModLoader implements ClientModInitializer {
     FireManager.getComponentList(Fire.Component.TORCH_BLOCK).stream().filter(CustomTorchBlock.class::isInstance).forEach(torch -> BlockRenderLayerMap.INSTANCE.putBlock(torch, RenderType.cutout()));
     FireManager.getComponentList(Fire.Component.WALL_TORCH_BLOCK).stream().filter(CustomWallTorchBlock.class::isInstance).forEach(torch -> BlockRenderLayerMap.INSTANCE.putBlock(torch, RenderType.cutout()));
     FireManager.getComponentList(Fire.Component.FLAME_PARTICLE).forEach(flame -> ParticleFactoryRegistry.getInstance().register(flame, FlameParticle.Provider::new));
-    ClientPlayNetworking.registerGlobalReceiver(RegisterFirePacket.ID, FabricFirePacketHandler::handleRegister);
-    ClientPlayNetworking.registerGlobalReceiver(UnregisterFirePacket.ID, FabricFirePacketHandler::handleUnregister);
+    ClientPlayNetworking.registerGlobalReceiver(RegisterFirePacket.TYPE, (packet, context) -> FirePacketHandler.handle(packet));
+    ClientPlayNetworking.registerGlobalReceiver(UnregisterFirePacket.TYPE, (packet, context) -> FirePacketHandler.handle(packet));
   }
 }

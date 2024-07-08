@@ -1,5 +1,6 @@
 package it.crystalnest.soul_fire_d.mixin;
 
+import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTypeChanger;
 import net.minecraft.core.BlockPos;
@@ -46,6 +47,6 @@ public abstract class CampfireBlockMixin implements FireTypeChanger {
    */
   @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity instance, DamageSource damageSource, float damage) {
-    return FireManager.damageInFire(instance, getFireType());
+    return FireManager.affect(instance, getFireType(), Fire::getOnCampfire);
   }
 }

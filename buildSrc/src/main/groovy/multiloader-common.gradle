@@ -1,0 +1,248 @@
+plugins {
+  id "java-library"
+  id "maven-publish"
+  id "com.hypherionmc.modutils.modpublisher"
+}
+
+base {
+  archivesName = "$mod_id_kebab-$name"
+  version = "$minecraft_version-$mod_version"
+}
+
+java {
+  toolchain.languageVersion = JavaLanguageVersion.of(java_version)
+  withSourcesJar()
+  withJavadocJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+  it.options.encoding = "UTF-8"
+  it.options.getRelease().set(java_version as Integer)
+}
+
+repositories {
+  mavenCentral()
+  exclusiveContent {
+    forRepository {
+      maven {
+        name = "Sponge"
+        url = "https://repo.spongepowered.org/repository/maven-public"
+      }
+    }
+    filter { includeGroupAndSubgroups("org.spongepowered") }
+  }
+  exclusiveContent {
+    forRepositories(
+      maven {
+        name = "ParchmentMC"
+        url = "https://maven.parchmentmc.org/"
+      },
+      maven {
+        name = "NeoForge"
+        url = "https://maven.neoforged.net/releases"
+      }
+    )
+    filter { includeGroup("org.parchmentmc.data") }
+  }
+  maven {
+    name = "Crystal Nest"
+    url = "https://maven.crystalnest.it"
+  }
+  maven {
+    name = "Fuzs Mod Resources"
+    url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+  }
+}
+
+if (name != "fabric") {
+  dependencies {
+    implementation "it.crystalnest:cobweb-$name:$minecraft_version-$cobweb_version"
+  }
+}
+
+["apiElements", "runtimeElements", "sourcesElements", "javadocElements"].each { variant ->
+  configurations."$variant".outgoing {
+    capability("$group:${base.archivesName.get()}:$version")
+    capability("$group:$mod_id-${project.name}-$minecraft_version:$version")
+    capability("$group:$mod_id:$version")
+  }
+  publishing.publications.configureEach {
+    suppressPomMetadataWarningsFor(variant)
+  }
+}
+
+sourcesJar {
+  from(rootProject.file("LICENSE")) {
+    rename { "${it}_$mod_title" }
+  }
+}
+
+jar {
+  from(rootProject.file("LICENSE")) {
+    rename { "${it}_$mod_title" }
+  }
+  manifest {
+    attributes([
+      "Specification-Title"     : mod_title,
+      "Specification-Vendor"    : mod_authors,
+      "Specification-Version"   : project.version,
+      "Implementation-Title"    : mod_title,
+      "Implementation-Vendor"   : mod_authors,
+      "Implementation-Version"  : project.version,
+      "Implementation-URL"      : "https://github.com/$github_user/$mod_id_kebab/tree/$minecraft_version",
+      "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+      "Timestamp"               : System.currentTimeMillis(),
+      "Built-On-Java"           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
+      "Built-On-Minecraft"      : minecraft_version
+    ])
+  }
+}
+
+processResources {
+  def expandProps = [
+    "java_version"                 : java_version,
+    "mod_version"                  : mod_version,
+    "group"                        : project.group,
+    "mod_authors"                  : mod_authors,
+    "mod_title"                    : mod_title,
+    "mod_id"                       : mod_id,
+    "mod_id_kebab"                 : mod_id_kebab,
+    "license"                      : license,
+    "description"                  : project.description,
+    "credits"                      : credits,
+    "github_user"                  : github_user,
+    "curseforge_id"                : curseforge_id,
+    "minecraft_version"            : minecraft_version,
+    "minecraft_version_range"      : minecraft_version_range,
+    "fabric_version"               : fabric_version,
+    "fabric_loader_version"        : fabric_loader_version,
+    "neoforge_version"             : neoforge_version,
+    "neoforge_loader_version_range": neoforge_loader_version_range,
+    "cobweb_version"               : cobweb_version,
+    "fcap_version"                 : fcap_version,
+  ]
+  filesMatching(["pack.mcmeta", "fabric.mod.json", "META-INF/neoforge.mods.toml", "*.mixins.json"]) {
+    expand expandProps
+  }
+  inputs.properties(expandProps)
+}
+
+def noPublish = name == "common"
+def changelog_body = "See [Changelog](https://github.com/$github_user/$mod_id_kebab/blob/master/CHANGELOG.md#v${mod_version.replaceAll('\\.', '')}---${new Date().format("yyyyMMdd")})."
+def version_type = mod_version.replaceFirst("([0-9]+\\.?)+-?", "") ?: "release"
+def loader = "Common"
+switch (name) {
+  case "fabric":
+    loader = "Fabric"
+    break
+  case "neoforge":
+    loader = "NeoForge"
+    break
+}
+
+publishing {
+  repositories {
+    maven {
+      name = "GitHubPackages"
+      url = uri("https://maven.pkg.github.com/$github_user/$mod_id_kebab")
+      credentials {
+        username = github_user
+        password = System.getenv("GITHUB_TOKEN") ?: ""
+      }
+    }
+  }
+  publications {
+    gpr(MavenPublication) {
+      groupId = project.group
+      artifactId = "$mod_id_kebab-${loader.toLowerCase()}"
+      version = project.version
+      from components.java
+      pom {
+        name = "[$loader - $minecraft_version] $mod_title v$mod_version"
+        description = "$description"
+        url = "https://github.com/$github_user/$mod_id_kebab/tree/$minecraft_version"
+        issueManagement {
+          system = "github"
+          url = "https://github.com/$github_user/$mod_id_kebab/issues"
+        }
+        licenses {
+          license {
+            name = license
+            url = "https://spdx.org/licenses/${license}.html"
+          }
+        }
+        developers {
+          mod_authors.split(", ").each { author ->
+            developer {
+              id = author.toLowerCase()
+              name = author
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+publisher {
+  apiKeys {
+    github System.getenv("GITHUB_TOKEN") ?: ""
+    modrinth System.getenv("MODRINTH_TOKEN") ?: ""
+    curseforge System.getenv("CURSEFORGE_TOKEN") ?: ""
+  }
+  setDebug(noPublish)
+  setVersion(mod_version)
+  setChangelog(changelog_body)
+  setVersionType(version_type)
+  setArtifact(jar)
+  setDisableMalwareScanner(true) // Disable the built in Fractureizer scanner.
+  setDisableEmptyJarCheck(true) // Disable check for valid mod metadata entry in artifact, which could possibly mean that the jar is empty.
+  setModrinthID(mod_id_kebab)
+  setCurseID(curseforge_id)
+  if (!noPublish) {
+    setLoaders(loader)
+  }
+  setGameVersions(minecraft_version)
+  setDisplayName("[$loader - $minecraft_version] $mod_title v$mod_version")
+  setJavaVersions([JavaVersion.VERSION_21]) // Remember to update this to match java_version gradle property.
+  setCurseEnvironment("both") // "server", "client" or "both".
+  github {
+    repo = "$github_user/$mod_id_kebab"
+    tag = "v${project.version}"
+    displayName("v${project.version}")
+    target = minecraft_version
+    createTag = true
+    createRelease = true
+    updateRelease = true
+    draft = false
+  }
+  modrinthDepends {
+    required "cobweb"
+    switch (loader) {
+      case "Fabric":
+        required "fabric-api"
+        required "forge-config-api-port"
+        break
+      case "NeoForge":
+        break
+    }
+  }
+  curseDepends {
+    required "cobweb"
+    switch (loader) {
+      case "Fabric":
+        required "fabric-api"
+        required "forge-config-api-port-fabric"
+        break
+      case "NeoForge":
+        break
+    }
+  }
+}
+
+tasks.register("publishLoader") {
+  group = "publishing"
+  description = "Publish $loader specific versions to all platforms"
+  dependsOn "publish"
+  dependsOn "publishMod"
+}

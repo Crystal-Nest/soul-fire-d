@@ -35,8 +35,8 @@ public final class FireClient {
     String modId = fireType.getNamespace();
     String fireId = fireType.getPath();
     String joiner = FireManager.DEFAULT_FIRE_TYPE.equals(fireType) ? "" : "_";
-    this.material0 = new Material(InventoryMenu.BLOCK_ATLAS, new ResourceLocation(modId, "block/" + fireId + joiner + "fire_0"));
-    this.material1 = new Material(InventoryMenu.BLOCK_ATLAS, new ResourceLocation(modId, "block/" + fireId + joiner + "fire_1"));
+    this.material0 = new Material(InventoryMenu.BLOCK_ATLAS, ResourceLocation.fromNamespaceAndPath(modId, "block/" + fireId + joiner + "fire_0"));
+    this.material1 = new Material(InventoryMenu.BLOCK_ATLAS, ResourceLocation.fromNamespaceAndPath(modId, "block/" + fireId + joiner + "fire_1"));
   }
 
   /**

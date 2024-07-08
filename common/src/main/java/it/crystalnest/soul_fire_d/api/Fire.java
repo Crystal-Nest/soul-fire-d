@@ -1,17 +1,13 @@
 package it.crystalnest.soul_fire_d.api;
 
 import com.google.common.collect.ImmutableMap;
-import it.crystalnest.soul_fire_d.api.enchantment.FireAspectBuilder;
-import it.crystalnest.soul_fire_d.api.enchantment.FireEnchantmentBuilder;
-import it.crystalnest.soul_fire_d.api.enchantment.FireTypedFireAspectEnchantment;
-import it.crystalnest.soul_fire_d.api.enchantment.FireTypedFlameEnchantment;
-import it.crystalnest.soul_fire_d.api.enchantment.FlameBuilder;
-import it.crystalnest.soul_fire_d.api.type.FireTypedEnchantment;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
@@ -19,9 +15,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.StandingAndWallBlockItem;
-import net.minecraft.world.item.enchantment.ArrowFireEnchantment;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.FireAspectEnchantment;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,12 +25,59 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
 
 /**
  * Fire.
  */
 public final class Fire {
+  /**
+   * Fire {@link StreamCodec}.
+   */
+  public static final StreamCodec<FriendlyByteBuf, Fire> STREAM_CODEC = new StreamCodec<>() {
+    @Override
+    public void encode(FriendlyByteBuf buffer, Fire fire) {
+      buffer.writeResourceLocation(fire.getFireType());
+      buffer.writeFloat(fire.getDamage());
+      buffer.writeBoolean(fire.invertHealAndHarm());
+      @Nullable ResourceLocation source = fire.getComponent(Fire.Component.SOURCE_BLOCK);
+      buffer.writeBoolean(source != null);
+      if (source != null) {
+        buffer.writeResourceLocation(source);
+      }
+      @Nullable ResourceLocation campfire = fire.getComponent(Fire.Component.CAMPFIRE_BLOCK);
+      buffer.writeBoolean(campfire != null);
+      if (campfire != null) {
+        buffer.writeResourceLocation(campfire);
+      }
+    }
+
+    @NotNull
+    @Override
+    public Fire decode(FriendlyByteBuf buffer) {
+      Fire.Builder builder = FireManager.fireBuilder(buffer.readResourceLocation())
+        .setDamage(buffer.readFloat())
+        .setInvertHealAndHarm(buffer.readBoolean())
+        .removeComponent(Fire.Component.CAMPFIRE_ITEM)
+        .removeComponent(Fire.Component.LANTERN_BLOCK)
+        .removeComponent(Fire.Component.LANTERN_ITEM)
+        .removeComponent(Fire.Component.TORCH_BLOCK)
+        .removeComponent(Fire.Component.TORCH_ITEM)
+        .removeComponent(Fire.Component.WALL_TORCH_BLOCK)
+        .removeComponent(Fire.Component.FLAME_PARTICLE);
+      if (buffer.readBoolean()) {
+        builder.setComponent(Fire.Component.SOURCE_BLOCK, buffer.readResourceLocation());
+      } else {
+        builder.removeComponent(Fire.Component.SOURCE_BLOCK);
+      }
+      if (buffer.readBoolean()) {
+        builder.setComponent(Fire.Component.CAMPFIRE_BLOCK, buffer.readResourceLocation());
+      } else {
+        builder.removeComponent(Fire.Component.CAMPFIRE_BLOCK);
+      }
+      return builder.build();
+    }
+  };
+
   /**
    * {@link ResourceLocation} to uniquely identify this Fire.
    */
@@ -63,6 +103,11 @@ public final class Fire {
    * Whether rain can douse this Fire.
    */
   private final boolean canRainDouse;
+
+  /**
+   * {@link DamageSource} getter for when the entity takes damage from a campfire.
+   */
+  private final Function<Entity, DamageSource> onCampfireGetter;
 
   /**
    * {@link DamageSource} getter for when the entity is in or on a block providing fire.
@@ -102,6 +147,7 @@ public final class Fire {
     float damage,
     boolean invertHealAndHarm,
     boolean canRainDouse,
+    Function<Entity, DamageSource> onCampfireGetter,
     Function<Entity, DamageSource> inFireGetter,
     Function<Entity, DamageSource> onFireGetter,
     Predicate<Entity> behavior,
@@ -112,6 +158,7 @@ public final class Fire {
     this.damage = damage;
     this.invertHealAndHarm = invertHealAndHarm;
     this.canRainDouse = canRainDouse;
+    this.onCampfireGetter = onCampfireGetter;
     this.inFireGetter = inFireGetter;
     this.onFireGetter = onFireGetter;
     this.behavior = behavior;
@@ -161,6 +208,16 @@ public final class Fire {
    */
   public boolean canRainDouse() {
     return canRainDouse;
+  }
+
+  /**
+   * Returns the Campfire {@link DamageSource} from the given {@link Entity}.
+   *
+   * @param entity entity.
+   * @return the Campfire {@link DamageSource} from the given {@link Entity}.
+   */
+  public DamageSource getOnCampfire(Entity entity) {
+    return onCampfireGetter.apply(entity);
   }
 
   /**
@@ -262,16 +319,6 @@ public final class Fire {
     public static final Component<ParticleType<?>, SimpleParticleType> FLAME_PARTICLE = new Component<>(Registries.PARTICLE_TYPE, "_flame");
 
     /**
-     * Fire Aspect enchantment component.
-     */
-    public static final Component<Enchantment, FireAspectEnchantment> FIRE_ASPECT_ENCHANTMENT = new Component<>(Registries.ENCHANTMENT, "_fire_aspect");
-
-    /**
-     * Flame enchantment component.
-     */
-    public static final Component<Enchantment, ArrowFireEnchantment> FLAME_ENCHANTMENT = new Component<>(Registries.ENCHANTMENT, "_flame");
-
-    /**
      * Registry key where the value associated to this component is stored.
      */
     private final ResourceKey<? extends Registry<R>> key;
@@ -355,7 +402,7 @@ public final class Fire {
      * @return the default {@link Map#entry(Object, Object) Map.entry} for this component.
      */
     Map.Entry<Component<R, T>, ResourceLocation> getEntry(String modId, String fireId) {
-      return Map.entry(this, new ResourceLocation(modId, fireId + suffix));
+      return Map.entry(this, ResourceLocation.fromNamespaceAndPath(modId, fireId + suffix));
     }
   }
 
@@ -382,6 +429,11 @@ public final class Fire {
      * Default value for {@link #canRainDouse}.
      */
     public static final boolean DEFAULT_CAN_RAIN_DOUSE = false;
+
+    /**
+     * Default value for {@link #onCampfireGetter}.
+     */
+    public static final Function<Entity, DamageSource> DEFAULT_ON_CAMPFIRE_GETTER = entity -> entity.damageSources().campfire();
 
     /**
      * Default value for {@link #inFireGetter}.
@@ -435,6 +487,13 @@ public final class Fire {
     private boolean canRainDouse;
 
     /**
+     * {@link Fire} instance {@link Fire#onCampfireGetter campfireGetter}.<br />
+     * Optional, defaults to {@link #DEFAULT_ON_CAMPFIRE_GETTER}.<br />
+     * If changed from the default, remember to add translations for the new death messages!
+     */
+    private Function<Entity, DamageSource> onCampfireGetter;
+
+    /**
      * {@link Fire} instance {@link Fire#inFireGetter inFireGetter}.<br />
      * Optional, defaults to {@link #DEFAULT_IN_FIRE_GETTER}.<br />
      * If changed from the default, remember to add translations for the new death messages!
@@ -459,26 +518,6 @@ public final class Fire {
      * Optional, defaults to a map with every component, each associated to the default {@link ResourceLocation} made by {@link #modId} and {@link #fireId} with the component default {@link Component#suffix suffix}.
      */
     private Map<Component<?, ?>, ResourceLocation> components;
-
-    /**
-     * {@link Function} to configure the {@link FireAspectBuilder}.<br />
-     * Optional, defaults to a configuration to build a new {@link FireTypedFireAspectEnchantment} with {@link Enchantment.Rarity#VERY_RARE}.<br />
-     * Default value is recommended.<br />
-     * If your Fire should have a Fire Aspect enchantment, but with a different value than default, use {@link #setFireAspectConfig(UnaryOperator)}.<br />
-     * If your Fire should not have a Fire Aspect enchantment, set this to null with {@link #removeFireAspect()}.
-     */
-    @Nullable
-    private Optional<UnaryOperator<FireAspectBuilder>> fireAspectConfigurator;
-
-    /**
-     * {@link UnaryOperator} to configure the {@link FlameBuilder}.<br />
-     * Optional, defaults to a configuration to build a new {@link FireTypedFlameEnchantment} with {@link Enchantment.Rarity#VERY_RARE}.<br />
-     * Default value is recommended.<br />
-     * If your Fire should have a Flame enchantment, but with a different value than default, use {@link #setFlameConfig(UnaryOperator)}.<br />
-     * If your Fire should not have a Flame enchantment, set this to null with {@link #removeFlame()}.
-     */
-    @Nullable
-    private Optional<UnaryOperator<FlameBuilder>> flameConfigurator;
 
     /**
      * @param modId {@link #modId}.
@@ -509,29 +548,11 @@ public final class Fire {
     }
 
     /**
-     * Returns the value obtained by calling {@link FireEnchantmentBuilder#register()} for the given Builder.<br />
-     * Returns {@code null} if the {@code optional} is either {@code null} or empty.
-     *
-     * @param <B> builder type.
-     * @param <E> enchantment type.
-     * @param optional
-     * @param builder
-     * @return the value obtained by calling {@link FireEnchantmentBuilder#register()}.
-     */
-    private static <B extends FireEnchantmentBuilder<E>, E extends Enchantment & FireTypedEnchantment> ResourceLocation register(ResourceLocation fireType, @Nullable Optional<UnaryOperator<B>> optional, Function<ResourceLocation, B> builder) {
-      UnaryOperator<B> configurator = get(optional);
-      if (configurator != null) {
-        return configurator.apply(builder.apply(fireType)).register();
-      }
-      return null;
-    }
-
-    /**
      * Sets the {@link #light}.<br />
      * Accepted values are only between {@code 0} and {@code 15} inclusive.
      *
      * @param light {@link #light}.
-     * @return this Builder to either set other properties or {@link #register}.
+     * @return this Builder to either set other properties or {@link #build()}.
      */
     public Builder setLight(int light) {
       if (light >= 0 && light <= 15) {
@@ -546,7 +567,7 @@ public final class Fire {
      * Whether the fire heals or harms depends also on {@link #invertHealAndHarm}.
      *
      * @param damage {@link #damage}.
-     * @return this Builder to either set other properties or {@link #register}.
+     * @return this Builder to either set other properties or {@link #build()}.
      */
     public Builder setDamage(float damage) {
       this.damage = damage;
@@ -558,7 +579,7 @@ public final class Fire {
      * If set to true, entities that have heal and harm inverted (e.g. undeads) will have heal and harm inverted for this fire too.
      *
      * @param invertHealAndHarm {@link #invertHealAndHarm}.
-     * @return this Builder to either set other properties or {@link #register}.
+     * @return this Builder to either set other properties or {@link #build()}.
      */
     public Builder setInvertHealAndHarm(boolean invertHealAndHarm) {
       this.invertHealAndHarm = invertHealAndHarm;
@@ -569,7 +590,7 @@ public final class Fire {
      * Sets the {@link #canRainDouse}.
      *
      * @param canRainDouse {@link #canRainDouse}.
-     * @return this Builder to either set other properties or {@link #register}.
+     * @return this Builder to either set other properties or {@link #build()}.
      */
     public Builder setCanRainDouse(boolean canRainDouse) {
       this.canRainDouse = canRainDouse;
@@ -577,10 +598,21 @@ public final class Fire {
     }
 
     /**
+     * Sets the {@link DamageSource} {@link #onCampfireGetter}.
+     *
+     * @param getter damage source getter.
+     * @return this Builder to either set other properties or {@link #build()}.
+     */
+    public Builder setOnCampfire(Function<Entity, DamageSource> getter) {
+      this.onCampfireGetter = getter;
+      return this;
+    }
+
+    /**
      * Sets the {@link DamageSource} {@link #inFireGetter}.
      *
      * @param getter damage source getter.
-     * @return this Builder to either set other properties or {@link #register}.
+     * @return this Builder to either set other properties or {@link #build()}.
      */
     public Builder setInFire(Function<Entity, DamageSource> getter) {
       this.inFireGetter = getter;
@@ -591,7 +623,7 @@ public final class Fire {
      * Sets the {@link DamageSource} {@link #onFireGetter}.
      *
      * @param getter damage source getter.
-     * @return this Builder to either set other properties or {@link #register}.
+     * @return this Builder to either set other properties or {@link #build()}.
      */
     public Builder setOnFire(Function<Entity, DamageSource> getter) {
       this.onFireGetter = getter;
@@ -602,7 +634,7 @@ public final class Fire {
      * Sets the {@link #behavior}.
      *
      * @param behavior {@link #behavior}.
-     * @return this Builder to either set other properties or {@link #register}.
+     * @return this Builder to either set other properties or {@link #build()}.
      */
     public Builder setBehavior(@NotNull Predicate<Entity> behavior) {
       this.behavior = behavior;
@@ -614,7 +646,7 @@ public final class Fire {
      * Shorthand for custom behaviors that don't prevent the default heal/harm behavior, thus returning {@code true}.
      *
      * @param behavior {@link #behavior}.
-     * @return this Builder to either set other properties or {@link #register}.
+     * @return this Builder to either set other properties or {@link #build()}.
      */
     public Builder setBehavior(@NotNull Consumer<Entity> behavior) {
       this.behavior = entity -> {
@@ -627,11 +659,10 @@ public final class Fire {
     /**
      * Sets the specified {@link Component}.<br />
      * It's strongly recommended that you use all the default values for each component. Use this only when you don't have control over the values.
-     * Do not use this to add Fire Aspect and Flame enchantments: use {@link #setFireAspectConfig(UnaryOperator)} and {@link #setFlameConfig(UnaryOperator)} instead.<br />
      *
      * @param component component.
      * @param id {@link ResourceLocation}.
-     * @return this Builder to either set other properties or {@link #register}.
+     * @return this Builder to either set other properties or {@link #build()}.
      */
     public Builder setComponent(Component<?, ?> component, ResourceLocation id) {
       this.components.put(component, id);
@@ -639,56 +670,13 @@ public final class Fire {
     }
 
     /**
-     * Removes the specified {@link Component}.<br />
-     * Do not use this to remove Fire Aspect and Flame enchantments: use {@link #removeFireAspect()} and {@link #removeFlame()} instead.<br />
+     * Removes the specified {@link Component}.
      *
      * @param component component.
-     * @return this Builder to either set other properties or {@link #register}.
+     * @return this Builder to either set other properties or {@link #build()}.
      */
     public Builder removeComponent(Component<?, ?> component) {
       this.components.remove(component);
-      return this;
-    }
-
-    /**
-     * Sets the {@link #fireAspectConfigurator}.
-     *
-     * @param fireAspectConfigurator {@link UnaryOperator} to configure the {@link FireAspectBuilder}.
-     * @return this Builder to either set other properties or {@link #register}.
-     */
-    public Builder setFireAspectConfig(UnaryOperator<FireAspectBuilder> fireAspectConfigurator) {
-      this.fireAspectConfigurator = Optional.of(fireAspectConfigurator);
-      return this;
-    }
-
-    /**
-     * Marks the Fire Aspect enchantment for removal: it will not be registered.
-     *
-     * @return this Builder to either set other properties or {@link #register}.
-     */
-    public Builder removeFireAspect() {
-      this.fireAspectConfigurator = null;
-      return this;
-    }
-
-    /**
-     * Sets the {@link #flameConfigurator}.
-     *
-     * @param flameConfigurator {@link UnaryOperator} to configure the {@link FlameBuilder}.
-     * @return this Builder to either set other properties or {@link #register}.
-     */
-    public Builder setFlameConfig(UnaryOperator<FlameBuilder> flameConfigurator) {
-      this.flameConfigurator = Optional.of(flameConfigurator);
-      return this;
-    }
-
-    /**
-     * Marks the Flame enchantment for removal: it will not be registered.
-     *
-     * @return this Builder to either set other properties or {@link #register}.
-     */
-    public Builder removeFlame() {
-      this.flameConfigurator = null;
       return this;
     }
 
@@ -730,6 +718,7 @@ public final class Fire {
       damage = DEFAULT_DAMAGE;
       invertHealAndHarm = DEFAULT_INVERT_HEAL_AND_HARM;
       canRainDouse = DEFAULT_CAN_RAIN_DOUSE;
+      onCampfireGetter = DEFAULT_ON_CAMPFIRE_GETTER;
       inFireGetter = DEFAULT_IN_FIRE_GETTER;
       onFireGetter = DEFAULT_ON_FIRE_GETTER;
       behavior = DEFAULT_BEHAVIOR;
@@ -744,8 +733,6 @@ public final class Fire {
         Component.WALL_TORCH_BLOCK.getEntry(modId, fireId),
         Component.FLAME_PARTICLE.getEntry(modId, fireId)
       ));
-      fireAspectConfigurator = Optional.empty();
-      flameConfigurator = Optional.empty();
       return this;
     }
 
@@ -757,20 +744,7 @@ public final class Fire {
      */
     public Fire build() throws IllegalStateException {
       if (FireManager.isValidFireId(fireId) && FireManager.isValidModId(modId)) {
-        ResourceLocation fireType = FireManager.sanitize(modId, fireId);
-        if (fireAspectConfigurator != null) {
-          if (fireAspectConfigurator.isEmpty()) {
-            fireAspectConfigurator = Optional.of(builder -> builder);
-          }
-          components.put(Component.FIRE_ASPECT_ENCHANTMENT, register(fireType, fireAspectConfigurator, FireAspectBuilder::new));
-        }
-        if (flameConfigurator != null) {
-          if (flameConfigurator.isEmpty()) {
-            flameConfigurator = Optional.of(builder -> builder);
-          }
-          components.put(Component.FLAME_ENCHANTMENT, register(fireType, flameConfigurator, FlameBuilder::new));
-        }
-        return new Fire(fireType, light, damage, invertHealAndHarm, canRainDouse, inFireGetter, onFireGetter, behavior, components);
+        return new Fire(FireManager.sanitize(modId, fireId), light, damage, invertHealAndHarm, canRainDouse, onCampfireGetter, inFireGetter, onFireGetter, behavior, components);
       }
       throw new IllegalStateException("Attempted to build a Fire with a non-valid fireId [" + fireId + "] or modId [" + modId + "].");
     }

@@ -1,18 +1,24 @@
-plugins {}
+plugins {
+  id "multiloader-loader"
+  id "fabric-loom"
+}
 
 dependencies {
-  minecraft "com.mojang:minecraft:${minecraft_version}"
-  mappings loom.officialMojangMappings()
-  modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-  modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-  compileOnly project(":common")
-  modImplementation "it.crystalnest:cobweb-fabric:${minecraft_version}-${cobweb_version}"
-  modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${fcap_version}"
+  minecraft "com.mojang:minecraft:$minecraft_version"
+  mappings loom.layered {
+    officialMojangMappings()
+    parchment("org.parchmentmc.data:parchment-$minecraft_version:$parchment_version@zip")
+  }
+  modImplementation "net.fabricmc:fabric-loader:$fabric_loader_version"
+  modImplementation "net.fabricmc.fabric-api:fabric-api:$fabric_version"
+  modImplementation "it.crystalnest:cobweb-$name:$minecraft_version-$cobweb_version"
+  modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:$fcap_version"
 }
 
 loom {
-  if (project(":common").file("src/main/resources/${mod_id}.accesswidener").exists()) {
-    accessWidenerPath.set(project(":common").file("src/main/resources/${mod_id}.accesswidener"))
+  def aw = project(":common").file("src/main/resources/${mod_id}.accesswidener")
+  if (aw.exists()) {
+    accessWidenerPath.set(aw)
   }
   mixin {
     defaultRefmapName.set("${mod_id}.refmap.json")
@@ -22,27 +28,17 @@ loom {
       client()
       setConfigName("Fabric Client")
       ideConfigGenerated(true)
-      runDir("run")
+      runDir("run/client")
     }
     server {
       server()
       setConfigName("Fabric Server")
       ideConfigGenerated(true)
-      runDir("run")
+      runDir("run/client")
     }
   }
 }
 
-tasks.withType(JavaCompile).configureEach {
-  source(project(":common").sourceSets.main.allSource)
-}
-tasks.withType(Javadoc).configureEach {
-  source(project(":common").sourceSets.main.allJava)
-}
-tasks.named("sourcesJar", Jar) {
-  from(project(":common").sourceSets.main.allSource)
-}
-
-processResources {
-  from project(":common").sourceSets.main.resources
+publisher {
+  setArtifact(remapJar)
 }

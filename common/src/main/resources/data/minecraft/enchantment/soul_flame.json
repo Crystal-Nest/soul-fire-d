@@ -1,0 +1,32 @@
+{
+  "anvil_cost": 4,
+  "description": {
+    "translate": "enchantment.minecraft.soul_flame"
+  },
+  "effects": {
+    "minecraft:projectile_spawned": [
+      {
+        "effect": {
+          "type": "soul_fire_d:ignite",
+          "duration": 100.0,
+          "fire_type": "soul"
+        }
+      }
+    ]
+  },
+  "max_cost": {
+    "base": 50,
+    "per_level_above_first": 0
+  },
+  "max_level": 1,
+  "min_cost": {
+    "base": 20,
+    "per_level_above_first": 0
+  },
+  "slots": [
+    "mainhand"
+  ],
+  "exclusive_set": "#soul_fire_d:exclusive_set/flame",
+  "supported_items": "#minecraft:enchantable/bow",
+  "weight": 2
+}

@@ -6,7 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Crystal Nest Semantic Versioning](https://crystalnest.it/#/versioning).
 
 ## [Unreleased]
-- Nothing new.
+
+[//]: # (- Nothing new.)
+
+[//]: # (## [5.0.0] - 2024/07/dd)
+
+- Ported to 1.21
+- Dropped support for Forge.
+- Reworked the enchantment system to comply with the new enchantment registry from Minecraft: now soul enchantments are part of the built-in data pack and new enchantments must be added via data packs.
+- Removed everything related to building custom fire typed enchantments via code (as enchantments are now separated from Fire instances and are server sided).
+- Added new exclusive_set tags to easily add enchantment exclusion with other custom fire aspect and flame enchantments.
+- DDFires can now support enchantments (as enchantments are now separated from Fire instances and are server sided).
+- Added new Ignite EnchantmentEntityEffect to ignite while setting a fire type.
+- Added support for upside down english and shakespearean english.
+- Removed mixins related to handling enchantment effects.
+- Added new fire property for the campfire damage source.
+- Removed damage source specific getters from FireManager and replaced them with a dynamic getter.
+- Removed damage source specific damage dealing method from FireManager and replaced them with a dynamic one.
 
 ## [v4.0.2] - 2024/06/21
 
@@ -403,6 +419,8 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
+
+[v5.0.0]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.0.0
 
 [v4.0.2]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.2
 [v4.0.1]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.1

@@ -30,7 +30,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.StandingAndWallBlockItem;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -63,12 +62,12 @@ public final class FireManager {
   /**
    * fire type of Vanilla Fire.
    */
-  public static final ResourceLocation DEFAULT_FIRE_TYPE = new ResourceLocation("");
+  public static final ResourceLocation DEFAULT_FIRE_TYPE = ResourceLocation.withDefaultNamespace("");
 
   /**
    * fire type of Soul Fire.
    */
-  public static final ResourceLocation SOUL_FIRE_TYPE = new ResourceLocation("soul");
+  public static final ResourceLocation SOUL_FIRE_TYPE = ResourceLocation.withDefaultNamespace("soul");
 
   /**
    * Default {@link Fire} used as fallback to retrieve default properties.
@@ -80,6 +79,7 @@ public final class FireManager {
     Fire.Builder.DEFAULT_DAMAGE,
     Fire.Builder.DEFAULT_INVERT_HEAL_AND_HARM,
     true,
+    Fire.Builder.DEFAULT_ON_CAMPFIRE_GETTER,
     Fire.Builder.DEFAULT_IN_FIRE_GETTER,
     Fire.Builder.DEFAULT_ON_FIRE_GETTER,
     Fire.Builder.DEFAULT_BEHAVIOR,
@@ -89,9 +89,7 @@ public final class FireManager {
       Map.entry(Fire.Component.LANTERN_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.LANTERN)),
       Map.entry(Fire.Component.TORCH_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.TORCH)),
       Map.entry(Fire.Component.WALL_TORCH_BLOCK, BuiltInRegistries.BLOCK.getKey(Blocks.WALL_TORCH)),
-      Map.entry(Fire.Component.FLAME_PARTICLE, BuiltInRegistries.PARTICLE_TYPE.getKey(ParticleTypes.FLAME)),
-      Map.entry(Fire.Component.FIRE_ASPECT_ENCHANTMENT, BuiltInRegistries.ENCHANTMENT.getKey(Enchantments.FIRE_ASPECT)),
-      Map.entry(Fire.Component.FLAME_ENCHANTMENT, BuiltInRegistries.ENCHANTMENT.getKey(Enchantments.FLAMING_ARROWS))
+      Map.entry(Fire.Component.FLAME_PARTICLE, BuiltInRegistries.PARTICLE_TYPE.getKey(ParticleTypes.FLAME))
     )
   );
 
@@ -106,12 +104,12 @@ public final class FireManager {
   /**
    * Dynamic data pack to automatically add {@link BlockTags#FIRE} to fire source block.
    */
-  private static final DynamicDataPack FIRE_SOURCE_TAGS = DynamicDataPack.named(new ResourceLocation(Constants.MOD_ID, "fire_source_tags"));
+  private static final DynamicDataPack FIRE_SOURCE_TAGS = DynamicDataPack.named(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "fire_source_tags"));
 
   /**
    * Dynamic data pack to automatically add {@link BlockTags#CAMPFIRES} to campfire block.
    */
-  private static final DynamicDataPack CAMPFIRE_TAGS = DynamicDataPack.named(new ResourceLocation(Constants.MOD_ID, "campfire_tags"));
+  private static final DynamicDataPack CAMPFIRE_TAGS = DynamicDataPack.named(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "campfire_tags"));
 
   /**
    * {@link ConcurrentHashMap} of all registered {@link Fire Fires}.
@@ -474,12 +472,24 @@ public final class FireManager {
    * Defaults to the property of the {@link #DEFAULT_FIRE} if the specified fire is not registered.
    *
    * @param fireType fire type.
-   * @param getter property getter.
-   * @return property value.
+   * @param getter property getter (use a method from the {@link Fire} class).
    * @param <T> property type.
+   * @return property value.
    */
   public static <T> T getProperty(ResourceLocation fireType, Function<Fire, T> getter) {
     return getter.apply(getFire(fireType));
+  }
+
+  /**
+   * Returns the specified damage source retrieved from the {@link Fire} damage source getter.
+   *
+   * @param entity entity.
+   * @param fireType fire type.
+   * @param getter damage source getter (use a method from the {@link Fire} class).
+   * @return the correct damage source for the specified fire.
+   */
+  public static DamageSource getDamageSource(Entity entity, ResourceLocation fireType, BiFunction<Fire, Entity, DamageSource> getter) {
+    return getter.apply(getFire(fireType), entity);
   }
 
   /**
@@ -687,7 +697,7 @@ public final class FireManager {
   public static ResourceLocation ensure(@Nullable String modId, @Nullable String fireId) {
     String trimmedModId = modId == null ? "" : modId.trim();
     String trimmedFireId = fireId == null ? "" : fireId.trim();
-    return isValidModId(trimmedModId) && isValidFireId(trimmedFireId) ? ensure(new ResourceLocation(trimmedModId, trimmedFireId)) : DEFAULT_FIRE_TYPE;
+    return isValidModId(trimmedModId) && isValidFireId(trimmedFireId) ? ensure(ResourceLocation.fromNamespaceAndPath(trimmedModId, trimmedFireId)) : DEFAULT_FIRE_TYPE;
   }
 
   /**
@@ -728,27 +738,24 @@ public final class FireManager {
   }
 
   /**
-   * Returns the in damage source of the {@link Fire} registered with the given {@code fireType} for the given {@link Entity}.<br />
-   * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
+   * Writes to the given {@link CompoundTag} the given {@code fireType}.<br />
+   * If the given {@code fireType} is not registered, {@link #DEFAULT_FIRE_TYPE} will be used instead.
    *
-   * @param entity entity.
-   * @param fireType fire type.
-   * @return the in damage source of the {@link Fire} for the {@link Entity}.
+   * @param tag {@link CompoundTag} to write to.
+   * @param fireType fire type to save.
    */
-  public static DamageSource getInFireDamageSourceFor(Entity entity, ResourceLocation fireType) {
-    return getFire(fireType).getInFire(entity);
+  public static void writeTag(CompoundTag tag, @Nullable ResourceLocation fireType) {
+    tag.putString(FIRE_TYPE_TAG, ensure(fireType).toString());
   }
 
   /**
-   * Returns the on damage source of the {@link Fire} registered with the given {@code fireType} for the given {@link Entity}.<br />
-   * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
+   * Reads the fire type from the given {@link CompoundTag}.
    *
-   * @param entity entity.
-   * @param fireType fire type.
-   * @return the on damage source of the {@link Fire} for the {@link Entity}.
+   * @param tag {@link CompoundTag} to read from.
+   * @return the fire type read from the given {@link CompoundTag}.
    */
-  public static DamageSource getOnFireDamageSourceFor(Entity entity, ResourceLocation fireType) {
-    return getFire(fireType).getOnFire(entity);
+  public static ResourceLocation readTag(CompoundTag tag) {
+    return ensure(ResourceLocation.tryParse(tag.getString(FIRE_TYPE_TAG)));
   }
 
   /**
@@ -758,48 +765,36 @@ public final class FireManager {
    * @param seconds amount of seconds the fire should last for.
    * @param fireType fire type.
    */
-  public static void setOnFire(Entity entity, int seconds, ResourceLocation fireType) {
-    entity.setSecondsOnFire(seconds);
+  public static void setOnFire(Entity entity, float seconds, ResourceLocation fireType) {
+    entity.igniteForSeconds(seconds);
     ((FireTypeChanger) entity).setFireType(ensure(fireType));
   }
 
   /**
-   * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireType}.<br />
-   * If no {@link Fire} was registered with the given {@code fireType}, defaults to the default {@code damageSource} and {@code damage} to harm the {@code entity}.
-   *
-   * @param entity {@link Entity} to harm or heal.
-   * @param fireType fire type.
-   * @return whether the {@code entity} has been harmed.
-   */
-  public static boolean damageInFire(Entity entity, ResourceLocation fireType) {
-    ((FireTypeChanger) entity).setFireType(ensure(fireType));
-    return harmOrHeal(entity, getInFireDamageSourceFor(entity, fireType), FireManager.getProperty(fireType, Fire::getDamage), FireManager.getProperty(fireType, Fire::invertHealAndHarm));
-  }
-
-  /**
-   * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireType}.<br />
-   * If no {@link Fire} was registered with the given {@code fireType}, defaults to the default {@code damageSource} and {@code damage} to harm the {@code entity}.
-   *
-   * @param entity {@link Entity} to harm or heal.
-   * @param fireType fire type.
-   * @return whether the {@code entity} has been harmed.
-   */
-  public static boolean damageOnFire(Entity entity, ResourceLocation fireType) {
-    ((FireTypeChanger) entity).setFireType(ensure(fireType));
-    return harmOrHeal(entity, getOnFireDamageSourceFor(entity, fireType), FireManager.getProperty(fireType, Fire::getDamage), FireManager.getProperty(fireType, Fire::invertHealAndHarm));
-  }
-
-  /**
-   * Harms or heals the given {@code entity}.<br />
+   * Hurts or heals the given {@code entity}.<br />
    * Also applies the custom fire behavior.
    *
-   * @param entity entity to harm/heal.
+   * @param entity entity to hurt/heal.
+   * @param fireType fire type.
+   * @param damageSourceGetter getter for the damage source. See .
+   * @return whether the {@code entity} was hurt.
+   */
+  public static boolean affect(Entity entity, ResourceLocation fireType, BiFunction<Fire, Entity, DamageSource> damageSourceGetter) {
+    ((FireTypeChanger) entity).setFireType(ensure(fireType));
+    return affect(entity, getDamageSource(entity, fireType, damageSourceGetter), FireManager.getProperty(fireType, Fire::getDamage), FireManager.getProperty(fireType, Fire::invertHealAndHarm));
+  }
+
+  /**
+   * Hurts or heals the given {@code entity}.<br />
+   * Also applies the custom fire behavior.
+   *
+   * @param entity entity to hurt/heal.
    * @param damageSource damage source.
    * @param damage damage/heal amount.
    * @param invertHealAndHarm whether to invert heal and harm.
-   * @return whether the {@code entity} has been harmed.
+   * @return whether the {@code entity} was hurt.
    */
-  private static boolean harmOrHeal(Entity entity, DamageSource damageSource, float damage, boolean invertHealAndHarm) {
+  private static boolean affect(Entity entity, DamageSource damageSource, float damage, boolean invertHealAndHarm) {
     Predicate<Entity> behavior = FireManager.getProperty(((FireTyped) entity).getFireType(), Fire::getBehavior);
     if (behavior.test(entity) && Float.compare(damage, 0) != 0) {
       if (damage > 0) {
@@ -824,27 +819,6 @@ public final class FireManager {
   }
 
   /**
-   * Writes to the given {@link CompoundTag} the given {@code fireType}.<br />
-   * If the given {@code fireType} is not registered, {@link #DEFAULT_FIRE_TYPE} will be used instead.
-   *
-   * @param tag {@link CompoundTag} to write to.
-   * @param fireType fire type to save.
-   */
-  public static void writeTag(CompoundTag tag, @Nullable ResourceLocation fireType) {
-    tag.putString(FIRE_TYPE_TAG, ensure(fireType).toString());
-  }
-
-  /**
-   * Reads the fire type from the given {@link CompoundTag}.
-   *
-   * @param tag {@link CompoundTag} to read from.
-   * @return the fire type read from the given {@link CompoundTag}.
-   */
-  public static ResourceLocation readTag(CompoundTag tag) {
-    return ensure(ResourceLocation.tryParse(tag.getString(FIRE_TYPE_TAG)));
-  }
-
-  /**
    * Safety methods to avoid data flow warnings for strings that are nullable but really aren't.
    *
    * @param modId mod ID.
@@ -852,6 +826,6 @@ public final class FireManager {
    * @return {@link ResourceLocation}.
    */
   private static ResourceLocation fireType(@Nullable String modId, @Nullable String fireId) {
-    return new ResourceLocation(Objects.requireNonNull(modId), Objects.requireNonNull(fireId));
+    return ResourceLocation.fromNamespaceAndPath(Objects.requireNonNull(modId), Objects.requireNonNull(fireId));
   }
 }

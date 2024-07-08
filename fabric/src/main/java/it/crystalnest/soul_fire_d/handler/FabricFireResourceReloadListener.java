@@ -19,6 +19,6 @@ public final class FabricFireResourceReloadListener extends FireResourceReloadLi
 
   @Override
   public ResourceLocation getFabricId() {
-    return new ResourceLocation(Constants.MOD_ID, Constants.DDFIRES);
+    return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, Constants.DDFIRES);
   }
 }

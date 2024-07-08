@@ -1,7 +1,8 @@
 package it.crystalnest.soul_fire_d.mixin;
 
+import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
-import it.crystalnest.soul_fire_d.api.type.FireTypeChanger;
+import it.crystalnest.soul_fire_d.api.type.FireTypeSynched;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -25,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * Injects into {@link Entity} to alter Fire behavior for consistency.
  */
 @Mixin(Entity.class)
-public abstract class EntityMixin implements FireTypeChanger {
+public abstract class EntityMixin implements FireTypeSynched {
   /**
    * {@link EntityDataAccessor} to synchronize the Fire Type across client and server.
    */
@@ -73,6 +74,11 @@ public abstract class EntityMixin implements FireTypeChanger {
     }
   }
 
+  @Override
+  public EntityDataAccessor<String> fireTypeAccessor() {
+    return DATA_FIRE_TYPE;
+  }
+
   /**
    * Redirects the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link Entity#baseTick()}.<br />
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
@@ -84,30 +90,19 @@ public abstract class EntityMixin implements FireTypeChanger {
    */
   @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity instance, DamageSource damageSource, float damage) {
-    return FireManager.damageOnFire(instance, ((FireTyped) instance).getFireType());
+    return FireManager.affect(instance, ((FireTyped) instance).getFireType(), Fire::getOnFire);
   }
 
   /**
-   * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link Entity#lavaHurt()}.<br />
+   * Redirects the call to {@link Entity#igniteForSeconds(float)} inside the method {@link Entity#lavaHurt()}.<br />
    * Sets the base Fire Type.
    *
    * @param instance owner of the redirected method.
    * @param seconds seconds to set the entity on fire for.
    */
-  @Redirect(method = "lavaHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setSecondsOnFire(I)V"))
-  private void redirectSetSecondsOnFire(Entity instance, int seconds) {
+  @Redirect(method = "lavaHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;igniteForSeconds(F)V"))
+  private void redirectSetSecondsOnFire(Entity instance, float seconds) {
     FireManager.setOnFire(instance, seconds, FireManager.DEFAULT_FIRE_TYPE);
-  }
-
-  /**
-   * Injects at the end of the constructor.<br />
-   * Defines the {@link #DATA_FIRE_TYPE Fire Type data} to synchronize across client and server.
-   *
-   * @param ci {@link CallbackInfo}.
-   */
-  @Inject(method = "<init>", at = @At("TAIL"))
-  private void redirectDefineSynchedData(CallbackInfo ci) {
-    entityData.define(DATA_FIRE_TYPE, FireManager.DEFAULT_FIRE_TYPE.toString());
   }
 
   /**

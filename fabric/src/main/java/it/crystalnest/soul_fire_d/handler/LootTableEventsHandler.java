@@ -1,16 +1,15 @@
 package it.crystalnest.soul_fire_d.handler;
 
-import it.crystalnest.soul_fire_d.api.Fire;
-import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.config.ModConfig;
-import net.fabricmc.fabric.api.loot.v2.FabricLootTableBuilder;
-import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
-import net.fabricmc.fabric.api.loot.v2.LootTableSource;
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
+import net.fabricmc.fabric.api.loot.v3.LootTableSource;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
@@ -24,27 +23,25 @@ public final class LootTableEventsHandler {
   /**
    * {@link ResourceLocation} of bastion chests.
    */
-  private static final ResourceLocation BASTION_CHEST_IDENTIFIER = new ResourceLocation("minecraft", "chests/bastion_other");
+  private static final ResourceLocation BASTION_CHEST_IDENTIFIER = ResourceLocation.withDefaultNamespace("chests/bastion_other");
 
   private LootTableEventsHandler() {}
 
   /**
    * Handles modifying Vanilla loot table to include Soul Flame enchantment.
    *
-   * @param resourceManager the server resource manager.
-   * @param lootManager the loot manager.
-   * @param id the loot table ID.
-   * @param builder a builder of the loot table being loaded.
-   * @param source the source of the loot table.
+   * @param key loot table key.
+   * @param builder builder of the loot table being loaded.
+   * @param source loot table source.
    */
-  public static void handle(ResourceManager resourceManager, LootDataManager lootManager, ResourceLocation id, FabricLootTableBuilder builder, LootTableSource source) {
-    if (ModConfig.getEnableSoulFlame() && id.equals(BASTION_CHEST_IDENTIFIER)) {
+  public static void handle(ResourceKey<LootTable> key, LootTable.Builder builder, LootTableSource source, HolderLookup.Provider provider) {
+    if (ModConfig.getEnableSoulFlame() && key.location().equals(BASTION_CHEST_IDENTIFIER)) {
       builder.pool(
         LootPool.lootPool()
           .setRolls(ConstantValue.exactly(1))
           .conditionally(LootItemRandomChanceCondition.randomChance(0.05F).build())
           .with(LootItem.lootTableItem(Items.BOOK).build())
-          .apply(new EnchantRandomlyFunction.Builder().withEnchantment(FireManager.getComponent(FireManager.SOUL_FIRE_TYPE, Fire.Component.FLAME_ENCHANTMENT)))
+          .apply(new EnchantRandomlyFunction.Builder().withEnchantment(provider.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.withDefaultNamespace("soul_flame")))))
           .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
           .build()
       );

@@ -2,13 +2,13 @@ package it.crystalnest.soul_fire_d.loot;
 
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.crystalnest.soul_fire_d.config.ModConfig;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -28,7 +28,7 @@ public final class ChestLootModifier extends LootModifier {
   /**
    * {@link Supplier} for this {@link LootModifier} {@link Codec}.
    */
-  public static final Supplier<Codec<ChestLootModifier>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.create(instance -> codecStart(instance).and(
+  public static final Supplier<MapCodec<ChestLootModifier>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.mapCodec(instance -> codecStart(instance).and(
     Addition.CODEC.listOf().fieldOf("additions").forGetter(modifier -> modifier.additions)
   ).apply(instance, ChestLootModifier::new)));
 
@@ -59,7 +59,7 @@ public final class ChestLootModifier extends LootModifier {
 
   @NotNull
   @Override
-  public Codec<? extends IGlobalLootModifier> codec() {
+  public MapCodec<? extends IGlobalLootModifier> codec() {
     return CODEC.get();
   }
 
@@ -71,7 +71,7 @@ public final class ChestLootModifier extends LootModifier {
      * {@link Codec}.
      */
     public static final Codec<Addition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-      BuiltInRegistries.ENCHANTMENT.byNameCodec().fieldOf("enchantment").forGetter(addition -> addition.enchantment),
+      Enchantment.CODEC.fieldOf("enchantment").forGetter(addition -> addition.enchantment),
       Codec.FLOAT.fieldOf("chance").forGetter(addition -> addition.chance),
       Codec.INT.fieldOf("level").forGetter(addition -> addition.level)
     ).apply(instance, Addition::new));
@@ -79,7 +79,7 @@ public final class ChestLootModifier extends LootModifier {
     /**
      * {@link Enchantment} to add to the loot.
      */
-    private final Enchantment enchantment;
+    private final Holder<Enchantment> enchantment;
 
     /**
      * Chance for this {@link #enchantment} to add to the loot.
@@ -96,7 +96,7 @@ public final class ChestLootModifier extends LootModifier {
      * @param chance chance to add the item.
      * @param quantity item quantity.
      */
-    private Addition(Enchantment item, Float chance, Integer quantity) {
+    private Addition(Holder<Enchantment> item, Float chance, Integer quantity) {
       this.enchantment = item;
       this.chance = chance;
       this.level = quantity;
@@ -108,9 +108,7 @@ public final class ChestLootModifier extends LootModifier {
      * @return an enchanted book with this {@link #enchantment} applied.
      */
     private ItemStack getEnchantedBook() {
-      ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
-      EnchantedBookItem.addEnchantment(book, new EnchantmentInstance(enchantment, Math.min(enchantment.getMaxLevel(), level)));
-      return book;
+      return EnchantedBookItem.createForEnchantment(new EnchantmentInstance(enchantment, Math.min(enchantment.value().getMaxLevel(), level)));
     }
   }
 }
