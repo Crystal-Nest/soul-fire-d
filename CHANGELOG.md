@@ -9,7 +9,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 - Nothing new.
 
-## [5.0.0] - 2024/07/10
+## [v5.0.0] - 2024/07/10
 
 - Ported to 1.21
 - Dropped support for Forge.
