@@ -4,7 +4,6 @@ import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import it.crystalnest.soul_fire_d.config.ModConfig;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.EnchantedBookItem;
@@ -50,7 +49,7 @@ public final class ChestLootModifier extends LootModifier {
   @Nonnull
   protected ObjectArrayList<ItemStack> doApply(@NotNull ObjectArrayList<ItemStack> generatedLoot, @NotNull LootContext context) {
     for (Addition addition : additions) {
-      if (ModConfig.getEnableSoulFlame() && context.getRandom().nextFloat() <= addition.chance) {
+      if (addition.enchantment.value().getSupportedItems().size() > 0 && context.getRandom().nextFloat() <= addition.chance) {
         generatedLoot.add(addition.getEnchantedBook());
       }
     }
@@ -92,12 +91,12 @@ public final class ChestLootModifier extends LootModifier {
     private final Integer level;
 
     /**
-     * @param item item.
-     * @param chance chance to add the item.
-     * @param quantity item quantity.
+     * @param enchantment enchantment.
+     * @param chance chance to add the enchantment.
+     * @param quantity enchantment quantity.
      */
-    private Addition(Holder<Enchantment> item, Float chance, Integer quantity) {
-      this.enchantment = item;
+    private Addition(Holder<Enchantment> enchantment, Float chance, Integer quantity) {
+      this.enchantment = enchantment;
       this.chance = chance;
       this.level = quantity;
     }

@@ -28,7 +28,8 @@ This mod makes Soul Fire actually work as one would expect, all whilst providing
   ![Arrows](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/soul-fire-d/arrow.gif)
 - **Two new enchantments: Soul Fire Aspect and Soul Flame.**  
   As their name suggests, they work exactly the same as Fire Aspect and Flame with the only difference being the kind of fire the target will burn from, with the consequent damage increase.  
-  Both these enchantments can be highly configured individually, enabling (default) or disabling them and more.
+  Both these enchantments can be highly configured individually, enabling (default) or disabling them and more.  
+  *Configuration is done via data pack since `1.21`*
 - **API for custom fire types:**  
   For mod/datapack creators who want to add their own custom fire(s), or implement another mod's fire, this mod provides an *easy-to-use* API to register your fire(s) and have it(them) behave consistently **automatically**.  
   Furthermore for each new fire registered using this API there can be new custom Fire Aspect and Flame enchantments available in game **automatically**.  
@@ -50,10 +51,10 @@ If you want your mod to appear in this list, open an issue [here](https://github
 
 ## **Dependencies**
 
-| Mod                                                                     |         Loader         | Requirement |
-|:------------------------------------------------------------------------|:----------------------:|:-----------:|
-| [Cobweb](https://modrinth.com/mod/cobweb)                               |          All           |  Required   |
-| [Forge Config API Port](https://modrinth.com/mod/forge-config-api-port) | Fabric; Forge ≥ 1.20.2 |  Required   |
+| Mod                                                                     |            Loader             | Requirement |
+|:------------------------------------------------------------------------|:-----------------------------:|:-----------:|
+| [Cobweb](https://modrinth.com/mod/cobweb)                               |              All              |  Required   |
+| [Forge Config API Port](https://modrinth.com/mod/forge-config-api-port) | Fabric < 1.21; Forge ≥ 1.20.2 |  Required   |
 
 ## **License and right of use**
 

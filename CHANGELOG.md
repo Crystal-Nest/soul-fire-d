@@ -7,9 +7,9 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 ## [Unreleased]
 
-[//]: # (- Nothing new.)
+- Nothing new.
 
-[//]: # (## [5.0.0] - 2024/07/dd)
+## [5.0.0] - 2024/07/10
 
 - Ported to 1.21
 - Dropped support for Forge.
@@ -18,6 +18,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 - Added new exclusive_set tags to easily add enchantment exclusion with other custom fire aspect and flame enchantments.
 - DDFires can now support enchantments (as enchantments are now separated from Fire instances and are server sided).
 - Added new Ignite EnchantmentEntityEffect to ignite while setting a fire type.
+- Removed mod configuration, and FCAP dependency, since now enchantment configuration needs to be done via data pack.
 - Added support for upside down english and shakespearean english.
 - Removed mixins related to handling enchantment effects.
 - Added new fire property for the campfire damage source.

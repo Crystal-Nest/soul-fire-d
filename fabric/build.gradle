@@ -12,7 +12,6 @@ dependencies {
   modImplementation "net.fabricmc:fabric-loader:$fabric_loader_version"
   modImplementation "net.fabricmc.fabric-api:fabric-api:$fabric_version"
   modImplementation "it.crystalnest:cobweb-$name:$minecraft_version-$cobweb_version"
-  modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:$fcap_version"
 }
 
 loom {

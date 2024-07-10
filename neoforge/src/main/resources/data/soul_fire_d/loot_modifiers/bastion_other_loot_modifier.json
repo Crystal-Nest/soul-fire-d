@@ -10,7 +10,7 @@
     {
       "enchantment": "minecraft:soul_flame",
       "level": 1,
-      "chance": 1
+      "chance": 0.05
     }
   ]
 }
