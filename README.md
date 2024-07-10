@@ -1,7 +1,7 @@
 ![Soul Fire'd banner](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/soul-fire-d/banner.gif)
 
 ---
-![Minecraft](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/minecraft.svg)[![1.21](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-21.svg "1.21")](https://modrinth.com/mod/cobweb-mod-template/versions?g=1.21)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.21](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-21.svg "1.21")](https://modrinth.com/mod/cobweb-mod-template/versions?g=1.21)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.20.4](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-20-4.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.20.4)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.20.2](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-20-2.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.20.2)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.20.1](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-20-1.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.20.1)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.19.4](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-19-4.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.19.4)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.19.2](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-19-2.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.19.2)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.18.2](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-18-2.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.18.2)
+![Minecraft](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/minecraft.svg)[![1.21](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-21.svg "1.21")](https://modrinth.com/mod/cobweb-mod-template/versions?g=1.21)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.20.4](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-20-4.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.20.4)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.20.2](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-20-2.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.20.2)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.20.1](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-20-1.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.20.1)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.19.4](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-19-4.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.19.4)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.19.2](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-19-2.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.19.2)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.18.2](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-18-2.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.18.2)
 
 ![Loader](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/loader/loader.svg)[![NeoForge](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/loader/neoforge.svg)](https://modrinth.com/mod/soul-fire-d/versions?l=neoforge)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![Forge](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/loader/forge.svg)](https://modrinth.com/mod/soul-fire-d/versions?l=forge)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![Fabric](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/loader/fabric.svg)](https://modrinth.com/mod/soul-fire-d/versions?l=fabric)
 
@@ -39,22 +39,22 @@ This mod makes Soul Fire actually work as one would expect, all whilst providing
 
 A list of mods adding full compatibility with Soul Fire'd by integrating Soul Fire behavior and, in some cases, registering new Fires:
 
-| Mod                                                                                              |     Loader     |
-|:-------------------------------------------------------------------------------------------------|:--------------:|
-| [Oh The Biomes You'll Go](https://modrinth.com/mod/biomesyougo)                                  |      All       |
-| [Tetra](https://modrinth.com/mod/tetra) with [Tetracelium](https://modrinth.com/mod/tetracelium) |   (Neo)Forge   |
-| [Decorative Blocks](https://modrinth.com/mod/decorative-blocks)                                  |      All       |
-| [Danger Close](https://modrinth.com/mod/danger-close)                                            |      All       |
-| [Torch hit!](https://modrinth.com/mod/torch-hit)                                                 |      All       |
+| Mod                                                                                              |   Loader   |
+|:-------------------------------------------------------------------------------------------------|:----------:|
+| [Oh The Biomes You'll Go](https://modrinth.com/mod/biomesyougo)                                  |    All     |
+| [Tetra](https://modrinth.com/mod/tetra) with [Tetracelium](https://modrinth.com/mod/tetracelium) | (Neo)Forge |
+| [Decorative Blocks](https://modrinth.com/mod/decorative-blocks)                                  |    All     |
+| [Danger Close](https://modrinth.com/mod/danger-close)                                            |    All     |
+| [Torch hit!](https://modrinth.com/mod/torch-hit)                                                 |    All     |
 
 If you want your mod to appear in this list, open an issue [here](https://github.com/Crystal-Nest/soul-fire-d/issues/new?assignees=Crystal-Spider&labels=question%2Cmedium+priority&projects=&template=information_request.yml) and provide a link to your mod!
 
 ## **Dependencies**
 
-| Mod                                                                     |            Loader             | Requirement |
-|:------------------------------------------------------------------------|:-----------------------------:|:-----------:|
-| [Cobweb](https://modrinth.com/mod/cobweb)                               |              All              |  Required   |
-| [Forge Config API Port](https://modrinth.com/mod/forge-config-api-port) | Fabric < 1.21; Forge ≥ 1.20.2 |  Required   |
+| Mod                                                                     |         Loader         |   Requirement    |
+|:------------------------------------------------------------------------|:----------------------:|:----------------:|
+| [Cobweb](https://modrinth.com/mod/cobweb)                               |          All           |     Required     |
+| [Forge Config API Port](https://modrinth.com/mod/forge-config-api-port) | Fabric; Forge ≥ 1.20.2 | Required  < 1.21 |
 
 ## **License and right of use**
 
