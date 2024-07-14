@@ -3,6 +3,7 @@ package it.crystalnest.soul_fire_d.api;
 import com.google.common.base.Suppliers;
 import it.crystalnest.cobweb.api.pack.DynamicDataPack;
 import it.crystalnest.cobweb.api.pack.DynamicTagBuilder;
+import it.crystalnest.cobweb.api.registry.CobwebEntry;
 import it.crystalnest.cobweb.api.registry.CobwebRegister;
 import it.crystalnest.cobweb.api.registry.CobwebRegistry;
 import it.crystalnest.soul_fire_d.Constants;
@@ -96,7 +97,7 @@ public final class FireManager {
   /**
    * Default {@link DynamicBlockEntityType} for custom campfires.
    */
-  public static final Supplier<DynamicBlockEntityType<CustomCampfireBlockEntity>> CUSTOM_CAMPFIRE_ENTITY_TYPE = CobwebRegistry.of(Registries.BLOCK_ENTITY_TYPE, Constants.MOD_ID).register(
+  public static final CobwebEntry<DynamicBlockEntityType<CustomCampfireBlockEntity>> CUSTOM_CAMPFIRE_ENTITY_TYPE = CobwebRegistry.of(Registries.BLOCK_ENTITY_TYPE, Constants.MOD_ID).register(
     "custom_campfire",
     () -> new DynamicBlockEntityType<>(CustomCampfireBlockEntity::new)
   );
@@ -212,7 +213,7 @@ public final class FireManager {
    * @param color light color.
    * @return supplier for the registered source block.
    */
-  public static Supplier<CustomFireBlock> registerFireSource(ResourceLocation fireType, TagKey<Block> base, MapColor color) {
+  public static CobwebEntry<CustomFireBlock> registerFireSource(ResourceLocation fireType, TagKey<Block> base, MapColor color) {
     return registerFireSource(fireType, type -> new CustomFireBlock(type, base, color));
   }
 
@@ -224,7 +225,7 @@ public final class FireManager {
    * @param properties {@link BlockBehaviour.Properties block properties}.
    * @return supplier for the registered source block.
    */
-  public static Supplier<CustomFireBlock> registerFireSource(ResourceLocation fireType, TagKey<Block> base, BlockBehaviour.Properties properties) {
+  public static CobwebEntry<CustomFireBlock> registerFireSource(ResourceLocation fireType, TagKey<Block> base, BlockBehaviour.Properties properties) {
     return registerFireSource(fireType, type -> new CustomFireBlock(type, base, properties));
   }
 
@@ -236,7 +237,7 @@ public final class FireManager {
    * @param <T> source block type.
    * @return supplier for the registered source block.
    */
-  public static <T extends CustomFireBlock> Supplier<T> registerFireSource(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
+  public static <T extends CustomFireBlock> CobwebEntry<T> registerFireSource(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
     Supplier<T> source = Suppliers.memoize(() -> supplier.apply(fireType));
     FIRE_SOURCE_TAGS.add(() -> DynamicTagBuilder.of(Registries.BLOCK, BlockTags.FIRE).addElement(source.get()));
     return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.SOURCE_BLOCK), source);
@@ -249,7 +250,7 @@ public final class FireManager {
    * @param spawnParticles whether to spawn crackling particles.
    * @return supplier for the registered campfire block.
    */
-  public static Supplier<CustomCampfireBlock> registerCampfire(ResourceLocation fireType, boolean spawnParticles) {
+  public static CobwebEntry<CustomCampfireBlock> registerCampfire(ResourceLocation fireType, boolean spawnParticles) {
     return registerCampfire(fireType, type -> new CustomCampfireBlock(type, spawnParticles));
   }
 
@@ -261,7 +262,7 @@ public final class FireManager {
    * @param properties {@link BlockBehaviour.Properties block properties}.
    * @return supplier for the registered campfire block.
    */
-  public static Supplier<CustomCampfireBlock> registerCampfire(ResourceLocation fireType, boolean spawnParticles, BlockBehaviour.Properties properties) {
+  public static CobwebEntry<CustomCampfireBlock> registerCampfire(ResourceLocation fireType, boolean spawnParticles, BlockBehaviour.Properties properties) {
     return registerCampfire(fireType, type -> new CustomCampfireBlock(type, spawnParticles, properties));
   }
 
@@ -273,7 +274,7 @@ public final class FireManager {
    * @param <T> campfire block type.
    * @return supplier for the registered campfire block.
    */
-  public static <T extends CustomCampfireBlock> Supplier<T> registerCampfire(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
+  public static <T extends CustomCampfireBlock> CobwebEntry<T> registerCampfire(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
     Supplier<T> campfire = Suppliers.memoize(() -> supplier.apply(fireType));
     CAMPFIRE_TAGS.add(() -> DynamicTagBuilder.of(Registries.BLOCK, BlockTags.CAMPFIRES).addElement(campfire.get()));
     return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.CAMPFIRE_BLOCK), campfire);
@@ -286,7 +287,7 @@ public final class FireManager {
    * @param fireType fire type.
    * @return supplier for the registered campfire item.
    */
-  public static Supplier<BlockItem> registerCampfireItem(ResourceLocation fireType) {
+  public static CobwebEntry<BlockItem> registerCampfireItem(ResourceLocation fireType) {
     return registerCampfireItem(fireType, campfire -> new BlockItem(campfire, new Item.Properties()));
   }
 
@@ -299,7 +300,7 @@ public final class FireManager {
    * @param <T> campfire item type.
    * @return supplier for the registered campfire item.
    */
-  public static <T extends BlockItem> Supplier<T> registerCampfireItem(ResourceLocation fireType, Function<Block, T> supplier) {
+  public static <T extends BlockItem> CobwebEntry<T> registerCampfireItem(ResourceLocation fireType, Function<Block, T> supplier) {
     return CobwebRegistry.ofItems(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.CAMPFIRE_ITEM), () -> supplier.apply(FireManager.getRequiredComponent(fireType, Fire.Component.CAMPFIRE_BLOCK)));
   }
 
@@ -309,7 +310,7 @@ public final class FireManager {
    * @param fireType fire type.
    * @return supplier for the registered particle type.
    */
-  public static Supplier<SimpleParticleType> registerParticle(ResourceLocation fireType) {
+  public static CobwebEntry<SimpleParticleType> registerParticle(ResourceLocation fireType) {
     return registerParticle(fireType, () -> new SimpleParticleType(false));
   }
 
@@ -321,7 +322,7 @@ public final class FireManager {
    * @param <T> particle type.
    * @return supplier for the registered particle type.
    */
-  public static <T extends SimpleParticleType> Supplier<T> registerParticle(ResourceLocation fireType, Supplier<T> supplier) {
+  public static <T extends SimpleParticleType> CobwebEntry<T> registerParticle(ResourceLocation fireType, Supplier<T> supplier) {
     return CobwebRegistry.of(Registries.PARTICLE_TYPE, fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.FLAME_PARTICLE), supplier);
   }
 
@@ -332,7 +333,7 @@ public final class FireManager {
    * @param fireType fire type.
    * @return supplier for the pair of torch and wall torch blocks.
    */
-  public static Pair<Supplier<CustomTorchBlock>, Supplier<CustomWallTorchBlock>> registerTorch(ResourceLocation fireType) {
+  public static Pair<CobwebEntry<CustomTorchBlock>, CobwebEntry<CustomWallTorchBlock>> registerTorch(ResourceLocation fireType) {
     return registerTorch(fireType, CustomTorchBlock::new, CustomWallTorchBlock::new);
   }
 
@@ -347,7 +348,7 @@ public final class FireManager {
    * @param <W> wall torch block type.
    * @return supplier for the pair of torch and wall torch blocks.
    */
-  public static <T extends CustomTorchBlock, W extends CustomWallTorchBlock> Pair<Supplier<T>, Supplier<W>> registerTorch(
+  public static <T extends CustomTorchBlock, W extends CustomWallTorchBlock> Pair<CobwebEntry<T>, CobwebEntry<W>> registerTorch(
     ResourceLocation fireType,
     BiFunction<ResourceLocation, Supplier<SimpleParticleType>, T> torchSupplier,
     BiFunction<ResourceLocation, Supplier<SimpleParticleType>, W> wallTorchSupplier
@@ -366,7 +367,7 @@ public final class FireManager {
    * @param fireType fire type.
    * @return supplier for the registered torch item.
    */
-  public static Supplier<StandingAndWallBlockItem> registerTorchItem(ResourceLocation fireType) {
+  public static CobwebEntry<StandingAndWallBlockItem> registerTorchItem(ResourceLocation fireType) {
     return registerTorchItem(fireType, (torch, wallTorch) -> new StandingAndWallBlockItem(torch, wallTorch, new Item.Properties(), Direction.DOWN));
   }
 
@@ -379,7 +380,7 @@ public final class FireManager {
    * @param <T> torch item type.
    * @return supplier for the registered torch item.
    */
-  public static <T extends StandingAndWallBlockItem> Supplier<T> registerTorchItem(ResourceLocation fireType, BiFunction<Block, Block, T> supplier) {
+  public static <T extends StandingAndWallBlockItem> CobwebEntry<T> registerTorchItem(ResourceLocation fireType, BiFunction<Block, Block, T> supplier) {
     return CobwebRegistry.ofItems(fireType.getNamespace()).register(
       FireManager.getComponentPath(fireType, Fire.Component.TORCH_ITEM),
       () -> supplier.apply(FireManager.getRequiredComponent(fireType, Fire.Component.TORCH_BLOCK), FireManager.getRequiredComponent(fireType, Fire.Component.WALL_TORCH_BLOCK))
@@ -392,7 +393,7 @@ public final class FireManager {
    * @param fireType fire type.
    * @return supplier for the registered lantern block.
    */
-  public static Supplier<CustomLanternBlock> registerLantern(ResourceLocation fireType) {
+  public static CobwebEntry<CustomLanternBlock> registerLantern(ResourceLocation fireType) {
     return registerLantern(fireType, CustomLanternBlock::new);
   }
 
@@ -404,7 +405,7 @@ public final class FireManager {
    * @param <T> lantern block type.
    * @return supplier for the registered lantern block.
    */
-  public static <T extends CustomLanternBlock> Supplier<T> registerLantern(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
+  public static <T extends CustomLanternBlock> CobwebEntry<T> registerLantern(ResourceLocation fireType, Function<ResourceLocation, T> supplier) {
     return CobwebRegistry.ofBlocks(fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.LANTERN_BLOCK), () -> supplier.apply(fireType));
   }
 
@@ -415,7 +416,7 @@ public final class FireManager {
    * @param fireType fire type.
    * @return supplier for the registered lantern item.
    */
-  public static Supplier<BlockItem> registerLanternItem(ResourceLocation fireType) {
+  public static CobwebEntry<BlockItem> registerLanternItem(ResourceLocation fireType) {
     return registerLanternItem(fireType, lantern -> new BlockItem(lantern, new Item.Properties()));
   }
 
@@ -428,7 +429,7 @@ public final class FireManager {
    * @param <T> item type.
    * @return supplier for the registered lantern item.
    */
-  public static <T extends BlockItem> Supplier<T> registerLanternItem(ResourceLocation fireType, Function<Block, T> supplier) {
+  public static <T extends BlockItem> CobwebEntry<T> registerLanternItem(ResourceLocation fireType, Function<Block, T> supplier) {
     return CobwebRegistry.ofItems(fireType.getNamespace()).register(
       FireManager.getComponentPath(fireType, Fire.Component.LANTERN_ITEM),
       () -> supplier.apply(FireManager.getRequiredComponent(fireType, Fire.Component.LANTERN_BLOCK))

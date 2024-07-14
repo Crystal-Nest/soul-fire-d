@@ -9,6 +9,11 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 - Nothing new.
 
+## [v5.0.1] - 2024/07/14
+
+- Fixed compatibility with Cobweb 1.1.x
+- Changed return type of game object registering methods from `Supplier` to `CobwebEntry`.
+
 ## [v5.0.0] - 2024/07/10
 
 - Ported to 1.21
@@ -421,6 +426,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[v5.0.1]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.0.1
 [v5.0.0]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.0.0
 
 [v4.0.2]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.2
