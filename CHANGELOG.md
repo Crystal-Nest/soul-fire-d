@@ -9,6 +9,15 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 - Nothing new.
 
+## [v5.0.2] - 2024/08/31
+
+- Fixed raw drops instead of cooked drops when instakilling a mob with Soul Fire Aspect ([#50](https://github.com/Crystal-Nest/soul-fire-d/issues/50)).
+- Implemented [#52](https://github.com/Crystal-Nest/soul-fire-d/issues/52), improve Russian translations.
+
+## [v4.0.3] - 2024/08/31
+
+- Implemented [#52](https://github.com/Crystal-Nest/soul-fire-d/issues/52), improve Russian translations.
+
 ## [v5.0.1] - 2024/07/14
 
 - Fixed compatibility with Cobweb 1.1.x
