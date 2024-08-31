@@ -1,6 +1,6 @@
 {
-  "enchantment.minecraft.soul_fire_aspect": "Заговор души",
-  "enchantment.minecraft.soul_flame": "Воспламенение души",
-  "enchantment.minecraft.soul_fire_aspect.desc": "Поджигает душу цели и наносит ей дополнительный урон.",
-  "enchantment.minecraft.soul_flame.desc": "Выпущенные стрелы поджигают душу цели и наносят ей дополнительный урон."
+  "enchantment.minecraft.soul_fire_aspect": "Заговор огня душ",
+  "enchantment.minecraft.soul_flame": "Воспламенение душ",
+  "enchantment.minecraft.soul_fire_aspect.desc": "Поджигает цель огнем душ.",
+  "enchantment.minecraft.soul_flame.desc": "Стрелы выпущенные из лука, наносят дополнительный урон огнем душ."
 }
