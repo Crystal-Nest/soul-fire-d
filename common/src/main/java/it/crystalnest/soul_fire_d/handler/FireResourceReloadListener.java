@@ -154,25 +154,6 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
     }
   }
 
-  @Override
-  protected void apply(Map<ResourceLocation, JsonElement> fires, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profilerFiller) {
-    unregisterFires();
-    for (Map.Entry<ResourceLocation, JsonElement> fire : fires.entrySet()) {
-      String jsonIdentifier = fire.getKey().getPath();
-      try {
-        JsonObject jsonData = getJsonObject(jsonIdentifier, fire.getValue());
-        String mod = parse(jsonIdentifier, "mod", jsonData, JsonElement::getAsString);
-        if (Services.PLATFORM.isModLoaded(mod)) {
-          parse(jsonIdentifier, "fires", jsonData, JsonElement::getAsJsonArray).forEach(element -> registerFire(getJsonObject(jsonIdentifier, element), mod, jsonIdentifier));
-        } else {
-          Constants.LOGGER.warn("Registering of ddfires for [{}] is canceled: {} is not loaded.", mod, mod);
-        }
-      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
-        Constants.LOGGER.error("Registering of ddfires for [{}] is canceled.", jsonIdentifier);
-      }
-    }
-  }
-
   /**
    * Builds and registers a DDFire.
    *
@@ -180,7 +161,7 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
    * @param mod related mod.
    * @param jsonIdentifier JSON ID.
    */
-  private void registerFire(JsonObject jsonFire, String mod, String jsonIdentifier) {
+  private static void registerFire(JsonObject jsonFire, String mod, String jsonIdentifier) {
     ResourceLocation fireType = ResourceLocation.fromNamespaceAndPath(mod, parse(jsonIdentifier, "fire", jsonFire, JsonElement::getAsString));
     Fire.Builder builder = FireManager.fireBuilder(fireType)
       .setDamage(parse(fireType.toString(), "damage", jsonFire, JsonElement::getAsFloat, Fire.Builder.DEFAULT_DAMAGE))
@@ -209,5 +190,24 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
       }
     }
     registerFire(fireType, builder.build());
+  }
+
+  @Override
+  protected void apply(Map<ResourceLocation, JsonElement> fires, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profilerFiller) {
+    unregisterFires();
+    for (Map.Entry<ResourceLocation, JsonElement> fire : fires.entrySet()) {
+      String jsonIdentifier = fire.getKey().getPath();
+      try {
+        JsonObject jsonData = getJsonObject(jsonIdentifier, fire.getValue());
+        String mod = parse(jsonIdentifier, "mod", jsonData, JsonElement::getAsString);
+        if (Services.PLATFORM.isModLoaded(mod)) {
+          parse(jsonIdentifier, "fires", jsonData, JsonElement::getAsJsonArray).forEach(element -> registerFire(getJsonObject(jsonIdentifier, element), mod, jsonIdentifier));
+        } else {
+          Constants.LOGGER.warn("Registering of ddfires for [{}] is canceled: {} is not loaded.", mod, mod);
+        }
+      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
+        Constants.LOGGER.error("Registering of ddfires for [{}] is canceled.", jsonIdentifier);
+      }
+    }
   }
 }
