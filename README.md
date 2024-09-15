@@ -13,8 +13,10 @@
 
 ## **Description**
 
-In Minecraft there's Soul Fire, yet if you or a mob catch fire because of it nothing will change from normal fire.  
+In Minecraft there's Soul Fire, yet if you or a mob catch fire because of it, nothing will change from normal fire.  
 This mod makes Soul Fire actually work as one would expect, all whilst providing an *easy-to-use* API for modders that want to add their own custom fire and have it behave consistently.
+
+#### Note: Soul Fire'd is **required** on **both** server **and** client, because this mod does more than a simple aesthetic change.
 
 ## **Features**
 
