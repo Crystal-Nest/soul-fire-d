@@ -22,7 +22,7 @@ This mod makes Soul Fire actually work as one would expect, all whilst providing
 
 - **Soul Fire overlay**  
   ![Overlay](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/soul-fire-d/overlay.gif)  
-  ### Want it to take up less space? Check out [Slim Fire](https://www.curseforge.com/minecraft/texture-packs/slim-fire)!
+  ### Want it to take up less space? Check out [Slim Fire](https://modrinth.com/resourcepack/slim-fire)!
 - **Entities catching fire from Soul Fire will burn with actual Soul Fire.**  
   Burning from Soul Fire will deal 2 damage per second.  
   ![Sheep](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/soul-fire-d/sheep.gif)
