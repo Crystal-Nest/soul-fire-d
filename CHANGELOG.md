@@ -9,6 +9,16 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 - Nothing new.
 
+## [v5.0.3] - 2024/09/22
+
+- For 1.21 and above.
+- Fixed [#57](https://github.com/Crystal-Nest/soul-fire-d/issues/57), Soul Fire'd causing crashes when too many mods are loaded.
+
+## [v4.0.4] - 2024/09/22
+
+- For 1.20.4 and below.
+- Fixed [#57](https://github.com/Crystal-Nest/soul-fire-d/issues/57), Soul Fire'd causing crashes when too many mods are loaded.
+
 ## [v5.0.2] - 2024/08/31
 
 - Fixed raw drops instead of cooked drops when instakilling a mob with Soul Fire Aspect ([#50](https://github.com/Crystal-Nest/soul-fire-d/issues/50)).
