@@ -1,0 +1,14 @@
+name: Remove Labels From Closed Items
+on:
+  issues:
+    types: [closed]
+  pull_request:
+    types: [closed]
+
+jobs:
+  call-remove-labels-workflow:
+    permissions:
+      issues: write
+      pull-requests: write
+    uses: crystal-nest/.github/.github/workflows/remove_labels.yml@main
+    secrets: inherit

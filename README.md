@@ -13,14 +13,16 @@
 
 ## **Description**
 
-In Minecraft there's Soul Fire, yet if you or a mob catch fire because of it nothing will change from normal fire.  
+In Minecraft there's Soul Fire, yet if you or a mob catch fire because of it, nothing will change from normal fire.  
 This mod makes Soul Fire actually work as one would expect, all whilst providing an *easy-to-use* API for modders that want to add their own custom fire and have it behave consistently.
+
+#### Note: Soul Fire'd is **required** on **both** server **and** client, because this mod does more than a simple aesthetic change.
 
 ## **Features**
 
 - **Soul Fire overlay**  
   ![Overlay](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/soul-fire-d/overlay.gif)  
-  Want it to take up less space? Check out [Slim Fire](https://modrinth.com/resourcepack/slim-fire)!
+  ### Want it to take up less space? Check out [Slim Fire](https://modrinth.com/resourcepack/slim-fire)!
 - **Entities catching fire from Soul Fire will burn with actual Soul Fire.**  
   Burning from Soul Fire will deal 2 damage per second.  
   ![Sheep](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/soul-fire-d/sheep.gif)
