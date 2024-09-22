@@ -28,5 +28,5 @@ issueTrackerURL="https://github.com/${github_user}/${mod_id_kebab}/issues" #opti
   modId = "cobweb"
   mandatory = true
   versionRange = "[${cobweb_version},)"
-  ordering = "NONE"
+  ordering = "AFTER"
   side = "BOTH"
