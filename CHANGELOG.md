@@ -9,6 +9,11 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 - Nothing new.
 
+## [v5.0.4] - 2024/09/30
+
+- For 1.21 and above.
+- Fixed support for 1.21.1.
+
 ## [v5.0.3] - 2024/09/22
 
 - For 1.21 and above.
@@ -445,6 +450,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[v5.0.4]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.0.4
 [v5.0.3]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.0.3
 [v5.0.2]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.0.2
 [v5.0.1]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.0.1

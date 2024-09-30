@@ -109,7 +109,6 @@ processResources {
     "github_user"                  : github_user,
     "curseforge_id"                : curseforge_id,
     "minecraft_version"            : minecraft_version,
-    "minecraft_version_range"      : minecraft_version_range,
     "fabric_version"               : fabric_version,
     "fabric_loader_version"        : fabric_loader_version,
     "neoforge_version"             : neoforge_version,
