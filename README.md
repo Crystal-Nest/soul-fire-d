@@ -50,6 +50,7 @@ A list of mods adding full compatibility with Soul Fire'd by integrating Soul Fi
 | [Danger Close](https://modrinth.com/mod/danger-close)                                            |  All   |
 | [Torch hit!](https://modrinth.com/mod/torch-hit)                                                 |  All   |
 | [Alex's Mobs Interaction](https://modrinth.com/mod/alexs-mobs-interaction)                       |  All   |
+| [Amendments](https://modrinth.com/mod/amendments)                                                |  All   |
 
 If you want your mod to appear in this list, open an issue [here](https://github.com/Crystal-Nest/soul-fire-d/issues/new?assignees=Crystal-Spider&labels=question%2Cmedium+priority&projects=&template=information_request.yml) and provide a link to your mod!
 
