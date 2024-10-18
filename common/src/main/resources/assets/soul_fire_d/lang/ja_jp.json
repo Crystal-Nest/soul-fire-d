@@ -1,6 +1,6 @@
 {
-  "enchantment.minecraft.soul_fire_aspect": "���̉Α���",
-  "enchantment.minecraft.soul_flame": "���̃t���C��",
-  "enchantment.minecraft.soul_fire_aspect.desc": "�U�����ɑ�������̉΂ŉ��コ���܂��B.",
-  "enchantment.minecraft.soul_flame.desc": "���˂�������̉Α����̃_���[�W��^����悤�ɂȂ�܂��B"
+  "enchantment.minecraft.soul_fire_aspect": "魂の火属性",
+  "enchantment.minecraft.soul_flame": "魂のフレイム",
+  "enchantment.minecraft.soul_fire_aspect.desc": "攻撃時に相手を魂の火で炎上させます。.",
+  "enchantment.minecraft.soul_flame.desc": "発射した矢が魂の火属性のダメージを与えるようになります。"
 }
