@@ -1,10 +1,7 @@
 package it.crystalnest.soul_fire_d.handler;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.crystalnest.soul_fire_d.Constants;
 import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
@@ -18,13 +15,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.Optional;
 
 /**
  * Resource reload listener for syncing ddfires.
  */
-public abstract class FireResourceReloadListener extends SimpleJsonResourceReloadListener {
+public class FireResourceReloadListener extends SimpleJsonResourceReloadListener<FireResourceReloadListener.DDFires> {
   /**
    * Current ddfires to unregister (previous registered ddfires).
    */
@@ -35,18 +33,8 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
    */
   protected static final ArrayList<ResourceLocation> ddfiresRegister = new ArrayList<>();
 
-  /**
-   * JSON field name for a Fire's source block.
-   */
-  private static final String SOURCE_FIELD_NAME = "source";
-
-  /**
-   * JSON field name for a Fire's campfire block.
-   */
-  private static final String CAMPFIRE_FIELD_NAME = "campfire";
-
   protected FireResourceReloadListener() {
-    super(new Gson(), "fires");
+    super(DDFires.CODEC, "fires");
   }
 
   /**
@@ -60,71 +48,6 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
     }
     for (ResourceLocation fireType : ddfiresRegister) {
       Services.NETWORK.sendToClient(player, FireManager.getFire(fireType));
-    }
-  }
-
-  /**
-   * Returns the given {@link JsonElement} as a {@link JsonObject}.
-   *
-   * @param identifier identifier of the JSON file.
-   * @param element {@link JsonElement}.
-   * @return the given {@link JsonElement} as a {@link JsonObject}.
-   * @throws IllegalStateException if the element is not a {@link JsonObject}.
-   */
-  private static JsonObject getJsonObject(String identifier, JsonElement element) throws IllegalStateException {
-    try {
-      return element.getAsJsonObject();
-    } catch (IllegalStateException e) {
-      Constants.LOGGER.error(Constants.MOD_ID + " encountered a non-blocking DDFire error!\nError parsing ddfire [{}]: not a JSON object.", identifier);
-      throw e;
-    }
-  }
-
-  /**
-   * Parses the given {@link JsonObject data} to retrieve the specified {@code field} using the provided {@code parser}.
-   *
-   * @param <T> element type.
-   * @param identifier identifier of the JSON file.
-   * @param field field to parse.
-   * @param data {@link JsonObject} with data to parse.
-   * @param parser function to use to retrieve parse a JSON field.
-   * @return value of the field.
-   * @throws NullPointerException if there's no such field.
-   * @throws UnsupportedOperationException if this element is not a {@link JsonPrimitive} or {@link JsonArray}.
-   * @throws IllegalStateException if this element is of the type {@link JsonArray} but contains more than a single element.
-   * @throws NumberFormatException if the value contained is not a valid number and the expected type ({@code T}) was a number.
-   */
-  private static <T> T parse(String identifier, String field, JsonObject data, Function<JsonElement, T> parser) throws NullPointerException, UnsupportedOperationException, IllegalStateException, NumberFormatException {
-    try {
-      return parser.apply(data.get(field));
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
-      Constants.LOGGER.error(Constants.MOD_ID + " encountered a non-blocking DDFire error!\nError parsing required field \"{}\" for ddfire [{}]: missing or malformed field.", field, identifier);
-      throw e;
-    }
-  }
-
-  /**
-   * Parses the given {@link JsonObject data} to retrieve the specified {@code field} using the provided {@code parser}.
-   *
-   * @param <T> element type.
-   * @param identifier identifier of the JSON file.
-   * @param field field to parse.
-   * @param data {@link JsonObject} with data to parse.
-   * @param parser function to use to retrieve parse a JSON field.
-   * @param fallback default value if no field named {@code field} exists.
-   * @return value of the field or default.
-   * @throws UnsupportedOperationException if this element is not a {@link JsonPrimitive} or {@link JsonArray}.
-   * @throws IllegalStateException if this element is of the type {@link JsonArray} but contains more than a single element.
-   * @throws NumberFormatException if the value contained is not a valid number and the expected type ({@code T}) was a number.
-   */
-  private static <T> T parse(String identifier, String field, JsonObject data, Function<JsonElement, T> parser, T fallback) throws UnsupportedOperationException, IllegalStateException, NumberFormatException {
-    try {
-      return parser.apply(data.get(field));
-    } catch (NullPointerException e) {
-      return fallback;
-    } catch (UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
-      Constants.LOGGER.error(Constants.MOD_ID + " encountered a non-blocking DDFire error!\nError parsing optional field \"{}\" for ddfire [{}]: malformed field.", field, identifier);
-      throw e;
     }
   }
 
@@ -154,60 +77,86 @@ public abstract class FireResourceReloadListener extends SimpleJsonResourceReloa
     }
   }
 
-  /**
-   * Builds and registers a DDFire.
-   *
-   * @param jsonFire JSON fire data.
-   * @param mod related mod.
-   * @param jsonIdentifier JSON ID.
-   */
-  private static void registerFire(JsonObject jsonFire, String mod, String jsonIdentifier) {
-    ResourceLocation fireType = ResourceLocation.fromNamespaceAndPath(mod, parse(jsonIdentifier, "fire", jsonFire, JsonElement::getAsString));
-    Fire.Builder builder = FireManager.fireBuilder(fireType)
-      .setDamage(parse(fireType.toString(), "damage", jsonFire, JsonElement::getAsFloat, Fire.Builder.DEFAULT_DAMAGE))
-      .setInvertHealAndHarm(parse(fireType.toString(), "invertHealAndHarm", jsonFire, JsonElement::getAsBoolean, Fire.Builder.DEFAULT_INVERT_HEAL_AND_HARM))
-      .removeComponent(Fire.Component.CAMPFIRE_ITEM)
-      .removeComponent(Fire.Component.LANTERN_BLOCK)
-      .removeComponent(Fire.Component.LANTERN_ITEM)
-      .removeComponent(Fire.Component.TORCH_BLOCK)
-      .removeComponent(Fire.Component.TORCH_ITEM)
-      .removeComponent(Fire.Component.WALL_TORCH_BLOCK)
-      .removeComponent(Fire.Component.FLAME_PARTICLE);
-    if (jsonFire.get(SOURCE_FIELD_NAME) != null && jsonFire.get(SOURCE_FIELD_NAME).isJsonNull()) {
-      builder.removeComponent(Fire.Component.SOURCE_BLOCK);
-    } else {
-      String source = parse(fireType.toString(), SOURCE_FIELD_NAME, jsonFire, JsonElement::getAsString, null);
-      if (source != null && ResourceLocation.tryParse(source) != null) {
-        builder.setComponent(Fire.Component.SOURCE_BLOCK, ResourceLocation.parse(source));
+  @Override
+  protected void apply(@NotNull Map<ResourceLocation, DDFires> resourceLocationDDFiresMap, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profilerFiller) {
+    unregisterFires();
+    for (final Map.Entry<ResourceLocation, DDFires> entry : resourceLocationDDFiresMap.entrySet()) {
+      DDFires fires = entry.getValue();
+      if (Services.PLATFORM.isModLoaded(fires.mod)) {
+        for (DDFire fire : fires.fires) {
+          ResourceLocation fireType = ResourceLocation.fromNamespaceAndPath(fires.mod, fire.fire);
+          Fire.Builder builder = FireManager.fireBuilder(fireType)
+            .setDamage(fire.damage.orElse(Fire.Builder.DEFAULT_DAMAGE))
+            .setInvertHealAndHarm(fire.invertHealAndHarm.orElse(Fire.Builder.DEFAULT_INVERT_HEAL_AND_HARM))
+            .removeComponent(Fire.Component.CAMPFIRE_ITEM)
+            .removeComponent(Fire.Component.LANTERN_BLOCK)
+            .removeComponent(Fire.Component.LANTERN_ITEM)
+            .removeComponent(Fire.Component.TORCH_BLOCK)
+            .removeComponent(Fire.Component.TORCH_ITEM)
+            .removeComponent(Fire.Component.WALL_TORCH_BLOCK)
+            .removeComponent(Fire.Component.FLAME_PARTICLE);
+          removeOrSet(builder, fire.source, Fire.Component.SOURCE_BLOCK);
+          removeOrSet(builder, fire.campfire, Fire.Component.CAMPFIRE_BLOCK);
+          registerFire(fireType, builder.build());
+        }
+      } else {
+        Constants.LOGGER.warn("Registering of ddfires for [{}] is canceled: {} is not loaded.", fires.mod, fires.mod);
       }
     }
-    if (jsonFire.get(CAMPFIRE_FIELD_NAME) != null && jsonFire.get(CAMPFIRE_FIELD_NAME).isJsonNull()) {
-      builder.removeComponent(Fire.Component.CAMPFIRE_BLOCK);
-    } else {
-      String campfire = parse(fireType.toString(), CAMPFIRE_FIELD_NAME, jsonFire, JsonElement::getAsString, null);
-      if (campfire != null && ResourceLocation.tryParse(campfire) != null) {
-        builder.setComponent(Fire.Component.CAMPFIRE_BLOCK, ResourceLocation.parse(campfire));
-      }
-    }
-    registerFire(fireType, builder.build());
   }
 
-  @Override
-  protected void apply(Map<ResourceLocation, JsonElement> fires, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profilerFiller) {
-    unregisterFires();
-    for (Map.Entry<ResourceLocation, JsonElement> fire : fires.entrySet()) {
-      String jsonIdentifier = fire.getKey().getPath();
-      try {
-        JsonObject jsonData = getJsonObject(jsonIdentifier, fire.getValue());
-        String mod = parse(jsonIdentifier, "mod", jsonData, JsonElement::getAsString);
-        if (Services.PLATFORM.isModLoaded(mod)) {
-          parse(jsonIdentifier, "fires", jsonData, JsonElement::getAsJsonArray).forEach(element -> registerFire(getJsonObject(jsonIdentifier, element), mod, jsonIdentifier));
-        } else {
-          Constants.LOGGER.warn("Registering of ddfires for [{}] is canceled: {} is not loaded.", mod, mod);
-        }
-      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException | NumberFormatException e) {
-        Constants.LOGGER.error("Registering of ddfires for [{}] is canceled.", jsonIdentifier);
+  /**
+   * Either removes the specified component or sets its value to the provided reference.
+   *
+   * @param builder {@link Fire.Builder}.
+   * @param reference component optional value.
+   * @param component {@link Fire.Component} to set.
+   */
+  private void removeOrSet(Fire.Builder builder, Optional<ResourceLocation> reference, Fire.Component<?, ?> component) {
+    if (reference.isPresent()) {
+      if ((reference.get().getNamespace().equalsIgnoreCase(ResourceLocation.DEFAULT_NAMESPACE) || reference.get().getNamespace().equalsIgnoreCase(Constants.MOD_ID)) && reference.get().getPath().equalsIgnoreCase("remove")) {
+        builder.removeComponent(component);
+      } else {
+        builder.setComponent(component, reference.get());
       }
     }
+  }
+
+  /**
+   * Representation of a Data Driven Fire.
+   *
+   * @param fire fire id.
+   * @param damage {@link Fire#invertHealAndHarm}.
+   * @param invertHealAndHarm {@link Fire#invertHealAndHarm}.
+   * @param source {@link Fire.Component#SOURCE_BLOCK}.
+   * @param campfire {@link Fire.Component#CAMPFIRE_BLOCK}.
+   */
+  protected record DDFire(String fire, Optional<Float> damage, Optional<Boolean> invertHealAndHarm, Optional<ResourceLocation> source, Optional<ResourceLocation> campfire) {
+    /**
+     * Codec.
+     */
+    private static final Codec<DDFire> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+      Codec.STRING.fieldOf("fire").forGetter(ddFire -> ddFire.fire),
+      Codec.FLOAT.optionalFieldOf("damage").forGetter(ddFire -> ddFire.damage),
+      Codec.BOOL.optionalFieldOf("invertHealAndHarm").forGetter(ddFire -> ddFire.invertHealAndHarm),
+      ResourceLocation.CODEC.optionalFieldOf("source").forGetter(ddFire -> ddFire.source),
+      ResourceLocation.CODEC.optionalFieldOf("campfire").forGetter(ddFire -> ddFire.campfire)
+    ).apply(instance, DDFire::new));
+  }
+
+  /**
+   * Representation of a list of Data Driven Fires.
+   *
+   * @param mod mod id.
+   * @param fires list of {@link DDFire}s.
+   */
+  protected record DDFires(String mod, List<DDFire> fires) {
+    /**
+     * Codec.
+     */
+    private static final Codec<DDFires> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+      Codec.STRING.fieldOf("mod").forGetter(ddFires -> ddFires.mod),
+      DDFire.CODEC.listOf().fieldOf("fires").forGetter(ddFires -> ddFires.fires)
+    ).apply(instance, DDFires::new));
   }
 }

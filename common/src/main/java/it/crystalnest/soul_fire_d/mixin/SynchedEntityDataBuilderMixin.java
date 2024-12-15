@@ -34,7 +34,7 @@ public abstract class SynchedEntityDataBuilderMixin {
   public abstract <T> SynchedEntityData.Builder define(EntityDataAccessor<T> accessor, T value);
 
   /**
-   * Injects at the end of the constructor.<br />
+   * Injects at the end of the constructor.<br>
    * Defines the Fire Type data accessor to synchronize across client and server.
    *
    * @param ci {@link CallbackInfoReturnable}.

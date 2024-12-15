@@ -15,18 +15,16 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import org.jetbrains.annotations.NotNull;
 
@@ -66,24 +64,33 @@ public class CustomFireBlock extends BaseFireBlock implements FireTyped {
   /**
    * @param fireType fire type.
    * @param base {@link CustomFireBlock#base}.
-   * @param color light color.
-   */
-  public CustomFireBlock(ResourceLocation fireType, TagKey<Block> base, MapColor color) {
-    this(fireType, base, BlockBehaviour.Properties.of().mapColor(color).replaceable().noCollission().instabreak().sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY));
-  }
-
-  /**
-   * Use the {@link CustomFireBlock#CustomFireBlock(ResourceLocation, TagKey, MapColor) other constructor} if your fire should behave similarly to the Vanilla ones (suggested).
-   *
-   * @param fireType fire type.
-   * @param base {@link CustomFireBlock#base}.
    * @param properties block properties.
    */
   public CustomFireBlock(ResourceLocation fireType, TagKey<Block> base, Properties properties) {
-    super(properties.lightLevel(state -> FireManager.getProperty(fireType, Fire::getLight)), FireManager.getProperty(fireType, Fire::getDamage));
+    this(fireType, base, true, properties);
+  }
+
+  /**
+   * @param fireType fire type.
+   * @param base {@link CustomFireBlock#base}.
+   * @param addDefaultProperties whether to add default block properties.
+   * @param properties block properties.
+   */
+  public CustomFireBlock(ResourceLocation fireType, TagKey<Block> base, boolean addDefaultProperties, Properties properties) {
+    super((addDefaultProperties ? addDefaultProperties(properties) : properties).lightLevel(state -> FireManager.light(fireType)), FireManager.getProperty(fireType, Fire::getDamage));
     registerDefaultState(stateDefinition.any().setValue(AGE, 0));
     this.fireType = fireType;
     this.base = base;
+  }
+
+  /**
+   * Adds the default properties.
+   *
+   * @param properties initial properties.
+   * @return combination of initial and default properties.
+   */
+  private static Properties addDefaultProperties(Properties properties) {
+    return properties.replaceable().noCollission().instabreak().sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY);
   }
 
   @Override
@@ -93,13 +100,11 @@ public class CustomFireBlock extends BaseFireBlock implements FireTyped {
 
   @NotNull
   @Override
-  @SuppressWarnings("deprecation")
-  public BlockState updateShape(@NotNull BlockState state, @NotNull Direction direction, @NotNull BlockState state2, @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos pos2) {
+  protected BlockState updateShape(@NotNull BlockState state, @NotNull LevelReader level, @NotNull ScheduledTickAccess scheduledTickAccess, @NotNull BlockPos pos, @NotNull Direction direction, @NotNull BlockPos neighborPos, @NotNull BlockState neighborState, @NotNull RandomSource random) {
     return canSurvive(state, level, pos) ? getStateWithAge(level, pos, state.getValue(AGE)) : Blocks.AIR.defaultBlockState();
   }
 
   @Override
-  @SuppressWarnings("deprecation")
   public boolean canSurvive(@NotNull BlockState state, @NotNull LevelReader level, @NotNull BlockPos pos) {
     return canSurvive(level.getBlockState(pos.below()));
   }
@@ -108,7 +113,6 @@ public class CustomFireBlock extends BaseFireBlock implements FireTyped {
    * Refer to {@link FireBlock#tick(BlockState, ServerLevel, BlockPos, RandomSource)}.
    */
   @Override
-  @SuppressWarnings("deprecation")
   public void tick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource rand) {
     super.tick(state, level, pos, rand);
     scheduleTick(level, pos);
@@ -158,20 +162,20 @@ public class CustomFireBlock extends BaseFireBlock implements FireTyped {
   }
 
   /**
-   * Copied from {@link FireBlock#getStateWithAge(LevelAccessor, BlockPos, int)}.
+   * Copied from {@link FireBlock#getStateWithAge(LevelReader, BlockPos, int)}.
    *
    * @param level level.
    * @param pos position.
    * @param age {@link CustomFireBlock#AGE} value.
    * @return correct block state.
    */
-  protected BlockState getStateWithAge(LevelAccessor level, BlockPos pos, int age) {
+  protected BlockState getStateWithAge(LevelReader level, BlockPos pos, int age) {
     BlockState state = getState(level, pos);
     return state.hasProperty(AGE) ? state.setValue(AGE, age) : state;
   }
 
   /**
-   * Schedule the next fire tick.<br />
+   * Schedule the next fire tick.<br>
    * Based on {@link FireBlock#getFireTickDelay(RandomSource)}.
    *
    * @param level level.

@@ -8,9 +8,9 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.WallTorchBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import org.jetbrains.annotations.NotNull;
@@ -34,21 +34,49 @@ public class CustomWallTorchBlock extends WallTorchBlock implements FireTyped {
   /**
    * @param fireType fire type.
    * @param type particle type.
+   * @param properties block properties.
    */
-  public CustomWallTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type) {
-    this(fireType, type, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.WOOD).dropsLike(FireManager.getRequiredComponent(fireType, Fire.Component.TORCH_BLOCK)).pushReaction(PushReaction.DESTROY));
+  public CustomWallTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type, Properties properties) {
+    this(fireType, type, true, properties);
   }
 
   /**
    * @param fireType fire type.
    * @param type particle type.
+   * @param addDefaultProperties whether to add default block properties.
    * @param properties block properties.
    */
-  public CustomWallTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type, Properties properties) {
+  public CustomWallTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type, boolean addDefaultProperties, Properties properties) {
     // noinspection DataFlowIssue
-    super(null, properties.lightLevel(state -> FireManager.getProperty(fireType, Fire::getLight)));
+    super(
+      null,
+      (addDefaultProperties ? addDefaultProperties(properties) : properties)
+        .lightLevel(state -> FireManager.light(fireType))
+        .overrideLootTable(getTorchBlock(fireType).getLootTable())
+        .overrideDescription(getTorchBlock(fireType).getDescriptionId())
+    );
     this.fireType = fireType;
     this.type = type;
+  }
+
+  /**
+   * Adds the default properties.
+   *
+   * @param properties initial properties.
+   * @return combination of initial and default properties.
+   */
+  private static Properties addDefaultProperties(Properties properties) {
+    return properties.noCollission().instabreak().sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY);
+  }
+
+  /**
+   * Returns the required {@link Fire.Component#TORCH_BLOCK}.
+   *
+   * @param fireType fire type.
+   * @return related {@link Fire.Component#TORCH_BLOCK}.
+   */
+  public static Block getTorchBlock(ResourceLocation fireType) {
+    return FireManager.getRequiredComponent(fireType, Fire.Component.TORCH_BLOCK);
   }
 
   @Override

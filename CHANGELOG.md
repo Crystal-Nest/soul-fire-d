@@ -9,6 +9,13 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 - Nothing new.
 
+## [v5.1.0] - 2024/12/15
+
+- 1.21 and above only.
+- Ported to 1.21.3.
+- Cobweb minimum required version is now 1.3.0.
+- Added a built-in data pack to toggle enchantment related stuff.
+
 ## [v5.0.6] - 2024/10/18
 
 - For 1.21 and above.
@@ -470,6 +477,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[v5.1.0]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.0
 [v5.0.6]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.0.6
 [v5.0.5]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.0.5
 [v5.0.4]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.0.4

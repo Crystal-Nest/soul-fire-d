@@ -2,6 +2,7 @@ package it.crystalnest.soul_fire_d.mixin;
 
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.Zombie;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(Zombie.class)
 public abstract class ZombieMixin implements FireTyped {
   /**
-   * Injects into the method {@link Entity#igniteForSeconds(float)} inside the method {@link Zombie#doHurtTarget(Entity)}.<br />
+   * Injects into the method {@link Entity#igniteForSeconds(float)} inside the method {@link Zombie#doHurtTarget(ServerLevel, Entity)}.<br>
    * Sets the correct Fire Type to the {@link Entity} being set on fire.
    *
    * @param instance owner of the redirected method.

@@ -6,9 +6,9 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.Holder;
-import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -49,7 +49,7 @@ public final class ChestLootModifier extends LootModifier {
   @Nonnull
   protected ObjectArrayList<ItemStack> doApply(@NotNull ObjectArrayList<ItemStack> generatedLoot, @NotNull LootContext context) {
     for (Addition addition : additions) {
-      if (addition.enchantment.value().getSupportedItems().size() > 0 && context.getRandom().nextFloat() <= addition.chance) {
+      if (context.getRandom().nextFloat() <= addition.chance) {
         generatedLoot.add(addition.getEnchantedBook());
       }
     }
@@ -107,7 +107,7 @@ public final class ChestLootModifier extends LootModifier {
      * @return an enchanted book with this {@link #enchantment} applied.
      */
     private ItemStack getEnchantedBook() {
-      return EnchantedBookItem.createForEnchantment(new EnchantmentInstance(enchantment, Math.min(enchantment.value().getMaxLevel(), level)));
+      return EnchantmentHelper.createBook(new EnchantmentInstance(enchantment, Math.min(enchantment.value().getMaxLevel(), level)));
     }
   }
 }

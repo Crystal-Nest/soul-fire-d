@@ -1,6 +1,5 @@
 package it.crystalnest.soul_fire_d.api.block;
 
-import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import net.minecraft.core.BlockPos;
@@ -10,7 +9,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.TorchBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import org.jetbrains.annotations.NotNull;
@@ -34,21 +32,33 @@ public class CustomTorchBlock extends TorchBlock implements FireTyped {
   /**
    * @param fireType fire type.
    * @param type particle type.
+   * @param properties block properties.
    */
-  public CustomTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type) {
-    this(fireType, type, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY));
+  public CustomTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type, Properties properties) {
+    this(fireType, type, true, properties);
   }
 
   /**
    * @param fireType fire type.
    * @param type particle type.
+   * @param addDefaultProperties whether to add default block properties.
    * @param properties block properties.
    */
-  public CustomTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type, Properties properties) {
+  public CustomTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type, boolean addDefaultProperties, Properties properties) {
     // noinspection DataFlowIssue
-    super(null, properties.lightLevel(state -> FireManager.getProperty(fireType, Fire::getLight)));
+    super(null, (addDefaultProperties ? addDefaultProperties(properties) : properties).lightLevel(state -> FireManager.light(fireType)));
     this.fireType = fireType;
     this.type = type;
+  }
+
+  /**
+   * Adds the default properties.
+   *
+   * @param properties initial properties.
+   * @return combination of initial and default properties.
+   */
+  private static Properties addDefaultProperties(Properties properties) {
+    return properties.noCollission().instabreak().sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY);
   }
 
   @Override

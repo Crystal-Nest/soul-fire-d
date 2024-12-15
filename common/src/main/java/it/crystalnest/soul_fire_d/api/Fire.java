@@ -345,7 +345,7 @@ public final class Fire {
     @NotNull
     @SuppressWarnings("unchecked")
     Registry<R> getRegistry() {
-      return (Registry<R>) BuiltInRegistries.REGISTRY.get(key.location());
+      return (Registry<R>) BuiltInRegistries.REGISTRY.get(key.location()).orElseThrow().value();
     }
 
     /**
@@ -358,7 +358,7 @@ public final class Fire {
     @Nullable
     @SuppressWarnings("unchecked")
     T getValue(ResourceLocation id) {
-      return (T) getRegistry().get(id);
+      return (T) getRegistry().getOptional(id).orElse(null);
     }
 
     /**

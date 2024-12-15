@@ -18,8 +18,7 @@ public class DynamicBlockEntityType<T extends CustomCampfireBlockEntity> extends
    * @param supplier {@link BlockEntitySupplier} for the custom campfire block entity.
    */
   public DynamicBlockEntityType(BlockEntitySupplier<? extends T> supplier) {
-    //noinspection DataFlowIssue
-    super(supplier, Set.of(), null);
+    super(supplier, Set.of());
   }
 
   @Override

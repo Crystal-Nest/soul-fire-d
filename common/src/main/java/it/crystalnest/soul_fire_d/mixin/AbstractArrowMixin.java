@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(AbstractArrow.class)
 public abstract class AbstractArrowMixin implements FireTypeChanger {
   /**
-   * Redirects the call to {@link Entity#igniteForSeconds(float)} inside the method {@link AbstractArrow#onHitEntity(EntityHitResult)}.<br />
+   * Redirects the call to {@link Entity#igniteForSeconds(float)} inside the method {@link AbstractArrow#onHitEntity(EntityHitResult)}.<br>
    * Sets the correct Fire Type for the Entity.
    *
    * @param instance {@link Entity} invoking (owning) the redirected method.

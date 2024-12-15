@@ -14,6 +14,8 @@
   ],
   "client": [
     "client.EntityRenderDispatcherMixin",
+    "client.EntityRendererMixin",
+    "client.EntityRenderStateMixin",
     "client.ScreenEffectRendererMixin"
   ],
   "server": [],

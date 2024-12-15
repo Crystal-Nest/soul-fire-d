@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -80,7 +81,7 @@ public abstract class EntityMixin implements FireTypeSynched {
   }
 
   /**
-   * Redirects the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link Entity#baseTick()}.<br />
+   * Redirects the call to {@link Entity#hurtServer(ServerLevel, DamageSource, float)} inside the method {@link Entity#baseTick()}.<br>
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
    *
    * @param instance owner of the redirected method.
@@ -88,25 +89,25 @@ public abstract class EntityMixin implements FireTypeSynched {
    * @param damage original damage (normal fire).
    * @return the result of calling the redirected method.
    */
-  @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
-  private boolean redirectHurt(Entity instance, DamageSource damageSource, float damage) {
+  @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
+  private boolean redirectHurtServer(Entity instance, ServerLevel level, DamageSource damageSource, float damage) {
     return FireManager.affect(instance, ((FireTyped) instance).getFireType(), Fire::getOnFire);
   }
 
   /**
-   * Redirects the call to {@link Entity#igniteForSeconds(float)} inside the method {@link Entity#lavaHurt()}.<br />
+   * Redirects the call to {@link Entity#igniteForSeconds(float)} inside the method {@link Entity#lavaHurt()}.<br>
    * Sets the base Fire Type.
    *
    * @param instance owner of the redirected method.
    * @param seconds seconds to set the entity on fire for.
    */
   @Redirect(method = "lavaHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;igniteForSeconds(F)V"))
-  private void redirectSetSecondsOnFire(Entity instance, float seconds) {
+  private void redirectIgniteForSeconds(Entity instance, float seconds) {
     FireManager.setOnFire(instance, seconds, FireManager.DEFAULT_FIRE_TYPE);
   }
 
   /**
-   * Injects at the start of the method {@link Entity#setRemainingFireTicks(int)}.<br />
+   * Injects at the start of the method {@link Entity#setRemainingFireTicks(int)}.<br>
    * Resets the Fire Type when this entity stops burning or catches fire from a new fire source.
    *
    * @param ticks ticks this entity should burn for.
@@ -120,7 +121,7 @@ public abstract class EntityMixin implements FireTypeSynched {
   }
 
   /**
-   * Injects in the method {@link Entity#saveWithoutId(CompoundTag)} before the invocation of {@link Entity#addAdditionalSaveData(CompoundTag)}.<br />
+   * Injects in the method {@link Entity#saveWithoutId(CompoundTag)} before the invocation of {@link Entity#addAdditionalSaveData(CompoundTag)}.<br>
    * If valid, saves the current Fire Type in the given {@link CompoundTag}.
    *
    * @param tag data tag.
@@ -132,7 +133,7 @@ public abstract class EntityMixin implements FireTypeSynched {
   }
 
   /**
-   * Injects in the method {@link Entity#load(CompoundTag)} before the invocation of {@link Entity#readAdditionalSaveData(CompoundTag)}.<br />
+   * Injects in the method {@link Entity#load(CompoundTag)} before the invocation of {@link Entity#readAdditionalSaveData(CompoundTag)}.<br>
    * Loads the Fire Type from the given {@link CompoundTag}.
    *
    * @param tag data tag.
