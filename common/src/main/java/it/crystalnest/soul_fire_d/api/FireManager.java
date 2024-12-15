@@ -1,5 +1,6 @@
 package it.crystalnest.soul_fire_d.api;
 
+import com.google.common.base.Suppliers;
 import it.crystalnest.cobweb.api.pack.dynamic.DynamicDataPack;
 import it.crystalnest.cobweb.api.pack.dynamic.DynamicTagBuilder;
 import it.crystalnest.cobweb.api.registry.CobwebEntry;
