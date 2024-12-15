@@ -1,0 +1,9 @@
+{
+  "pack": {
+    "pack_format": 57,
+    "description": {
+      "translate": "datapack.soul_fire_d.enchantments.description",
+      "fallback": "Burn your enemies with Soul Fire Aspect and Soul Flame!"
+    }
+  }
+}

@@ -1,8 +1,7 @@
 package it.crystalnest.soul_fire_d.api;
 
-import com.google.common.base.Suppliers;
-import it.crystalnest.cobweb.api.pack.DynamicDataPack;
-import it.crystalnest.cobweb.api.pack.DynamicTagBuilder;
+import it.crystalnest.cobweb.api.pack.dynamic.DynamicDataPack;
+import it.crystalnest.cobweb.api.pack.dynamic.DynamicTagBuilder;
 import it.crystalnest.cobweb.api.registry.CobwebEntry;
 import it.crystalnest.cobweb.api.registry.CobwebRegister;
 import it.crystalnest.cobweb.api.registry.CobwebRegistry;
@@ -193,7 +192,7 @@ public final class FireManager {
   }
 
   /**
-   * Unregisters the specified fire.<br />
+   * Unregisters the specified fire.<br>
    * Internally use only, do not use elsewhere!
    *
    * @param fireType fire type.
@@ -437,7 +436,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the {@link Fire} registered with the given {@code id}.<br />
+   * Returns the {@link Fire} registered with the given {@code id}.<br>
    * Returns {@link #DEFAULT_FIRE} if no {@link Fire} is registered with the given {@code modId} and {@code fireId}.
    *
    * @param modId mod ID.
@@ -449,7 +448,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the {@link Fire} registered with the given {@code id}.<br />
+   * Returns the {@link Fire} registered with the given {@code id}.<br>
    * Returns {@link #DEFAULT_FIRE} if no {@link Fire} is registered with the given {@code fireType}.
    *
    * @param fireType fire type.
@@ -469,7 +468,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the specified property of the specified fire.<br />
+   * Returns the specified property of the specified fire.<br>
    * Defaults to the property of the {@link #DEFAULT_FIRE} if the specified fire is not registered.
    *
    * @param fireType fire type.
@@ -494,7 +493,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the specified component of the specified fire.<br />
+   * Returns the specified component of the specified fire.<br>
    * Defaults to the component of the {@link #DEFAULT_FIRE} if the specified fire is not registered.
    *
    * @param fireType fire type.
@@ -507,7 +506,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the specified component value of the specified fire.<br />
+   * Returns the specified component value of the specified fire.<br>
    * Defaults to the component value of the {@link #DEFAULT_FIRE} if the specified fire is not registered.
    *
    * @param fireType fire type.
@@ -534,7 +533,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the specified component value of the specified fire.<br />
+   * Returns the specified component value of the specified fire.<br>
    * Defaults to the component value of the {@link #DEFAULT_FIRE} if the specified fire is not registered.
    *
    * @param fireType fire type.
@@ -550,7 +549,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the list of the specified property from all the registered fires.<br />
+   * Returns the list of the specified property from all the registered fires.<br>
    * This list will have as many elements as there are registered fires.
    *
    * @param getter property getter.
@@ -562,7 +561,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the list of the specified component IDs from all the registered fires.<br />
+   * Returns the list of the specified component IDs from all the registered fires.<br>
    * This list won't necessarily have as many elements as there are registered fires because fires without the specified component are filtered out.
    *
    * @param component component.
@@ -573,7 +572,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the list of the specified component values from all the registered fires.<br />
+   * Returns the list of the specified component values from all the registered fires.<br>
    * This list won't necessarily have as many elements as there are registered fires because fires without the specified component are filtered out.
    *
    * @param component component.
@@ -603,7 +602,7 @@ public final class FireManager {
    * @return whether the given values represent a valid fire type.
    */
   public static boolean isValidType(@Nullable ResourceLocation fireType) {
-    return fireType != null && Strings.isNotBlank(fireType.getNamespace()) && Strings.isNotBlank(fireType.getPath());
+    return fireType != null && Strings.isNotBlank(fireMod(fireType)) && Strings.isNotBlank(fireType.getPath());
   }
 
   /**
@@ -664,7 +663,7 @@ public final class FireManager {
    * @return whether the given mod ID is a valid, loaded and registered mod ID.
    */
   public static boolean isRegisteredModId(@Nullable String modId) {
-    return isValidModId(modId) && FIRES.keySet().stream().anyMatch(fireType -> fireType.getNamespace().equals(modId));
+    return isValidModId(modId) && FIRES.keySet().stream().anyMatch(fireType -> fireMod(fireType).equals(modId));
   }
 
   /**
@@ -739,7 +738,7 @@ public final class FireManager {
   }
 
   /**
-   * Writes to the given {@link CompoundTag} the given {@code fireType}.<br />
+   * Writes to the given {@link CompoundTag} the given {@code fireType}.<br>
    * If the given {@code fireType} is not registered, {@link #DEFAULT_FIRE_TYPE} will be used instead.
    *
    * @param tag {@link CompoundTag} to write to.
@@ -772,7 +771,7 @@ public final class FireManager {
   }
 
   /**
-   * Hurts or heals the given {@code entity}.<br />
+   * Hurts or heals the given {@code entity}.<br>
    * Also applies the custom fire behavior.
    *
    * @param entity entity to hurt/heal.
@@ -786,7 +785,7 @@ public final class FireManager {
   }
 
   /**
-   * Hurts or heals the given {@code entity}.<br />
+   * Hurts or heals the given {@code entity}.<br>
    * Also applies the custom fire behavior.
    *
    * @param entity entity to hurt/heal.
@@ -828,5 +827,25 @@ public final class FireManager {
    */
   private static ResourceLocation fireType(@Nullable String modId, @Nullable String fireId) {
     return ResourceLocation.fromNamespaceAndPath(Objects.requireNonNull(modId), Objects.requireNonNull(fireId));
+  }
+
+  /**
+   * Returns the namespace (mod ID) of the given fire type.
+   *
+   * @param fireType fire type.
+   * @return fire mod ID.
+   */
+  private static String fireMod(ResourceLocation fireType) {
+    return fireType.getNamespace();
+  }
+
+  /**
+   * Shorthand for getting the {@link Fire#light} property of the specified fire.
+   *
+   * @param fireType fire type.
+   * @return fire light property.
+   */
+  public static int light(ResourceLocation fireType) {
+    return FireManager.getProperty(fireType, Fire::getLight);
   }
 }

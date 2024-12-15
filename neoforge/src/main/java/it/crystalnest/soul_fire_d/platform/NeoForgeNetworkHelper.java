@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * NeoForge networking helper.
  */
-public class NeoForgeNetworkHelper implements NetworkHelper {
+public final class NeoForgeNetworkHelper implements NetworkHelper {
   /**
    * Registers the custom packets and their handlers.
    *

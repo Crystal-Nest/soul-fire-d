@@ -30,16 +30,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CustomCampfireBlock extends CampfireBlock implements FireTyped {
   /**
-   * {@link Codec}.
+   * Codec.
    */
-  public static final MapCodec<CampfireBlock> CODEC = RecordCodecBuilder.mapCodec(
-    instance -> instance.group(
-        ResourceLocation.CODEC.fieldOf("fire_type").forGetter(block -> ((FireTyped) block).getFireType()),
-        Codec.BOOL.fieldOf("spawn_particles").forGetter(block -> block.spawnParticles),
-        propertiesCodec()
-      )
-      .apply(instance, CustomCampfireBlock::new)
-  );
+  public static final MapCodec<CampfireBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    ResourceLocation.CODEC.fieldOf("fire_type").forGetter(block -> ((FireTyped) block).getFireType()),
+    Codec.BOOL.fieldOf("spawn_particles").forGetter(block -> block.spawnParticles),
+    propertiesCodec()
+  ).apply(instance, CustomCampfireBlock::new));
 
   /**
    * Fire type.

@@ -2,5 +2,11 @@
   "enchantment.minecraft.soul_fire_aspect": "Aspect of Soule Fire",
   "enchantment.minecraft.soul_flame": "Enchanted Soulefire",
   "enchantment.minecraft.soul_fire_aspect.desc": "Causes additional soule fire damageth at which hour hath used to attacketh a mob.",
-  "enchantment.minecraft.soul_flame.desc": "Arrows fir'd from the boweth shall dealeth additional soule fire damageth."
+  "enchantment.minecraft.soul_flame.desc": "Arrows fir'd from the boweth shall dealeth additional soule fire damageth.",
+  "datapack.soul_fire_d.enchantments": "Soul fire'd enchantments",
+  "datapack.soul_fire_d.enchantments.description": "Burneth thy enemies with Aspect of Soule Fire and Enchanted Soulefire!",
+  "soul_fire_d:fire_source_tags": "Soul Fire'd fireth sources",
+  "soul_fire_d_dynamic_fire_source_tags": "Marks fireth sources with the c'rrect tag",
+  "soul_fire_d:campfire_tags": "Soul Fire'd campfires",
+  "soul_fire_d_dynamic_campfire_tags": "Marks campfires with the c'rrect tag"
 }

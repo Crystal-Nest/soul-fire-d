@@ -27,7 +27,7 @@ public final class FireClientManager {
   private FireClientManager() {}
 
   /**
-   * Attempts to register the given {@link FireClient}.<br />
+   * Attempts to register the given {@link FireClient}.<br>
    * If the {@link FireClient#fireType} is already registered, logs an error.
    *
    * @param fire {@link FireClient} to register.
@@ -79,7 +79,7 @@ public final class FireClientManager {
   }
 
   /**
-   * Unregisters the specified fire.<br />
+   * Unregisters the specified fire.<br>
    * Internally use only, do not use elsewhere!
    *
    * @param fireType fire type.
@@ -87,12 +87,13 @@ public final class FireClientManager {
    */
   @Nullable
   @ApiStatus.Internal
+  @SuppressWarnings("UnusedReturnValue")
   public static synchronized FireClient unregisterFire(ResourceLocation fireType) {
     return FIRES.remove(fireType);
   }
 
   /**
-   * Returns the {@link FireClient#material0} of the {@link FireClient} registered with the given {@code fireType}.<br />
+   * Returns the {@link FireClient#material0} of the {@link FireClient} registered with the given {@code fireType}.<br>
    * Returns {@link ModelBakery#FIRE_0} if no {@link FireClient} was registered with the given {@code fireType}.
    *
    * @param fireType fire type.
@@ -106,7 +107,7 @@ public final class FireClientManager {
   }
 
   /**
-   * Returns the {@link FireClient#material1} of the {@link FireClient} registered with the given {@code fireType}.<br />
+   * Returns the {@link FireClient#material1} of the {@link FireClient} registered with the given {@code fireType}.<br>
    * Returns {@link ModelBakery#FIRE_1} if no {@link FireClient} was registered with the given {@code fireType}.
    *
    * @param fireType fire type.
@@ -120,7 +121,7 @@ public final class FireClientManager {
   }
 
   /**
-   * Returns the sprite 0 of the {@link FireClient} registered with the given {@code fireType}.<br />
+   * Returns the sprite 0 of the {@link FireClient} registered with the given {@code fireType}.<br>
    * Returns {@link ModelBakery#FIRE_0} sprite if no {@link FireClient} was registered with the given {@code fireType}.
    *
    * @param fireType fire type.
@@ -134,7 +135,7 @@ public final class FireClientManager {
   }
 
   /**
-   * Returns the sprite 1 of the {@link FireClient} registered with the given {@code fireType}.<br />
+   * Returns the sprite 1 of the {@link FireClient} registered with the given {@code fireType}.<br>
    * Returns {@link ModelBakery#FIRE_1} sprite if no {@link FireClient} was registered with the given {@code fireType}.
    *
    * @param fireType fire type.

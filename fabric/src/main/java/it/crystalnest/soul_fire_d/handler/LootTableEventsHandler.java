@@ -34,19 +34,31 @@ public final class LootTableEventsHandler {
    * @param key loot table key.
    * @param builder builder of the loot table being loaded.
    * @param source loot table source.
+   * @param provider holder reference provider.
    */
   public static void handle(ResourceKey<LootTable> key, LootTable.Builder builder, LootTableSource source, HolderLookup.Provider provider) {
-    Holder.Reference<Enchantment> soulFlame = provider.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.withDefaultNamespace("soul_flame")));
-    if (soulFlame.value().getSupportedItems().size() > 0 && key.location().equals(BASTION_CHEST_IDENTIFIER)) {
-      builder.pool(
-        LootPool.lootPool()
-          .setRolls(ConstantValue.exactly(1))
-          .conditionally(LootItemRandomChanceCondition.randomChance(0.05F).build())
-          .with(LootItem.lootTableItem(Items.BOOK).build())
-          .apply(new EnchantRandomlyFunction.Builder().withEnchantment(soulFlame))
-          .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
-          .build()
-      );
+    if (key.location().equals(BASTION_CHEST_IDENTIFIER)) {
+      buildPool(builder, provider, "soul_fire_aspect");
+      buildPool(builder, provider, "soul_flame");
     }
+  }
+
+  /**
+   * Conditionally build a loot pool to add a chance of finding the specified Soul Fire enchantment.
+   *
+   * @param builder builder of the loot table being loaded.
+   * @param provider holder reference provider.
+   * @param name enchantment name.
+   */
+  private static void buildPool(LootTable.Builder builder, HolderLookup.Provider provider, String name) {
+    provider.lookupOrThrow(Registries.ENCHANTMENT).get(ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.withDefaultNamespace(name))).ifPresent(enchantment -> builder.pool(
+      LootPool.lootPool()
+        .setRolls(ConstantValue.exactly(1))
+        .conditionally(LootItemRandomChanceCondition.randomChance(0.05F).build())
+        .with(LootItem.lootTableItem(Items.BOOK).build())
+        .apply(new EnchantRandomlyFunction.Builder().withEnchantment(enchantment))
+        .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
+        .build()
+    ));
   }
 }
