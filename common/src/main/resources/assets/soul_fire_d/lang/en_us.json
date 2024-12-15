@@ -2,5 +2,11 @@
   "enchantment.minecraft.soul_fire_aspect": "Soul Fire Aspect",
   "enchantment.minecraft.soul_flame": "Soul Flame",
   "enchantment.minecraft.soul_fire_aspect.desc": "Causes additional soul fire damage when used to attack a mob.",
-  "enchantment.minecraft.soul_flame.desc": "Arrows fired from the bow will deal additional soul fire damage."
+  "enchantment.minecraft.soul_flame.desc": "Arrows fired from the bow will deal additional soul fire damage.",
+  "datapack.soul_fire_d.enchantments": "Soul Fire'd enchantments",
+  "datapack.soul_fire_d.enchantments.description": "Burn your enemies with Soul Fire Aspect and Soul Flame!",
+  "soul_fire_d:fire_source_tags": "Soul Fire'd fire sources",
+  "soul_fire_d_dynamic_fire_source_tags": "Marks fire sources with the correct tag",
+  "soul_fire_d:campfire_tags": "Soul Fire'd campfires",
+  "soul_fire_d_dynamic_campfire_tags": "Marks campfires with the correct tag"
 }

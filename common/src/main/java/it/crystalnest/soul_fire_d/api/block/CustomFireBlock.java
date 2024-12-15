@@ -47,14 +47,11 @@ public class CustomFireBlock extends BaseFireBlock implements FireTyped {
   /**
    * {@link Codec}.
    */
-  public static final MapCodec<CustomFireBlock> CODEC = RecordCodecBuilder.mapCodec(
-    instance -> instance.group(
-        ResourceLocation.CODEC.fieldOf("fire_type").forGetter(block -> block.fireType),
-        TagKey.codec(Registries.BLOCK).fieldOf("base").forGetter(block -> block.base),
-        propertiesCodec()
-      )
-      .apply(instance, CustomFireBlock::new)
-  );
+  public static final MapCodec<CustomFireBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    ResourceLocation.CODEC.fieldOf("fire_type").forGetter(block -> block.fireType),
+    TagKey.codec(Registries.BLOCK).fieldOf("base").forGetter(block -> block.base),
+    propertiesCodec()
+  ).apply(instance, CustomFireBlock::new));
 
   /**
    * Fire type.

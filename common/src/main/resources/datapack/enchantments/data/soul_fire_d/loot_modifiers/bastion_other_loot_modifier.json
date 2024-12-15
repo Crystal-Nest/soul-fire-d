@@ -8,6 +8,11 @@
   ],
   "additions": [
     {
+      "enchantment": "minecraft:soul_fire_aspect",
+      "level": 1,
+      "chance": 0.05
+    },
+    {
       "enchantment": "minecraft:soul_flame",
       "level": 1,
       "chance": 0.05

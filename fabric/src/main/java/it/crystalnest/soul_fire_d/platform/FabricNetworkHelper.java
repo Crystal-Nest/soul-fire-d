@@ -12,7 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 /**
  * Fabric networking helper.
  */
-public class FabricNetworkHelper implements NetworkHelper {
+public final class FabricNetworkHelper implements NetworkHelper {
   @Override
   public void register() {
     PayloadTypeRegistry.playS2C().register(RegisterFirePacket.TYPE, RegisterFirePacket.CODEC);

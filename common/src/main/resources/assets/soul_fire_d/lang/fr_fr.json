@@ -2,5 +2,11 @@
   "enchantment.minecraft.soul_fire_aspect": "Aura de feu des âmes",
   "enchantment.minecraft.soul_flame": "Flamme des âmes",
   "enchantment.minecraft.soul_fire_aspect.desc": "Inflige des dégâts de feu des ames supplémentaires lorsqu'il est utilisé pour attaquer une foule.",
-  "enchantment.minecraft.soul_flame.desc": "Les flèches tirées depuis l'arc infligent des dégâts de feu des âmes supplémentaires."
+  "enchantment.minecraft.soul_flame.desc": "Les flèches tirées depuis l'arc infligent des dégâts de feu des âmes supplémentaires.",
+  "datapack.soul_fire_d.enchantments": "Enchantements de Soul Fire'd",
+  "datapack.soul_fire_d.enchantments.description": "Brûler vos ennemis avec de l'Aura de feu des âmes et la Flamme des âmes!",
+  "soul_fire_d:fire_source_tags": "Sources de feu de Soul Fire'd",
+  "soul_fire_d_dynamic_fire_source_tags": "Attribue aux sources de feu le tag correcte",
+  "soul_fire_d:campfire_tags": "Feux de camp de Soul Fire'd",
+  "soul_fire_d_dynamic_campfire_tags": "Attribue aux feux de camp le tag correcte"
 }
