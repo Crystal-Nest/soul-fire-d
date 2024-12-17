@@ -38,6 +38,6 @@ artifacts {
 }
 
 // Disable publishing tasks where common is not published
-tasks.named('publishModrinth').get().setEnabled(false)
-tasks.named('publishCurseforge').get().setEnabled(false)
-tasks.named('publishGitHub').get().setEnabled(false)
+tasks.named("publishModrinth").get().setEnabled(false)
+tasks.named("publishCurseforge").get().setEnabled(false)
+tasks.named("publishGitHub").get().setEnabled(false)

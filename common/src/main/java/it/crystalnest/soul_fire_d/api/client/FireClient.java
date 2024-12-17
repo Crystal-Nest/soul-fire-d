@@ -1,10 +1,10 @@
 package it.crystalnest.soul_fire_d.api.client;
 
 import it.crystalnest.soul_fire_d.api.FireManager;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
 
 /**
  * Fire, client side only.
@@ -30,13 +30,14 @@ public final class FireClient {
   /**
    * @param fireType {@link #fireType}.
    */
+  @SuppressWarnings("deprecation")
   FireClient(ResourceLocation fireType) {
     this.fireType = fireType;
     String modId = fireType.getNamespace();
     String fireId = fireType.getPath();
     String joiner = FireManager.DEFAULT_FIRE_TYPE.equals(fireType) ? "" : "_";
-    this.material0 = new Material(InventoryMenu.BLOCK_ATLAS, ResourceLocation.fromNamespaceAndPath(modId, "block/" + fireId + joiner + "fire_0"));
-    this.material1 = new Material(InventoryMenu.BLOCK_ATLAS, ResourceLocation.fromNamespaceAndPath(modId, "block/" + fireId + joiner + "fire_1"));
+    this.material0 = new Material(TextureAtlas.LOCATION_BLOCKS, ResourceLocation.fromNamespaceAndPath(modId, "block/" + fireId + joiner + "fire_0"));
+    this.material1 = new Material(TextureAtlas.LOCATION_BLOCKS, ResourceLocation.fromNamespaceAndPath(modId, "block/" + fireId + joiner + "fire_1"));
   }
 
   /**

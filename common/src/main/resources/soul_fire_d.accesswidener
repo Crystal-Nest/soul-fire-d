@@ -6,3 +6,4 @@ accessible method net/minecraft/world/level/block/entity/BlockEntityType <init> 
 accessible method net/minecraft/core/particles/SimpleParticleType <init> (Z)V
 accessible field net/minecraft/world/level/block/entity/CampfireBlockEntity cookingProgress [I
 accessible field net/minecraft/world/level/block/entity/CampfireBlockEntity cookingTime [I
+accessible method net/minecraft/client/renderer/ScreenEffectRenderer renderFire (Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V

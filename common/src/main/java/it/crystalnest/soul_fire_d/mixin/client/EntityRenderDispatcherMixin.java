@@ -26,12 +26,13 @@ public abstract class EntityRenderDispatcherMixin {
    *
    * @param value original sprite returned by the modified method.
    * @param poseStack matrices.
-   * @param bufferSource buffer.
+   * @param source buffer source.
    * @param renderState {@link EntityRenderState} of the entity that's burning.
+   * @param quaternion matrix.
    * @return {@link TextureAtlasSprite} to assign.
    */
   @ModifyVariable(method = "renderFlame", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/resources/model/Material;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", ordinal = 0), ordinal = 0)
-  private TextureAtlasSprite onRenderFlameAtSprite0(TextureAtlasSprite value, PoseStack poseStack, MultiBufferSource bufferSource, EntityRenderState renderState, Quaternionf matrix) {
+  private TextureAtlasSprite onRenderFlameAtSprite0(TextureAtlasSprite value, PoseStack poseStack, MultiBufferSource source, EntityRenderState renderState, Quaternionf quaternion) {
     ResourceLocation fireType = ((FireTyped) renderState).getFireType();
     if (FireManager.isRegisteredType(fireType)) {
       return FireClientManager.getSprite0(fireType);
@@ -45,12 +46,13 @@ public abstract class EntityRenderDispatcherMixin {
    *
    * @param value original sprite returned by the modified method.
    * @param poseStack matrices.
-   * @param bufferSource buffer.
+   * @param source buffer source.
    * @param renderState {@link EntityRenderState} of the entity that's burning.
+   * @param quaternion matrix.
    * @return {@link TextureAtlasSprite} to assign.
    */
   @ModifyVariable(method = "renderFlame", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/resources/model/Material;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", ordinal = 1), ordinal = 1)
-  private TextureAtlasSprite onRenderFlameAtSprite1(TextureAtlasSprite value, PoseStack poseStack, MultiBufferSource bufferSource, EntityRenderState renderState, Quaternionf matrix) {
+  private TextureAtlasSprite onRenderFlameAtSprite1(TextureAtlasSprite value, PoseStack poseStack, MultiBufferSource source, EntityRenderState renderState, Quaternionf quaternion) {
     ResourceLocation fireType = ((FireTyped) renderState).getFireType();
     if (FireManager.isRegisteredType(fireType)) {
       return FireClientManager.getSprite1(fireType);

@@ -6,6 +6,7 @@ import it.crystalnest.soul_fire_d.Constants;
 import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.platform.Services;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -34,7 +35,7 @@ public class FireResourceReloadListener extends SimpleJsonResourceReloadListener
   protected static final ArrayList<ResourceLocation> ddfiresRegister = new ArrayList<>();
 
   protected FireResourceReloadListener() {
-    super(DDFires.CODEC, "fires");
+    super(DDFires.CODEC, FileToIdConverter.json("fires"));
   }
 
   /**
