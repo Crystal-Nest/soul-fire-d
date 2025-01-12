@@ -5,6 +5,7 @@ import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.block.CustomCampfireBlock;
 import it.crystalnest.soul_fire_d.api.block.CustomFireBlock;
+import it.crystalnest.soul_fire_d.api.block.CustomLanternBlock;
 import it.crystalnest.soul_fire_d.api.block.CustomTorchBlock;
 import it.crystalnest.soul_fire_d.api.block.CustomWallTorchBlock;
 import it.crystalnest.soul_fire_d.api.client.FireClientManager;
@@ -37,6 +38,7 @@ public final class FMLClientSetupEventHandler {
     FireClientManager.registerFires(FireManager.getFires());
     FireManager.getComponentList(Fire.Component.CAMPFIRE_BLOCK).stream().filter(CustomCampfireBlock.class::isInstance).forEach(campfire -> ItemBlockRenderTypes.setRenderLayer(campfire, RenderType.cutout()));
     FireManager.getComponentList(Fire.Component.SOURCE_BLOCK).stream().filter(CustomFireBlock.class::isInstance).forEach(source -> ItemBlockRenderTypes.setRenderLayer(source, RenderType.cutout()));
+    FireManager.getComponentList(Fire.Component.LANTERN_BLOCK).stream().filter(CustomLanternBlock.class::isInstance).forEach(lantern -> ItemBlockRenderTypes.setRenderLayer(lantern, RenderType.cutout()));
     FireManager.getComponentList(Fire.Component.TORCH_BLOCK).stream().filter(CustomTorchBlock.class::isInstance).forEach(torch -> ItemBlockRenderTypes.setRenderLayer(torch, RenderType.cutout()));
     FireManager.getComponentList(Fire.Component.WALL_TORCH_BLOCK).stream().filter(CustomWallTorchBlock.class::isInstance).forEach(torch -> ItemBlockRenderTypes.setRenderLayer(torch, RenderType.cutout()));
   }
