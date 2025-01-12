@@ -44,9 +44,16 @@ repositories {
     )
     filter { includeGroup("org.parchmentmc.data") }
   }
-  maven {
-    name = "Crystal Nest"
-    url = "https://maven.crystalnest.it"
+  exclusiveContent {
+    forRepository {
+      maven {
+        name = "Crystal Nest"
+        url = "https://maven.crystalnest.it"
+      }
+    }
+    filter {
+      includeGroup "it.crystalnest"
+    }
   }
 }
 

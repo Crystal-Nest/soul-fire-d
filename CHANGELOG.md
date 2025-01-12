@@ -9,6 +9,16 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 - Port to 1.21.4.
 
+## [v5.1.1] - 2025/01/12
+
+- 1.21 and above only.
+- Fixed lanterns render type.
+
+## [v4.0.7] - 2025/01/12
+
+- For 1.20.4 and below.
+- Fixed lanterns render type.
+
 ## [v5.1.0] - 2024/12/15
 
 - 1.21 and above only.
