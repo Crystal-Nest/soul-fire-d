@@ -196,7 +196,7 @@ publisher {
   if (!noPublish) {
     setLoaders(loader)
   }
-  setGameVersions(minecraft_version)
+  setGameVersions(minecraft_version, "1.21.1")
   setDisplayName("[$loader - $minecraft_version] $mod_title v$mod_version")
   setJavaVersions([JavaVersion.VERSION_21]) // Remember to update this to match java_version gradle property.
   setCurseEnvironment("both") // "server", "client" or "both".
