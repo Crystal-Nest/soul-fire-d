@@ -69,7 +69,14 @@ sourceSets.main.resources.srcDir "src/generated/resources"
 dependencies {
   minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
   compileOnly project(":common")
+
   annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+  compileOnly annotationProcessor("io.github.llamalad7:mixinextras-common:${mixinextras_version}")
+  implementation(jarJar("io.github.llamalad7:mixinextras-forge:${mixinextras_version}")) {
+    jarJar.pin(it, mixinextras_version)
+    jarJar.ranged(it, "[${mixinextras_version},)")
+  }
+
   implementation fg.deobf("it.crystalnest:cobweb-forge:${minecraft_version}-${cobweb_version}")
   implementation fg.deobf("fuzs.forgeconfigapiport:forgeconfigapiport-forge:${fcap_version}")
 }
