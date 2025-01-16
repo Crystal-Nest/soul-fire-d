@@ -1,3 +1,5 @@
+import net.minecraftforge.gradle.userdev.tasks.JarJar
+
 plugins {
   id "net.minecraftforge.gradle" version "[6.0,6.2)"
   id "org.spongepowered.mixin" version "0.7-SNAPSHOT"
@@ -97,6 +99,11 @@ processResources {
 
 jar.finalizedBy("configureReobfTaskForReobfJar")
 jar.finalizedBy("reobfJar")
+jar.archiveClassifier = "no-embeds"
+
+tasks.named('jarJar', JarJar).configure {
+  archiveClassifier = ""
+}
 
 // Task seems bugged, breaks build because of mod dependencies in the Common project, with no apparent workaround.
 tasks.named("compileTestJava").get().setEnabled(false)
