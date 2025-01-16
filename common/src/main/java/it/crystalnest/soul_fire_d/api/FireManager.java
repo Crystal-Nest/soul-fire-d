@@ -16,6 +16,8 @@ import it.crystalnest.soul_fire_d.api.block.entity.DynamicBlockEntityType;
 import it.crystalnest.soul_fire_d.api.type.FireTypeChanger;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -318,7 +320,7 @@ public final class FireManager {
    * @param <T> particle type.
    * @return {@link CobwebEntry} for the particle type.
    */
-  public static <T extends SimpleParticleType> CobwebEntry<T> registerParticle(ResourceLocation fireType, Supplier<T> supplier) {
+  public static <T extends ParticleType<?>> CobwebEntry<T> registerParticle(ResourceLocation fireType, Supplier<T> supplier) {
     return CobwebRegistry.of(Registries.PARTICLE_TYPE, fireMod(fireType)).register(FireManager.getComponentPath(fireType, Fire.Component.FLAME_PARTICLE), supplier);
   }
 
@@ -346,8 +348,8 @@ public final class FireManager {
    */
   public static <T extends CustomTorchBlock, W extends CustomWallTorchBlock> Pair<CobwebEntry<T>, CobwebEntry<W>> registerTorch(
     ResourceLocation fireType,
-    TriFunction<ResourceLocation, Supplier<SimpleParticleType>, BlockBehaviour.Properties, T> torchSupplier,
-    TriFunction<ResourceLocation, Supplier<SimpleParticleType>, BlockBehaviour.Properties, W> wallTorchSupplier
+    TriFunction<ResourceLocation, Supplier<? extends ParticleOptions>, BlockBehaviour.Properties, T> torchSupplier,
+    TriFunction<ResourceLocation, Supplier<? extends ParticleOptions>, BlockBehaviour.Properties, W> wallTorchSupplier
   ) {
     CobwebRegister.Blocks blocks = CobwebRegistry.ofBlocks(fireMod(fireType));
     return Pair.of(
