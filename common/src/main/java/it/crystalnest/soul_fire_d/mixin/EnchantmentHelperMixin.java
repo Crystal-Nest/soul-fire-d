@@ -1,5 +1,7 @@
 package it.crystalnest.soul_fire_d.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import it.crystalnest.soul_fire_d.api.enchantment.FireEnchantmentHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -7,8 +9,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
@@ -17,38 +17,44 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EnchantmentHelper.class)
 public abstract class EnchantmentHelperMixin {
   /**
-   * Injects at the start of the method {@link EnchantmentHelper#getEnchantmentLevel(Enchantment, LivingEntity)}.<br />
-   * Returns the level of any Fire Aspect or Flame.
+   * Injects at the start of the method {@link EnchantmentHelper#getEnchantmentLevel(Enchantment, LivingEntity)}.<br
+   * /> Returns the level of any Fire Aspect or Flame.
    *
    * @param enchantment enchantment to calculate the level of.
-   * @param entity entity with the enchanted equipment.
-   * @param cir {@link CallbackInfoReturnable}.
+   * @param entity      entity with the enchanted equipment.
+   * @param cir         {@link CallbackInfoReturnable}.
+   * @return
    */
-  @Inject(method = "getEnchantmentLevel(Lnet/minecraft/world/item/enchantment/Enchantment;Lnet/minecraft/world/entity/LivingEntity;)I", at = @At(value = "HEAD"), cancellable = true)
-  private static void onGetEnchantmentLevel(Enchantment enchantment, LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
+  @WrapMethod(method = "getEnchantmentLevel(Lnet/minecraft/world/item/enchantment/Enchantment;Lnet/minecraft/world/entity/LivingEntity;)I")
+  private static int onGetEnchantmentLevel(Enchantment enchantment, LivingEntity entity, Operation<Integer> original) {
     if (enchantment == Enchantments.FIRE_ASPECT) {
-      cir.setReturnValue(FireEnchantmentHelper.getAnyFireAspect(entity));
+      return FireEnchantmentHelper.getAnyFireAspect(entity);
     }
     if (enchantment == Enchantments.FLAMING_ARROWS) {
-      cir.setReturnValue(FireEnchantmentHelper.getAnyFlame(entity));
+      return FireEnchantmentHelper.getAnyFlame(entity);
     }
+
+    return original.call(enchantment, entity);
   }
 
   /**
-   * Injects at the start of the method {@link EnchantmentHelper#getItemEnchantmentLevel(Enchantment, ItemStack)}.<br />
-   * Returns the level of any Fire Aspect or Flame.
+   * Injects at the start of the method {@link EnchantmentHelper#getItemEnchantmentLevel(Enchantment, ItemStack)}.<br
+   * /> Returns the level of any Fire Aspect or Flame.
    *
    * @param enchantment enchantment to calculate the level of.
-   * @param stack enchanted {@link ItemStack}.
-   * @param cir {@link CallbackInfoReturnable}.
+   * @param stack       enchanted {@link ItemStack}.
+   * @param cir         {@link CallbackInfoReturnable}.
+   * @return
    */
-  @Inject(method = "getItemEnchantmentLevel", at = @At(value = "HEAD"), cancellable = true)
-  private static void onGetItemEnchantmentLevel(Enchantment enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
+  @WrapMethod(method = "getItemEnchantmentLevel")
+  private static int onGetItemEnchantmentLevel(Enchantment enchantment, ItemStack stack, Operation<Integer> original) {
     if (enchantment == Enchantments.FIRE_ASPECT) {
-      cir.setReturnValue(FireEnchantmentHelper.getAnyFireAspect(stack));
+      return FireEnchantmentHelper.getAnyFireAspect(stack);
     }
     if (enchantment == Enchantments.FLAMING_ARROWS) {
-      cir.setReturnValue(FireEnchantmentHelper.getAnyFlame(stack));
+      return FireEnchantmentHelper.getAnyFlame(stack);
     }
+
+    return original.call(enchantment, stack);
   }
 }

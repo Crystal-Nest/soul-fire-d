@@ -47,6 +47,6 @@ public abstract class CampfireBlockMixin implements FireTypeChanger {
    */
   @WrapOperation(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity instance, DamageSource damageSource, float damage, Operation<Boolean> original) {
-    return FireManager.damageInFire(instance, getFireType());
+    return FireManager.damageInFire(instance, getFireType(), original::call);
   }
 }
