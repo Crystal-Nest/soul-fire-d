@@ -75,12 +75,13 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Redirects the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link Entity#baseTick()}.<br />
+   * Wraps the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link Entity#baseTick()}.<br />
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
    *
    * @param instance owner of the redirected method.
    * @param damageSource original {@link DamageSource} (normal fire).
    * @param damage original damage (normal fire).
+   * @param original original {@link Operation} being wrapped.
    * @return the result of calling the redirected method.
    */
   @WrapOperation(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
@@ -89,12 +90,12 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link Entity#lavaHurt()}.<br />
+   * Wraps the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link Entity#lavaHurt()}.<br />
    * Sets the base Fire Type.
    *
    * @param instance owner of the redirected method.
    * @param seconds seconds to set the entity on fire for.
-   * @param original the original call that is being redirected.
+   * @param original original {@link Operation} being wrapped.
    */
   @WrapOperation(method = "lavaHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setSecondsOnFire(I)V"))
   private void redirectSetSecondsOnFire(Entity instance, int seconds, Operation<Void> original) {
