@@ -16,13 +16,13 @@ public final class FireClient {
   private final ResourceLocation fireType;
 
   /**
-   * Fire {@link Material} for the sprite 0.<br />
+   * Fire {@link Material} for the sprite 0.<br>
    * Used only in rendering the Fire of an entity.
    */
   private final Material material0;
 
   /**
-   * Fire {@link Material} for the sprite 1.<br />
+   * Fire {@link Material} for the sprite 1.<br>
    * Used both for rendering the Fire of an entity and the player overlay.
    */
   private final Material material1;
