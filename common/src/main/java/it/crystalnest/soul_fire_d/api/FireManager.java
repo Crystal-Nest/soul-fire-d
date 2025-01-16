@@ -787,6 +787,7 @@ public final class FireManager {
    * @param fireType fire type.
    * @param setOnFireFunction how to set the entity on fire.
    */
+  @ApiStatus.Internal
   public static void setOnFire(Entity entity, float seconds, ResourceLocation fireType, BiConsumer<Entity, Float> setOnFireFunction) {
     setOnFireFunction.accept(entity, seconds);
     ((FireTypeChanger) entity).setFireType(ensure(fireType));
@@ -814,6 +815,7 @@ public final class FireManager {
    * @param damageSourceGetter getter for the damage source. See .
    * @return whether the {@code entity} was hurt.
    */
+  @ApiStatus.Internal
   public static boolean affect(Entity entity, ResourceLocation fireType, BiFunction<Fire, Entity, DamageSource> damageSourceGetter, TriFunction<Entity, DamageSource, Float, Boolean> hurtFunction) {
     ((FireTypeChanger) entity).setFireType(ensure(fireType));
     return affect(entity, getDamageSource(entity, fireType, damageSourceGetter), FireManager.getProperty(fireType, Fire::getDamage), FireManager.getProperty(fireType, Fire::invertHealAndHarm), hurtFunction);
