@@ -42,22 +42,20 @@ public abstract class BaseFireBlockMixin implements FireTypeChanger {
   }
 
   /**
-   * Conditionally modifies the return value of {@link BaseFireBlock#getState(BlockGetter, BlockPos)}.<br />
+   * Modifies the return value of {@link BaseFireBlock#getState(BlockGetter, BlockPos)}.<br />
    * Returns the most appropriate fire {@link BlockState}.
    *
-   * @param original the original block state.
+   * @param original original block state.
    * @param level level.
    * @param pos position.
    */
   @ModifyReturnValue(method = "getState", at = @At(value = "RETURN"))
   private static BlockState onGetState(BlockState original, BlockGetter level, BlockPos pos) {
-    return FireManager.getComponentList(Fire.Component.SOURCE_BLOCK).stream()
-      .filter(source -> source instanceof CustomFireBlock customFireBlock && customFireBlock.canSurvive(level.getBlockState(pos.below())))
-      .findFirst().map(Block::defaultBlockState).orElse(original);
+    return FireManager.getComponentList(Fire.Component.SOURCE_BLOCK).stream().filter(source -> canSurvive(source, level.getBlockState(pos.below()))).findFirst().map(Block::defaultBlockState).orElse(original);
   }
 
   /**
-   * Redirects the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link BaseFireBlock#entityInside(BlockState, Level, BlockPos, Entity)}.<br />
+   * Wraps the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link BaseFireBlock#entityInside(BlockState, Level, BlockPos, Entity)}.<br />
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
    *
    * @param instance {@link Entity} invoking (owning) the redirected method.
@@ -68,5 +66,17 @@ public abstract class BaseFireBlockMixin implements FireTypeChanger {
   @WrapOperation(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurt(Entity instance, DamageSource damageSource, float damage, Operation<Boolean> original) {
     return FireManager.damageInFire(instance, getFireType(), original::call);
+  }
+
+  /**
+   * Checks whether the given {@link Block} can burn on the given base.
+   *
+   * @param source fire source block.
+   * @param base block base.
+   * @return whether the source can burn on the base.
+   */
+  @Unique
+  private static boolean canSurvive(Block source, BlockState base) {
+    return source instanceof CustomFireBlock customFireBlock && customFireBlock.canSurvive(base);
   }
 }
