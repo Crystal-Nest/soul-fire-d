@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.Mixin;
 @Mixin(EnchantmentHelper.class)
 public abstract class EnchantmentHelperMixin {
   /**
-   * Injects at the start of the method {@link EnchantmentHelper#getEnchantmentLevel(Enchantment, LivingEntity)}.<br />
+   * Injects at the start of the method {@link EnchantmentHelper#getEnchantmentLevel(Enchantment, LivingEntity)}.<br>
    * Returns the level of any Fire Aspect or Flame.
    *
    * @param enchantment enchantment to calculate the level of.
@@ -37,7 +37,7 @@ public abstract class EnchantmentHelperMixin {
   }
 
   /**
-   * Injects at the start of the method {@link EnchantmentHelper#getItemEnchantmentLevel(Enchantment, ItemStack)}.<br />
+   * Injects at the start of the method {@link EnchantmentHelper#getItemEnchantmentLevel(Enchantment, ItemStack)}.<br>
    * Returns the level of any Fire Aspect or Flame.
    *
    * @param enchantment enchantment to calculate the level of.

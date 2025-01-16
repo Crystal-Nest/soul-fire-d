@@ -170,7 +170,7 @@ public final class FireEnchantmentHelper {
   }
 
   /**
-   * Logic copied from {@link EnchantmentHelper#getEnchantmentLevel(Enchantment, LivingEntity)}.<br />
+   * Logic copied from {@link EnchantmentHelper#getEnchantmentLevel(Enchantment, LivingEntity)}.<br>
    * Necessary to avoid recursion when {@link EnchantmentHelperMixin} is applied and above methods are called.
    *
    * @param enchantment enchantment.
@@ -189,7 +189,7 @@ public final class FireEnchantmentHelper {
   }
 
   /**
-   * Logic copied from {@link EnchantmentHelper#getItemEnchantmentLevel(Enchantment, ItemStack)}.<br />
+   * Logic copied from {@link EnchantmentHelper#getItemEnchantmentLevel(Enchantment, ItemStack)}.<br>
    * Necessary to avoid recursion when {@link EnchantmentHelperMixin} is applied and above methods are called.
    *
    * @param enchantment enchantment.

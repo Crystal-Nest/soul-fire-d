@@ -75,7 +75,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Wraps the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link Entity#baseTick()}.<br />
+   * Wraps the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link Entity#baseTick()}.<br>
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
    *
    * @param instance owner of the redirected method.
@@ -90,7 +90,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Wraps the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link Entity#lavaHurt()}.<br />
+   * Wraps the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link Entity#lavaHurt()}.<br>
    * Sets the base Fire Type.
    *
    * @param instance owner of the redirected method.
@@ -103,7 +103,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Injects at the end of the constructor.<br />
+   * Injects at the end of the constructor.<br>
    * Defines the {@link #DATA_FIRE_TYPE Fire Type data} to synchronize across client and server.
    *
    * @param ci {@link CallbackInfo}.
@@ -114,7 +114,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Injects at the start of the method {@link Entity#setRemainingFireTicks(int)}.<br />
+   * Injects at the start of the method {@link Entity#setRemainingFireTicks(int)}.<br>
    * Resets the Fire Type when this entity stops burning or catches fire from a new fire source.
    *
    * @param ticks ticks this entity should burn for.
@@ -128,7 +128,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Injects in the method {@link Entity#saveWithoutId(CompoundTag)} before the invocation of {@link Entity#addAdditionalSaveData(CompoundTag)}.<br />
+   * Injects in the method {@link Entity#saveWithoutId(CompoundTag)} before the invocation of {@link Entity#addAdditionalSaveData(CompoundTag)}.<br>
    * If valid, saves the current Fire Type in the given {@link CompoundTag}.
    *
    * @param tag data tag.
@@ -140,7 +140,7 @@ public abstract class EntityMixin implements FireTypeChanger {
   }
 
   /**
-   * Injects in the method {@link Entity#load(CompoundTag)} before the invocation of {@link Entity#readAdditionalSaveData(CompoundTag)}.<br />
+   * Injects in the method {@link Entity#load(CompoundTag)} before the invocation of {@link Entity#readAdditionalSaveData(CompoundTag)}.<br>
    * Loads the Fire Type from the given {@link CompoundTag}.
    *
    * @param tag data tag.
