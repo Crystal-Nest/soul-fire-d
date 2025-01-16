@@ -16,6 +16,8 @@ import it.crystalnest.soul_fire_d.api.block.entity.DynamicBlockEntityType;
 import it.crystalnest.soul_fire_d.api.type.FireTypeChanger;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
@@ -321,7 +323,7 @@ public final class FireManager {
    * @param <T> particle type.
    * @return supplier for the registered particle type.
    */
-  public static <T extends SimpleParticleType> Supplier<T> registerParticle(ResourceLocation fireType, Supplier<T> supplier) {
+  public static <T extends ParticleType<?>> Supplier<T> registerParticle(ResourceLocation fireType, Supplier<T> supplier) {
     return CobwebRegistry.of(Registry.PARTICLE_TYPE, fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.FLAME_PARTICLE), supplier);
   }
 
@@ -349,8 +351,8 @@ public final class FireManager {
    */
   public static <T extends CustomTorchBlock, W extends CustomWallTorchBlock> Pair<Supplier<T>, Supplier<W>> registerTorch(
     ResourceLocation fireType,
-    BiFunction<ResourceLocation, Supplier<SimpleParticleType>, T> torchSupplier,
-    BiFunction<ResourceLocation, Supplier<SimpleParticleType>, W> wallTorchSupplier
+    BiFunction<ResourceLocation, Supplier<? extends ParticleOptions>, T> torchSupplier,
+    BiFunction<ResourceLocation, Supplier<? extends ParticleOptions>, W> wallTorchSupplier
   ) {
     CobwebRegister<Block> blocks = CobwebRegistry.ofBlocks(fireType.getNamespace());
     return Pair.of(
