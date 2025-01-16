@@ -15,11 +15,12 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(Zombie.class)
 public abstract class ZombieMixin implements FireTyped {
   /**
-   * Injects into the method {@link Entity#setSecondsOnFire(int)} inside the method {@link Zombie#doHurtTarget(Entity)}.<br />
+   * Wraps the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link Zombie#doHurtTarget(Entity)}.<br />
    * Sets the correct Fire Type to the {@link Entity} being set on fire.
    *
    * @param instance owner of the redirected method.
    * @param seconds amount of seconds the entity should be set on fire for.
+   * @param original original {@link Operation} being wrapped.
    */
   @WrapOperation(method = "doHurtTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setSecondsOnFire(I)V"))
   private void onDoHurtTarget(Entity instance, int seconds, Operation<Void> original) {
