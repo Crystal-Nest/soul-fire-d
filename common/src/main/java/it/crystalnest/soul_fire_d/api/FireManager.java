@@ -36,6 +36,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MaterialColor;
+import org.apache.commons.lang3.function.TriFunction;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.ApiStatus;
@@ -47,6 +48,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -762,7 +764,20 @@ public final class FireManager {
    * @param fireType fire type.
    */
   public static void setOnFire(Entity entity, int seconds, ResourceLocation fireType) {
-    entity.setSecondsOnFire(seconds);
+    setOnFire(entity, seconds, fireType, Entity::setSecondsOnFire);
+  }
+
+  /**
+   * Set on fire the given entity for the given seconds with the given fire type.
+   *
+   * @param entity {@link Entity} to set on fire.
+   * @param seconds amount of seconds the fire should last for.
+   * @param fireType fire type.
+   * @param setOnFireFunction how to set the entity on fire.
+   */
+  @ApiStatus.Internal
+  public static void setOnFire(Entity entity, int seconds, ResourceLocation fireType, BiConsumer<Entity, Integer> setOnFireFunction) {
+    setOnFireFunction.accept(entity, seconds);
     ((FireTypeChanger) entity).setFireType(ensure(fireType));
   }
 
@@ -775,8 +790,22 @@ public final class FireManager {
    * @return whether the {@code entity} has been harmed.
    */
   public static boolean damageInFire(Entity entity, ResourceLocation fireType) {
+    return damageInFire(entity, fireType, Entity::hurt);
+  }
+
+  /**
+   * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireType}.<br />
+   * If no {@link Fire} was registered with the given {@code fireType}, defaults to the default {@code damageSource} and {@code damage} to harm the {@code entity}.
+   *
+   * @param entity {@link Entity} to harm or heal.
+   * @param fireType fire type.
+   * @param hurtFunction how to harm the {@code entity}.
+   * @return whether the {@code entity} has been harmed.
+   */
+  @ApiStatus.Internal
+  public static boolean damageInFire(Entity entity, ResourceLocation fireType, TriFunction<Entity, DamageSource, Float, Boolean> hurtFunction) {
     ((FireTypeChanger) entity).setFireType(ensure(fireType));
-    return harmOrHeal(entity, getInFireDamageSource(fireType), FireManager.getProperty(fireType, Fire::getDamage), FireManager.getProperty(fireType, Fire::invertHealAndHarm));
+    return harmOrHeal(entity, getInFireDamageSource(fireType), FireManager.getProperty(fireType, Fire::getDamage), FireManager.getProperty(fireType, Fire::invertHealAndHarm), hurtFunction);
   }
 
   /**
@@ -788,8 +817,22 @@ public final class FireManager {
    * @return whether the {@code entity} has been harmed.
    */
   public static boolean damageOnFire(Entity entity, ResourceLocation fireType) {
+    return damageOnFire(entity, fireType, Entity::hurt);
+  }
+
+  /**
+   * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireType}.<br />
+   * If no {@link Fire} was registered with the given {@code fireType}, defaults to the default {@code damageSource} and {@code damage} to harm the {@code entity}.
+   *
+   * @param entity {@link Entity} to harm or heal.
+   * @param fireType fire type.
+   * @param hurtFunction how to harm the {@code entity}.
+   * @return whether the {@code entity} has been harmed.
+   */
+  @ApiStatus.Internal
+  public static boolean damageOnFire(Entity entity, ResourceLocation fireType, TriFunction<Entity, DamageSource, Float, Boolean> hurtFunction) {
     ((FireTypeChanger) entity).setFireType(ensure(fireType));
-    return harmOrHeal(entity, getOnFireDamageSource(fireType), FireManager.getProperty(fireType, Fire::getDamage), FireManager.getProperty(fireType, Fire::invertHealAndHarm));
+    return harmOrHeal(entity, getOnFireDamageSource(fireType), FireManager.getProperty(fireType, Fire::getDamage), FireManager.getProperty(fireType, Fire::invertHealAndHarm), hurtFunction);
   }
 
   /**
@@ -802,7 +845,7 @@ public final class FireManager {
    * @param invertHealAndHarm whether to invert heal and harm.
    * @return whether the {@code entity} has been harmed.
    */
-  private static boolean harmOrHeal(Entity entity, DamageSource damageSource, float damage, boolean invertHealAndHarm) {
+  private static boolean harmOrHeal(Entity entity, DamageSource damageSource, float damage, boolean invertHealAndHarm, TriFunction<Entity, DamageSource, Float, Boolean> hurtFunction) {
     Predicate<Entity> behavior = FireManager.getProperty(((FireTyped) entity).getFireType(), Fire::getBehavior);
     if (behavior.test(entity) && Float.compare(damage, 0) != 0) {
       if (damage > 0) {
@@ -811,13 +854,13 @@ public final class FireManager {
             livingEntity.heal(damage);
             return false;
           }
-          return livingEntity.hurt(damageSource, damage);
+          return hurtFunction.apply(livingEntity, damageSource, damage);
         }
-        return entity.hurt(damageSource, damage);
+        return hurtFunction.apply(entity, damageSource, damage);
       }
       if (entity instanceof LivingEntity livingEntity) {
         if (livingEntity.isInvertedHealAndHarm() && invertHealAndHarm) {
-          return livingEntity.hurt(damageSource, -damage);
+          return hurtFunction.apply(livingEntity, damageSource, -damage);
         }
         livingEntity.heal(-damage);
         return false;

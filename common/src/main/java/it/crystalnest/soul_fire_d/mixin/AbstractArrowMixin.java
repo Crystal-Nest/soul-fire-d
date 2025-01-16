@@ -1,5 +1,7 @@
 package it.crystalnest.soul_fire_d.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.enchantment.FireEnchantmentHelper;
@@ -12,7 +14,6 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.EntityHitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 /**
  * Injects into {@link AbstractArrow} to alter Fire behavior for consistency.
@@ -25,10 +26,11 @@ public abstract class AbstractArrowMixin implements FireTypeChanger {
    *
    * @param caller {@link Entity} invoking (owning) the redirected method.
    * @param seconds seconds the entity should be set on fire for.
+   * @param original the original call that is being redirected.
    */
-  @Redirect(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setSecondsOnFire(I)V"))
-  private void redirectSetSecondsOnFire(Entity caller, int seconds) {
-    FireManager.setOnFire(caller, FireManager.getComponent(getFireType(), Fire.Component.FLAME_ENCHANTMENT) instanceof FireTypedFlameEnchantment flame ? flame.duration(((Projectile) (Object) this).getOwner(), caller, seconds) : seconds, getFireType());
+  @WrapOperation(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setSecondsOnFire(I)V"))
+  private void redirectSetSecondsOnFire(Entity caller, int seconds, Operation<Void> original) {
+    FireManager.setOnFire(caller, FireManager.getComponent(getFireType(), Fire.Component.FLAME_ENCHANTMENT) instanceof FireTypedFlameEnchantment flame ? flame.duration(((Projectile) (Object) this).getOwner(), caller, seconds) : seconds, getFireType(), original::call);
   }
 
   /**
@@ -38,12 +40,13 @@ public abstract class AbstractArrowMixin implements FireTypeChanger {
    * @param caller {@link AbstractArrow} invoking (owning) the redirected method. It's the same as {@code this}.
    * @param seconds seconds the arrow should be set on fire for.
    * @param entity {@link LivingEntity}, a mob, shooting the arrow.
+   * @param original the original call that is being redirected.
    */
-  @Redirect(method = "setEnchantmentEffectsFromEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/AbstractArrow;setSecondsOnFire(I)V"))
-  private void redirectSetSecondsOnFire(AbstractArrow caller, int seconds, LivingEntity entity) {
+  @WrapOperation(method = "setEnchantmentEffectsFromEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/AbstractArrow;setSecondsOnFire(I)V"))
+  private void redirectSetSecondsOnFire(AbstractArrow caller, int seconds, Operation<Void> original, LivingEntity entity) {
     FireEnchantmentHelper.FireEnchantment fireEnchantment = FireEnchantmentHelper.getWhichFlame(entity);
     if (fireEnchantment.isApplied()) {
-      FireManager.setOnFire(caller, seconds, fireEnchantment.getFireType());
+      FireManager.setOnFire(caller, seconds, fireEnchantment.getFireType(), original::call);
     }
   }
 }
