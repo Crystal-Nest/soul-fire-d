@@ -840,6 +840,21 @@ public final class FireManager {
    * @param invertHealAndHarm whether to invert heal and harm.
    * @return whether the {@code entity} has been harmed.
    */
+  @Deprecated(forRemoval = true)
+  private static boolean harmOrHeal(Entity entity, DamageSource damageSource, float damage, boolean invertHealAndHarm) {
+    return harmOrHeal(entity, damageSource, damage, invertHealAndHarm, Entity::hurt);
+  }
+
+  /**
+   * Harms or heals the given {@code entity}.<br />
+   * Also applies the custom fire behavior.
+   *
+   * @param entity entity to harm/heal.
+   * @param damageSource damage source.
+   * @param damage damage/heal amount.
+   * @param invertHealAndHarm whether to invert heal and harm.
+   * @return whether the {@code entity} has been harmed.
+   */
   private static boolean harmOrHeal(Entity entity, DamageSource damageSource, float damage, boolean invertHealAndHarm, TriFunction<Entity, DamageSource, Float, Boolean> hurtFunction) {
     Predicate<Entity> behavior = FireManager.getProperty(((FireTyped) entity).getFireType(), Fire::getBehavior);
     if (behavior.test(entity) && Float.compare(damage, 0) != 0) {
