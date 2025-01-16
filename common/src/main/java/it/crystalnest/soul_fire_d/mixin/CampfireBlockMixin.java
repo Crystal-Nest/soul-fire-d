@@ -1,5 +1,7 @@
 package it.crystalnest.soul_fire_d.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTypeChanger;
 import net.minecraft.core.BlockPos;
@@ -12,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 /**
  * Injects into {@link CampfireBlock} to alter Fire behavior for consistency.
@@ -44,8 +45,8 @@ public abstract class CampfireBlockMixin implements FireTypeChanger {
    * @param damage original damage (normal fire).
    * @return the result of calling the redirected method.
    */
-  @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
-  private boolean redirectHurt(Entity instance, DamageSource damageSource, float damage) {
+  @WrapOperation(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
+  private boolean redirectHurt(Entity instance, DamageSource damageSource, float damage, Operation<Boolean> original) {
     return FireManager.damageInFire(instance, getFireType());
   }
 }
