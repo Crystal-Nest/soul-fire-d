@@ -151,7 +151,7 @@ public final class FireManager {
   }
 
   /**
-   * Attempts to register the given {@link Fire}.<br />
+   * Attempts to register the given {@link Fire}.<br>
    * If the {@link Fire#fireType} is already registered, logs an error.
    *
    * @param fire {@link Fire} to register.
@@ -286,7 +286,7 @@ public final class FireManager {
   }
 
   /**
-   * Registers the campfire item for the specified fire.<br />
+   * Registers the campfire item for the specified fire.<br>
    * Must be called <strong>after</strong> {@link #registerCampfire}.
    *
    * @param fireType fire type.
@@ -297,7 +297,7 @@ public final class FireManager {
   }
 
   /**
-   * Registers the campfire item for the specified fire from the given supplier.<br />
+   * Registers the campfire item for the specified fire from the given supplier.<br>
    * Must be called <strong>after</strong> {@link #registerCampfire}.
    *
    * @param fireType fire type.
@@ -320,8 +320,8 @@ public final class FireManager {
   }
 
   /**
-   * Registers the particle type for the specified fire from the given supplier.<br />
-   * Make sure your particle implements {@link ParticleOptions} if you are going to register a custom torch too.<br />
+   * Registers the particle type for the specified fire from the given supplier.<br>
+   * Make sure your particle implements {@link ParticleOptions} if you are going to register a custom torch too.<br>
    * If it's not a subclass of {@link SimpleParticleType}, you also need to register a {@link ParticleProvider} for your particle.
    *
    * @param fireType fire type.
@@ -334,8 +334,8 @@ public final class FireManager {
   }
 
   /**
-   * Registers the pair of torch and wall torch blocks for the specified fire.<br />
-   * Must be called <strong>after</strong> {@link #registerParticle}.<br />
+   * Registers the pair of torch and wall torch blocks for the specified fire.<br>
+   * Must be called <strong>after</strong> {@link #registerParticle}.<br>
    * Make sure your registered particle implements {@link ParticleOptions}.
    *
    * @param fireType fire type.
@@ -346,8 +346,8 @@ public final class FireManager {
   }
 
   /**
-   * Registers the pair of torch and wall torch blocks for the specified fire from the given suppliers.<br />
-   * Must be called <strong>after</strong> {@link #registerParticle}.<br />
+   * Registers the pair of torch and wall torch blocks for the specified fire from the given suppliers.<br>
+   * Must be called <strong>after</strong> {@link #registerParticle}.<br>
    * Make sure your registered particle implements {@link ParticleOptions}.
    *
    * @param fireType fire type.
@@ -370,7 +370,7 @@ public final class FireManager {
   }
 
   /**
-   * Registers the torch item for the specified fire.<br />
+   * Registers the torch item for the specified fire.<br>
    * Must be called <strong>after</strong> {@link #registerTorch}.
    *
    * @param fireType fire type.
@@ -381,7 +381,7 @@ public final class FireManager {
   }
 
   /**
-   * Registers the torch item for the specified fire from the given supplier.<br />
+   * Registers the torch item for the specified fire from the given supplier.<br>
    * Must be called <strong>after</strong> {@link #registerTorch}.
    *
    * @param fireType fire type.
@@ -419,7 +419,7 @@ public final class FireManager {
   }
 
   /**
-   * Registers the lantern item for the specified fire.<br />
+   * Registers the lantern item for the specified fire.<br>
    * Must be called <strong>after</strong> {@link #registerLantern}.
    *
    * @param fireType fire type.
@@ -430,7 +430,7 @@ public final class FireManager {
   }
 
   /**
-   * Registers the lantern item for the specified fire from the given supplier.<br />
+   * Registers the lantern item for the specified fire from the given supplier.<br>
    * Must be called <strong>after</strong> {@link #registerLantern}.
    *
    * @param fireType fire type.

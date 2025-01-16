@@ -348,7 +348,7 @@ public final class Fire {
     }
 
     /**
-     * Returns the value associated to this component.<br />
+     * Returns the value associated to this component.<br>
      * Might be {@code null} if no value was registered with the given ID.
      *
      * @param id value ID.
@@ -361,7 +361,7 @@ public final class Fire {
     }
 
     /**
-     * Returns the value associated to this component by retrieving the ID from the given {@link Fire}.<br />
+     * Returns the value associated to this component by retrieving the ID from the given {@link Fire}.<br>
      * Might be {@code null} if no value was registered with the given ID.
      *
      * @param fire {@link Fire}.

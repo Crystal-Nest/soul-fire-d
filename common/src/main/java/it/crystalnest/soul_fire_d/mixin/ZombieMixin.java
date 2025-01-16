@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(Zombie.class)
 public abstract class ZombieMixin implements FireTyped {
   /**
-   * Wraps the call to {@link Entity#igniteForSeconds(float)} inside the method {@link Zombie#doHurtTarget(Entity)}.<br />
+   * Wraps the call to {@link Entity#igniteForSeconds(float)} inside the method {@link Zombie#doHurtTarget(Entity)}.<br>
    * Sets the correct Fire Type to the {@link Entity} being set on fire.
    *
    * @param instance owner of the redirected method.

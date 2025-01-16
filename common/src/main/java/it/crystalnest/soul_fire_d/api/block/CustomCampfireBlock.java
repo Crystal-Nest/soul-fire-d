@@ -68,7 +68,7 @@ public class CustomCampfireBlock extends CampfireBlock implements FireTyped {
   }
 
   /**
-   * Return the {@link DynamicBlockEntityType} for the custom campfire block entity.<br />
+   * Return the {@link DynamicBlockEntityType} for the custom campfire block entity.<br>
    * Override to change it with a more specific one if you registered a different {@link DynamicBlockEntityType} for a subclass of {@link CustomCampfireBlockEntity}.
    *
    * @return {@link DynamicBlockEntityType}.
@@ -78,7 +78,7 @@ public class CustomCampfireBlock extends CampfireBlock implements FireTyped {
   }
 
   /**
-   * Return the {@link CampfireBlockEntity#particleTick(Level, BlockPos, BlockState, CampfireBlockEntity)} override for the custom campfire block entity.<br />
+   * Return the {@link CampfireBlockEntity#particleTick(Level, BlockPos, BlockState, CampfireBlockEntity)} override for the custom campfire block entity.<br>
    * Override to change it with a more specific one if you subclass {@link CustomCampfireBlockEntity}.
    *
    * @return {@link CampfireBlockEntity#particleTick(Level, BlockPos, BlockState, CampfireBlockEntity)} custom override.
@@ -88,7 +88,7 @@ public class CustomCampfireBlock extends CampfireBlock implements FireTyped {
   }
 
   /**
-   * Return the {@link CampfireBlockEntity#cookTick(Level, BlockPos, BlockState, CampfireBlockEntity)} override for the custom campfire block entity.<br />
+   * Return the {@link CampfireBlockEntity#cookTick(Level, BlockPos, BlockState, CampfireBlockEntity)} override for the custom campfire block entity.<br>
    * Override to change it with a more specific one if you subclass {@link CustomCampfireBlockEntity}.
    *
    * @return {@link CampfireBlockEntity#cookTick(Level, BlockPos, BlockState, CampfireBlockEntity)} custom override.
@@ -98,7 +98,7 @@ public class CustomCampfireBlock extends CampfireBlock implements FireTyped {
   }
 
   /**
-   * Return the {@link CampfireBlockEntity#cooldownTick(Level, BlockPos, BlockState, CampfireBlockEntity)} override for the custom campfire block entity.<br />
+   * Return the {@link CampfireBlockEntity#cooldownTick(Level, BlockPos, BlockState, CampfireBlockEntity)} override for the custom campfire block entity.<br>
    * Override to change it with a more specific one if you subclass {@link CustomCampfireBlockEntity}.
    *
    * @return {@link CampfireBlockEntity#cooldownTick(Level, BlockPos, BlockState, CampfireBlockEntity)} custom override.
@@ -114,7 +114,7 @@ public class CustomCampfireBlock extends CampfireBlock implements FireTyped {
   }
 
   /**
-   * Return a new block entity for this block.<br />
+   * Return a new block entity for this block.<br>
    * Override this to change the block entity created when this block is placed down.
    *
    * @param pos block position.
@@ -127,7 +127,7 @@ public class CustomCampfireBlock extends CampfireBlock implements FireTyped {
   }
 
   /**
-   * Handles custom block entity.<br />
+   * Handles custom block entity.<br>
    * To change the block entity used, override the other specific methods in {@link CustomCampfireBlock}.
    *
    * @param level level.
