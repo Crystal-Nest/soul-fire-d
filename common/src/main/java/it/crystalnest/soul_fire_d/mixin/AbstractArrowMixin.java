@@ -16,12 +16,12 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(AbstractArrow.class)
 public abstract class AbstractArrowMixin implements FireTypeChanger {
   /**
-   * Redirects the call to {@link Entity#igniteForSeconds(float)} inside the method {@link AbstractArrow#onHitEntity(EntityHitResult)}.<br>
+   * Wraps the call to {@link Entity#igniteForSeconds(float)} inside the method {@link AbstractArrow#onHitEntity(EntityHitResult)}.<br>
    * Sets the correct Fire Type for the Entity.
    *
    * @param instance {@link Entity} invoking (owning) the redirected method.
    * @param seconds seconds the entity should be set on fire for.
-   * @param original the original call that is being redirected.
+   * @param original the original call that is being wrapped.
    */
   @WrapOperation(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;igniteForSeconds(F)V"))
   private void redirectSetSecondsOnFire(Entity instance, float seconds, Operation<Void> original) {
