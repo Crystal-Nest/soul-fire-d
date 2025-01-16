@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(ScreenEffectRenderer.class)
 public abstract class ScreenEffectRendererMixin {
   /**
-   * Wraps the call to {@link Material#sprite()} in the method {@link ScreenEffectRenderer#renderFire(Minecraft, PoseStack)}.<br />
+   * Wraps the call to {@link Material#sprite()} in the method {@link ScreenEffectRenderer#renderFire(Minecraft, PoseStack)}.<br>
    * Assigns the correct sprite for the Fire Type the player is burning from.
    *
    * @param originalMaterial material of the original sprite returned by the modified method.

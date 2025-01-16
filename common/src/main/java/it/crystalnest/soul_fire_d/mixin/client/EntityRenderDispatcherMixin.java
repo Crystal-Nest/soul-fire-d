@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(EntityRenderDispatcher.class)
 public abstract class EntityRenderDispatcherMixin {
   /**
-   * Wraps the call to {@link Material#sprite()} in the method {@link EntityRenderDispatcher#renderFlame(PoseStack, MultiBufferSource, Entity, Quaternionf)}.<br />
+   * Wraps the call to {@link Material#sprite()} in the method {@link EntityRenderDispatcher#renderFlame(PoseStack, MultiBufferSource, Entity, Quaternionf)}.<br>
    * Assigns the correct sprite for the fire type the entity is burning from.
    *
    * @param originalMaterial material of the original sprite returned by the modified method.
@@ -42,7 +42,7 @@ public abstract class EntityRenderDispatcherMixin {
   }
 
   /**
-   * Wraps the call to {@link Material#sprite()} in the method {@link EntityRenderDispatcher#renderFlame(PoseStack, MultiBufferSource, Entity, Quaternionf)}.<br />
+   * Wraps the call to {@link Material#sprite()} in the method {@link EntityRenderDispatcher#renderFlame(PoseStack, MultiBufferSource, Entity, Quaternionf)}.<br>
    * Assigns the correct sprite for the fire type the entity is burning from.
    *
    * @param originalMaterial material of the original sprite returned by the modified method.

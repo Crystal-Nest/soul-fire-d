@@ -42,7 +42,7 @@ public abstract class BaseFireBlockMixin implements FireTypeChanger {
   }
 
   /**
-   * Modifies the return value of {@link BaseFireBlock#getState(BlockGetter, BlockPos)}.<br />
+   * Modifies the return value of {@link BaseFireBlock#getState(BlockGetter, BlockPos)}.<br>
    * Returns the most appropriate fire {@link BlockState}.
    *
    * @param original original block state.
@@ -55,7 +55,7 @@ public abstract class BaseFireBlockMixin implements FireTypeChanger {
   }
 
   /**
-   * Wraps the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link BaseFireBlock#entityInside(BlockState, Level, BlockPos, Entity)}.<br />
+   * Wraps the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link BaseFireBlock#entityInside(BlockState, Level, BlockPos, Entity)}.<br>
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
    *
    * @param instance {@link Entity} invoking (owning) the redirected method.
