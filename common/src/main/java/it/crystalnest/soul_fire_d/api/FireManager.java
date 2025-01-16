@@ -767,7 +767,6 @@ public final class FireManager {
    * @param seconds amount of seconds the fire should last for.
    * @param fireType fire type.
    */
-  @Deprecated(forRemoval = true)
   public static void setOnFire(Entity entity, int seconds, ResourceLocation fireType) {
     setOnFire(entity, seconds, fireType, Entity::setSecondsOnFire);
   }
@@ -780,6 +779,7 @@ public final class FireManager {
    * @param fireType fire type.
    * @param setOnFireFunction how to set the entity on fire.
    */
+  @ApiStatus.Internal
   public static void setOnFire(Entity entity, int seconds, ResourceLocation fireType, BiConsumer<Entity, Integer> setOnFireFunction) {
     setOnFireFunction.accept(entity, seconds);
     ((FireTypeChanger) entity).setFireType(ensure(fireType));
@@ -793,7 +793,6 @@ public final class FireManager {
    * @param fireType fire type.
    * @return whether the {@code entity} has been harmed.
    */
-  @Deprecated(forRemoval = true)
   public static boolean damageInFire(Entity entity, ResourceLocation fireType) {
     return damageInFire(entity, fireType, Entity::hurt);
   }
@@ -807,6 +806,7 @@ public final class FireManager {
    * @param hurtFunction how to harm the {@code entity}.
    * @return whether the {@code entity} has been harmed.
    */
+  @ApiStatus.Internal
   public static boolean damageInFire(Entity entity, ResourceLocation fireType, TriFunction<Entity, DamageSource, Float, Boolean> hurtFunction) {
     ((FireTypeChanger) entity).setFireType(ensure(fireType));
     return harmOrHeal(entity, getInFireDamageSourceFor(entity, fireType), FireManager.getProperty(fireType, Fire::getDamage), FireManager.getProperty(fireType, Fire::invertHealAndHarm), hurtFunction);
@@ -820,7 +820,6 @@ public final class FireManager {
    * @param fireType fire type.
    * @return whether the {@code entity} has been harmed.
    */
-  @Deprecated(forRemoval = true)
   public static boolean damageOnFire(Entity entity, ResourceLocation fireType) {
     return damageOnFire(entity, fireType, Entity::hurt);
   }
@@ -834,24 +833,10 @@ public final class FireManager {
    * @param hurtFunction how to harm the {@code entity}.
    * @return whether the {@code entity} has been harmed.
    */
+  @ApiStatus.Internal
   public static boolean damageOnFire(Entity entity, ResourceLocation fireType, TriFunction<Entity, DamageSource, Float, Boolean> hurtFunction) {
     ((FireTypeChanger) entity).setFireType(ensure(fireType));
     return harmOrHeal(entity, getOnFireDamageSourceFor(entity, fireType), FireManager.getProperty(fireType, Fire::getDamage), FireManager.getProperty(fireType, Fire::invertHealAndHarm), hurtFunction);
-  }
-
-  /**
-   * Harms or heals the given {@code entity}.<br />
-   * Also applies the custom fire behavior.
-   *
-   * @param entity entity to harm/heal.
-   * @param damageSource damage source.
-   * @param damage damage/heal amount.
-   * @param invertHealAndHarm whether to invert heal and harm.
-   * @return whether the {@code entity} has been harmed.
-   */
-  @Deprecated(forRemoval = true)
-  private static boolean harmOrHeal(Entity entity, DamageSource damageSource, float damage, boolean invertHealAndHarm) {
-    return harmOrHeal(entity, damageSource, damage, invertHealAndHarm, Entity::hurt);
   }
 
   /**
