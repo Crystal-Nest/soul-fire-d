@@ -16,6 +16,7 @@ import it.crystalnest.soul_fire_d.api.block.entity.CustomCampfireBlockEntity;
 import it.crystalnest.soul_fire_d.api.block.entity.DynamicBlockEntityType;
 import it.crystalnest.soul_fire_d.api.type.FireTypeChanger;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
+import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -315,10 +316,12 @@ public final class FireManager {
   }
 
   /**
-   * Registers the particle type for the specified fire from the given supplier.
+   * Registers the particle type for the specified fire from the given supplier.<br />
+   * Make sure your particle implements {@link ParticleOptions} if you are going to register a custom torch too.<br />
+   * If it's not a subclass of {@link SimpleParticleType}, you also need to register a {@link ParticleProvider} for your particle.
    *
    * @param fireType fire type.
-   * @param supplier {@link SimpleParticleType} supplier.
+   * @param supplier {@link ParticleType} supplier.
    * @param <T> particle type.
    * @return {@link CobwebEntry} for the particle type.
    */
@@ -328,7 +331,8 @@ public final class FireManager {
 
   /**
    * Registers the pair of torch and wall torch blocks for the specified fire.<br>
-   * Must be called <strong>after</strong> {@link #registerParticle}.
+   * Must be called <strong>after</strong> {@link #registerParticle}.<br>
+   * Make sure your registered particle implements {@link ParticleOptions}.
    *
    * @param fireType fire type.
    * @return pair of {@link CobwebEntry}s for the torch and wall torch blocks.
@@ -339,7 +343,8 @@ public final class FireManager {
 
   /**
    * Registers the pair of torch and wall torch blocks for the specified fire from the given constructors.<br>
-   * Must be called <strong>after</strong> {@link #registerParticle}.
+   * Must be called <strong>after</strong> {@link #registerParticle}.<br>
+   * Make sure your registered particle implements {@link ParticleOptions}.
    *
    * @param fireType fire type.
    * @param torchSupplier {@link CustomTorchBlock} constructor.
@@ -355,8 +360,8 @@ public final class FireManager {
   ) {
     CobwebRegister.Blocks blocks = CobwebRegistry.ofBlocks(fireMod(fireType));
     return Pair.of(
-      blocks.registerBlock(FireManager.getComponentPath(fireType, Fire.Component.TORCH_BLOCK), properties -> torchSupplier.apply(fireType, () -> getRequiredComponent(fireType, Fire.Component.FLAME_PARTICLE), properties)),
-      blocks.registerBlock(FireManager.getComponentPath(fireType, Fire.Component.WALL_TORCH_BLOCK), properties -> wallTorchSupplier.apply(fireType, () -> getRequiredComponent(fireType, Fire.Component.FLAME_PARTICLE), properties))
+      blocks.registerBlock(FireManager.getComponentPath(fireType, Fire.Component.TORCH_BLOCK), properties -> torchSupplier.apply(fireType, () -> (ParticleOptions) getRequiredComponent(fireType, Fire.Component.FLAME_PARTICLE), properties)),
+      blocks.registerBlock(FireManager.getComponentPath(fireType, Fire.Component.WALL_TORCH_BLOCK), properties -> wallTorchSupplier.apply(fireType, () -> (ParticleOptions) getRequiredComponent(fireType, Fire.Component.FLAME_PARTICLE), properties))
     );
   }
 
