@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(AbstractArrow.class)
 public abstract class AbstractArrowMixin implements FireTypeChanger {
   /**
-   * Wraps the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link AbstractArrow#onHitEntity(EntityHitResult)}.<br />
+   * Wraps the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link AbstractArrow#onHitEntity(EntityHitResult)}.<br>
    * Sets the correct Fire Type for the Entity.
    *
    * @param caller {@link Entity} invoking (owning) the redirected method.
@@ -34,7 +34,7 @@ public abstract class AbstractArrowMixin implements FireTypeChanger {
   }
 
   /**
-   * Redirects the call to {@link AbstractArrow#setSecondsOnFire(int)} inside the method {@link AbstractArrow#setEnchantmentEffectsFromEntity(LivingEntity, float)}.<br />
+   * Redirects the call to {@link AbstractArrow#setSecondsOnFire(int)} inside the method {@link AbstractArrow#setEnchantmentEffectsFromEntity(LivingEntity, float)}.<br>
    * Handles setting this arrow on the correct kind of fire, if any.
    *
    * @param caller {@link AbstractArrow} invoking (owning) the redirected method. It's the same as {@code this}.

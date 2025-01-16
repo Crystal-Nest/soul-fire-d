@@ -51,19 +51,19 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
   protected final ResourceLocation fireType;
 
   /**
-   * Enchantment kind identifier.<br />
+   * Enchantment kind identifier.<br>
    * Will be used as suffix when registering the enchantment.
    */
   private final String kind;
 
   /**
-   * {@link BooleanSupplier} to check whether the enchantment is enabled in survival.<br />
+   * {@link BooleanSupplier} to check whether the enchantment is enabled in survival.<br>
    * Defaults to {@code () -> true}.
    */
   protected BooleanSupplier enabled = () -> true;
 
   /**
-   * Additional compatibility {@link Predicate} to call and check for when checking compatibility with other enchantments.<br />
+   * Additional compatibility {@link Predicate} to call and check for when checking compatibility with other enchantments.<br>
    * Defaults to {@code enchantment -> true}.
    */
   protected Predicate<Enchantment> compatibility = enchantment -> true;
@@ -74,33 +74,33 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
   protected TriFunction<Entity, Entity, Integer, Integer> duration = (attacker, target, seconds) -> seconds;
 
   /**
-   * {@link Rarity} for the enchantment.<br />
+   * {@link Rarity} for the enchantment.<br>
    * Defaults to {@link Rarity#VERY_RARE}.
    */
   protected Rarity rarity = DEFAULT_RARITY;
 
   /**
-   * {@link Supplier} for whether the enchantment cannot appear in the enchanting table.<br />
-   * If set to {@code true} along with {@link #isDiscoverable}, the enchantment won't appear in the enchanting table, but can still be found in loots.<br />
+   * {@link Supplier} for whether the enchantment cannot appear in the enchanting table.<br>
+   * If set to {@code true} along with {@link #isDiscoverable}, the enchantment won't appear in the enchanting table, but can still be found in loots.<br>
    * Defaults to {@code () -> false}
    */
   protected BooleanSupplier isTreasure = () -> DEFAULT_IS_TREASURE;
 
   /**
-   * {@link Supplier} for whether the enchantment is a curse.<br />
+   * {@link Supplier} for whether the enchantment is a curse.<br>
    * Defaults to {@code () -> false}
    */
   protected BooleanSupplier isCurse = () -> DEFAULT_IS_CURSE;
 
   /**
-   * {@link Supplier} for whether the enchantment can appear in the enchanted book trade offers of librarian villagers.<br />
+   * {@link Supplier} for whether the enchantment can appear in the enchanted book trade offers of librarian villagers.<br>
    * Defaults to {@code () -> true}
    */
   protected BooleanSupplier isTradeable = () -> DEFAULT_IS_TRADEABLE;
 
   /**
-   * {@link Supplier} for whether the enchantment will appear in the enchanting table or loots with random enchant function.<br />
-   * Note that {@link #isTreasure} takes precedence.<br />
+   * {@link Supplier} for whether the enchantment will appear in the enchanting table or loots with random enchant function.<br>
+   * Note that {@link #isTreasure} takes precedence.<br>
    * Defaults to {@code () -> true}
    */
   protected BooleanSupplier isDiscoverable = () -> DEFAULT_IS_DISCOVERABLE;
@@ -231,7 +231,7 @@ public abstract class FireEnchantmentBuilder<T extends Enchantment & FireTypedEn
   }
 
   /**
-   * Sets the {@link #enabled} {@link Supplier}.<br />
+   * Sets the {@link #enabled} {@link Supplier}.<br>
    * There is no setter for a static value for this flag as it would make no sense to do so.
    * If you don't want the enchantment, simply remove it rather than forcing this flag to {@code false}.
    *
