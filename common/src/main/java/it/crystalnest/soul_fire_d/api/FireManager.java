@@ -803,6 +803,7 @@ public final class FireManager {
    * @param entity {@link Entity} to set on fire.
    * @param seconds amount of seconds the fire should last for.
    * @param fireType fire type.
+   * @param setOnFireFunction how to set the entity on fire.
    */
   public static void setOnFire(Entity entity, float seconds, ResourceLocation fireType, BiConsumer<Entity, Float> setOnFireFunction) {
     setOnFireFunction.accept(entity, seconds);
