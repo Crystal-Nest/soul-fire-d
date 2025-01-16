@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(BowItem.class)
 public abstract class BowItemMixin {
   /**
-   * Wraps the call to {@link AbstractArrow#setSecondsOnFire(int)} inside the method {@link BowItem#releaseUsing(ItemStack, Level, LivingEntity, int)}.<br />
+   * Wraps the call to {@link AbstractArrow#setSecondsOnFire(int)} inside the method {@link BowItem#releaseUsing(ItemStack, Level, LivingEntity, int)}.<br>
    * Handles setting the arrow on the correct kind of fire if the bow has a custom fire enchantment.
    *
    * @param instance owner of the redirected method.

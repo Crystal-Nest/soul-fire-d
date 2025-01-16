@@ -150,7 +150,7 @@ public final class FireManager {
   }
 
   /**
-   * Attempts to register the given {@link Fire}.<br />
+   * Attempts to register the given {@link Fire}.<br>
    * If the {@link Fire#fireType} is already registered, logs an error.
    *
    * @param fire {@link Fire} to register.
@@ -197,7 +197,7 @@ public final class FireManager {
   }
 
   /**
-   * Unregisters the specified fire.<br />
+   * Unregisters the specified fire.<br>
    * Internally use only, do not use elsewhere!
    *
    * @param fireType fire type.
@@ -285,7 +285,7 @@ public final class FireManager {
   }
 
   /**
-   * Registers the campfire item for the specified fire.<br />
+   * Registers the campfire item for the specified fire.<br>
    * Must be called <strong>after</strong> {@link #registerCampfire}.
    *
    * @param fireType fire type.
@@ -296,7 +296,7 @@ public final class FireManager {
   }
 
   /**
-   * Registers the campfire item for the specified fire from the given supplier.<br />
+   * Registers the campfire item for the specified fire from the given supplier.<br>
    * Must be called <strong>after</strong> {@link #registerCampfire}.
    *
    * @param fireType fire type.
@@ -319,8 +319,8 @@ public final class FireManager {
   }
 
   /**
-   * Registers the particle type for the specified fire from the given supplier.<br />
-   * Make sure your particle implements {@link ParticleOptions} if you are going to register a custom torch too.<br />
+   * Registers the particle type for the specified fire from the given supplier.<br>
+   * Make sure your particle implements {@link ParticleOptions} if you are going to register a custom torch too.<br>
    * If it's not a subclass of {@link SimpleParticleType}, you also need to register a {@link ParticleProvider} for your particle.
    *
    * @param fireType fire type.
@@ -333,8 +333,8 @@ public final class FireManager {
   }
 
   /**
-   * Registers the pair of torch and wall torch blocks for the specified fire.<br />
-   * Must be called <strong>after</strong> {@link #registerParticle}.<br />
+   * Registers the pair of torch and wall torch blocks for the specified fire.<br>
+   * Must be called <strong>after</strong> {@link #registerParticle}.<br>
    * Make sure your registered particle implements {@link ParticleOptions}.
    *
    * @param fireType fire type.
@@ -345,8 +345,8 @@ public final class FireManager {
   }
 
   /**
-   * Registers the pair of torch and wall torch blocks for the specified fire from the given suppliers.<br />
-   * Must be called <strong>after</strong> {@link #registerParticle}.<br />
+   * Registers the pair of torch and wall torch blocks for the specified fire from the given suppliers.<br>
+   * Must be called <strong>after</strong> {@link #registerParticle}.<br>
    * Make sure your registered particle implements {@link ParticleOptions}.
    *
    * @param fireType fire type.
@@ -369,7 +369,7 @@ public final class FireManager {
   }
 
   /**
-   * Registers the torch item for the specified fire.<br />
+   * Registers the torch item for the specified fire.<br>
    * Must be called <strong>after</strong> {@link #registerTorch}.
    *
    * @param fireType fire type.
@@ -380,7 +380,7 @@ public final class FireManager {
   }
 
   /**
-   * Registers the torch item for the specified fire from the given supplier.<br />
+   * Registers the torch item for the specified fire from the given supplier.<br>
    * Must be called <strong>after</strong> {@link #registerTorch}.
    *
    * @param fireType fire type.
@@ -418,7 +418,7 @@ public final class FireManager {
   }
 
   /**
-   * Registers the lantern item for the specified fire.<br />
+   * Registers the lantern item for the specified fire.<br>
    * Must be called <strong>after</strong> {@link #registerLantern}.
    *
    * @param fireType fire type.
@@ -429,7 +429,7 @@ public final class FireManager {
   }
 
   /**
-   * Registers the lantern item for the specified fire from the given supplier.<br />
+   * Registers the lantern item for the specified fire from the given supplier.<br>
    * Must be called <strong>after</strong> {@link #registerLantern}.
    *
    * @param fireType fire type.
@@ -445,7 +445,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the {@link Fire} registered with the given {@code id}.<br />
+   * Returns the {@link Fire} registered with the given {@code id}.<br>
    * Returns {@link #DEFAULT_FIRE} if no {@link Fire} is registered with the given {@code modId} and {@code fireId}.
    *
    * @param modId mod ID.
@@ -457,7 +457,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the {@link Fire} registered with the given {@code id}.<br />
+   * Returns the {@link Fire} registered with the given {@code id}.<br>
    * Returns {@link #DEFAULT_FIRE} if no {@link Fire} is registered with the given {@code fireType}.
    *
    * @param fireType fire type.
@@ -477,7 +477,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the specified property of the specified fire.<br />
+   * Returns the specified property of the specified fire.<br>
    * Defaults to the property of the {@link #DEFAULT_FIRE} if the specified fire is not registered.
    *
    * @param fireType fire type.
@@ -490,7 +490,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the specified component of the specified fire.<br />
+   * Returns the specified component of the specified fire.<br>
    * Defaults to the component of the {@link #DEFAULT_FIRE} if the specified fire is not registered.
    *
    * @param fireType fire type.
@@ -503,7 +503,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the specified component value of the specified fire.<br />
+   * Returns the specified component value of the specified fire.<br>
    * Defaults to the component value of the {@link #DEFAULT_FIRE} if the specified fire is not registered.
    *
    * @param fireType fire type.
@@ -530,7 +530,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the specified component value of the specified fire.<br />
+   * Returns the specified component value of the specified fire.<br>
    * Defaults to the component value of the {@link #DEFAULT_FIRE} if the specified fire is not registered.
    *
    * @param fireType fire type.
@@ -546,7 +546,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the list of the specified property from all the registered fires.<br />
+   * Returns the list of the specified property from all the registered fires.<br>
    * This list will have as many elements as there are registered fires.
    *
    * @param getter property getter.
@@ -558,7 +558,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the list of the specified component IDs from all the registered fires.<br />
+   * Returns the list of the specified component IDs from all the registered fires.<br>
    * This list won't necessarily have as many elements as there are registered fires because fires without the specified component are filtered out.
    *
    * @param component component.
@@ -569,7 +569,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the list of the specified component values from all the registered fires.<br />
+   * Returns the list of the specified component values from all the registered fires.<br>
    * This list won't necessarily have as many elements as there are registered fires because fires without the specified component are filtered out.
    *
    * @param component component.
@@ -735,7 +735,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the in damage source of the {@link Fire} registered with the given {@code fireType}.<br />
+   * Returns the in damage source of the {@link Fire} registered with the given {@code fireType}.<br>
    * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
    *
    * @param fireType fire type.
@@ -746,7 +746,7 @@ public final class FireManager {
   }
 
   /**
-   * Returns the on damage source of the {@link Fire} registered with the given {@code fireType}.<br />
+   * Returns the on damage source of the {@link Fire} registered with the given {@code fireType}.<br>
    * Returns the default value if no {@link Fire} was registered with the given {@code fireType}.
    *
    * @param fireType fire type.
@@ -782,7 +782,7 @@ public final class FireManager {
   }
 
   /**
-   * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireType}.<br />
+   * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireType}.<br>
    * If no {@link Fire} was registered with the given {@code fireType}, defaults to the default {@code damageSource} and {@code damage} to harm the {@code entity}.
    *
    * @param entity {@link Entity} to harm or heal.
@@ -794,7 +794,7 @@ public final class FireManager {
   }
 
   /**
-   * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireType}.<br />
+   * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireType}.<br>
    * If no {@link Fire} was registered with the given {@code fireType}, defaults to the default {@code damageSource} and {@code damage} to harm the {@code entity}.
    *
    * @param entity {@link Entity} to harm or heal.
@@ -809,7 +809,7 @@ public final class FireManager {
   }
 
   /**
-   * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireType}.<br />
+   * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireType}.<br>
    * If no {@link Fire} was registered with the given {@code fireType}, defaults to the default {@code damageSource} and {@code damage} to harm the {@code entity}.
    *
    * @param entity {@link Entity} to harm or heal.
@@ -821,7 +821,7 @@ public final class FireManager {
   }
 
   /**
-   * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireType}.<br />
+   * Harms (or heals) the given {@code entity} based on the {@link Fire} registered with the given {@code fireType}.<br>
    * If no {@link Fire} was registered with the given {@code fireType}, defaults to the default {@code damageSource} and {@code damage} to harm the {@code entity}.
    *
    * @param entity {@link Entity} to harm or heal.
@@ -836,7 +836,7 @@ public final class FireManager {
   }
 
   /**
-   * Harms or heals the given {@code entity}.<br />
+   * Harms or heals the given {@code entity}.<br>
    * Also applies the custom fire behavior.
    *
    * @param entity entity to harm/heal.
@@ -871,7 +871,7 @@ public final class FireManager {
   }
 
   /**
-   * Writes to the given {@link CompoundTag} the given {@code fireType}.<br />
+   * Writes to the given {@link CompoundTag} the given {@code fireType}.<br>
    * If the given {@code fireType} is not registered, {@link #DEFAULT_FIRE_TYPE} will be used instead.
    *
    * @param tag {@link CompoundTag} to write to.

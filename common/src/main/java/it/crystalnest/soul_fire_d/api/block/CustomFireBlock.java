@@ -152,7 +152,7 @@ public class CustomFireBlock extends BaseFireBlock implements FireTyped {
   }
 
   /**
-   * Schedule the next fire tick.<br />
+   * Schedule the next fire tick.<br>
    * Based on {@link FireBlock#getFireTickDelay(Random)}.
    *
    * @param level level.
