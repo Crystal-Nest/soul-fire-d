@@ -20,11 +20,11 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(ScreenEffectRenderer.class)
 public abstract class ScreenEffectRendererMixin {
   /**
-   * Modifies the assignment value returned by {@link Material#sprite()} in the method {@link ScreenEffectRenderer#renderFire(Minecraft, PoseStack)}.<br>
+   * Wraps the call to {@link Material#sprite()} in the method {@link ScreenEffectRenderer#renderFire(Minecraft, PoseStack)}.<br>
    * Assigns the correct sprite for the Fire Type the player is burning from.
    *
    * @param originalMaterial material of the original sprite returned by the modified method.
-   * @param original the operation that gets the original sprite returned by the modified method.
+   * @param original the {@link Operation} that gets the original sprite returned by the modified method.
    * @param minecraft Minecraft client.
    * @param poseStack matrices.
    * @return {@link TextureAtlasSprite} to assign.
