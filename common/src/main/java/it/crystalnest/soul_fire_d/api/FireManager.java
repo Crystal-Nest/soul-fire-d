@@ -316,8 +316,8 @@ public final class FireManager {
   }
 
   /**
-   * Registers the particle type for the specified fire from the given supplier.<br />
-   * Make sure your particle implements {@link ParticleOptions} if you are going to register a custom torch too.<br />
+   * Registers the particle type for the specified fire from the given supplier.<br>
+   * Make sure your particle implements {@link ParticleOptions} if you are going to register a custom torch too.<br>
    * If it's not a subclass of {@link SimpleParticleType}, you also need to register a {@link ParticleProvider} for your particle.
    *
    * @param fireType fire type.
