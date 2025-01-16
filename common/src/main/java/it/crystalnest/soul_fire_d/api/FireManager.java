@@ -1,7 +1,6 @@
 package it.crystalnest.soul_fire_d.api;
 
 import com.google.common.base.Suppliers;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import it.crystalnest.cobweb.api.pack.DynamicDataPack;
 import it.crystalnest.cobweb.api.pack.DynamicTagBuilder;
 import it.crystalnest.cobweb.api.registry.CobwebRegister;
@@ -51,7 +50,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.function.ToIntFunction;
 
 /**
  * Static manager for registered Fires.
