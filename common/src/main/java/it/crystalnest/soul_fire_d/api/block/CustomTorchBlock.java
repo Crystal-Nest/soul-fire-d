@@ -3,7 +3,7 @@ package it.crystalnest.soul_fire_d.api.block;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
@@ -27,14 +27,14 @@ public class CustomTorchBlock extends TorchBlock implements FireTyped {
   /**
    * Particle type.
    */
-  private final Supplier<SimpleParticleType> type;
+  private final Supplier<? extends ParticleOptions> type;
 
   /**
    * @param fireType fire type.
    * @param type particle type.
    * @param properties block properties.
    */
-  public CustomTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type, Properties properties) {
+  public CustomTorchBlock(ResourceLocation fireType, Supplier<? extends ParticleOptions> type, Properties properties) {
     this(fireType, type, true, properties);
   }
 
@@ -44,7 +44,7 @@ public class CustomTorchBlock extends TorchBlock implements FireTyped {
    * @param addDefaultProperties whether to add default block properties.
    * @param properties block properties.
    */
-  public CustomTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type, boolean addDefaultProperties, Properties properties) {
+  public CustomTorchBlock(ResourceLocation fireType, Supplier<? extends ParticleOptions> type, boolean addDefaultProperties, Properties properties) {
     // noinspection DataFlowIssue
     super(null, (addDefaultProperties ? addDefaultProperties(properties) : properties).lightLevel(state -> FireManager.light(fireType)));
     this.fireType = fireType;
