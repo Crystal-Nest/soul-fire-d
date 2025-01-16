@@ -13,6 +13,7 @@ import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.CampfireRenderer;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -50,7 +51,7 @@ public final class FMLClientSetupEventHandler {
    */
   @SubscribeEvent
   public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
-    FireManager.getComponentList(Fire.Component.FLAME_PARTICLE).forEach(flame -> event.register(flame, FlameParticle.Provider::new));
+    FireManager.getComponentList(Fire.Component.FLAME_PARTICLE).stream().filter(SimpleParticleType.class::isInstance).forEach(flame -> event.register((SimpleParticleType) flame, FlameParticle.Provider::new));
   }
 
   /**
