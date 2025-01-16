@@ -1,5 +1,7 @@
 package it.crystalnest.soul_fire_d.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTypeSynched;
@@ -18,7 +20,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -88,9 +89,9 @@ public abstract class EntityMixin implements FireTypeSynched {
    * @param damage original damage (normal fire).
    * @return the result of calling the redirected method.
    */
-  @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
-  private boolean redirectHurt(Entity instance, DamageSource damageSource, float damage) {
-    return FireManager.affect(instance, ((FireTyped) instance).getFireType(), Fire::getOnFire);
+  @WrapOperation(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
+  private boolean redirectHurt(Entity instance, DamageSource damageSource, float damage, Operation<Boolean> original) {
+    return FireManager.damageOnFire(instance, ((FireTyped) instance).getFireType(), Fire::getOnFire, original::call);
   }
 
   /**
@@ -99,10 +100,11 @@ public abstract class EntityMixin implements FireTypeSynched {
    *
    * @param instance owner of the redirected method.
    * @param seconds seconds to set the entity on fire for.
+   * @param original the original call that is being redirected.
    */
-  @Redirect(method = "lavaHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;igniteForSeconds(F)V"))
-  private void redirectSetSecondsOnFire(Entity instance, float seconds) {
-    FireManager.setOnFire(instance, seconds, FireManager.DEFAULT_FIRE_TYPE);
+  @WrapOperation(method = "lavaHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;igniteForSeconds(F)V"))
+  private void redirectSetSecondsOnFire(Entity instance, float seconds, Operation<Void> original) {
+    FireManager.setOnFire(instance, seconds, FireManager.DEFAULT_FIRE_TYPE, original::call);
   }
 
   /**

@@ -1,5 +1,8 @@
 package it.crystalnest.soul_fire_d.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.block.CustomFireBlock;
@@ -11,13 +14,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Injects into {@link BaseFireBlock} to alter Fire behavior for consistency.
@@ -41,19 +42,18 @@ public abstract class BaseFireBlockMixin implements FireTypeChanger {
   }
 
   /**
-   * Injects before returning in the method {@link BaseFireBlock#getState(BlockGetter, BlockPos)}.<br />
+   * Conditionally modifies the return value of {@link BaseFireBlock#getState(BlockGetter, BlockPos)}.<br />
    * Returns the most appropriate fire {@link BlockState}.
    *
+   * @param original the original block state.
    * @param level level.
    * @param pos position.
-   * @param cir {@link CallbackInfoReturnable}.
    */
-  @Inject(method = "getState", at = @At(value = "RETURN"), cancellable = true)
-  private static void onGetState(BlockGetter level, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
-    FireManager.getComponentList(Fire.Component.SOURCE_BLOCK).stream()
+  @ModifyReturnValue(method = "getState", at = @At(value = "RETURN"))
+  private static BlockState onGetState(BlockState original, BlockGetter level, BlockPos pos) {
+    return FireManager.getComponentList(Fire.Component.SOURCE_BLOCK).stream()
       .filter(source -> source instanceof CustomFireBlock customFireBlock && customFireBlock.canSurvive(level.getBlockState(pos.below())))
-      .findFirst()
-      .ifPresent(source -> cir.setReturnValue(source.defaultBlockState()));
+      .findFirst().map(Block::defaultBlockState).orElse(original);
   }
 
   /**
@@ -65,8 +65,8 @@ public abstract class BaseFireBlockMixin implements FireTypeChanger {
    * @param damage original damage (normal fire).
    * @return the result of calling the redirected method.
    */
-  @Redirect(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
-  private boolean redirectHurt(Entity instance, DamageSource damageSource, float damage) {
-    return FireManager.affect(instance, getFireType(), Fire::getInFire);
+  @WrapOperation(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
+  private boolean redirectHurt(Entity instance, DamageSource damageSource, float damage, Operation<Boolean> original) {
+    return FireManager.affect(instance, getFireType(), Fire::getInFire, original::call);
   }
 }
