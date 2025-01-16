@@ -843,6 +843,7 @@ public final class FireManager {
    * @param damageSource damage source.
    * @param damage damage/heal amount.
    * @param invertHealAndHarm whether to invert heal and harm.
+   * @param hurtFunction how to harm the {@code entity}.
    * @return whether the {@code entity} has been harmed.
    */
   private static boolean harmOrHeal(Entity entity, DamageSource damageSource, float damage, boolean invertHealAndHarm, TriFunction<Entity, DamageSource, Float, Boolean> hurtFunction) {

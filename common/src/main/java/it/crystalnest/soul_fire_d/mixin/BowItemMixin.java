@@ -18,16 +18,15 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(BowItem.class)
 public abstract class BowItemMixin {
   /**
-   * Redirects the call to {@link AbstractArrow#setSecondsOnFire(int)} inside the method
-   * {@link BowItem#releaseUsing(ItemStack, Level, LivingEntity, int)}.<br /> Handles setting the arrow on the correct
-   * kind of fire if the bow has a custom fire enchantment.
+   * Wraps the call to {@link AbstractArrow#setSecondsOnFire(int)} inside the method {@link BowItem#releaseUsing(ItemStack, Level, LivingEntity, int)}.<br />
+   * Handles setting the arrow on the correct kind of fire if the bow has a custom fire enchantment.
    *
-   * @param instance          owner of the redirected method.
-   * @param seconds           parameter of the redirected method: number of seconds to set the arrow on fire for.
-   * @param original          the original call that is being redirected.
-   * @param bow               bow being released.
-   * @param world             world inside which the arrow should be generated.
-   * @param user              {@link LivingEntity} holding the {@code bow}.
+   * @param instance owner of the redirected method.
+   * @param seconds parameter of the redirected method: number of seconds to set the arrow on fire for.
+   * @param original original {@link Operation} being wrapped.
+   * @param bow bow being released.
+   * @param world world inside which the arrow should be generated.
+   * @param user {@link LivingEntity} holding the {@code bow}.
    * @param remainingUseTicks time left before pulling the {@code bow} to the max.
    */
   @WrapOperation(method = "releaseUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/AbstractArrow;setSecondsOnFire(I)V"))

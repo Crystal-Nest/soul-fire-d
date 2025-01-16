@@ -21,12 +21,12 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(AbstractArrow.class)
 public abstract class AbstractArrowMixin implements FireTypeChanger {
   /**
-   * Redirects the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link AbstractArrow#onHitEntity(EntityHitResult)}.<br />
+   * Wraps the call to {@link Entity#setSecondsOnFire(int)} inside the method {@link AbstractArrow#onHitEntity(EntityHitResult)}.<br />
    * Sets the correct Fire Type for the Entity.
    *
    * @param caller {@link Entity} invoking (owning) the redirected method.
    * @param seconds seconds the entity should be set on fire for.
-   * @param original the original call that is being redirected.
+   * @param original the original call that is being wrapped.
    */
   @WrapOperation(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setSecondsOnFire(I)V"))
   private void redirectSetSecondsOnFire(Entity caller, int seconds, Operation<Void> original) {
@@ -40,7 +40,7 @@ public abstract class AbstractArrowMixin implements FireTypeChanger {
    * @param caller {@link AbstractArrow} invoking (owning) the redirected method. It's the same as {@code this}.
    * @param seconds seconds the arrow should be set on fire for.
    * @param entity {@link LivingEntity}, a mob, shooting the arrow.
-   * @param original the original call that is being redirected.
+   * @param original the original call that is being wrapped.
    */
   @WrapOperation(method = "setEnchantmentEffectsFromEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/AbstractArrow;setSecondsOnFire(I)V"))
   private void redirectSetSecondsOnFire(AbstractArrow caller, int seconds, Operation<Void> original, LivingEntity entity) {
