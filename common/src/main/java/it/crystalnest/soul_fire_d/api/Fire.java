@@ -46,7 +46,7 @@ public final class Fire {
   private final int light;
 
   /**
-   * Fire damage per second.<br />
+   * Fire damage per second.<br>
    * Positive will hurt, negative will heal, {@code 0} will do nothing.
    */
   private final float damage;
@@ -72,7 +72,7 @@ public final class Fire {
   private final DamageSource onFire;
 
   /**
-   * Custom behavior to apply before the entity takes damage or heals.<br />
+   * Custom behavior to apply before the entity takes damage or heals.<br>
    * The returned value determines whether the default hurt/heal behavior should still apply.
    */
   private final Predicate<Entity> behavior;
@@ -188,7 +188,7 @@ public final class Fire {
   }
 
   /**
-   * Returns {@link ResourceLocation} associated with specified {@link Component}.<br />
+   * Returns {@link ResourceLocation} associated with specified {@link Component}.<br>
    * Might be {@code null} if this fire doesn't have the specified component.
    *
    * @param component {@link Component}.
@@ -297,7 +297,7 @@ public final class Fire {
     }
 
     /**
-     * Returns the value associated to this component.<br />
+     * Returns the value associated to this component.<br>
      * Might be {@code null} if no value was registered with the given ID.
      *
      * @param id value ID.
@@ -310,7 +310,7 @@ public final class Fire {
     }
 
     /**
-     * Returns the value associated to this component by retrieving the ID from the given {@link Fire}.<br />
+     * Returns the value associated to this component by retrieving the ID from the given {@link Fire}.<br>
      * Might be {@code null} if no value was registered with the given ID.
      *
      * @param fire {@link Fire}.
@@ -394,82 +394,82 @@ public final class Fire {
     public static final Predicate<Entity> DEFAULT_BEHAVIOR = entity -> true;
 
     /**
-     * {@link Fire} instance modId.<br />
+     * {@link Fire} instance modId.<br>
      * Required.
      */
     private String modId;
 
     /**
-     * {@link Fire} instance fireId.<br />
+     * {@link Fire} instance fireId.<br>
      * Required.
      */
     private String fireId;
 
     /**
-     * {@link Fire} instance {@link Fire#light light}.<br />
+     * {@link Fire} instance {@link Fire#light light}.<br>
      * Optional, defaults to {@link #DEFAULT_LIGHT}.
      */
     private int light;
 
     /**
-     * {@link Fire} instance {@link Fire#damage damage}.<br />
+     * {@link Fire} instance {@link Fire#damage damage}.<br>
      * Optional, defaults to {@link #DEFAULT_DAMAGE}.
      */
     private float damage;
 
     /**
-     * {@link Fire} instance {@link Fire#invertHealAndHarm invertedHealAndHarm}.<br />
+     * {@link Fire} instance {@link Fire#invertHealAndHarm invertedHealAndHarm}.<br>
      * Optional, defaults to {@link #DEFAULT_INVERT_HEAL_AND_HARM}.
      */
     private boolean invertHealAndHarm;
 
     /**
-     * {@link Fire} instance {@link Fire#canRainDouse canRainDouse}.<br />
+     * {@link Fire} instance {@link Fire#canRainDouse canRainDouse}.<br>
      * Optional, defaults to {@link #DEFAULT_CAN_RAIN_DOUSE}.
      */
     private boolean canRainDouse;
 
     /**
-     * {@link Fire} instance {@link Fire#inFire inFire}.<br />
-     * Optional, defaults to {@link #DEFAULT_IN_FIRE}.<br />
+     * {@link Fire} instance {@link Fire#inFire inFire}.<br>
+     * Optional, defaults to {@link #DEFAULT_IN_FIRE}.<br>
      * If changed from the default, remember to add translations for the new death messages!
      */
     private DamageSource inFire;
 
     /**
-     * {@link Fire} instance {@link Fire#onFire onFire}.<br />
-     * Optional, defaults to {@link #DEFAULT_ON_FIRE}.<br />
+     * {@link Fire} instance {@link Fire#onFire onFire}.<br>
+     * Optional, defaults to {@link #DEFAULT_ON_FIRE}.<br>
      * If changed from the default, remember to add translations for the new death messages!
      */
     private DamageSource onFire;
 
     /**
-     * {@link Fire} instance {@link Fire#behavior behavior}.<br />
+     * {@link Fire} instance {@link Fire#behavior behavior}.<br>
      * Optional, defaults to {@link #DEFAULT_BEHAVIOR}.
      */
     private Predicate<Entity> behavior;
 
     /**
-     * {@link Fire} instance {@link Fire#components components}.<br />
+     * {@link Fire} instance {@link Fire#components components}.<br>
      * Optional, defaults to a map with every component, each associated to the default {@link ResourceLocation} made by {@link #modId} and {@link #fireId} with the component default {@link Component#suffix suffix}.
      */
     private Map<Component<?, ?>, ResourceLocation> components;
 
     /**
-     * {@link Function} to configure the {@link FireAspectBuilder}.<br />
-     * Optional, defaults to a configuration to build a new {@link FireTypedFireAspectEnchantment} with {@link Enchantment.Rarity#VERY_RARE}.<br />
-     * Default value is recommended.<br />
-     * If your Fire should have a Fire Aspect enchantment, but with a different value than default, use {@link #setFireAspectConfig(UnaryOperator)}.<br />
+     * {@link Function} to configure the {@link FireAspectBuilder}.<br>
+     * Optional, defaults to a configuration to build a new {@link FireTypedFireAspectEnchantment} with {@link Enchantment.Rarity#VERY_RARE}.<br>
+     * Default value is recommended.<br>
+     * If your Fire should have a Fire Aspect enchantment, but with a different value than default, use {@link #setFireAspectConfig(UnaryOperator)}.<br>
      * If your Fire should not have a Fire Aspect enchantment, set this to null with {@link #removeFireAspect()}.
      */
     @Nullable
     private Optional<UnaryOperator<FireAspectBuilder>> fireAspectConfigurator;
 
     /**
-     * {@link UnaryOperator} to configure the {@link FlameBuilder}.<br />
-     * Optional, defaults to a configuration to build a new {@link FireTypedFlameEnchantment} with {@link Enchantment.Rarity#VERY_RARE}.<br />
-     * Default value is recommended.<br />
-     * If your Fire should have a Flame enchantment, but with a different value than default, use {@link #setFlameConfig(UnaryOperator)}.<br />
+     * {@link UnaryOperator} to configure the {@link FlameBuilder}.<br>
+     * Optional, defaults to a configuration to build a new {@link FireTypedFlameEnchantment} with {@link Enchantment.Rarity#VERY_RARE}.<br>
+     * Default value is recommended.<br>
+     * If your Fire should have a Flame enchantment, but with a different value than default, use {@link #setFlameConfig(UnaryOperator)}.<br>
      * If your Fire should not have a Flame enchantment, set this to null with {@link #removeFlame()}.
      */
     @Nullable
@@ -491,7 +491,7 @@ public final class Fire {
     }
 
     /**
-     * Returns the value of the given {@link Optional}.<br />
+     * Returns the value of the given {@link Optional}.<br>
      * Returns {@code null} if the {@code optional} is either {@code null} or empty.
      *
      * @param <T> value type.
@@ -504,7 +504,7 @@ public final class Fire {
     }
 
     /**
-     * Returns the value obtained by calling {@link FireEnchantmentBuilder#register()} for the given Builder.<br />
+     * Returns the value obtained by calling {@link FireEnchantmentBuilder#register()} for the given Builder.<br>
      * Returns {@code null} if the {@code optional} is either {@code null} or empty.
      *
      * @param <B> builder type.
@@ -522,7 +522,7 @@ public final class Fire {
     }
 
     /**
-     * Sets the {@link #light}.<br />
+     * Sets the {@link #light}.<br>
      * Accepted values are only between {@code 0} and {@code 15} inclusive.
      *
      * @param light {@link #light}.
@@ -536,8 +536,8 @@ public final class Fire {
     }
 
     /**
-     * Sets the {@link #damage}.<br />
-     * If the {@code damage} passed is {@code >= 0} the fire will harm entities, otherwise it will heal them.<br />
+     * Sets the {@link #damage}.<br>
+     * If the {@code damage} passed is {@code >= 0} the fire will harm entities, otherwise it will heal them.<br>
      * Whether the fire heals or harms depends also on {@link #invertHealAndHarm}.
      *
      * @param damage {@link #damage}.
@@ -549,7 +549,7 @@ public final class Fire {
     }
 
     /**
-     * Sets the {@link #invertHealAndHarm} flag.<br />
+     * Sets the {@link #invertHealAndHarm} flag.<br>
      * If set to true, entities that have heal and harm inverted (e.g. undeads) will have heal and harm inverted for this fire too.
      *
      * @param invertHealAndHarm {@link #invertHealAndHarm}.
@@ -605,7 +605,7 @@ public final class Fire {
     }
 
     /**
-     * Sets the {@link #behavior}.<br />
+     * Sets the {@link #behavior}.<br>
      * Shorthand for custom behaviors that don't prevent the default heal/harm behavior, thus returning {@code true}.
      *
      * @param behavior {@link #behavior}.
@@ -620,9 +620,9 @@ public final class Fire {
     }
 
     /**
-     * Sets the specified {@link Component}.<br />
+     * Sets the specified {@link Component}.<br>
      * It's strongly recommended that you use all the default values for each component. Use this only when you don't have control over the values.
-     * Do not use this to add Fire Aspect and Flame enchantments: use {@link #setFireAspectConfig(UnaryOperator)} and {@link #setFlameConfig(UnaryOperator)} instead.<br />
+     * Do not use this to add Fire Aspect and Flame enchantments: use {@link #setFireAspectConfig(UnaryOperator)} and {@link #setFlameConfig(UnaryOperator)} instead.<br>
      *
      * @param component component.
      * @param id {@link ResourceLocation}.
@@ -634,8 +634,8 @@ public final class Fire {
     }
 
     /**
-     * Removes the specified {@link Component}.<br />
-     * Do not use this to remove Fire Aspect and Flame enchantments: use {@link #removeFireAspect()} and {@link #removeFlame()} instead.<br />
+     * Removes the specified {@link Component}.<br>
+     * Do not use this to remove Fire Aspect and Flame enchantments: use {@link #removeFireAspect()} and {@link #removeFlame()} instead.<br>
      *
      * @param component component.
      * @return this Builder to either set other properties or {@link #register}.
@@ -688,7 +688,7 @@ public final class Fire {
     }
 
     /**
-     * Resets the state of the Builder.<br />
+     * Resets the state of the Builder.<br>
      * Used to avoid getting new Builders from the {@link FireManager manager} and instead use the same instance to build different {@link Fire Fires}.
      *
      * @param fireType {@link ResourceLocation} of the new {@link Fire} to build.
@@ -699,7 +699,7 @@ public final class Fire {
     }
 
     /**
-     * Resets the state of the Builder.<br />
+     * Resets the state of the Builder.<br>
      * Used to avoid getting new Builders from the {@link FireManager manager} and instead use the same instance to build different {@link Fire Fires}.
      *
      * @param modId {@code modId} of the new {@link Fire} to build.
@@ -712,8 +712,8 @@ public final class Fire {
     }
 
     /**
-     * Resets the state of the Builder.<br />
-     * Used to avoid getting new Builders from the {@link FireManager manager} and instead use the same instance to build different {@link Fire Fires}.<br />
+     * Resets the state of the Builder.<br>
+     * Used to avoid getting new Builders from the {@link FireManager manager} and instead use the same instance to build different {@link Fire Fires}.<br>
      * Note that, for ease of use, the {@link #modId} is not reset.
      *
      * @param fireId {@code fireId} of the new {@link Fire} to build.
