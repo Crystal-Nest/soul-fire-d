@@ -4,7 +4,7 @@ import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
@@ -29,13 +29,13 @@ public class CustomTorchBlock extends TorchBlock implements FireTyped {
   /**
    * Particle type.
    */
-  private final Supplier<? extends ParticleOptions> type;
+  private final Supplier<SimpleParticleType> type;
 
   /**
    * @param fireType fire type.
    * @param type particle type.
    */
-  public CustomTorchBlock(ResourceLocation fireType, Supplier<? extends ParticleOptions> type) {
+  public CustomTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type) {
     this(fireType, type, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY));
   }
 
@@ -44,7 +44,7 @@ public class CustomTorchBlock extends TorchBlock implements FireTyped {
    * @param type particle type.
    * @param properties block properties.
    */
-  public CustomTorchBlock(ResourceLocation fireType, Supplier<? extends ParticleOptions> type, Properties properties) {
+  public CustomTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type, Properties properties) {
     // noinspection DataFlowIssue
     super(null, properties.lightLevel(state -> FireManager.getProperty(fireType, Fire::getLight)));
     this.fireType = fireType;

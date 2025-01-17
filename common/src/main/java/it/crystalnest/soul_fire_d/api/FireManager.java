@@ -18,7 +18,6 @@ import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -326,11 +325,11 @@ public final class FireManager {
    * If it's not a subclass of {@link SimpleParticleType}, you also need to register a {@link ParticleProvider} for your particle.
    *
    * @param fireType fire type.
-   * @param supplier {@link ParticleType} supplier.
+   * @param supplier {@link SimpleParticleType} supplier.
    * @param <T> particle type.
    * @return supplier for the registered particle type.
    */
-  public static <T extends ParticleType<?>> Supplier<T> registerParticle(ResourceLocation fireType, Supplier<T> supplier) {
+  public static <T extends SimpleParticleType> Supplier<T> registerParticle(ResourceLocation fireType, Supplier<T> supplier) {
     return CobwebRegistry.of(Registries.PARTICLE_TYPE, fireType.getNamespace()).register(FireManager.getComponentPath(fireType, Fire.Component.FLAME_PARTICLE), supplier);
   }
 
@@ -360,13 +359,13 @@ public final class FireManager {
    */
   public static <T extends CustomTorchBlock, W extends CustomWallTorchBlock> Pair<Supplier<T>, Supplier<W>> registerTorch(
     ResourceLocation fireType,
-    BiFunction<ResourceLocation, Supplier<? extends ParticleOptions>, T> torchSupplier,
-    BiFunction<ResourceLocation, Supplier<? extends ParticleOptions>, W> wallTorchSupplier
+    BiFunction<ResourceLocation, Supplier<SimpleParticleType>, T> torchSupplier,
+    BiFunction<ResourceLocation, Supplier<SimpleParticleType>, W> wallTorchSupplier
   ) {
     CobwebRegister<Block> blocks = CobwebRegistry.ofBlocks(fireType.getNamespace());
     return Pair.of(
-      blocks.register(FireManager.getComponentPath(fireType, Fire.Component.TORCH_BLOCK), () -> torchSupplier.apply(fireType, () -> (ParticleOptions) getRequiredComponent(fireType, Fire.Component.FLAME_PARTICLE))),
-      blocks.register(FireManager.getComponentPath(fireType, Fire.Component.WALL_TORCH_BLOCK), () -> wallTorchSupplier.apply(fireType, () -> (ParticleOptions) getRequiredComponent(fireType, Fire.Component.FLAME_PARTICLE)))
+      blocks.register(FireManager.getComponentPath(fireType, Fire.Component.TORCH_BLOCK), () -> torchSupplier.apply(fireType, () -> getRequiredComponent(fireType, Fire.Component.FLAME_PARTICLE))),
+      blocks.register(FireManager.getComponentPath(fireType, Fire.Component.WALL_TORCH_BLOCK), () -> wallTorchSupplier.apply(fireType, () -> getRequiredComponent(fireType, Fire.Component.FLAME_PARTICLE)))
     );
   }
 
