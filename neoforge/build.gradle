@@ -32,6 +32,9 @@ dependencies {
   implementation "net.neoforged:neoforge:${neoforge_version}"
   implementation project(":common")
   implementation "it.crystalnest:cobweb-neoforge:${minecraft_version}-${cobweb_version}"
+  implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:$mixinextras_version")) {
+    jarJar.ranged(it, "[$mixinextras_version,)")
+  }
 }
 
 // NeoGradle compiles the game, but we don't want to add our common code to the game's code
