@@ -3,6 +3,7 @@ package it.crystalnest.soul_fire_d.api;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -315,7 +316,7 @@ public final class Fire {
     /**
      * Flame particle component.
      */
-    public static final Component<ParticleType<?>, ParticleType<?>> FLAME_PARTICLE = new Component<>(Registries.PARTICLE_TYPE, "_flame");
+    public static final Component<ParticleType<?>, SimpleParticleType> FLAME_PARTICLE = new Component<>(Registries.PARTICLE_TYPE, "_flame");
 
     /**
      * Registry key where the value associated to this component is stored.

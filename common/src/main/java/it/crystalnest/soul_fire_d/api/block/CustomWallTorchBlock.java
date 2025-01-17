@@ -4,7 +4,7 @@ import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
@@ -29,14 +29,14 @@ public class CustomWallTorchBlock extends WallTorchBlock implements FireTyped {
   /**
    * Particle type.
    */
-  private final Supplier<? extends ParticleOptions> type;
+  private final Supplier<SimpleParticleType> type;
 
   /**
    * @param fireType fire type.
    * @param type particle type.
    * @param properties block properties.
    */
-  public CustomWallTorchBlock(ResourceLocation fireType, Supplier<? extends ParticleOptions> type, Properties properties) {
+  public CustomWallTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type, Properties properties) {
     this(fireType, type, true, properties);
   }
 
@@ -46,7 +46,7 @@ public class CustomWallTorchBlock extends WallTorchBlock implements FireTyped {
    * @param addDefaultProperties whether to add default block properties.
    * @param properties block properties.
    */
-  public CustomWallTorchBlock(ResourceLocation fireType, Supplier<? extends ParticleOptions> type, boolean addDefaultProperties, Properties properties) {
+  public CustomWallTorchBlock(ResourceLocation fireType, Supplier<SimpleParticleType> type, boolean addDefaultProperties, Properties properties) {
     // noinspection DataFlowIssue
     super(
       null,
