@@ -1,12 +1,8 @@
-import net.minecraftforge.gradle.userdev.tasks.JarJar
-
 plugins {
   id "org.sonarqube" version "4.4.1.3373"
   id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
   id "com.hypherionmc.modutils.modpublisher" version "2.1.4" apply false
   id "fabric-loom" version "1.5-SNAPSHOT" apply false
-  id "net.minecraftforge.gradle" version "[6.0,6.2)" apply false
-  id "org.spongepowered.mixin" version "0.7-SNAPSHOT" apply false
 }
 
 sonar {
@@ -22,7 +18,6 @@ sonar {
 subprojects { subproject ->
   def noPublish = subproject.name === "common"
   def isFabric = subproject.name == "fabric"
-  def isForge = subproject.name == "forge"
 
   apply plugin: "java"
   apply plugin: "idea"
@@ -31,10 +26,6 @@ subprojects { subproject ->
   apply plugin: "maven-publish"
   if (isFabric) {
     apply plugin: "fabric-loom"
-  }
-  if (isForge) {
-    apply plugin: "net.minecraftforge.gradle"
-    apply plugin: "org.spongepowered.mixin"
   }
 
   java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -196,7 +187,7 @@ subprojects { subproject ->
     setVersion(mod_version)
     setChangelog(changelog_body)
     setVersionType(version_type)
-    setArtifact(isFabric ? remapJar : isForge ? JarJar : jar)
+    setArtifact(isFabric ? remapJar : jar)
     setDisableMalwareScanner(true) // Disable the built in Fractureizer scanner.
     setDisableEmptyJarCheck(true) // Disable check for valid mod metadata entry in artifact, which could possibly mean that the jar is empty.
     setModrinthID(mod_id_kebab)
