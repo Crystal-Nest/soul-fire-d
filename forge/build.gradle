@@ -1,9 +1,6 @@
 import net.minecraftforge.gradle.userdev.tasks.JarJar
 
-plugins {
-  id "net.minecraftforge.gradle" version "[6.0,6.2)"
-  id "org.spongepowered.mixin" version "0.7-SNAPSHOT"
-}
+plugins {}
 
 mixin {
   add(sourceSets.main, "${mod_id}.refmap.json")
@@ -91,6 +88,9 @@ tasks.withType(Javadoc).configureEach {
 tasks.named("sourcesJar", Jar) {
   from(project(":common").sourceSets.main.allSource)
 }
+tasks.named("jarJar", JarJar).configure {
+  archiveClassifier = ""
+}
 
 processResources {
   from project(":common").sourceSets.main.resources
@@ -99,10 +99,6 @@ processResources {
 jar.finalizedBy("configureReobfTaskForReobfJar")
 jar.finalizedBy("reobfJar")
 jar.archiveClassifier = "no-embeds"
-
-tasks.named('jarJar', JarJar).configure {
-  archiveClassifier = ""
-}
 
 // Task seems bugged, breaks build because of mod dependencies in the Common project, with no apparent workaround.
 tasks.named("compileTestJava").get().setEnabled(false)
