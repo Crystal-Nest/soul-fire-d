@@ -802,7 +802,8 @@ public final class FireManager {
   }
 
   /**
-   * Set on fire the given entity for the given seconds with the given fire type.
+   * Set on fire the given entity for the given seconds with the given fire type.<br>
+   * This is for internal use only (or for mixin usage). Use {@link #setOnFire(Entity, float, ResourceLocation)} instead.
    *
    * @param entity {@link Entity} to set on fire.
    * @param seconds amount of seconds the fire should last for.
@@ -830,28 +831,30 @@ public final class FireManager {
 
   /**
    * Hurts or heals the given {@code entity}.<br>
-   * Also applies the custom fire behavior.
+   * Also applies the custom fire behavior.<br>
+   * This is for internal use only (or for mixin usage). Use {@link #affect(Entity, ResourceLocation, BiFunction)} instead.
    *
    * @param entity entity to hurt/heal.
    * @param fireType fire type.
-   * @param damageSourceGetter getter for the damage source. See .
+   * @param damageSourceGetter getter for the damage source. See {@link #getDamageSource(Entity, ResourceLocation, BiFunction)}.
    * @return whether the {@code entity} was hurt.
    */
   @ApiStatus.Internal
-  public static boolean affect(Entity entity, ResourceLocation fireType, BiFunction<Fire, Entity, DamageSource> damageSourceGetter, QuadriFunction<Entity, ServerLevel, DamageSource, Float, Void> hurtFunction, boolean hurtResult) {
+  public static boolean affect(Entity entity, ResourceLocation fireType, BiFunction<Fire, Entity, DamageSource> damageSourceGetter, TriFunction<Entity, DamageSource, Float, Void> hurtFunction) {
     return affect(entity, fireType, damageSourceGetter, (e, l, ds, d) -> {
-      hurtFunction.apply(e, l, ds, d);
-      return hurtResult;
+      hurtFunction.apply(e, ds, d);
+      return true;
     });
   }
 
   /**
    * Hurts or heals the given {@code entity}.<br>
-   * Also applies the custom fire behavior.
+   * Also applies the custom fire behavior.<br>
+   * This is for internal use only (or for mixin usage). Use {@link #affect(Entity, ResourceLocation, BiFunction)} instead.
    *
    * @param entity entity to hurt/heal.
    * @param fireType fire type.
-   * @param damageSourceGetter getter for the damage source. See .
+   * @param damageSourceGetter getter for the damage source. See {@link #getDamageSource(Entity, ResourceLocation, BiFunction)}.
    * @return whether the {@code entity} was hurt.
    */
   @ApiStatus.Internal
@@ -862,7 +865,8 @@ public final class FireManager {
 
   /**
    * Hurts or heals the given {@code entity}.<br>
-   * Also applies the custom fire behavior.
+   * Also applies the custom fire behavior.<br>
+   * This is for internal use only (or for mixin usage). Use {@link #affect(Entity, ResourceLocation, BiFunction)} instead.
    *
    * @param entity entity to hurt/heal.
    * @param damageSource damage source.
