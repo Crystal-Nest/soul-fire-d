@@ -105,9 +105,6 @@ jar.finalizedBy("configureReobfTaskForReobfJar")
 jar.finalizedBy("reobfJar")
 jar.archiveClassifier = "no-embeds"
 
-//project.tasks.jarJar.finalizedBy("configureReobfTaskForReobfJarJar")
-//project.tasks.jarJar.finalizedBy("reobfJarJar")
-
 // Task seems bugged, breaks build because of mod dependencies in the Common project, with no apparent workaround.
 tasks.named("compileTestJava").get().setEnabled(false)
 
