@@ -9,6 +9,24 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 - Port to 1.21.4.
 
+## [v5.1.3] - 2025/01/18
+
+- For 1.21 and above.
+- Merge [#62](https://github.com/Crystal-Nest/soul-fire-d/pull/62), use compatibility-friendly injectors from MixinExtras.
+- Fix [#6](https://github.com/Crystal-Nest/soul-fire-d/issues/6), crash with Aileron.
+
+## [v4.0.10] - 2025/01/18
+
+- For 1.20.4 and below.
+- Fix [#63](https://github.com/Crystal-Nest/soul-fire-d/issues/63), crash while in boot phase.
+
+## [v4.0.9] - 2025/01/18
+
+- For 1.20.4 and below.
+- Merge [#61](https://github.com/Crystal-Nest/soul-fire-d/pull/61), use `ParticleOptions` instead of `SimpleParticleType` for custom torches.
+- Merge [#62](https://github.com/Crystal-Nest/soul-fire-d/pull/62), use compatibility-friendly injectors from MixinExtras.
+- Fix [#6](https://github.com/Crystal-Nest/soul-fire-d/issues/6), crash with Aileron.
+
 ## [v5.1.2] - 2025/01/15
 
 - 1.21 and above only.
@@ -497,6 +515,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[v5.1.3]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.3
 [v5.1.2]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.2
 [v5.1.1]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.1
 [v5.1.0]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.0
@@ -508,6 +527,8 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 [v5.0.1]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.0.1
 [v5.0.0]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.0.0
 
+[v4.0.10]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.10
+[v4.0.9]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.9
 [v4.0.8]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.8
 [v4.0.7]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.7
 [v4.0.6]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.6

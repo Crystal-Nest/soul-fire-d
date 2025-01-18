@@ -48,7 +48,7 @@ public abstract class CampfireBlockMixin implements FireTypeChanger {
    * @param original original {@link Operation} being wrapped.
    */
   @WrapOperation(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)V"))
-  private void redirectHurt(Entity instance, DamageSource damageSource, float damage, Operation<Void> original) {
+  private void wrapHurt(Entity instance, DamageSource damageSource, float damage, Operation<Void> original) {
     FireManager.affect(instance, getFireType(), Fire::getOnCampfire, (TriFunction<Entity, DamageSource, Float, Void>) original::call);
   }
 }

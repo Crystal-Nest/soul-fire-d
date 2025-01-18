@@ -93,7 +93,7 @@ public abstract class EntityMixin implements FireTypeSynched {
    * @return the result of calling the redirected method.
    */
   @WrapOperation(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
-  private boolean redirectHurtServer(Entity instance, ServerLevel level, DamageSource damageSource, float damage, Operation<Boolean> original) {
+  private boolean wrapHurtServer(Entity instance, ServerLevel level, DamageSource damageSource, float damage, Operation<Boolean> original) {
     return FireManager.affect(instance, ((FireTyped) instance).getFireType(), Fire::getOnFire, (QuadriFunction<Entity, ServerLevel, DamageSource, Float, Boolean>) original::call);
   }
 
@@ -106,7 +106,7 @@ public abstract class EntityMixin implements FireTypeSynched {
    * @param original original {@link Operation} being wrapped.
    */
   @WrapOperation(method = "lavaHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;igniteForSeconds(F)V"))
-  private void redirectIgniteForSeconds(Entity instance, float seconds, Operation<Void> original) {
+  private void wrapIgniteForSeconds(Entity instance, float seconds, Operation<Void> original) {
     FireManager.setOnFire(instance, seconds, FireManager.DEFAULT_FIRE_TYPE, original::call);
   }
 

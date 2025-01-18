@@ -24,7 +24,7 @@ public abstract class AbstractArrowMixin implements FireTypeChanger {
    * @param original the original call that is being wrapped.
    */
   @WrapOperation(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;igniteForSeconds(F)V"))
-  private void redirectSetSecondsOnFire(Entity instance, float seconds, Operation<Void> original) {
+  private void wrapIgniteForSeconds(Entity instance, float seconds, Operation<Void> original) {
     FireManager.setOnFire(instance, seconds, getFireType(), original::call);
   }
 }

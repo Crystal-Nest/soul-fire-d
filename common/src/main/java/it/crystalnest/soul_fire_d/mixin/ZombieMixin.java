@@ -24,7 +24,7 @@ public abstract class ZombieMixin implements FireTyped {
    * @param original original {@link Operation} being wrapped.
    */
   @WrapOperation(method = "doHurtTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;igniteForSeconds(F)V"))
-  private void onDoHurtTarget(Entity instance, float seconds, Operation<Void> original) {
+  private void wrapIgniteForSeconds(Entity instance, float seconds, Operation<Void> original) {
     FireManager.setOnFire(instance, seconds, getFireType(), original::call);
   }
 }

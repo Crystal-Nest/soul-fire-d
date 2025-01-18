@@ -34,7 +34,7 @@ public abstract class EntityRenderDispatcherMixin {
    * @return {@link TextureAtlasSprite} to assign.
    */
   @WrapOperation(method = "renderFlame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resources/model/Material;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", ordinal = 0))
-  private TextureAtlasSprite onRenderFlameAtSprite0(Material originalMaterial, Operation<TextureAtlasSprite> original, PoseStack poseStack, MultiBufferSource bufferSource, EntityRenderState renderState, Quaternionf quaternion) {
+  private TextureAtlasSprite wrapSprite0(Material originalMaterial, Operation<TextureAtlasSprite> original, PoseStack poseStack, MultiBufferSource bufferSource, EntityRenderState renderState, Quaternionf quaternion) {
     ResourceLocation fireType = ((FireTyped) renderState).getFireType();
     if (FireManager.isRegisteredType(fireType)) {
       return FireClientManager.getSprite0(fireType);
@@ -55,7 +55,7 @@ public abstract class EntityRenderDispatcherMixin {
    * @return {@link TextureAtlasSprite} to assign.
    */
   @WrapOperation(method = "renderFlame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resources/model/Material;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", ordinal = 1))
-  private TextureAtlasSprite onRenderFlameAtSprite1(Material originalMaterial, Operation<TextureAtlasSprite> original, PoseStack poseStack, MultiBufferSource bufferSource, EntityRenderState renderState, Quaternionf quaternion) {
+  private TextureAtlasSprite wrapSprite1(Material originalMaterial, Operation<TextureAtlasSprite> original, PoseStack poseStack, MultiBufferSource bufferSource, EntityRenderState renderState, Quaternionf quaternion) {
     ResourceLocation fireType = ((FireTyped) renderState).getFireType();
     if (FireManager.isRegisteredType(fireType)) {
       return FireClientManager.getSprite1(fireType);

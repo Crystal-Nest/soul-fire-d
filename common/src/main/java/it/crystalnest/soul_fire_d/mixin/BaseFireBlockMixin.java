@@ -51,7 +51,7 @@ public abstract class BaseFireBlockMixin implements FireTypeChanger {
    * @param pos position.
    */
   @ModifyReturnValue(method = "getState", at = @At(value = "RETURN"))
-  private static BlockState onGetState(BlockState original, BlockGetter level, BlockPos pos) {
+  private static BlockState modifyGetState(BlockState original, BlockGetter level, BlockPos pos) {
     return FireManager.getComponentList(Fire.Component.SOURCE_BLOCK).stream().filter(source -> canSurvive(source, level.getBlockState(pos.below()))).findFirst().map(Block::defaultBlockState).orElse(original);
   }
 
@@ -64,7 +64,7 @@ public abstract class BaseFireBlockMixin implements FireTypeChanger {
    * @param damage original damage (normal fire).
    */
   @WrapOperation(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)V"))
-  private void redirectHurt(Entity instance, DamageSource damageSource, float damage, Operation<Void> original) {
+  private void wrapHurt(Entity instance, DamageSource damageSource, float damage, Operation<Void> original) {
     FireManager.affect(instance, getFireType(), Fire::getInFire, (TriFunction<Entity, DamageSource, Float, Void>) original::call);
   }
 
