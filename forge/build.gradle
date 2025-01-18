@@ -90,6 +90,11 @@ tasks.withType(Javadoc).configureEach {
 tasks.named("sourcesJar", Jar) {
   from(project(":common").sourceSets.main.allSource)
 }
+tasks.named("jarJar", JarJar).configure {
+  archiveClassifier = ""
+  finalizedBy("configureReobfTaskForReobfJarJar")
+  finalizedBy("reobfJarJar")
+}
 
 processResources {
   from project(":common").sourceSets.main.resources
@@ -99,9 +104,8 @@ jar.finalizedBy("configureReobfTaskForReobfJar")
 jar.finalizedBy("reobfJar")
 jar.archiveClassifier = "no-embeds"
 
-tasks.named('jarJar', JarJar).configure {
-  archiveClassifier = ""
-}
+//project.tasks.jarJar.finalizedBy("configureReobfTaskForReobfJarJar")
+//project.tasks.jarJar.finalizedBy("reobfJarJar")
 
 // Task seems bugged, breaks build because of mod dependencies in the Common project, with no apparent workaround.
 tasks.named("compileTestJava").get().setEnabled(false)
