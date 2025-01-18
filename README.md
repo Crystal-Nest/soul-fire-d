@@ -14,7 +14,7 @@
 [![Discord](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/discord/discord32.png)](https://discord.gg/BP6EdBfAmt)
 [![Kofi](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/kofi/kofi32.png)](https://ko-fi.com/crystalspider)
 [![Patreon](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/patreon/patreon32.png)](https://www.patreon.com/crystalspider)  
-Want to chat and ask questions? Join our Discord!  
+Want to chat, ask questions, and win prizes? Join our Discord!  
 Stay up to date and support us on Kofi!  
 Become a lore-rich spider on Patreon to get extra content, previews, early access, and more!
 
@@ -62,6 +62,7 @@ A list of mods adding full compatibility with Soul Fire'd by integrating Soul Fi
 | [Torch hit!](https://modrinth.com/mod/torch-hit)                                                 |  All   |
 | [Alex's Mobs Interaction](https://modrinth.com/mod/alexs-mobs-interaction)                       |  All   |
 | [Amendments](https://modrinth.com/mod/amendments)                                                |  All   |
+| [Infernal Expansion](https://modrinth.com/mod/infernal-expansion)                                |  All   |
 
 If you want your mod to appear in this list, open an issue [here](https://github.com/Crystal-Nest/soul-fire-d/issues/new?assignees=Crystal-Spider&labels=question%2Cmedium+priority&projects=&template=information_request.yml) and provide a link to your mod!
 
