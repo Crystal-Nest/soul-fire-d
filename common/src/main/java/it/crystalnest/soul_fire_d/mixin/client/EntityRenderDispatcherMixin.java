@@ -52,7 +52,7 @@ public abstract class EntityRenderDispatcherMixin {
    * @param renderState {@link EntityRenderState} of the entity that's burning.
    * @return {@link TextureAtlasSprite} to assign.
    */
-  @WrapOperation(method = "renderFlame", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/resources/model/Material;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", ordinal = 1))
+  @WrapOperation(method = "renderFlame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resources/model/Material;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", ordinal = 1))
   private TextureAtlasSprite onRenderFlameAtSprite1(Material originalMaterial, Operation<TextureAtlasSprite> original, PoseStack poseStack, MultiBufferSource bufferSource, EntityRenderState renderState, Quaternionf matrix) {
     ResourceLocation fireType = ((FireTyped) renderState).getFireType();
     if (FireManager.isRegisteredType(fireType)) {

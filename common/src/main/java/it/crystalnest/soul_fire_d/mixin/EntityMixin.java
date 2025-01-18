@@ -2,6 +2,7 @@ package it.crystalnest.soul_fire_d.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import it.crystalnest.soul_fire_d.QuadriFunction;
 import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTypeSynched;
@@ -93,7 +94,7 @@ public abstract class EntityMixin implements FireTypeSynched {
    */
   @WrapOperation(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
   private boolean redirectHurtServer(Entity instance, ServerLevel level, DamageSource damageSource, float damage, Operation<Boolean> original) {
-    return FireManager.affect(instance, ((FireTyped) instance).getFireType(), Fire::getOnFire, original::call);
+    return FireManager.affect(instance, ((FireTyped) instance).getFireType(), Fire::getOnFire, (QuadriFunction<Entity, ServerLevel, DamageSource, Float, Boolean>) original::call);
   }
 
   /**

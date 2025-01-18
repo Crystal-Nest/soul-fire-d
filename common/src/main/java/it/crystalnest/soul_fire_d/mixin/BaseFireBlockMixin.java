@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.commons.lang3.function.TriFunction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -64,7 +65,7 @@ public abstract class BaseFireBlockMixin implements FireTypeChanger {
    */
   @WrapOperation(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)V"))
   private void redirectHurt(Entity instance, DamageSource damageSource, float damage, Operation<Void> original) {
-    FireManager.affect(instance, getFireType(), Fire::getInFire, original::call, true);
+    FireManager.affect(instance, getFireType(), Fire::getInFire, (TriFunction<Entity, DamageSource, Float, Void>) original::call);
   }
 
   /**
