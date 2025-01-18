@@ -1,5 +1,7 @@
 package it.crystalnest.soul_fire_d.mixin.client;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.client.FireClientManager;
@@ -12,7 +14,6 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import java.util.Objects;
 
@@ -25,17 +26,16 @@ public abstract class ScreenEffectRendererMixin {
    * Modifies the assignment value returned by {@link Material#sprite()} in the method {@link ScreenEffectRenderer#renderFire(PoseStack, MultiBufferSource)}.<br>
    * Assigns the correct sprite for the Fire Type the player is burning from.
    *
-   * @param value original sprite returned by the modified method.
-   * @param poseStack matrices.
-   * @param source buffer source.
+   * @param originalMaterial material of the original sprite returned by the modified method.
+   * @param original the operation that gets the original sprite returned by the modified method.
    * @return {@link TextureAtlasSprite} to assign.
    */
-  @ModifyVariable(method = "renderFire", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/resources/model/Material;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;"))
-  private static TextureAtlasSprite onRenderFire(TextureAtlasSprite value, PoseStack poseStack, MultiBufferSource source) {
+  @WrapOperation(method = "renderFire", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resources/model/Material;sprite()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;"))
+  private static TextureAtlasSprite onRenderFire(Material originalMaterial, Operation<TextureAtlasSprite> original) {
     ResourceLocation fireType = ((FireTyped) Objects.requireNonNull(Minecraft.getInstance().player)).getFireType();
     if (FireManager.isRegisteredType(fireType)) {
       return FireClientManager.getSprite1(fireType);
     }
-    return value;
+    return original.call(originalMaterial);
   }
 }

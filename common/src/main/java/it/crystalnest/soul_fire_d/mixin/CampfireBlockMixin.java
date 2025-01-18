@@ -44,10 +44,9 @@ public abstract class CampfireBlockMixin implements FireTypeChanger {
    * @param instance owner of the redirected method.
    * @param damageSource original {@link DamageSource} (normal fire).
    * @param damage original damage (normal fire).
-   * @return the result of calling the redirected method.
    */
   @WrapOperation(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)V"))
-  private void redirectHurt(Entity instance, DamageSource damageSource, float damage, Operation<Boolean> original) {
-    FireManager.affect(instance, getFireType(), Fire::getOnCampfire);
+  private void redirectHurt(Entity instance, DamageSource damageSource, float damage, Operation<Void> original) {
+    FireManager.affect(instance, getFireType(), Fire::getOnCampfire, original::call, true);
   }
 }
