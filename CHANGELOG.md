@@ -11,7 +11,12 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 ## [v5.1.3] - 2025/02/02
 
-- Ported to 1.21.4.
+- Nothing new.
+
+## [v5.1.4] - 2025/02/08
+
+- 1.21.4 only.
+- Fix [#65](https://github.com/Crystal-Nest/soul-fire-d/issues/65), NeoForge crash due to change in the resource reload listener system.
 
 ## [v5.1.3] - 2025/01/18
 
