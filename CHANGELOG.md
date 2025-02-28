@@ -9,6 +9,11 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 - Nothing new.
 
+## [v5.1.6] - 2025/02/28
+
+- For 1.21 and above.
+- Improve russian localization.
+
 ## [v5.1.5] - 2025/02/28
 
 - For 1.21 and above.
@@ -534,6 +539,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[v5.1.6]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.6
 [v5.1.5]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.5
 [v5.1.4]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.4
 [v5.1.3]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.3
