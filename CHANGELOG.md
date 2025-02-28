@@ -9,6 +9,16 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 - Nothing new.
 
+## [v5.1.5] - 2025/02/28
+
+- For 1.21 and above.
+- Add Korean localization.
+
+## [v4.0.11] - 2025/02/28
+
+- For 1.20.4 and below.
+- Add Korean localization.
+
 ## [v5.1.4] - 2025/02/08
 
 - 1.21.4 only.
@@ -524,6 +534,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[v5.1.5]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.5
 [v5.1.4]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.4
 [v5.1.3]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.3
 [v5.1.2]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.2
@@ -537,6 +548,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 [v5.0.1]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.0.1
 [v5.0.0]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.0.0
 
+[v4.0.11]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.11
 [v4.0.10]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.10
 [v4.0.9]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.9
 [v4.0.8]: https://github.com/crystal-nest/soul-fire-d/releases?q=4.0.8
