@@ -1,0 +1,12 @@
+{
+  "enchantment.minecraft.soul_fire_aspect": "영혼 발화",
+  "enchantment.minecraft.soul_flame": "영혼 화염",
+  "enchantment.minecraft.soul_fire_aspect.desc": "몹을 공격하면 추가적인 영혼 불 피해를 유발시킵니다.",
+  "enchantment.minecraft.soul_flame.desc": "이 활로 쏜 화살이 추가적인 영혼 불 피해를 유발시킵니다.",
+  "datapack.soul_fire_d.enchantments": "영혼 불 인챈트",
+  "datapack.soul_fire_d.enchantments.description": "당신의 적들을 영혼 발화와 영혼 화염으로 태워버리세요!",
+  "soul_fire_d:fire_source_tags": "영혼 불",
+  "soul_fire_d_dynamic_fire_source_tags": "불의 근원을 올바른 태그로 표시합니다.",
+  "soul_fire_d:campfire_tags": "영혼 모닥불",
+  "soul_fire_d_dynamic_campfire_tags": "모닥불을 올바른 태그로 표시합니다."
+}
