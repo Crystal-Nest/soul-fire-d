@@ -787,7 +787,7 @@ public final class FireManager {
    * @return the fire type read from the given {@link CompoundTag}.
    */
   public static ResourceLocation readTag(CompoundTag tag) {
-    return ensure(ResourceLocation.tryParse(tag.getString(FIRE_TYPE_TAG)));
+    return ensure(ResourceLocation.tryParse(tag.getStringOr(FIRE_TYPE_TAG, "")));
   }
 
   /**

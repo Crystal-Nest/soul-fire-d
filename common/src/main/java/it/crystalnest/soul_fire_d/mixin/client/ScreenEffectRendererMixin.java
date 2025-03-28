@@ -7,6 +7,7 @@ import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.client.FireClientManager;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
@@ -22,7 +23,7 @@ import java.util.Objects;
 @Mixin(ScreenEffectRenderer.class)
 public abstract class ScreenEffectRendererMixin {
   /**
-   * Wraps the call to {@link Material#sprite()} in the method {@link ScreenEffectRenderer#renderFire(Minecraft, PoseStack)}.<br>
+   * Wraps the call to {@link Material#sprite()} in the method {@link ScreenEffectRenderer#renderFire(PoseStack, MultiBufferSource)}.<br>
    * Assigns the correct sprite for the Fire Type the player is burning from.
    *
    * @param originalMaterial material of the original sprite returned by the modified method.

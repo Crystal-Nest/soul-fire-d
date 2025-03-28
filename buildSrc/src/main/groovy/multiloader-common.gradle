@@ -169,7 +169,7 @@ publishing {
         licenses {
           license {
             name = license
-            url = "https://spdx.org/licenses/${license}.html"
+            url = "https://github.com/Crystal-Nest/.github/blob/main/LICENSE"
           }
         }
         developers {

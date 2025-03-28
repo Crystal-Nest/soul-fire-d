@@ -3,7 +3,9 @@
   "minVersion": "0.8",
   "package": "${group}.${mod_id}.mixin",
   "compatibilityLevel": "JAVA_${java_version}",
-  "mixins": [],
+  "mixins": [
+    "BaseFireBlockMixin"
+  ],
   "client": [],
   "server": [],
   "injectors": {

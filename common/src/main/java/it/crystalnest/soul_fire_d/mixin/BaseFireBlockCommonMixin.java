@@ -1,22 +1,16 @@
 package it.crystalnest.soul_fire_d.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.block.CustomFireBlock;
 import it.crystalnest.soul_fire_d.api.type.FireTypeChanger;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.apache.commons.lang3.function.TriFunction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,22 +19,12 @@ import org.spongepowered.asm.mixin.injection.At;
  * Injects into {@link BaseFireBlock} to alter Fire behavior for consistency.
  */
 @Mixin(BaseFireBlock.class)
-public abstract class BaseFireBlockMixin implements FireTypeChanger {
+public abstract class BaseFireBlockCommonMixin implements FireTypeChanger {
   /**
    * Fire Type.
    */
   @Unique
   private ResourceLocation fireType;
-
-  @Override
-  public ResourceLocation getFireType() {
-    return fireType;
-  }
-
-  @Override
-  public void setFireType(ResourceLocation fireType) {
-    this.fireType = fireType;
-  }
 
   /**
    * Modifies the return value of {@link BaseFireBlock#getState(BlockGetter, BlockPos)}.<br>
@@ -56,19 +40,6 @@ public abstract class BaseFireBlockMixin implements FireTypeChanger {
   }
 
   /**
-   * Wraps the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link BaseFireBlock#entityInside(BlockState, Level, BlockPos, Entity)}.<br>
-   * Hurts the entity with the correct fire damage and {@link DamageSource}.
-   *
-   * @param instance {@link Entity} invoking (owning) the redirected method.
-   * @param damageSource original {@link DamageSource} (normal fire).
-   * @param damage original damage (normal fire).
-   */
-  @WrapOperation(method = "entityInside", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)V"))
-  private void wrapHurt(Entity instance, DamageSource damageSource, float damage, Operation<Void> original) {
-    FireManager.affect(instance, getFireType(), Fire::getInFire, (TriFunction<Entity, DamageSource, Float, Void>) original::call);
-  }
-
-  /**
    * Checks whether the given {@link Block} can burn on the given base.
    *
    * @param source fire source block.
@@ -78,5 +49,15 @@ public abstract class BaseFireBlockMixin implements FireTypeChanger {
   @Unique
   private static boolean canSurvive(Block source, BlockState base) {
     return source instanceof CustomFireBlock customFireBlock && customFireBlock.canSurvive(base);
+  }
+
+  @Override
+  public ResourceLocation getFireType() {
+    return fireType;
+  }
+
+  @Override
+  public void setFireType(ResourceLocation fireType) {
+    this.fireType = fireType;
   }
 }

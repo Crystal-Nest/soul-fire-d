@@ -98,14 +98,14 @@ public abstract class EntityMixin implements FireTypeSynched {
   }
 
   /**
-   * Wraps the call to {@link Entity#igniteForSeconds(float)} inside the method {@link Entity#lavaHurt()}.<br>
+   * Wraps the call to {@link Entity#igniteForSeconds(float)} inside the method {@link Entity#lavaIgnite()}.<br>
    * Sets the base Fire Type.
    *
    * @param instance owner of the redirected method.
    * @param seconds seconds to set the entity on fire for.
    * @param original original {@link Operation} being wrapped.
    */
-  @WrapOperation(method = "lavaHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;igniteForSeconds(F)V"))
+  @WrapOperation(method = "lavaIgnite", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;igniteForSeconds(F)V"))
   private void wrapIgniteForSeconds(Entity instance, float seconds, Operation<Void> original) {
     FireManager.setOnFire(instance, seconds, FireManager.DEFAULT_FIRE_TYPE, original::call);
   }

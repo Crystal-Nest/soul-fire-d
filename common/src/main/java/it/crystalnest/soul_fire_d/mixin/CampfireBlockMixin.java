@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,7 +40,7 @@ public abstract class CampfireBlockMixin implements FireTypeChanger {
   }
 
   /**
-   * Wraps the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link CampfireBlock#entityInside(BlockState, Level, BlockPos, Entity)}.<br>
+   * Wraps the call to {@link Entity#hurt(DamageSource, float)} inside the method {@link CampfireBlock#entityInside(BlockState, Level, BlockPos, Entity, InsideBlockEffectApplier)}.<br>
    * Hurts the entity with the correct fire damage and {@link DamageSource}.
    *
    * @param instance owner of the redirected method.
