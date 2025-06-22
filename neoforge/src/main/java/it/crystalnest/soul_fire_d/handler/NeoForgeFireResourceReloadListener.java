@@ -10,7 +10,7 @@ import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 /**
  * Handles datapack reload events.
  */
-@EventBusSubscriber(modid = Constants.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = Constants.MOD_ID)
 public final class NeoForgeFireResourceReloadListener extends FireResourceReloadListener {
   /**
    * Handles the {@link AddServerReloadListenersEvent}.

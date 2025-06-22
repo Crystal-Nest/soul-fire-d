@@ -7,7 +7,6 @@ import it.crystalnest.soul_fire_d.api.Fire;
 import it.crystalnest.soul_fire_d.api.FireManager;
 import it.crystalnest.soul_fire_d.api.type.FireTypeSynched;
 import it.crystalnest.soul_fire_d.api.type.FireTyped;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -16,6 +15,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,7 +24,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Injects into {@link Entity} to alter Fire behavior for consistency.
@@ -125,26 +125,26 @@ public abstract class EntityMixin implements FireTypeSynched {
   }
 
   /**
-   * Injects in the method {@link Entity#saveWithoutId(CompoundTag)} before the invocation of {@link Entity#addAdditionalSaveData(CompoundTag)}.<br>
-   * If valid, saves the current Fire Type in the given {@link CompoundTag}.
+   * Injects in the method {@link Entity#saveWithoutId(ValueOutput)} before the invocation of {@link Entity#addAdditionalSaveData(ValueOutput)}.<br>
+   * If valid, saves the current Fire Type in the given {@link ValueOutput}.
    *
-   * @param tag data tag.
-   * @param cir {@link CallbackInfoReturnable}.
+   * @param output {@link ValueOutput}.
+   * @param ci {@link CallbackInfo}.
    */
-  @Inject(method = "saveWithoutId", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V"))
-  private void onSaveWithoutId(CompoundTag tag, CallbackInfoReturnable<CompoundTag> cir) {
-    FireManager.writeTag(tag, getFireType());
+  @Inject(method = "saveWithoutId", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;addAdditionalSaveData(Lnet/minecraft/world/level/storage/ValueOutput;)V"))
+  private void onSaveWithoutId(ValueOutput output, CallbackInfo ci) {
+    FireManager.writeTag(output, getFireType());
   }
 
   /**
-   * Injects in the method {@link Entity#load(CompoundTag)} before the invocation of {@link Entity#readAdditionalSaveData(CompoundTag)}.<br>
-   * Loads the Fire Type from the given {@link CompoundTag}.
+   * Injects in the method {@link Entity#load(ValueInput)} before the invocation of {@link Entity#readAdditionalSaveData(ValueInput)}.<br>
+   * Loads the Fire Type from the given {@link ValueInput}.
    *
-   * @param tag data tag.
+   * @param input {@link ValueInput}.
    * @param ci {@link CallbackInfo}.
    */
-  @Inject(method = "load", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V"))
-  private void onLoad(CompoundTag tag, CallbackInfo ci) {
-    setFireType(FireManager.readTag(tag));
+  @Inject(method = "load", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;readAdditionalSaveData(Lnet/minecraft/world/level/storage/ValueInput;)V"))
+  private void onLoad(ValueInput input, CallbackInfo ci) {
+    setFireType(FireManager.readTag(input));
   }
 }

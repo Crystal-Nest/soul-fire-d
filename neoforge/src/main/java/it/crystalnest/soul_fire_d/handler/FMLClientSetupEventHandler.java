@@ -11,8 +11,8 @@ import it.crystalnest.soul_fire_d.api.block.CustomWallTorchBlock;
 import it.crystalnest.soul_fire_d.api.client.FireClientManager;
 import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.CampfireRenderer;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -23,7 +23,7 @@ import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 /**
  * Handles the registry events.
  */
-@EventBusSubscriber(value = Dist.CLIENT, modid = Constants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, modid = Constants.MOD_ID)
 public final class FMLClientSetupEventHandler {
   private FMLClientSetupEventHandler() {}
 
@@ -36,11 +36,11 @@ public final class FMLClientSetupEventHandler {
   @SuppressWarnings("deprecation")
   public static void handle(FMLClientSetupEvent event) {
     FireClientManager.registerFires(FireManager.getFires());
-    FireManager.getComponentList(Fire.Component.CAMPFIRE_BLOCK).stream().filter(CustomCampfireBlock.class::isInstance).forEach(campfire -> ItemBlockRenderTypes.setRenderLayer(campfire, RenderType.cutout()));
-    FireManager.getComponentList(Fire.Component.SOURCE_BLOCK).stream().filter(CustomFireBlock.class::isInstance).forEach(source -> ItemBlockRenderTypes.setRenderLayer(source, RenderType.cutout()));
-    FireManager.getComponentList(Fire.Component.LANTERN_BLOCK).stream().filter(CustomLanternBlock.class::isInstance).forEach(lantern -> ItemBlockRenderTypes.setRenderLayer(lantern, RenderType.cutout()));
-    FireManager.getComponentList(Fire.Component.TORCH_BLOCK).stream().filter(CustomTorchBlock.class::isInstance).forEach(torch -> ItemBlockRenderTypes.setRenderLayer(torch, RenderType.cutout()));
-    FireManager.getComponentList(Fire.Component.WALL_TORCH_BLOCK).stream().filter(CustomWallTorchBlock.class::isInstance).forEach(torch -> ItemBlockRenderTypes.setRenderLayer(torch, RenderType.cutout()));
+    FireManager.getComponentList(Fire.Component.CAMPFIRE_BLOCK).stream().filter(CustomCampfireBlock.class::isInstance).forEach(campfire -> ItemBlockRenderTypes.setRenderLayer(campfire, ChunkSectionLayer.CUTOUT));
+    FireManager.getComponentList(Fire.Component.SOURCE_BLOCK).stream().filter(CustomFireBlock.class::isInstance).forEach(source -> ItemBlockRenderTypes.setRenderLayer(source, ChunkSectionLayer.CUTOUT));
+    FireManager.getComponentList(Fire.Component.LANTERN_BLOCK).stream().filter(CustomLanternBlock.class::isInstance).forEach(lantern -> ItemBlockRenderTypes.setRenderLayer(lantern, ChunkSectionLayer.CUTOUT));
+    FireManager.getComponentList(Fire.Component.TORCH_BLOCK).stream().filter(CustomTorchBlock.class::isInstance).forEach(torch -> ItemBlockRenderTypes.setRenderLayer(torch, ChunkSectionLayer.CUTOUT));
+    FireManager.getComponentList(Fire.Component.WALL_TORCH_BLOCK).stream().filter(CustomWallTorchBlock.class::isInstance).forEach(torch -> ItemBlockRenderTypes.setRenderLayer(torch, ChunkSectionLayer.CUTOUT));
   }
 
   /**

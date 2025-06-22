@@ -23,7 +23,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -38,6 +37,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.apache.commons.lang3.function.TriFunction;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.util.Strings;
@@ -770,24 +771,24 @@ public final class FireManager {
   }
 
   /**
-   * Writes to the given {@link CompoundTag} the given {@code fireType}.<br>
+   * Writes to the given {@link ValueOutput} the given {@code fireType}.<br>
    * If the given {@code fireType} is not registered, {@link #DEFAULT_FIRE_TYPE} will be used instead.
    *
-   * @param tag {@link CompoundTag} to write to.
+   * @param output {@link ValueOutput} to write to.
    * @param fireType fire type to save.
    */
-  public static void writeTag(CompoundTag tag, @Nullable ResourceLocation fireType) {
-    tag.putString(FIRE_TYPE_TAG, ensure(fireType).toString());
+  public static void writeTag(ValueOutput output, @Nullable ResourceLocation fireType) {
+    output.putString(FIRE_TYPE_TAG, ensure(fireType).toString());
   }
 
   /**
-   * Reads the fire type from the given {@link CompoundTag}.
+   * Reads the fire type from the given {@link ValueInput}.
    *
-   * @param tag {@link CompoundTag} to read from.
-   * @return the fire type read from the given {@link CompoundTag}.
+   * @param input {@link ValueInput} to read from.
+   * @return the fire type read from the given {@link ValueInput}.
    */
-  public static ResourceLocation readTag(CompoundTag tag) {
-    return ensure(ResourceLocation.tryParse(tag.getStringOr(FIRE_TYPE_TAG, "")));
+  public static ResourceLocation readTag(ValueInput input) {
+    return ensure(ResourceLocation.tryParse(input.getStringOr(FIRE_TYPE_TAG, "")));
   }
 
   /**
