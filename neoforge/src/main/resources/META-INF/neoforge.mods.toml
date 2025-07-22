@@ -25,7 +25,7 @@ issueTrackerURL="https://github.com/${github_user}/${mod_id_kebab}/issues" #opti
 [[dependencies.${mod_id}]]
   modId = "minecraft"
   type = "required"
-  versionRange = "[${minecraft_version},)"
+  versionRange = "[1.21.6,)"
   ordering = "NONE"
   side = "BOTH"
 [[dependencies.${mod_id}]]
