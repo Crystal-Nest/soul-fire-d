@@ -60,6 +60,7 @@ Mods fully integrated with Soul Fire'd:
 | [Amendments](https://modrinth.com/mod/amendments)                                                |  All   |
 | [Infernal Expansion](https://modrinth.com/mod/infernal-expansion)                                |  All   |
 | [The Endergetic Expansion](https://modrinth.com/mod/endergetic)                                  |  All   |
+| [Supplementaries](https://modrinth.com/mod/supplementaries)                                      |  All   |
 
 Want your mod listed here? Submit an issue [here](https://github.com/Crystal-Nest/soul-fire-d/issues/new?assignees=Crystal-Spider&labels=question%2Cmedium+priority&projects=&template=information_request.yml) and provide a link to your mod!
 
