@@ -1,0 +1,13 @@
+{
+  "enchantment.minecraft.soul_fire_aspect": "Сила вогню душ",
+  "enchantment.minecraft.soul_flame": "Полум'я душ",
+  "enchantment.minecraft.soul_fire_aspect.desc": "Завдає додаткову шкоду від вогню душ при ударі моба.",
+  "enchantment.minecraft.soul_flame.desc": "Стріли, випущені з лука, завдають додаткової шкоди вогню душ.",
+  "datapack.soul_fire_d.enchantments": "Зачарування горіння душ",
+  "datapack.soul_fire_d.enchantments.description": "Запаліть ворогів за допомогою «Сила вогню душ» та «Полум'я душ»!",
+  "soul_fire_d:fire_source_tags": "Джерела горіння душ",
+  "soul_fire_d_dynamic_fire_source_tags": "Позначає джерела вогню правильним теґом",
+  "soul_fire_d:campfire_tags": "Багаття горіння душ",
+  "soul_fire_d_dynamic_campfire_tags": "Позначає багаття правильним теґом",
+  "modmenu.descriptionTranslation.soul_fire_d": "Нехай палає вогонь душ!"
+}
