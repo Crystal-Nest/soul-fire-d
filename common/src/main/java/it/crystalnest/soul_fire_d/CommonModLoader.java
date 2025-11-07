@@ -1,9 +1,7 @@
 package it.crystalnest.soul_fire_d;
 
 import it.crystalnest.cobweb.api.pack.fixed.StaticDataPack;
-import it.crystalnest.soul_fire_d.api.FireManager;
-import it.crystalnest.soul_fire_d.api.enchantment.EnchantmentRegistry;
-import it.crystalnest.soul_fire_d.platform.Services;
+import it.crystalnest.soul_fire_d.fire.FireRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.repository.Pack;
 import org.jetbrains.annotations.ApiStatus;
@@ -19,9 +17,7 @@ public final class CommonModLoader {
    * Initialize common operations across loaders.
    */
   public static void init() {
-    FireManager.registerFire(FireManager.fireBuilder(FireManager.SOUL_FIRE_TYPE).setLight(10).setDamage(2).build());
-    Services.NETWORK.register();
-    EnchantmentRegistry.register();
+    FireRegistry.register();
     new StaticDataPack(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "enchantments"), Pack.Position.TOP).register();
   }
 }

@@ -4,9 +4,5 @@
   "enchantment.minecraft.soul_fire_aspect.desc": "Поджигает цель огнем душ.",
   "enchantment.minecraft.soul_flame.desc": "Стрелы выпущенные из лука, наносят дополнительный урон огнем душ.",
   "datapack.soul_fire_d.enchantments": "Зачарования из Soul Fire'd",
-  "datapack.soul_fire_d.enchantments.description": "Сжигайте своих врагов «Заговором огня душ» и «Воспламенением душ»!",
-  "soul_fire_d:fire_source_tags": "Источники огня Soul Fire'd",
-  "soul_fire_d_dynamic_fire_source_tags": "Помечает источники огня правильным тегом",
-  "soul_fire_d:campfire_tags": "Костры Soul Fire'd",
-  "soul_fire_d_dynamic_campfire_tags": "Помечает костры правильным тегом"
+  "datapack.soul_fire_d.enchantments.description": "Сжигайте своих врагов «Заговором огня душ» и «Воспламенением душ»!"
 }

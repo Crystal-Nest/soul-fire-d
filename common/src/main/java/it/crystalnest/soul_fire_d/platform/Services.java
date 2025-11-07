@@ -1,7 +1,6 @@
 package it.crystalnest.soul_fire_d.platform;
 
 import it.crystalnest.soul_fire_d.Constants;
-import it.crystalnest.soul_fire_d.platform.services.NetworkHelper;
 import it.crystalnest.soul_fire_d.platform.services.PlatformHelper;
 
 import java.util.ServiceLoader;
@@ -15,11 +14,6 @@ public final class Services {
    * Provides information about what platform the mod is running on.
    */
   public static final PlatformHelper PLATFORM = load(PlatformHelper.class);
-
-  /**
-   * Provides networking handling.
-   */
-  public static final NetworkHelper NETWORK = load(NetworkHelper.class);
 
   private Services() {}
 

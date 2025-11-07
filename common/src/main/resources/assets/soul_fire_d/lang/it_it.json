@@ -4,9 +4,5 @@
   "enchantment.minecraft.soul_fire_aspect.desc": "Provoca un danno da fuoco delle anime aggiuntivo quando l'arma viene usata per attaccare una creatura.",
   "enchantment.minecraft.soul_flame.desc": "Le frecce scagliate dall'arco provocano un danno da fuoco delle anime aggiuntivo.",
   "datapack.soul_fire_d.enchantments": "Incantesimi di Soul Fire'd",
-  "datapack.soul_fire_d.enchantments.description": "Ardi i tuoi nemici con Aspetto di fuoco delle anime e Fiamma delle anime!",
-  "soul_fire_d:fire_source_tags": "Fonti di fuoco di Soul Fire'd",
-  "soul_fire_d_dynamic_fire_source_tags": "Assegna alle fonti di fuoco il tag corretto",
-  "soul_fire_d:campfire_tags": "Fuochi da campo di Soul Fire'd",
-  "soul_fire_d_dynamic_campfire_tags": "Assegna ai fuochi da campo il tag corretto"
+  "datapack.soul_fire_d.enchantments.description": "Ardi i tuoi nemici con Aspetto di fuoco delle anime e Fiamma delle anime!"
 }

@@ -7,7 +7,7 @@
     "minecraft:projectile_spawned": [
       {
         "effect": {
-          "type": "soul_fire_d:ignite",
+          "type": "prometheus:ignite",
           "duration": 100.0,
           "fire_type": "soul"
         }
@@ -26,7 +26,7 @@
   "slots": [
     "mainhand"
   ],
-  "exclusive_set": "#soul_fire_d:exclusive_set/flame",
+  "exclusive_set": "#prometheus:exclusive_set/flame",
   "supported_items": "#minecraft:enchantable/bow",
   "weight": 2
 }

@@ -53,6 +53,7 @@ repositories {
 if (name != "fabric") {
   dependencies {
     implementation "it.crystalnest:cobweb-$name:$minecraft_version-$cobweb_version"
+    implementation "it.crystalnest:prometheus-$name:$minecraft_version-$prometheus_version"
   }
 }
 
@@ -114,6 +115,7 @@ processResources {
     "neoforge_version"             : neoforge_version,
     "neoforge_loader_version_range": neoforge_loader_version_range,
     "cobweb_version"               : cobweb_version,
+    "prometheus_version"           : prometheus_version,
   ]
   filesMatching(["pack.mcmeta", "fabric.mod.json", "META-INF/neoforge.mods.toml", "*.mixins.json"]) {
     expand expandProps
@@ -212,6 +214,7 @@ publisher {
   }
   modrinthDepends {
     required "cobweb"
+    required "prometheus-api"
     switch (loader) {
       case "Fabric":
         required "fabric-api"
@@ -222,6 +225,7 @@ publisher {
   }
   curseDepends {
     required "cobweb"
+    required "prometheus"
     switch (loader) {
       case "Fabric":
         required "fabric-api"

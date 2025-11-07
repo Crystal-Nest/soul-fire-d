@@ -4,18 +4,8 @@
   "package": "${group}.${mod_id}.mixin",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_${java_version}",
-  "mixins": [
-    "AbstractArrowMixin",
-    "BaseFireBlockMixin",
-    "CampfireBlockMixin",
-    "EntityMixin",
-    "SynchedEntityDataBuilderMixin",
-    "ZombieMixin"
-  ],
-  "client": [
-    "client.EntityRenderDispatcherMixin",
-    "client.ScreenEffectRendererMixin"
-  ],
+  "mixins": [],
+  "client": [],
   "server": [],
   "injectors": {
     "defaultRequire": 1

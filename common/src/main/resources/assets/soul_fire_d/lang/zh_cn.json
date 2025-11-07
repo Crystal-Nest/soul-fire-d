@@ -4,9 +4,5 @@
   "enchantment.minecraft.soul_fire_aspect.desc": "击中生物使之附着灵魂火，造成灵魂火焰伤害",
   "enchantment.minecraft.soul_flame.desc": "箭矢击中生物使之附着灵魂火，造成灵魂火焰伤害",
   "datapack.soul_fire_d.enchantments": "Soul Fire'd enchantments",
-  "datapack.soul_fire_d.enchantments.description": "Burn your enemies with 魂焰附加 and 灵魂火矢!",
-  "soul_fire_d:fire_source_tags": "Soul Fire'd fire sources",
-  "soul_fire_d_dynamic_fire_source_tags": "Marks fire sources with the correct tag",
-  "soul_fire_d:campfire_tags": "Soul Fire'd campfires",
-  "soul_fire_d_dynamic_campfire_tags": "Marks campfires with the correct tag"
+  "datapack.soul_fire_d.enchantments.description": "Burn your enemies with 魂焰附加 and 灵魂火矢!"
 }
