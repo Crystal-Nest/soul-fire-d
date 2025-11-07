@@ -8,7 +8,7 @@
       {
         "affected": "victim",
         "effect": {
-          "type": "soul_fire_d:ignite",
+          "type": "prometheus:ignite",
           "duration": {
             "type": "minecraft:linear",
             "base": 4.0,
@@ -39,7 +39,7 @@
   "slots": [
     "mainhand"
   ],
-  "exclusive_set": "#soul_fire_d:exclusive_set/fire_aspect",
+  "exclusive_set": "#prometheus:exclusive_set/fire_aspect",
   "supported_items": "#minecraft:enchantable/fire_aspect",
   "weight": 2
 }

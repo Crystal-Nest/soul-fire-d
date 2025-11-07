@@ -4,9 +4,5 @@
   "enchantment.minecraft.soul_fire_aspect.desc": "Causa daño de fuego de almas adicional cuando se usa para atacar a una criatura.",
   "enchantment.minecraft.soul_flame.desc": "Las flechas disparadas desde el arco causarán daño de fuego de almas adicional.",
   "datapack.soul_fire_d.enchantments": "Encantamientos de Soul Fire'd",
-  "datapack.soul_fire_d.enchantments.description": "¡Quema a tus enemigos con Aspecto ígneo de almas y Fuego de almas!",
-  "soul_fire_d:fire_source_tags": "Fuentes de fuego de Soul Fire'd",
-  "soul_fire_d_dynamic_fire_source_tags": "Asigna a las fuentes de fuego la etiqueta correcta",
-  "soul_fire_d:campfire_tags": "Campfires de Soul Fire'd",
-  "soul_fire_d_dynamic_campfire_tags": "Asigna a las hogueras la etiqueta correcta"
+  "datapack.soul_fire_d.enchantments.description": "¡Quema a tus enemigos con Aspecto ígneo de almas y Fuego de almas!"
 }

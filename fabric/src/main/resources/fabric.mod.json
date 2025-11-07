@@ -18,12 +18,8 @@
   "entrypoints": {
     "main": [
       "${group}.${mod_id}.ModLoader"
-    ],
-    "client": [
-      "${group}.${mod_id}.ClientModLoader"
     ]
   },
-  "accessWidener": "${mod_id}.accesswidener",
   "mixins": [
     "${mod_id}.mixins.json",
     "${mod_id}.fabric.mixins.json"
@@ -33,6 +29,7 @@
     "fabric-api": "*",
     "minecraft": "~${minecraft_version}",
     "java": ">=${java_version}",
-    "cobweb": "^${cobweb_version}"
+    "cobweb": "^${cobweb_version}",
+    "prometheus": "^${prometheus_version}"
   }
 }

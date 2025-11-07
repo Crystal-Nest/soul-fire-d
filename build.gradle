@@ -2,9 +2,9 @@ plugins {
   id "org.sonarqube" version "4.4.1.3373"
   id "com.hypherionmc.modutils.modpublisher" version "2.1.7" apply false
   // https://projects.neoforged.net/neoforged/moddevgradle
-  id "net.neoforged.moddev" version "2.0.95" apply false
+  id "net.neoforged.moddev" version "2.0.115" apply false
   // https://fabricmc.net/develop/
-  id "fabric-loom" version "1.10-SNAPSHOT" apply false
+  id "fabric-loom" version "1.11-SNAPSHOT" apply false
 }
 
 sonar {
