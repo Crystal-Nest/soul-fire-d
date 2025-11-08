@@ -20,7 +20,6 @@
       "${group}.${mod_id}.ModLoader"
     ]
   },
-  "accessWidener": "${mod_id}.accesswidener",
   "mixins": [
     "${mod_id}.mixins.json",
     "${mod_id}.fabric.mixins.json"
