@@ -49,7 +49,6 @@ Mods fully integrated with Soul Fire'd:
 |:-------------------------------------------------------------------------------------------------|:------:|
 | [Tetra](https://modrinth.com/mod/tetra) with [Tetracelium](https://modrinth.com/mod/tetracelium) |  All   |
 | [Decorative Blocks](https://modrinth.com/mod/decorative-blocks)                                  |  All   |
-| [Danger Close](https://modrinth.com/mod/danger-close)                                            |  All   |
 | [Alex's Mobs Interaction](https://modrinth.com/mod/alexs-mobs-interaction)                       |  All   |
 | [Amendments](https://modrinth.com/mod/amendments)                                                |  All   |
 | [Infernal Expansion](https://modrinth.com/mod/infernal-expansion)                                |  All   |
