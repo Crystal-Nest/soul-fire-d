@@ -549,6 +549,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[v6.0.0]: https://github.com/crystal-nest/soul-fire-d/releases?q=6.0.0
 [v5.1.6]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.6
 [v5.1.5]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.5
 [v5.1.4]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.4
