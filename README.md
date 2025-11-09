@@ -2,9 +2,9 @@
 
 ---
 
-![Minecraft](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/minecraft.svg)[![1.21.6](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-21-6.svg)](https://www.patreon.com/c/crystalspider/membership)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.21.5](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-21-5.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.21.5)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.21.4](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-21-4.svg "1.21.4")](https://modrinth.com/mod/soul-fire-d/versions?g=1.21.4)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.21.3](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-21-3.svg "1.21.3")](https://modrinth.com/mod/soul-fire-d/versions?g=1.21.3)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.21.1](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-21-1.svg "1.21.1")](https://modrinth.com/mod/soul-fire-d/versions?g=1.21.1)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.21](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-21.svg "1.21")](https://modrinth.com/mod/soul-fire-d/versions?g=1.21)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.20.4](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-20-4.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.20.4)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.20.2](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-20-2.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.20.2)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.20.1](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-20-1.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.20.1)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.19.4](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-19-4.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.19.4)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.19.2](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-19-2.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.19.2)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.18.2](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-18-2.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.18.2)
+![Minecraft](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/minecraft.svg)[![1.21.10](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-21-10.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.21.10 "1.21.10")![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.21.8](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-21-8.svg)](https://modrinth.com/mod/soul-fire-d/versions?g=1.21.8 "1.21.8")![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.21.7](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-21-7.svg "1.21.7")](https://modrinth.com/mod/soul-fire-d/versions?g=1.21.7)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.21.6](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-21-6.svg "1.21.6")](https://modrinth.com/mod/soul-fire-d/versions?g=1.21.6)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.21.1](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-21-1.svg "1.21.1")](https://modrinth.com/mod/soul-fire-d/versions?g=1.21.1)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![1.21](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/minecraft/1-21.svg "1.21")](https://modrinth.com/mod/soul-fire-d/versions?g=1.21)
 
-![Loader](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/loader/loader.svg)[![NeoForge](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/loader/neoforge.svg)](https://modrinth.com/mod/soul-fire-d/versions?l=neoforge)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![Forge](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/loader/forge.svg)](https://modrinth.com/mod/soul-fire-d/versions?l=forge)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![Fabric](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/loader/fabric.svg)](https://modrinth.com/mod/soul-fire-d/versions?l=fabric)
+![Loader](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/loader/loader.svg)[![NeoForge](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/loader/neoforge.svg)](https://modrinth.com/mod/soul-fire-d/versions?l=neoforge)![Separator](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/separator.svg)[![Fabric](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/loader/fabric.svg)](https://modrinth.com/mod/soul-fire-d/versions?l=fabric)
 
 ![Overlay](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/side/client-server.svg)
 
@@ -16,7 +16,7 @@
 
 Ever noticed how Soul Fire in Minecraft looks unique, but doesn't act differently from regular fire? **Soul Fire'd** fixes that, making Soul Fire behave exactly as you'd expect!
 
-This mod ensures that **Soul Fire has distinct behaviors**, including special damage effects, custom enchantments, and more. Additionally, it provides an **easy-to-use API** for modders who wish to introduce their own custom fire types, seamlessly integrating consistent behavior.
+This mod ensures that **Soul Fire has distinct behaviors**, including special damage effects, custom enchantments, and more.
 
 > ⚠️ **Important**: Soul Fire'd must be installed on **both client and server**, as it introduces substantial gameplay changes, not just visuals.
 
@@ -41,25 +41,18 @@ This mod ensures that **Soul Fire has distinct behaviors**, including special da
   Both these enchantments can be highly configured individually, enabling (default) or disabling them and more.  
   *Configuration is done via datapack since `1.21`*
 
-- 🛠️ **Comprehensive API for Custom Fires**
-  Modders and datapack creators can easily add their own custom fires (or implement another mod's fire), automatically ensuring **automatic consistent behavior** and custom enchantments.  
-  Check the *For developers* section below to learn more.
-
 ## 🤝 **Compatibilities**
 
 Mods fully integrated with Soul Fire'd:
 
 | Mod                                                                                              | Loader |
 |:-------------------------------------------------------------------------------------------------|:------:|
-| [Oh The Biomes You'll Go](https://modrinth.com/mod/biomesyougo)                                  |  All   |
 | [Tetra](https://modrinth.com/mod/tetra) with [Tetracelium](https://modrinth.com/mod/tetracelium) |  All   |
 | [Decorative Blocks](https://modrinth.com/mod/decorative-blocks)                                  |  All   |
 | [Danger Close](https://modrinth.com/mod/danger-close)                                            |  All   |
-| [Torch hit!](https://modrinth.com/mod/torch-hit)                                                 |  All   |
 | [Alex's Mobs Interaction](https://modrinth.com/mod/alexs-mobs-interaction)                       |  All   |
 | [Amendments](https://modrinth.com/mod/amendments)                                                |  All   |
 | [Infernal Expansion](https://modrinth.com/mod/infernal-expansion)                                |  All   |
-| [The Endergetic Expansion](https://modrinth.com/mod/endergetic)                                  |  All   |
 
 Want your mod listed here? Submit an issue [here](https://github.com/Crystal-Nest/soul-fire-d/issues/new?assignees=Crystal-Spider&labels=question%2Cmedium+priority&projects=&template=information_request.yml) and provide a link to your mod!
 
@@ -68,7 +61,6 @@ Want your mod listed here? Submit an issue [here](https://github.com/Crystal-Nes
 | Mod                                                                     |         Loader         |   Requirement    |
 |:------------------------------------------------------------------------|:----------------------:|:----------------:|
 | [Cobweb](https://modrinth.com/mod/cobweb)                               |          All           |     Required     |
-| [Forge Config API Port](https://modrinth.com/mod/forge-config-api-port) | Fabric; Forge ≥ 1.20.2 | Required  < 1.21 |
 
 ## 📜 **License and right of use**
 
@@ -77,10 +69,11 @@ This project is published under the [Crystal Nest Community License v1](https://
 
 ## 💻 **For developers**
 
+Since **v6.0.0**, the API has been moved to [Prometheus](https://modrinth.com/mod/prometheus).
 Learn how to integrate custom fire types and utilize the provided API through detailed documentation:
 
-- 📖 [API Wiki](https://github.com/crystal-nest/soul-fire-d/wiki)
-- 📘 [Datapack Integration Wiki](https://github.com/crystal-nest/soul-fire-d/wiki/Data-Driven-Fires)
+- 📖 [API Wiki](https://github.com/crystal-nest/prometheus/wiki)
+- 📘 [Datapack Integration Wiki](https://github.com/crystal-nest/prometheus/wiki/Data-Driven-Fires)
 
 ## ❤️ **Support us**
 
