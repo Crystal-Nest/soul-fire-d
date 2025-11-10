@@ -9,7 +9,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 - Nothing new.
 
-## [v6.0.0] - 2025/09/11
+## [v6.0.0] - 2025/11/09
 
 - Removed API and added dependency to Prometheus.
 - Port to 1.21.10.
