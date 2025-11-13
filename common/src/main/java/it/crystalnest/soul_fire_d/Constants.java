@@ -15,11 +15,6 @@ public final class Constants {
   public static final String MOD_ID = "soul_fire_d";
 
   /**
-   * Data Driven Fires id.
-   */
-  public static final String DDFIRES = "ddfires";
-
-  /**
    * Mod logger.
    */
   public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
