@@ -1,6 +1,9 @@
 package it.crystalnest.soul_fire_d.fire;
 
+import it.crystalnest.prometheus.api.Fire;
 import it.crystalnest.prometheus.api.FireManager;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -13,7 +16,14 @@ public final class FireRegistry {
   public static final ResourceLocation SOUL_FIRE_TYPE = ResourceLocation.withDefaultNamespace("soul");
 
   static {
-    FireManager.registerFire(FireManager.fireBuilder(SOUL_FIRE_TYPE).setDefaultComponents().setLight(10).setDamage(2).build());
+    FireManager.registerFire(
+      FireManager.fireBuilder(SOUL_FIRE_TYPE)
+        .setDefaultComponents()
+        .setComponent(Fire.Component.FLAME_PARTICLE, BuiltInRegistries.PARTICLE_TYPE.getKey(ParticleTypes.SOUL_FIRE_FLAME))
+        .setLight(10)
+        .setDamage(2)
+        .build()
+    );
   }
 
   private FireRegistry() {}
