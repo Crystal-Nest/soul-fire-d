@@ -1,4 +1,4 @@
-![Soul Fire'd banner](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/soul-fire-d/banner.gif)
+![Soul Fire'd banner](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/soul-fire-d/banner.png)
 
 ---
 

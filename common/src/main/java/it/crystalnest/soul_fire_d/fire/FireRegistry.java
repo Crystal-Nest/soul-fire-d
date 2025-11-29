@@ -11,9 +11,9 @@ import net.minecraft.resources.ResourceLocation;
  */
 public final class FireRegistry {
   /**
-   * Fire type of Soul Fire.
+   * Fire type of Soul Fire (from {@link FireManager#SOUL_FIRE_TYPE}).
    */
-  public static final ResourceLocation SOUL_FIRE_TYPE = ResourceLocation.withDefaultNamespace("soul");
+  public static final ResourceLocation SOUL_FIRE_TYPE = FireManager.SOUL_FIRE_TYPE;
 
   static {
     FireManager.registerFire(
