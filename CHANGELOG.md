@@ -13,6 +13,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 - Minimum version of Prometheus is now 1.1.2.
 - Linked `FireRegistry#SOUL_FIRE_TYPE` to `FireManager#SOUL_FIRE_TYPE` for consistency.
+- Update mod icon.
 
 ## [v6.0.1] - 2025/11/13
 
