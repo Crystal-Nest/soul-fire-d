@@ -9,6 +9,15 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 - Nothing new.
 
+## [v6.0.2] - 2025/11/29
+
+- Minimum version of Prometheus is now 1.1.2.
+- Linked `FireRegistry#SOUL_FIRE_TYPE` to `FireManager#SOUL_FIRE_TYPE` for consistency.
+
+## [v6.0.1] - 2025/11/13
+
+- Fixed soul fire flame component.
+
 ## [v6.0.0] - 2025/11/09
 
 - Removed API and added dependency to Prometheus.
@@ -549,6 +558,8 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[v6.0.2]: https://github.com/crystal-nest/soul-fire-d/releases?q=6.0.2
+[v6.0.1]: https://github.com/crystal-nest/soul-fire-d/releases?q=6.0.1
 [v6.0.0]: https://github.com/crystal-nest/soul-fire-d/releases?q=6.0.0
 [v5.1.6]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.6
 [v5.1.5]: https://github.com/crystal-nest/soul-fire-d/releases?q=5.1.5
