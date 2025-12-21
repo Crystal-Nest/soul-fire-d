@@ -4,5 +4,6 @@
   "enchantment.minecraft.soul_fire_aspect.desc": "Causes additional soule fire damageth at which hour hath used to attacketh a mob.",
   "enchantment.minecraft.soul_flame.desc": "Arrows fir'd from the boweth shall dealeth additional soule fire damageth.",
   "datapack.soul_fire_d.enchantments": "Soul fire'd enchantments",
-  "datapack.soul_fire_d.enchantments.description": "Burneth thy enemies with Aspect of Soule Fire and Enchanted Soulefire!"
+  "datapack.soul_fire_d.enchantments.description": "Burneth thy enemies with Aspect of Soule Fire and Enchanted Soulefire!",
+  "item.minecraft.soul_fire_charge": "Soule Fire Charge"
 }
