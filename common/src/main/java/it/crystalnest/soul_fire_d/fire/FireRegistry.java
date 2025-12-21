@@ -5,7 +5,7 @@ import it.crystalnest.prometheus.api.FireManager;
 import it.crystalnest.prometheus.api.FireRegistrar;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
@@ -16,7 +16,7 @@ public final class FireRegistry {
    * Fire type of Soul Fire (from {@link FireManager#SOUL_FIRE_TYPE}).
    */
   @ApiStatus.Internal
-  public static final ResourceLocation SOUL_FIRE_TYPE = FireManager.SOUL_FIRE_TYPE;
+  public static final Identifier SOUL_FIRE_TYPE = FireManager.SOUL_FIRE_TYPE;
 
   static {
     // noinspection DataFlowIssue: key of SOUL_FIRE_FLAME is sure to be defined.

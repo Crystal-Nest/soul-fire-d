@@ -4,8 +4,8 @@ import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.fabricmc.fabric.api.loot.v3.LootTableSource;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -20,9 +20,9 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
  */
 public final class LootTableEventsHandler {
   /**
-   * {@link ResourceLocation} of bastion chests.
+   * {@link Identifier} of bastion chests.
    */
-  private static final ResourceLocation BASTION_CHEST_IDENTIFIER = ResourceLocation.withDefaultNamespace("chests/bastion_other");
+  private static final Identifier BASTION_CHEST_IDENTIFIER = Identifier.withDefaultNamespace("chests/bastion_other");
 
   private LootTableEventsHandler() {}
 
@@ -35,7 +35,7 @@ public final class LootTableEventsHandler {
    * @param provider holder reference provider.
    */
   public static void handle(ResourceKey<LootTable> key, LootTable.Builder builder, LootTableSource source, HolderLookup.Provider provider) {
-    if (key.location().equals(BASTION_CHEST_IDENTIFIER)) {
+    if (key.identifier().equals(BASTION_CHEST_IDENTIFIER)) {
       buildPool(builder, provider, "soul_fire_aspect");
       buildPool(builder, provider, "soul_flame");
     }
@@ -49,7 +49,7 @@ public final class LootTableEventsHandler {
    * @param name enchantment name.
    */
   private static void buildPool(LootTable.Builder builder, HolderLookup.Provider provider, String name) {
-    provider.lookupOrThrow(Registries.ENCHANTMENT).get(ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.withDefaultNamespace(name))).ifPresent(enchantment -> builder.pool(
+    provider.lookupOrThrow(Registries.ENCHANTMENT).get(ResourceKey.create(Registries.ENCHANTMENT, Identifier.withDefaultNamespace(name))).ifPresent(enchantment -> builder.pool(
       LootPool.lootPool()
         .setRolls(ConstantValue.exactly(1))
         .conditionally(LootItemRandomChanceCondition.randomChance(0.05F).build())

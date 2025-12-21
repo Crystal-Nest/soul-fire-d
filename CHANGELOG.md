@@ -9,7 +9,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 - Nothing new.
 
-## [v6.1.0] - 2025/12/dd
+## [v6.1.0] - 2025/12/21
 
 - Updated to Prometheus 1.2.0+.
 - Fixed unwanted override of tags in the enchantments datapack.
