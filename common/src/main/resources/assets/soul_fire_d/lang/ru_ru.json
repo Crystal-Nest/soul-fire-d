@@ -4,5 +4,6 @@
   "enchantment.minecraft.soul_fire_aspect.desc": "Поджигает цель огнем душ.",
   "enchantment.minecraft.soul_flame.desc": "Стрелы выпущенные из лука, наносят дополнительный урон огнем душ.",
   "datapack.soul_fire_d.enchantments": "Зачарования из Soul Fire'd",
-  "datapack.soul_fire_d.enchantments.description": "Сжигайте своих врагов «Заговором огня душ» и «Воспламенением душ»!"
+  "datapack.soul_fire_d.enchantments.description": "Сжигайте своих врагов «Заговором огня душ» и «Воспламенением душ»!",
+  "item.minecraft.soul_fire_charge": "Заряд огня душ"
 }

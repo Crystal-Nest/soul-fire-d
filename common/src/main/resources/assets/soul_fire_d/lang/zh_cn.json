@@ -3,6 +3,7 @@
   "enchantment.minecraft.soul_flame": "灵魂火矢",
   "enchantment.minecraft.soul_fire_aspect.desc": "击中生物使之附着灵魂火，造成灵魂火焰伤害",
   "enchantment.minecraft.soul_flame.desc": "箭矢击中生物使之附着灵魂火，造成灵魂火焰伤害",
-  "datapack.soul_fire_d.enchantments": "Soul Fire'd enchantments",
-  "datapack.soul_fire_d.enchantments.description": "Burn your enemies with 魂焰附加 and 灵魂火矢!"
+  "datapack.soul_fire_d.enchantments": "Soul Fire'd 附魔",
+  "datapack.soul_fire_d.enchantments.description": "用魂焰附加和灵魂火矢燃烧你的敌人！",
+  "item.minecraft.soul_fire_charge": "灵魂火焰弹"
 }

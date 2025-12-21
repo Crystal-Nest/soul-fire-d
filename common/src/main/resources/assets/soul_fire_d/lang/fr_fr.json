@@ -4,5 +4,6 @@
   "enchantment.minecraft.soul_fire_aspect.desc": "Inflige des dégâts de feu des ames supplémentaires lorsqu'il est utilisé pour attaquer une foule.",
   "enchantment.minecraft.soul_flame.desc": "Les flèches tirées depuis l'arc infligent des dégâts de feu des âmes supplémentaires.",
   "datapack.soul_fire_d.enchantments": "Enchantements de Soul Fire'd",
-  "datapack.soul_fire_d.enchantments.description": "Brûler vos ennemis avec de l'Aura de feu des âmes et la Flamme des âmes!"
+  "datapack.soul_fire_d.enchantments.description": "Brûler vos ennemis avec de l'Aura de feu des âmes et la Flamme des âmes!",
+  "item.minecraft.soul_fire_charge": "Charge de feu des âmes"
 }
