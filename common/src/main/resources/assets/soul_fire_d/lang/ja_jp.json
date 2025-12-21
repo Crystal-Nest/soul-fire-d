@@ -3,6 +3,7 @@
   "enchantment.minecraft.soul_flame": "魂のフレイム",
   "enchantment.minecraft.soul_fire_aspect.desc": "攻撃時に相手を魂の火で炎上させます。.",
   "enchantment.minecraft.soul_flame.desc": "発射した矢が魂の火属性のダメージを与えるようになります。",
-  "datapack.soul_fire_d.enchantments": "Soul Fire'd enchantments",
-  "datapack.soul_fire_d.enchantments.description": "Burn your enemies with 魂の火属性 and 魂のフレイム!"
+  "datapack.soul_fire_d.enchantments": "Soul Fire'd のエンチャント",
+  "datapack.soul_fire_d.enchantments.description": "魂の火属性と魂のフレイムで敵を燃やそう！",
+  "item.minecraft.soul_fire_charge": "魂の火のチャージ"
 }

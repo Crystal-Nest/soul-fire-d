@@ -9,6 +9,14 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 - Nothing new.
 
+## [v6.1.0] - 2025/12/dd
+
+- Updated to Prometheus 1.2.0+.
+- Fixed unwanted override of tags in the enchantments datapack.
+- Fixed pack format of the enchantments datapack.
+- Implemented [#80](https://github.com/Crystal-Nest/soul-fire-d/issues/80), add soul fire charge.
+- Ported to 1.21.11.
+
 ## [v6.0.2] - 2025/11/29
 
 - Minimum version of Prometheus is now 1.1.2.
@@ -559,6 +567,7 @@ and this project adheres to [Crystal Nest Semantic Versioning](https://crystalne
 
 [Unreleased]: https://github.com/crystal-nest/soul-fire-d
 
+[v6.1.0]: https://github.com/crystal-nest/soul-fire-d/releases?q=6.1.0
 [v6.0.2]: https://github.com/crystal-nest/soul-fire-d/releases?q=6.0.2
 [v6.0.1]: https://github.com/crystal-nest/soul-fire-d/releases?q=6.0.1
 [v6.0.0]: https://github.com/crystal-nest/soul-fire-d/releases?q=6.0.0

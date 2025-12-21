@@ -24,7 +24,7 @@ This mod ensures that **Soul Fire has distinct behaviors**, including special da
 
 ## ✨ **Features**
 
-- 🔹 **Soul Fire overlay**  
+- 🔵 **Soul Fire overlay**  
   ![Overlay](https://raw.githubusercontent.com/crystal-nest/mod-fancy-assets/main/soul-fire-d/overlay.gif)  
   *Prefer a slimmer version? Check out [Slim Fire](https://modrinth.com/resourcepack/slim-fire)!*
 
@@ -57,9 +57,10 @@ Want your mod listed here? Submit an issue [here](https://github.com/Crystal-Nes
 
 ## 🔗 **Dependencies**
 
-| Mod                                                                     |         Loader         |   Requirement    |
-|:------------------------------------------------------------------------|:----------------------:|:----------------:|
-| [Cobweb](https://modrinth.com/mod/cobweb)                               |          All           |     Required     |
+| Mod                                                   |         Loader         |   Requirement    |
+|:------------------------------------------------------|:----------------------:|:----------------:|
+| [Cobweb](https://modrinth.com/mod/cobweb)             |          All           |     Required     |
+| [Prometheus](https://modrinth.com/mod/promehteus-api) |          All           |     Required     |
 
 ## 📜 **License and right of use**
 
