@@ -13,6 +13,8 @@ import net.minecraft.world.item.Items;
  * Handler for creative mode tabs related events.
  */
 public final class CreativeModeTabEventsHandler {
+  private CreativeModeTabEventsHandler() {}
+
   /**
    * Handles the {@link ItemGroupEvents#MODIFY_ENTRIES_ALL} event.<br>
    * Adds the copper campfire right after the normal campfire.

@@ -16,6 +16,8 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
  */
 @EventBusSubscriber(modid = Constants.MOD_ID)
 public final class CreativeModeTabEventsHandler {
+  private CreativeModeTabEventsHandler() {}
+
   /**
    * Handles the {@link BuildCreativeModeTabContentsEvent} event.<br>
    * Adds the copper campfire right after the normal campfire.
