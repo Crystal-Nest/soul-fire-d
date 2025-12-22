@@ -2,11 +2,19 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "minecraft:gunpowder",
-    "minecraft:ghast_tear",
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:ghast_tear"
+    },
     [
-      "minecraft:coal",
-      "minecraft:charcoal"
+      {
+        "item": "minecraft:coal"
+      },
+      {
+        "item": "minecraft:charcoal"
+      }
     ]
   ],
   "result": {

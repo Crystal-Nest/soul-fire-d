@@ -14,7 +14,7 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 /**
  * Handler for creative mode tabs related events.
  */
-@EventBusSubscriber(modid = Constants.MOD_ID)
+@EventBusSubscriber(modid = Constants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class CreativeModeTabEventsHandler {
   /**
    * Handles the {@link BuildCreativeModeTabContentsEvent} event.<br>
