@@ -52,8 +52,8 @@ public final class LootTableEventsHandler {
     provider.lookupOrThrow(Registries.ENCHANTMENT).get(ResourceKey.create(Registries.ENCHANTMENT, Identifier.withDefaultNamespace(name))).ifPresent(enchantment -> builder.pool(
       LootPool.lootPool()
         .setRolls(ConstantValue.exactly(1))
-        .conditionally(LootItemRandomChanceCondition.randomChance(0.05F).build())
-        .with(LootItem.lootTableItem(Items.BOOK).build())
+        .when(LootItemRandomChanceCondition.randomChance(0.05F).build())
+        .add(LootItem.lootTableItem(Items.BOOK).build())
         .apply(new EnchantRandomlyFunction.Builder().withEnchantment(enchantment))
         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
         .build()

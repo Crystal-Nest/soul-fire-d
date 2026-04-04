@@ -9,16 +9,12 @@ neoForge {
   if (at.exists()) {
     accessTransformers.from(at.absolutePath)
   }
-  parchment {
-    minecraftVersion = parchment_minecraft
-    mappingsVersion = parchment_version
-  }
 }
 
 dependencies {
-  compileOnly group: "org.spongepowered", name: "mixin", version: "0.8.5"
-  compileOnly group: "io.github.llamalad7", name: "mixinextras-common", version: "0.4.1"
-  annotationProcessor group: "io.github.llamalad7", name: "mixinextras-common", version: "0.4.1"
+  compileOnly group: "org.spongepowered", name: "mixin", version: "0.8.7"
+  compileOnly group: "io.github.llamalad7", name: "mixinextras-common", version: "0.5.3"
+  annotationProcessor group: "io.github.llamalad7", name: "mixinextras-common", version: "0.5.3"
 }
 
 configurations {
