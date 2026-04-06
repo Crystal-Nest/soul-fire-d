@@ -17,7 +17,7 @@ public final class LootRegistry {
   private static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS, Constants.MOD_ID);
 
   static {
-    LOOT_MODIFIERS.register("chest_loot_modifier", ChestLootModifier.CODEC);
+    LOOT_MODIFIERS.register("loot_modifier", () -> LootModifier.CODEC);
   }
 
   private LootRegistry() {}

@@ -1,11 +1,13 @@
 package it.crystalnest.soul_fire_d.fire;
 
+import it.crystalnest.cobweb.api.registry.CobwebEntry;
 import it.crystalnest.prometheus.api.Fire;
 import it.crystalnest.prometheus.api.FireManager;
 import it.crystalnest.prometheus.api.FireRegistrar;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.FireChargeItem;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
@@ -28,8 +30,12 @@ public final class FireRegistry {
         .setDamage(2)
         .build()
     );
-    FireRegistrar.registerFireCharge(SOUL_FIRE_TYPE);
   }
+
+  /**
+   * {@link CobwebEntry} for Soul Fire Charge.
+   */
+  public static CobwebEntry<FireChargeItem> SOUL_FIRE_CHARGE = FireRegistrar.registerFireCharge(SOUL_FIRE_TYPE);
 
   private FireRegistry() {}
 

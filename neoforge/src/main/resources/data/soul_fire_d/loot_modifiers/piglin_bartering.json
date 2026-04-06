@@ -1,0 +1,30 @@
+{
+  "type": "soul_fire_d:loot_modifier",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:gameplay/piglin_bartering"
+    }
+  ],
+  "replacement_chance": 0.6,
+  "items": [
+    {
+      "item": "minecraft:soul_fire_charge",
+      "weight": 30,
+      "min_count": 1,
+      "max_count": 3
+    }
+  ],
+  "enchantments": [
+    {
+      "enchantment": "minecraft:soul_fire_aspect",
+      "weight": 10,
+      "level": 5
+    },
+    {
+      "enchantment": "minecraft:soul_flame",
+      "weight": 10,
+      "level": 5
+    }
+  ]
+}

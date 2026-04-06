@@ -1,0 +1,44 @@
+{
+  "type": "soul_fire_d:loot_modifier",
+  "conditions": [
+    {
+      "condition": "minecraft:any_of",
+      "terms": [
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:chests/bastion_bridge"
+        },
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:chests/bastion_hoglin_stable"
+        },
+        {
+          "condition": "neoforge:loot_table_id",
+          "loot_table_id": "minecraft:chests/bastion_other"
+        }
+      ]
+    }
+  ],
+  "empty_weight": 20,
+  "items": [
+    {
+      "item": "minecraft:soul_fire_charge",
+      "weight": 20,
+      "min_count": 1,
+      "max_count": 3
+    }
+  ],
+  "enchantments": [
+    {
+      "enchantment": "minecraft:soul_fire_aspect",
+      "weight": 5,
+      "level": 5
+    },
+    {
+      "enchantment": "minecraft:soul_flame",
+      "weight": 5,
+      "level": 5
+    }
+  ]
+}
+
