@@ -68,7 +68,7 @@ public final class LootTableEventsHandler {
   public static void handle(ResourceKey<LootTable> key, LootTable.Builder builder, LootTableSource source, HolderLookup.Provider provider) {
     if (key.identifier().equals(PIGLIN_BARTER_IDENTIFIER)) {
       builder.modifyPools(pool -> pool.add(LootItem.lootTableItem(FireRegistry.SOUL_FIRE_CHARGE.get()).setWeight(20)));
-      builder.modifyPools(pool -> addEnchantment(provider, pool, "soul_fire_aspect", 500));
+      builder.modifyPools(pool -> addEnchantment(provider, pool, "soul_fire_aspect", 5));
       builder.modifyPools(pool -> addEnchantment(provider, pool, "soul_flame", 5));
     } else if (key.identifier().equals(BASTION_BRIDGE_CHEST_IDENTIFIER) || key.identifier().equals(BASTION_HOGLIN_STABLE_CHEST_IDENTIFIER) || key.identifier().equals(BASTION_OTHER_CHEST_IDENTIFIER)) {
       buildPool(provider, builder, 20, 20, 5);

@@ -6,7 +6,7 @@
       "loot_table_id": "minecraft:gameplay/piglin_bartering"
     }
   ],
-  "replacement_chance": 0.6,
+  "replacement_chance": 0.06,
   "items": [
     {
       "item": "minecraft:soul_fire_charge",
