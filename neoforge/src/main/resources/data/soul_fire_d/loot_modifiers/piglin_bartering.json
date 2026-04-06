@@ -10,20 +10,18 @@
   "items": [
     {
       "item": "minecraft:soul_fire_charge",
-      "weight": 30,
-      "min_count": 1,
-      "max_count": 3
+      "weight": 20
     }
   ],
   "enchantments": [
     {
       "enchantment": "minecraft:soul_fire_aspect",
-      "weight": 10,
+      "weight": 5,
       "level": 5
     },
     {
       "enchantment": "minecraft:soul_flame",
-      "weight": 10,
+      "weight": 5,
       "level": 5
     }
   ]
