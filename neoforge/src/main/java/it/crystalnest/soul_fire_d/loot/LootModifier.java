@@ -79,7 +79,7 @@ public final class LootModifier extends net.neoforged.neoforge.common.loot.LootM
     HolderLookup.RegistryLookup<Enchantment> lookup = context.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
     List<ResolvedEnchantment> resolved = new ArrayList<>();
     for (EnchantmentEntry entry : enchantments) {
-      lookup.get(ResourceKey.create(Registries.ENCHANTMENT, entry.enchantment())).ifPresent(holder -> resolved.add(new ResolvedEnchantment(holder, entry.weight(), entry.level())));
+      lookup.get(ResourceKey.create(Registries.ENCHANTMENT, entry.enchantment())).ifPresent(holder -> resolved.add(new ResolvedEnchantment(holder, entry.weight())));
     }
     if (replacementChance > 0) {
       if (context.getRandom().nextFloat() < replacementChance) {
@@ -133,7 +133,7 @@ public final class LootModifier extends net.neoforged.neoforge.common.loot.LootM
      */
     public static final Codec<ItemEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
       BuiltInRegistries.ITEM.holderByNameCodec().fieldOf("item").forGetter(ItemEntry::item),
-      Codec.INT.fieldOf("weight").forGetter(ItemEntry::weight),
+      Codec.INT.optionalFieldOf("weight", 1).forGetter(ItemEntry::weight),
       Codec.INT.optionalFieldOf("min_count", 1).forGetter(ItemEntry::minCount),
       Codec.INT.optionalFieldOf("max_count", 1).forGetter(ItemEntry::maxCount)
     ).apply(instance, ItemEntry::new));
@@ -144,16 +144,14 @@ public final class LootModifier extends net.neoforged.neoforge.common.loot.LootM
    *
    * @param enchantment {@link Identifier} of the enchantment.
    * @param weight weight for this entry.
-   * @param level level of the enchantment.
    */
-  private record EnchantmentEntry(Identifier enchantment, int weight, int level) {
+  private record EnchantmentEntry(Identifier enchantment, int weight) {
     /**
      * {@link Codec}.
      */
     public static final Codec<EnchantmentEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
       Identifier.CODEC.fieldOf("enchantment").forGetter(EnchantmentEntry::enchantment),
-      Codec.INT.fieldOf("weight").forGetter(EnchantmentEntry::weight),
-      Codec.INT.fieldOf("level").forGetter(EnchantmentEntry::level)
+      Codec.INT.optionalFieldOf("weight", 1).forGetter(EnchantmentEntry::weight)
     ).apply(instance, EnchantmentEntry::new));
   }
 
@@ -162,7 +160,6 @@ public final class LootModifier extends net.neoforged.neoforge.common.loot.LootM
    *
    * @param holder resolved enchantment holder.
    * @param weight weight for this entry.
-   * @param level level of the enchantment.
    */
-  private record ResolvedEnchantment(Holder<Enchantment> holder, int weight, int level) {}
+  private record ResolvedEnchantment(Holder<Enchantment> holder, int weight) {}
 }

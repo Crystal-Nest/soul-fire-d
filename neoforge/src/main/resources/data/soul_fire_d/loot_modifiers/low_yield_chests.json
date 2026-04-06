@@ -31,13 +31,11 @@
   "enchantments": [
     {
       "enchantment": "minecraft:soul_fire_aspect",
-      "weight": 5,
-      "level": 5
+      "weight": 5
     },
     {
       "enchantment": "minecraft:soul_flame",
-      "weight": 5,
-      "level": 5
+      "weight": 5
     }
   ]
 }
