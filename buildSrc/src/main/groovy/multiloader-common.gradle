@@ -64,8 +64,8 @@ repositories {
 }
 
 dependencies {
-  api "it.crystalnest:cobweb-$name:$minecraft_version-$cobweb_version"
-  api "it.crystalnest:prometheus-$name:$minecraft_version-$prometheus_version"
+  api "it.crystalnest:cobweb-$name:26.1-$cobweb_version"
+  api "it.crystalnest:prometheus-$name:26.1-$prometheus_version"
 }
 
 sourcesJar {
