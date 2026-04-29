@@ -65,8 +65,8 @@ public final class LootModifier extends net.neoforged.neoforge.common.loot.LootM
    * @param items item entries.
    * @param enchantments enchanted book entries.
    */
-  private LootModifier(LootItemCondition[] conditionsIn, float replacementChance, int emptyWeight, List<ItemEntry> items, List<EnchantmentEntry> enchantments) {
-    super(conditionsIn);
+  private LootModifier(LootItemCondition[] conditionsIn, int priority, float replacementChance, int emptyWeight, List<ItemEntry> items, List<EnchantmentEntry> enchantments) {
+    super(conditionsIn, priority);
     this.replacementChance = replacementChance;
     this.emptyWeight = emptyWeight;
     this.items = items;
