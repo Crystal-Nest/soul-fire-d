@@ -17,15 +17,15 @@ loom {
   runs {
     client {
       client()
-      setConfigName("Fabric Client")
-      ideConfigGenerated(true)
-      runDir("run/client")
+      setDisplayName("Fabric Client")
+      setGenerateRunConfig(true)
+      setRunDirectory("run/client")
     }
     server {
       server()
-      setConfigName("Fabric Server")
-      ideConfigGenerated(true)
-      runDir("run/server")
+      setDisplayName("Fabric Server")
+      setGenerateRunConfig(true)
+      setRunDirectory("run/server")
     }
   }
 }

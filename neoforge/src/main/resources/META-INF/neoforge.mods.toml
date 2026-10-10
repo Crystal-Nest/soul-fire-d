@@ -6,9 +6,9 @@ issueTrackerURL="https://github.com/${github_user}/${mod_id_kebab}/issues" #opti
   modId = "${mod_id}" #mandatory
   version = "${mod_version}" #mandatory
   displayName = "${mod_title}" #mandatory
-  updateJSONURL = "https://api.modrinth.com/updates/${mod_id_kebab}/forge_updates.json" #optional (see https://docs.neoforged.net/docs/misc/updatechecker/)
+  updateJSONURL = "https://api.modrinth.com/updates/${mod_id_kebab}/forge_updates.json?neoforge=only" #optional (see https://docs.neoforged.net/docs/misc/updatechecker/)
   displayURL = "https://github.com/${github_user}/${mod_id_kebab}/tree/${minecraft_version}" #optional (displayed in the mod UI)
-  logoFile = "banner.png" #optional
+  iconFile = "${mod_id_kebab}.png" #optional
   credits = "${credits}" #optional
   authors = "${mod_authors}" #optional
   description = '''${description}''' #mandatory (Supports multiline text)
