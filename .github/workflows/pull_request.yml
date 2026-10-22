@@ -1,0 +1,17 @@
+name: Pull Request Workflow
+'on':
+  pull_request:
+    types:
+    - opened
+    - reopened
+    - synchronize
+    - ready_for_review
+    - review_requested
+jobs:
+  call-analyze-workflow:
+    permissions:
+      contents: read
+    uses: Crystal-Nest/.github/.github/workflows/analyze.yml@main
+    with:
+      java-version: '21'
+    secrets: inherit
