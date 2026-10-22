@@ -1,9 +1,11 @@
 name: Analyze Workflow
-
-on:
-  workflow_dispatch:
-     
+'on':
+  workflow_dispatch: null
 jobs:
   call-analyze-workflow:
-    uses: crystal-nest/.github/.github/workflows/analyze.yml@main
-    secrets: inherit 
+    permissions:
+      contents: read
+    uses: Crystal-Nest/.github/.github/workflows/analyze.yml@main
+    with:
+      java-version: '25'
+    secrets: inherit
