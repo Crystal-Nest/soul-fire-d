@@ -11,7 +11,7 @@ name: Release Workflow
         type: boolean
         default: false
       dry_run:
-        description: Build and analyze without pushing a version commit or publishing releases
+        description: Dry run
         type: boolean
         default: false
 jobs:
