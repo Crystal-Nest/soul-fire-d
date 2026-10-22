@@ -4,6 +4,13 @@ plugins {
   id "com.hypherionmc.modutils.modpublisher"
 }
 
+def buildCommit = providers.exec {
+  commandLine 'git', 'rev-parse', 'HEAD'
+}.standardOutput.asText.get().trim()
+def buildTimestamp = new Date(providers.exec {
+  commandLine 'git', 'log', '-1', '--format=%ct'
+}.standardOutput.asText.get().trim().toLong() * 1000L)
+
 base {
   archivesName = "$mod_id_kebab-$name"
   version = "$minecraft_version-$mod_version"
@@ -93,8 +100,8 @@ jar {
       "Implementation-Vendor"   : mod_authors,
       "Implementation-Version"  : project.version,
       "Implementation-URL"      : "https://github.com/$github_user/$mod_id_kebab/tree/$minecraft_version",
-      "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-      "Timestamp"               : System.currentTimeMillis(),
+      "Implementation-Timestamp": buildTimestamp.format("yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone('UTC')),
+      "Timestamp"               : buildTimestamp.time,
       "Built-On-Java"           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
       "Built-On-Minecraft"      : minecraft_version
     ])
@@ -205,13 +212,13 @@ publisher {
   }
   setGameVersions("1.21.6", "1.21.7", minecraft_version)
   setDisplayName("[$loader - $minecraft_version] $mod_title v$mod_version")
-  setJavaVersions([JavaVersion.VERSION_21]) // Remember to update this to match java_version gradle property.
+  setJavaVersions([JavaVersion.toVersion(java_version)])
   setCurseEnvironment("both") // "server", "client" or "both".
   github {
     repo = "$github_user/$mod_id_kebab"
     tag = "v${project.version}"
     displayName("v${project.version}")
-    target = minecraft_version
+    target = buildCommit
     createTag = true
     createRelease = true
     updateRelease = true
