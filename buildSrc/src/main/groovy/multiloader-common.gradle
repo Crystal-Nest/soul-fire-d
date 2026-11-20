@@ -7,9 +7,6 @@ plugins {
 def buildCommit = providers.exec {
   commandLine 'git', 'rev-parse', 'HEAD'
 }.standardOutput.asText.get().trim()
-def buildTimestamp = new Date(providers.exec {
-  commandLine 'git', 'log', '-1', '--format=%ct'
-}.standardOutput.asText.get().trim().toLong() * 1000L)
 
 def minecraft_target = minecraft_version + minecraft_patch_version
 
@@ -86,8 +83,6 @@ jar {
       "Implementation-Vendor"   : mod_authors,
       "Implementation-Version"  : project.version,
       "Implementation-URL"      : "https://github.com/$github_user/$mod_id_kebab/tree/$minecraft_version",
-      "Implementation-Timestamp": buildTimestamp.format("yyyy-MM-dd'T'HH:mm:ssZ", TimeZone.getTimeZone('UTC')),
-      "Timestamp"               : buildTimestamp.time,
       "Built-On-Java"           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
       "Built-On-Minecraft"      : minecraft_target
     ])
