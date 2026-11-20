@@ -3,6 +3,7 @@ package it.crystalnest.soul_fire_d.handler;
 import it.crystalnest.soul_fire_d.fire.FireRegistry;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.fabricmc.fabric.api.loot.v3.LootTableSource;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -15,9 +16,8 @@ import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 import java.util.function.Supplier;
 
@@ -87,8 +87,8 @@ public final class LootTableEventsHandler {
    * @param enchantmentsWeight weight for each of the enchantments.
    */
   private static void buildPool(HolderLookup.Provider provider, LootTable.Builder builder, int emptyWeight, int fireChargeWeight, int enchantmentsWeight) {
-    LootPool.Builder pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(EmptyLootItem.emptyItem().setWeight(emptyWeight));
-    addItem(pool, FireRegistry.SOUL_FIRE_CHARGE, fireChargeWeight, UniformGenerator.between(1, 3));
+    LootPool.Builder pool = LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(EmptyLootItem.emptyItem().setWeight(emptyWeight));
+    addItem(pool, FireRegistry.SOUL_FIRE_CHARGE, fireChargeWeight, ContextIntProviders.between(1, 3));
     addEnchantment(provider, pool, "soul_fire_aspect", enchantmentsWeight);
     addEnchantment(provider, pool, "soul_flame", enchantmentsWeight);
     builder.pool(pool.build());
@@ -102,7 +102,7 @@ public final class LootTableEventsHandler {
    * @param weight weight for the item.
    * @param count item count.
    */
-  private static void addItem(LootPool.Builder pool, Supplier<? extends Item> item, int weight, NumberProvider count) {
+  private static void addItem(LootPool.Builder pool, Supplier<? extends Item> item, int weight, Holder<ContextIntProvider> count) {
     pool.add(LootItem.lootTableItem(item.get()).setWeight(weight).apply(SetItemCountFunction.setCount(count)));
   }
 

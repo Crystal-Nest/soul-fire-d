@@ -1,20 +1,18 @@
 {
   "type": "soul_fire_d:loot_modifier",
-  "conditions": [
-    {
-      "condition": "minecraft:any_of",
-      "terms": [
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:chests/ancient_city"
-        },
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:chests/bastion_treasure"
-        }
-      ]
-    }
-  ],
+  "condition": {
+    "type": "minecraft:any_of",
+    "terms": [
+      {
+        "type": "neoforge:loot_table_id",
+        "loot_table_id": "minecraft:chests/ancient_city"
+      },
+      {
+        "type": "neoforge:loot_table_id",
+        "loot_table_id": "minecraft:chests/bastion_treasure"
+      }
+    ]
+  },
   "empty_weight": 10,
   "items": [
     {

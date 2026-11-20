@@ -1,11 +1,9 @@
 {
   "type": "soul_fire_d:loot_modifier",
-  "conditions": [
-    {
-      "condition": "neoforge:loot_table_id",
-      "loot_table_id": "minecraft:gameplay/piglin_bartering"
-    }
-  ],
+  "condition": {
+    "type": "neoforge:loot_table_id",
+    "loot_table_id": "minecraft:gameplay/piglin_bartering"
+  },
   "replacement_chance": 0.06,
   "items": [
     {

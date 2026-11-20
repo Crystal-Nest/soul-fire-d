@@ -1,24 +1,22 @@
 {
   "type": "soul_fire_d:loot_modifier",
-  "conditions": [
-    {
-      "condition": "minecraft:any_of",
-      "terms": [
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:chests/bastion_bridge"
-        },
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:chests/bastion_hoglin_stable"
-        },
-        {
-          "condition": "neoforge:loot_table_id",
-          "loot_table_id": "minecraft:chests/bastion_other"
-        }
-      ]
-    }
-  ],
+  "condition": {
+    "type": "minecraft:any_of",
+    "terms": [
+      {
+        "type": "neoforge:loot_table_id",
+        "loot_table_id": "minecraft:chests/bastion_bridge"
+      },
+      {
+        "type": "neoforge:loot_table_id",
+        "loot_table_id": "minecraft:chests/bastion_hoglin_stable"
+      },
+      {
+        "type": "neoforge:loot_table_id",
+        "loot_table_id": "minecraft:chests/bastion_other"
+      }
+    ]
+  },
   "empty_weight": 20,
   "items": [
     {
@@ -39,4 +37,3 @@
     }
   ]
 }
-

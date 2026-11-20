@@ -1,9 +1,9 @@
 package it.crystalnest.soul_fire_d;
 
-import it.crystalnest.cobweb.api.pack.fixed.StaticDataPack;
+import it.crystalnest.cobweb.api.pack.DataPack;
+import it.crystalnest.cobweb.api.pack.query.PackActivation;
 import it.crystalnest.soul_fire_d.fire.FireRegistry;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.repository.Pack;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
@@ -18,6 +18,8 @@ public final class CommonModLoader {
    */
   public static void init() {
     FireRegistry.register();
-    new StaticDataPack(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "enchantments"), Pack.Position.TOP).register();
+    DataPack.registrar(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "enchantments"))
+      .activation(PackActivation.DEFAULT_ENABLED)
+      .register();
   }
 }

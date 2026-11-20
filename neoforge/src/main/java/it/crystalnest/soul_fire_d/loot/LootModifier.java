@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -60,13 +61,15 @@ public final class LootModifier extends net.neoforged.neoforge.common.loot.LootM
   private final List<EnchantmentEntry> enchantments;
 
   /**
-   * @param conditionsIn loot item conditions.
+   * @param condition optional loot item condition.
+   * @param priority native loot modifier priority.
+   * @param replacementChance probability of replacing the original loot.
    * @param emptyWeight weight for the empty entry.
    * @param items item entries.
    * @param enchantments enchanted book entries.
    */
-  private LootModifier(LootItemCondition[] conditionsIn, int priority, float replacementChance, int emptyWeight, List<ItemEntry> items, List<EnchantmentEntry> enchantments) {
-    super(conditionsIn, priority);
+  private LootModifier(Optional<Holder<LootItemCondition>> condition, int priority, float replacementChance, int emptyWeight, List<ItemEntry> items, List<EnchantmentEntry> enchantments) {
+    super(condition, priority);
     this.replacementChance = replacementChance;
     this.emptyWeight = emptyWeight;
     this.items = items;

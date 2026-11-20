@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:soul_fire_charge"
+        "recipes": "minecraft:soul_fire_charge"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
